@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_user_protocol_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!-- Title -->
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <ImageView
+            android:id="@+id/activity_user_protocol_title_icon"
+            android:layout_width="45dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
+            android:padding="16dp"
+            android:src="@drawable/actionbar_back" />
+
+        <TextView
+            android:id="@+id/activity_user_protocol_title_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/setting_privacy_policy"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+    </LinearLayout>-->
+    <include layout="@layout/common_action_bar"/>
+
+    <WebView
+        android:id="@+id/activity_user_protocol_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"/>
+
+</LinearLayout>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.jb.filemanager">
+
+    <!-- 允许程序访问精良位置		?? -->
+    <!-- 获取帐号权限，用于获取gmail帐号，必须配置 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 允许程序获取任何package占用空间容量	应用管理 -->
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
+    <!-- 清除应用缓存	清理 -->
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
+    <!-- 读取系统底层日志		?? -->
+    <!-- <uses-permission android:name="android.permission.READ_LOGS"/> -->
+    <!-- 允许程序写入外部存储，如SD卡上写文件		若干模块 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 读取电话状态	辅助禁用模块等 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 获取WiFi状态	快捷栏模块等 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- 获取网络状态	快捷栏模块等 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 显示系统窗口	悬浮窗、辅助杀、辅助禁用等 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!-- 创建快捷方式	快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <!-- 联网	若干模块 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 挂载文件系统		?? -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <!-- 获取电池电量统计信息	电量相关 -->
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+    <!-- 允许振动	悬浮窗 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- 改变WiFi状态	快捷栏 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- 改变网络状态	快捷栏 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <!-- 允许读写系统设置项	若干模块 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <!-- 允许程序扩展或收缩状态栏	快捷栏 -->
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+    <!--
+     充许用户在设置(设置 -> 安全 -> 高级 -> 有权查看使用情况的应用(Apps with
+	 * usage access))中授权后可访问用户的应用使用统计信息，如识当前打开的应用
+    -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <!-- 组播 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+
+    <!-- 必须 Push所需的权限，其中自定义权限的作用是防止应用服务被恶意软件利用 -->
+    <!-- 注意拷贝的时候与自己应用一样的权限要删除，重复权限会导致应用意外停止 -->
+    <permission
+        android:name="com.ace.network.permission.SERVICE"
+        android:protectionLevel="normal"/>
+
+    <!-- 获取正在运行的任务列表权限，智能预加载需要权限 -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!-- 检测下载管理权限，智能预加载ABTEST需要权限 -->
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
+    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS"/>
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- 辅助功能强杀服务的权限		辅助杀，辅助禁用模块所用（格式下同，？？代表暂不知哪个模块用到） -->
+    <!-- <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/> -->
+    <!-- 屏蔽HOME键需要的权限 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <!-- 杀进程	内存查杀 -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <!-- pushService权限 -->
+    <uses-permission android:name="com.ace.network.permission.SERVICE"/>
+
+    <!-- 自动重启相关，能添加最好，不添加也可以 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- TrafficContentProvider权限 -->
+    <uses-permission android:name="com.ace.network.provider.permission"/>
+
+
+    <application
+        android:name=".TheApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.jb.filemanager.channel"
+            android:value="${COM_JB_FILEMANAGER_CHANNEL_VALUE}"/>
+
+        <activity
+            android:name=".home.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 隐私页 -->
+        <activity
+            android:name=".function.privacy.PrivacyActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_Blue_StateBar"/>
+
+        <!-- 用户协议页 -->
+        <activity
+            android:name=".function.privacy.UserProtocolActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_bg"/>
+
+        <!-- 闪屏页 -->
+        <activity
+            android:name=".function.splash.SplashActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_Blue_StateBar"/>
+
+        <!-- about页面 -->
+        <activity
+            android:name=".function.about.AboutActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <!-- 反馈页 -->
+        <activity
+            android:name=".function.feedback.FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+
+        <!-- 设置页 -->
+        <activity
+            android:name=".function.setting.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+
+        <!-- 守护进程 start -->
+        <!-- 后台监测应用流量使用的服务 -->
+        <receiver android:name=".function.daemon.DaemonReceiver"/>
+
+        <service
+            android:name=".function.daemon.DaemonService"
+            android:exported="true"/>
+        <service android:name=".function.daemon.DaemonService$InnerDaemonNotifService"/>
+        <service
+            android:name=".function.daemon.AssistantService"
+            android:process=":assistant"/>
+
+        <receiver
+            android:name=".function.daemon.AssistantReceiver"
+            android:process=":assistant"/>
+
+        <service
+            android:name=".function.daemon.AssistantService$InnerAssistantNotifService"
+            android:process=":assistant"/>
+
+        <!-- 任务服务，必须配置在主常驻进程里 -->
+        <service
+            android:name="com.jiubang.commerce.daemon.JobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <!-- 开机自动重启Receiver，进程名称要和主常驻进程一致 -->
+        <receiver android:name="com.jiubang.commerce.daemon.BootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <!-- 蓝牙状态变化 -->
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+                <!-- WIFI状态变化 -->
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+            </intent-filter>
+            <intent-filter android:priority="999">
+
+                <!-- 网络连接变化 -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <!-- 开机广播 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <!-- 解锁完成后会调用 -->
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <!-- 壁纸变化 -->
+                <action android:name="android.intent.action.WALLPAPER_CHANGED"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_RESTARTED"/>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+            <intent-filter android:priority="99999">
+
+                <!-- "*#*#开头 #*#*结尾"的拨号 -->
+                <action android:name="android.provider.Telephony.SECRET_CODE"/>
+
+                <data android:scheme="android_secret_code"/>
+            </intent-filter>
+            <intent-filter android:priority="99999">
+
+                <!-- 电话呼出 -->
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+            </intent-filter>
+            <intent-filter>
+
+                <!-- SD卡挂载、卸载 -->
+                <action android:name="android.intent.action.MEDIA_MOUNTED"/>
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED"/>
+
+                <data android:scheme="file"/>
+            </intent-filter>
+            <intent-filter>
+
+                <!-- 公司内产品的广播监听 -->
+                <action android:name="com.jiubang.alock.ACTION_LOCKER_ACCOUNT_CHANGE"/>
+                <action android:name="com.jiubang.alocker.theme.change"/>
+                <action android:name="com.jiubang.alocker.monitor.vip"/>
+                <action android:name="com.jiubang.alocker.refresh.vip"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- 守护进程 end -->
+
+        <!-- Google AdMod start -->
+        <!-- 设置android:multiprocess=true, 支持多进程打开广告 -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:multiprocess="true"
+            android:theme="@android:style/Theme.Translucent"/>
+        <!-- Google AdMod end -->
+
+        <!-- CommerceAdSdk===BEGIN=========================== -->
+        <!-- 智能预加载服务 -->
+        <service
+            android:name="com.jiubang.commerce.service.IntelligentPreloadService"
+            android:label="Intelligent Preload Service"
+            android:process=":com.jiubang.commerce.service.IntelligentPreloadService"/>
+        <!-- 开机监听广播(用于智能预加载) -->
+        <receiver android:name="com.jiubang.commerce.receiver.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </receiver>
+
+        <provider android:name="com.gau.go.gostaticsdk.StaticDataContentProvider"
+            android:authorities="com.jb.filemanager.staticsdkprovider"/>
+        <!-- authorities命名规则为"包名.chargelocker.MultiprocessSharedPreferences"，如短信配置为"com.jb.gosms.chargelocker.MultiprocessSharedPreferences" -->
+        <provider
+            android:name="com.jb.ga0.commerce.util.io.MultiprocessSharedPreferences"
+            android:authorities="com.jb.filemanager.chargelocker.MultiprocessSharedPreferences"
+            android:exported="false"/>
+
+        <!-- 商业推广302跳转提示框 -->
+        <activity
+            android:name="com.jiubang.commerce.ad.url.AdUrlPreParseLoadingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- 展示H5广告 -->
+        <activity
+            android:name="com.jiubang.commerce.ad.h5.H5AdActivity"
+            android:screenOrientation="portrait"/>
+        <!-- 广告SDK本身服务 -->
+        <service
+            android:name="com.jiubang.commerce.service.AdService"
+            android:label="Ad Service"/>
+        <!-- 应用安装/卸载监听广播 -->
+        <receiver android:name="com.jiubang.commerce.receiver.AppBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+        <!-- CommerceAdSdk===END===================================== -->
+
+
+        <!-- "买量SDK相关声明 start" -->
+        <!-- authorities命名规则为"包名.commerce.MPSharedPreferences"，如短信配置为"com.jb.gosms.commerce.MPSharedPreferences" -->
+        <provider
+            android:name="com.jiubang.commerce.buychannel.MPSharedPreferences"
+            android:authorities="com.ace.network.commerce.MPSharedPreferences"
+            android:exported="false" />
+        <!-- "买量SDK相关声明 end" -->
+
+    </application>
+
+</manifest>

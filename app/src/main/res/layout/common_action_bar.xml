@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage"
+    android:id="@+id/ll_title"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:background="@android:color/transparent">
+
+    <TextView
+        android:id="@+id/tv_common_action_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@drawable/action_bar_back_drawable_selector"
+        android:drawableStart="@drawable/action_bar_back_drawable_selector"
+        android:text="@string/common_action_bar_title"
+        android:textColor="@drawable/action_bar_back_text_selector"
+        android:textSize="20dp"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:id="@+id/iv_common_action_bar_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="2dp"
+        android:layout_marginEnd="2dp"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:visibility="gone"
+        android:scaleType="center"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/ic_action_bar_more"
+        android:contentDescription="@null"/>
+
+</LinearLayout>

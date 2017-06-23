@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage"
+    android:layout_width="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:layout_height="120dp"
+    android:background="@drawable/bg_card3"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_main_operate_more_detail"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:background="#00FF00"
+        android:gravity="center|start"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:text="Details"
+        android:textColor="#aab2bd"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/tv_main_operate_more_rename"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:background="#00FF00"
+        android:gravity="center|start"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:text="Rename"
+        android:textColor="#aab2bd"
+        android:textSize="14dp" />
+
+</LinearLayout>

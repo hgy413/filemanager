@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="drawer_item_height_50dp">50dp</dimen>
+    <dimen name="drawer_item_height_70dp">70dp</dimen>
+    <dimen name="drawer_sv_margin_top_42dp">42dp</dimen>
+
+
+</resources>

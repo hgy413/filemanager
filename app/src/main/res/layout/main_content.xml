@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
+    tools:ignore="SpUsage,ContentDescription"
+    android:fitsSystemWindows="true"
+    android:id="@+id/rl_home_root"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:background="#FF0000"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="#0000FF">
+
+        <ImageView
+            android:id="@+id/iv_main_action_bar_menu"
+            android:layout_gravity="center_vertical"
+            android:layout_width="44dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_home_menu"  />
+
+        <TextView
+            android:id="@+id/tv_main_action_bar_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="#000000"
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/et_main_action_bar_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            android:inputType="text"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_main_action_bar_search"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_bar_search"/>
+
+        <ImageView
+            android:id="@+id/iv_main_action_bar_more"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_bar_more"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_home_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_main_phone_storage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tl_main_view_pager_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top" />
+
+        </android.support.v4.view.ViewPager>
+
+        <LinearLayout
+            android:id="@+id/ll_main_bottom_operate_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="#77000000"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_main_bottom_cut"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_drawer_about"
+                android:drawablePadding="3dp"
+                android:text="Cut"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_main_bottom_copy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_drawer_setting"
+                android:drawablePadding="3dp"
+                android:text="Copy"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_main_bottom_paste"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_drawer_feedback"
+                android:drawablePadding="3dp"
+                android:text="Paste"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <ImageView
+                android:id="@+id/iv_main_bottom_more"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_operate_bar_more"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_home_search_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#77000000"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+</LinearLayout>

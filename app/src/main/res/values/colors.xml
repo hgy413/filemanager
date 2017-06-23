@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="white_50">#7FFFFFFF</color>
+
+
+    <!-- about -->
+    <color name="about_item_pressed">#EEEEEE</color>
+
+    <!-- common -->
+    <color name="common_status_bar_bg">#1C72B4</color>
+    <color name="common_action_bar_bg">#4FABFF</color>
+
+    <!-- feedback -->
+    <color name="feedback_drop_box_background_pressed">#FFFFFF</color>
+    <color name="feedback_drop_box_background_normal">#F0F3F5</color>
+
+    <!-- 隐私页 -->
+    <color name="privacy_btu_shallow">#4FC1E9</color>
+    <color name="privacy_btu_deep">#5D9CEC</color>
+
+</resources>

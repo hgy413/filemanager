@@ -1,0 +1,36 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<plugins>
+    <!--插件配置
+    pkgname：插件包名
+    entrance_class：插件入口类
+    assets_file_name：内置插件文件名，存放在assets下
+    target_interface_version：目标插件接口版本号（框架版本号）
+    min_interface_version：支持的最低插件接口版本号（框架版本号）
+    -->
+
+    <plugin
+        pkgname="com.jiubang.commerce.ad.intelligent"
+        entrance_class="com.jiubang.commerce.ad.intelligent.entrance.IntelligentEntrance"
+        assets_file_name="intelligentlocal"
+        target_interface_version="1"
+        min_interface_version="1"
+        >
+        <!--配置注册Actvity到插件Actvity的映射，通常用于启动模式为单例的Activity
+        proxy：注册Activity
+        target：插件Activity
+        -->
+        <service_map
+            proxy="com.jiubang.commerce.service.IntelligentPreloadService"
+            target="com.jiubang.commerce.ad.intelligent.service.IntelligentPreloadService"
+            />
+        <!--配置插件加载的进程
+        auto_loa：是否自动加载，true为自动加载，false需要主动调用代码加载
+        hot_update：是否热更新（新插件下载后，是否立即加载到内存），一般建议为false
+        标签值：main_process——>主进程
+               支持子进程:字符，类似android:process
+        -->
+        <load_process auto_load="true" hot_update="true">main_process</load_process>
+        <load_process auto_load="true" hot_update="false">:com.jiubang.commerce.service.IntelligentPreloadService</load_process>
+    </plugin>
+
+</plugins>

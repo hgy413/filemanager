@@ -1,0 +1,198 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'AndResGuard'
+
+def static dateTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+8"))
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.2'
+    }
+}
+
+andResGuard {
+    mappingFile = file("./resource_mapping.txt")
+//    mappingFile = null
+    use7zip = true
+    useSign = true
+    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
+    keepRoot = false
+    whiteList = [
+            "com.jb.filemanager.R.xml.*",
+            "com.jb.filemanager.R.raw.*",
+            "com.jb.filemanager.R.string.*",
+            "com.jb.filemanager.R.drawable.ic_launcher",
+            "com.jb.filemanager.R.dimen.ad_gp_install_btn_margin_left_edge",
+            "com.jb.filemanager.R.dimen.ad_gp_install_btn_margin_top_include_btn_height",
+            "com.jb.filemanager.R.drawable.default_icon",
+            "com.jb.filemanager.R.id.ad_activation_top_layout",
+            "com.jb.filemanager.R.id.ad_refresh_progressbar",
+            "com.jb.filemanager.R.id.dialog_cancel",
+            "com.jb.filemanager.R.id.dialog_installed_app_name_textview",
+            "com.jb.filemanager.R.id.dialog_item_icon",
+            "com.jb.filemanager.R.id.dialog_item_name",
+            "com.jb.filemanager.R.id.dialog_open",
+            "com.jb.filemanager.R.id.dialog_recommends",
+            "com.jb.filemanager.R.id.dialog_refresh",
+            "com.jb.filemanager.R.id.float_window_image_big",
+            "com.jb.filemanager.R.id.float_window_view",
+            "com.jb.filemanager.R.id.image",
+            "com.jb.filemanager.R.id.small_window_layout",
+            "com.jb.filemanager.R.id.text",
+            "com.jb.filemanager.R.id.title",
+            "com.jb.filemanager.R.layout.ad_jump_tips_layout",
+            "com.jb.filemanager.R.layout.ad_activation_guide_dialog_layout",
+            "com.jb.filemanager.R.layout.ad_activation_recommend_item",
+            "com.jb.filemanager.R.layout.ad_exit_google_float_window_small_layout",
+            "com.jb.filemanager.R.layout.ad_google_guide_download_layout",
+            "com.jb.filemanager.R.layout.ad_notification_open_app_layout",
+            "com.jb.filemanager.R.id.cl_*",
+            "com.jb.filemanager.R.id.dl_*",
+            "com.jb.filemanager.R.layout.cl_*",
+            "com.jb.filemanager.R.drawable.cl_*",
+            "com.jb.filemanager.R.integer.cfg_*",
+            "com.jb.filemanager.R.string.cfg_*",
+            "com.jb.filemanager.R.bool.cfg_*"
+    ]
+    compressFilePattern = [
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+            "resources.arsc"
+    ]
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.2.2'
+        if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+            // consider Windows.
+            path = "C:\\Program Files\\7-Zip\\7z.exe"
+        } else if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+            // consider OSX.
+            path = "/usr/local/bin/7za"
+        } else if (org.gradle.internal.os.OperatingSystem.current().isLinux()) {
+            // modify by nieyh consider ubuntu.
+            path = "/usr/bin/7za"
+        }
+    }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    useLibrary 'org.apache.http.legacy'
+
+    defaultConfig {
+        applicationId "com.jb.filemanager"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled = true
+        manifestPlaceholders = [COM_JB_FILEMANAGER_CHANNEL_VALUE: "200"]
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+            v2SigningEnabled false
+        }
+        release {
+            storeFile file("filemanager.jks")
+            storePassword "filemanager"
+            keyAlias "key0"
+            keyPassword "filemanager"
+            v2SigningEnabled false
+        }
+    }
+
+    buildTypes {
+        release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 混淆
+            minifyEnabled true
+            // zipAlign优化
+            zipAlignEnabled true
+            // 移除无用的资源文件文件
+            shrinkResources true
+            // 加载默认混淆配置文件，PS:将proguard.cfg放置在主Module目录下
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+            // 签名
+            signingConfig signingConfigs.release
+            // 定义APK名称格式
+            applicationVariants.all { variant ->
+                if (variant.buildType.name == "debug") return;
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "${defaultConfig.applicationId}_v${defaultConfig.versionName}_${defaultConfig.versionCode}_${dateTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    //渠道Flavors
+    productFlavors {
+        GooglePlay {
+            manifestPlaceholders = [COM_JB_FILEMANAGER_CHANNEL_VALUE:"200"]
+        }
+    }
+
+    aaptOptions {
+        cruncherEnabled = false
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
+    // aar
+    compile(name: 'AudienceNetwork-4.22.1', ext: 'aar')
+    compile(name: 'DyloadSdk-trunk-v6.0.1-r30288', ext: 'aar')
+    compile(name: 'CommerceAdSdk-trunk-GPMonitorAdvanced-Time30000-v3.0-isInner-true-r35450', ext: 'aar')
+    compile(name: 'BuyChannelSdk-trunk-v1.4.2-r33143-AF-4.6', ext: 'aar')
+    compile(name: 'ProcessDaemonSdk-trunk-v1.2.6-r17114', ext: 'aar')
+    // network lib
+    compile 'com.google.android.gms:play-services-ads-lite:10.2.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.mopub.volley:mopub-volley:1.1.0'
+    compile('com.mopub:mopub-sdk-banner:4.11.0@aar') { transitive = true }
+    compile('com.mopub:mopub-sdk-native-static:4.11.0@aar') { transitive = true }
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'junit:junit:4.12'
+}
