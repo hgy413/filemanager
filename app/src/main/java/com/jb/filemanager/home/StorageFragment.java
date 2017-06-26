@@ -9,10 +9,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,19 +22,16 @@ import android.widget.TextView;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
-import com.jb.filemanager.home.event.SelectFileEvent;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.widget.HorizontalListView;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.images.ImageCache;
 import com.jb.filemanager.util.images.ImageFetcher;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -41,11 +40,14 @@ import java.util.Stack;
  *
  */
 
-public class StorageFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<File>> {
+public class StorageFragment extends Fragment implements View.OnKeyListener,
+        LoaderManager.LoaderCallbacks<List<File>> {
 
+    private HorizontalListView mHLvDirs;
     private ListView mLvFiles;
 
-    private Stack<File> mPathStack = new Stack<>();
+    private List<File> mStorageList;
+    private Stack<File> mPathStack;
     private FileListAdapter mAdapter;
 
     @Override
@@ -53,10 +55,25 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
         super.onCreate(savedInstanceState);
 
         mPathStack = new Stack<>();
-        mPathStack.push(new File(Const.FILE_MANAGER_DIR));
-        String[] paths = FileUtil.getVolumePaths(getActivity());
+        mStorageList = new ArrayList<>();
+        initStoragePath();
 
-        mAdapter = new FileListAdapter(getActivity(), paths);
+        mAdapter = new FileListAdapter(getActivity(), mStorageList);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mLvFiles.setAdapter(mAdapter);
+
+        if (!mPathStack.isEmpty()) {
+            getLoaderManager().initLoader(FileManager.LOADER_FILES, null, this);
+        }
+
+        if (mStorageList != null && mStorageList.size() > 1) {
+            mAdapter.setListItems(mStorageList);
+        }
     }
 
     @Override
@@ -65,6 +82,19 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
         // The last two arguments ensure LayoutParams are inflated
         // properly.
         View rootView = inflater.inflate(R.layout.fragment_main_storage, container, false);
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(this);
+
+        mHLvDirs = (HorizontalListView) rootView.findViewById(R.id.lv_dirs);
+        mHLvDirs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String word = (String) ((HorizontalListView) parent).getAdapter().getItem(position);
+                backToClickedDirectory(word);
+            }
+        });
 
         mLvFiles = (ListView) rootView.findViewById(R.id.lv_main_storage_list);
         mLvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,9 +107,9 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
 
                 File file = adapter.getItem(position);
                 if (file.isDirectory() && !FileManager.getInstance().isSelected(file)) {
-//                    mPathStack.push(file);
                     // TODO
-//                    restartLoad();
+                    mPathStack.push(file);
+                    restartLoad();
                 } else {
                     FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
                             .getTag();
@@ -87,9 +117,9 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
                         boolean isSelected = holder.mIvChecked.isSelected();
                         holder.mIvChecked.setSelected(!isSelected);
                         if (!isSelected) {
-                            FileManager.getInstance().add(file);
+                            FileManager.getInstance().addSelected(file);
                         } else {
-                            FileManager.getInstance().remove(file);
+                            FileManager.getInstance().removeSelected(file);
                         }
                     }
                 }
@@ -97,12 +127,37 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
         });
         mLvFiles.setAdapter(mAdapter);
 
-        getLoaderManager().initLoader(FileManager.LOADER_FILES, null, this);
-
         return rootView;
     }
 
-    // implements LoaderManager.LoaderCallbacks<List<File>>
+    // implements OnKeyListener start
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_UP) {
+            if (mPathStack.size() > 1) {
+                mPathStack.pop();
+                restartLoad();
+                return true;
+            } else if (mPathStack.size() == 1) {
+                // TODO
+                mPathStack.pop();
+                if (mStorageList.size() == 1) {
+                    return false;
+                } else {
+                    mHLvDirs.setVisibility(View.GONE);
+                    mAdapter.setListItems(mStorageList);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // implements OnKeyListener end
+
+
+    // implements LoaderManager.LoaderCallbacks<List<File>> start
     @Override
     public Loader<List<File>> onCreateLoader(int id, Bundle args) {
         if (mPathStack != null && !mPathStack.isEmpty()) {
@@ -113,7 +168,13 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
-        mAdapter.setListItems(data);
+        if (data != null) {
+            mAdapter.setListItems(data);
+
+            if (!mPathStack.isEmpty()) {
+                updateCurrentDir(mPathStack.lastElement());
+            }
+        }
     }
 
     @Override
@@ -121,14 +182,103 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
         mAdapter.clear();
     }
 
+    // implements LoaderManager.LoaderCallbacks<List<File>> end
+
     // private start
+    private void initStoragePath() {
+        String[] paths = FileUtil.getVolumePaths(getActivity());
+        if (paths != null && paths.length > 0) {
+            for (int i = 0; i < paths.length; i++) {
+                File file = new File(paths[i]);
+                mStorageList.add(file);
+            }
+            if (paths.length == 1) {
+                mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
+            }
+        }
+    }
 
     public void restartLoad() {
 //        mProgressBar.setVisibility(View.VISIBLE);
         getLoaderManager().restartLoader(FileManager.LOADER_FILES, null, this);
     }
 
+    private void updateCurrentDir(File file) {
+        String currentPath = "";
+        int count = mStorageList.size();
+        for (int i = 0; i < count; i++) {
+            String filePath = file.getAbsolutePath();
+            String storagePath = mStorageList.get(i).getAbsolutePath();
+            int index = filePath.indexOf(storagePath);
+            if (index != -1) {
+                boolean isInternal = FileUtil.isInternalStoragePath(
+                        getActivity(), storagePath);
+                currentPath = filePath.replace(storagePath, isInternal ? getString(R.string.main_internal_storage)
+                        : new File(mStorageList.get(i).getAbsolutePath()).getName());
+                break;
+            }
 
+        }
+        final String[] words = currentPath.split(File.separator);
+        mHLvDirs.setVisibility(View.VISIBLE);
+        mHLvDirs.setAdapter(new ArrayAdapter<>(getActivity(),
+                R.layout.item_main_storage_list_dir, R.id.tv_dir, words));
+        mHLvDirs.post(new Runnable() {
+
+            @Override
+            public void run() {
+                mHLvDirs.scrollTo(Integer.MAX_VALUE);
+            }
+        });
+
+    }
+
+    private void backToClickedDirectory(String word) {
+        String clickDirectory = word;
+        for (File file : mStorageList) {
+            if ((FileUtil.isInternalStoragePath(getActivity(), file.getAbsolutePath()) && word.equals(getString(R.string.main_internal_storage)))
+                    || file.getName().equals(word)) {
+                clickDirectory = file.getAbsolutePath();
+                break;
+            }
+        }
+        if (mPathStack.isEmpty()) {
+            return;
+        }
+        String currentDir = mPathStack.lastElement().getAbsolutePath();
+        if (currentDir.endsWith(clickDirectory)) {
+            if (isRootDir(currentDir) && mStorageList.size() > 1) {
+                mPathStack.clear();
+                mAdapter.setListItems(mStorageList);
+                mHLvDirs.setVisibility(View.GONE);
+            }
+        } else {
+            int index = currentDir.indexOf(clickDirectory);
+            String dir = currentDir.substring(0,
+                    index + clickDirectory.length());
+            Stack<File> temp = new Stack<>();
+            for (File file : mPathStack) {
+                temp.push(file);
+                if (file.getAbsolutePath().equals(dir)) {
+                    break;
+                }
+            }
+            mPathStack.clear();
+            mPathStack.addAll(temp);
+            restartLoad();
+        }
+    }
+
+    private boolean isRootDir(String path) {
+        if (mStorageList.size() > 0) {
+            for (File file : mStorageList) {
+                if (path.equals(file.getAbsolutePath())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     // private end
 
@@ -139,9 +289,9 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
         private int mImageSize;
 
         private List<File> mData = new ArrayList<>();
-        private String[] mRootDirs;
+        private List<File> mRootDirs;
 
-        public FileListAdapter(Context context, String[] rootDirs) {
+        public FileListAdapter(Context context, List<File> rootDirs) {
             mInflater = LayoutInflater.from(context);
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
@@ -255,9 +405,9 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
                     boolean isSelected = holder.mIvChecked.isSelected();
                     File file = getItem(position);
                     if (!isSelected) {
-                        FileManager.getInstance().add(file);
+                        FileManager.getInstance().addSelected(file);
                     } else {
-                        FileManager.getInstance().remove(file);
+                        FileManager.getInstance().removeSelected(file);
                     }
                     holder.mIvChecked.setSelected(!isSelected);
                 }
@@ -301,9 +451,9 @@ public class StorageFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
         private boolean isRootDir(String path) {
-            if (mRootDirs != null && mRootDirs.length > 0) {
-                for (String filePath : mRootDirs) {
-                    if (path.equals(filePath)) {
+            if (mRootDirs != null && mRootDirs.size() > 0) {
+                for (File file : mRootDirs) {
+                    if (path.equals(file.getAbsolutePath())) {
                         return true;
                     }
                 }

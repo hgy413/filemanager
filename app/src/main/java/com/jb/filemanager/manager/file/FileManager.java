@@ -51,7 +51,7 @@ public class FileManager {
 
 
     public static final int LOADER_PICTURE = 0;
-    public static final int LOADER_VEDIO = 1;
+    public static final int LOADER_VIDEO = 1;
     public static final int LOADER_MUSIC = 2;
     public static final int LOADER_FILES = 3;
     public static final int LOADER_APPS = 4;
@@ -84,7 +84,7 @@ public class FileManager {
         return result;
     }
 
-    public void add(File file) {
+    public void addSelected(File file) {
         if (file != null) {
             try {
                 if (!mSelectedFiles.contains(file)) {
@@ -97,7 +97,7 @@ public class FileManager {
         }
     }
 
-    public void remove(File file) {
+    public void removeSelected(File file) {
         if (file != null) {
             try {
                 if (mSelectedFiles.contains(file)) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage"
+    android:id="@+id/tv_dir"
+    android:layout_width="wrap_content"
+    android:layout_height="46dp"
+    android:background="@drawable/bg_item_main_content_list_sytle_dir"
+    android:gravity="center"
+    android:textColor="#452345"
+    android:textSize="14dp">
+
+</TextView>

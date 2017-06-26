@@ -11,7 +11,14 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-
+        <com.jb.filemanager.ui.widget.HorizontalListView
+            android:id="@+id/lv_dirs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dir_list"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none" />
 
         <ImageView
             android:id="@+id/iv_main_storage_style_switcher"
