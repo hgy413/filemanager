@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,11 +45,14 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         LoaderManager.LoaderCallbacks<List<File>> {
 
     private HorizontalListView mHLvDirs;
+    private ImageView mIvStyleSwitcher;
     private ListView mLvFiles;
+    private GridView mGvFiles;
 
     private List<File> mStorageList;
     private Stack<File> mPathStack;
-    private FileListAdapter mAdapter;
+    private FileListAdapter mListAdapter;
+    private FileGridAdapter mGridAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,21 +62,24 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         mStorageList = new ArrayList<>();
         initStoragePath();
 
-        mAdapter = new FileListAdapter(getActivity(), mStorageList);
+        mListAdapter = new FileListAdapter(getActivity(), mStorageList);
+        mGridAdapter = new FileGridAdapter(getActivity(), mStorageList);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mLvFiles.setAdapter(mAdapter);
+        mLvFiles.setAdapter(mListAdapter);
+        mGvFiles.setAdapter(mGridAdapter);
 
         if (!mPathStack.isEmpty()) {
             getLoaderManager().initLoader(FileManager.LOADER_FILES, null, this);
         }
 
         if (mStorageList != null && mStorageList.size() > 1) {
-            mAdapter.setListItems(mStorageList);
+            mListAdapter.setListItems(mStorageList);
+            mGridAdapter.setListItems(mStorageList);
         }
     }
 
@@ -85,6 +92,25 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
         rootView.setOnKeyListener(this);
+
+        mIvStyleSwitcher = (ImageView) rootView.findViewById(R.id.iv_main_storage_style_switcher);
+        if (mIvStyleSwitcher != null) {
+            mIvStyleSwitcher.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean isGridStyle = mIvStyleSwitcher.isSelected();
+                    if (isGridStyle) {
+                        mLvFiles.setVisibility(View.VISIBLE);
+                        mGvFiles.setVisibility(View.GONE);
+                    } else {
+                        mGvFiles.setVisibility(View.VISIBLE);
+                        mLvFiles.setVisibility(View.GONE);
+                    }
+
+                    mIvStyleSwitcher.setSelected(!isGridStyle);
+                }
+            });
+        }
 
         mHLvDirs = (HorizontalListView) rootView.findViewById(R.id.lv_dirs);
         mHLvDirs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,7 +133,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
                 File file = adapter.getItem(position);
                 if (file.isDirectory() && !FileManager.getInstance().isSelected(file)) {
-                    // TODO
                     mPathStack.push(file);
                     restartLoad();
                 } else {
@@ -125,8 +150,37 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                 }
             }
         });
-        mLvFiles.setAdapter(mAdapter);
+        mLvFiles.setAdapter(mListAdapter);
 
+        mGvFiles = (GridView) rootView.findViewById(R.id.gv_main_storage_grid);
+        mGvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FileListAdapter adapter = (FileListAdapter) mLvFiles.getAdapter();
+                if (adapter.getCount() <= position) {
+                    return;
+                }
+
+                File file = adapter.getItem(position);
+                if (file.isDirectory() && !FileManager.getInstance().isSelected(file)) {
+                    mPathStack.push(file);
+                    restartLoad();
+                } else {
+                    FileGridAdapter.ViewHolder holder = (FileGridAdapter.ViewHolder) view
+                            .getTag();
+                    if (holder != null) {
+                        boolean isSelected = holder.mIvChecked.isSelected();
+                        holder.mIvChecked.setSelected(!isSelected);
+                        if (!isSelected) {
+                            FileManager.getInstance().addSelected(file);
+                        } else {
+                            FileManager.getInstance().removeSelected(file);
+                        }
+                    }
+                }
+            }
+        });
+        mGvFiles.setAdapter(mGridAdapter);
         return rootView;
     }
 
@@ -140,13 +194,13 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                 restartLoad();
                 return true;
             } else if (mPathStack.size() == 1) {
-                // TODO
                 mPathStack.pop();
                 if (mStorageList.size() == 1) {
                     return false;
                 } else {
                     mHLvDirs.setVisibility(View.GONE);
-                    mAdapter.setListItems(mStorageList);
+                    mListAdapter.setListItems(mStorageList);
+                    mGridAdapter.setListItems(mStorageList);
                     return true;
                 }
             }
@@ -169,7 +223,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     @Override
     public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
         if (data != null) {
-            mAdapter.setListItems(data);
+            mListAdapter.setListItems(data);
+            mGridAdapter.setListItems(data);
 
             if (!mPathStack.isEmpty()) {
                 updateCurrentDir(mPathStack.lastElement());
@@ -179,7 +234,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     @Override
     public void onLoaderReset(Loader<List<File>> loader) {
-        mAdapter.clear();
+        mListAdapter.clear();
+        mGridAdapter.clear();
     }
 
     // implements LoaderManager.LoaderCallbacks<List<File>> end
@@ -188,8 +244,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     private void initStoragePath() {
         String[] paths = FileUtil.getVolumePaths(getActivity());
         if (paths != null && paths.length > 0) {
-            for (int i = 0; i < paths.length; i++) {
-                File file = new File(paths[i]);
+            for (String path : paths) {
+                File file = new File(path);
                 mStorageList.add(file);
             }
             if (paths.length == 1) {
@@ -249,7 +305,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         if (currentDir.endsWith(clickDirectory)) {
             if (isRootDir(currentDir) && mStorageList.size() > 1) {
                 mPathStack.clear();
-                mAdapter.setListItems(mStorageList);
+                mListAdapter.setListItems(mStorageList);
+                mGridAdapter.setListItems(mStorageList);
                 mHLvDirs.setVisibility(View.GONE);
             }
         } else {
@@ -282,16 +339,15 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     // private end
 
-    private static class FileListAdapter extends BaseAdapter {
+    private abstract static class FileAdapter extends BaseAdapter {
+        final LayoutInflater mInflater;
+        ImageFetcher mImageFetcher;
+        int mImageSize;
 
-        private final LayoutInflater mInflater;
-        private ImageFetcher mImageFetcher;
-        private int mImageSize;
+        List<File> mData = new ArrayList<>();
+        List<File> mRootDirs;
 
-        private List<File> mData = new ArrayList<>();
-        private List<File> mRootDirs;
-
-        public FileListAdapter(Context context, List<File> rootDirs) {
+        FileAdapter(Context context, List<File> rootDirs) {
             mInflater = LayoutInflater.from(context);
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
@@ -299,12 +355,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             mRootDirs = rootDirs;
         }
 
-        public void add(File file) {
-            mData.add(file);
-            notifyDataSetChanged();
-        }
-
-        public void clear() {
+        void clear() {
             mData.clear();
             notifyDataSetChanged();
         }
@@ -332,13 +383,69 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             return result;
         }
 
-        public List<File> getListItems() {
-            return mData;
-        }
-
-        public void setListItems(List<File> data) {
+        void setListItems(List<File> data) {
             mData = data;
             notifyDataSetChanged();
+        }
+
+        void loadFileThumb(String path, ImageView ivThumb) {
+            int type = FileUtil.getFileType(path);
+            switch (type) {
+                case FileManager.PICTURE:
+                case FileManager.VIDEO:
+                    if (mImageFetcher != null) {
+                        mImageFetcher.loadImage(path, ivThumb);
+                    }
+                    break;
+
+                case FileManager.MUSIC:
+                    ivThumb.setImageResource(R.drawable.img_music);
+                    break;
+
+                case FileManager.OTHERS:
+                    ivThumb.setImageResource(R.drawable.img_file);
+                    break;
+
+                case FileManager.APP:
+                    ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        boolean isRootDir(String path) {
+            if (mRootDirs != null && mRootDirs.size() > 0) {
+                for (File file : mRootDirs) {
+                    if (path.equals(file.getAbsolutePath())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        ImageFetcher createImageFetcher(FragmentActivity activity, int imageSize, int defaultImageId) {
+            ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(activity,
+                    Const.IMAGE_CACHE_DIR);
+
+            cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of
+            // app memory
+
+            // The ImageFetcher takes care of loading images into our ImageView
+            // children asynchronously
+            ImageFetcher imageFetcher = new ImageFetcher(activity, imageSize);
+            imageFetcher.setLoadingImage(defaultImageId);
+            imageFetcher.addImageCache(activity.getSupportFragmentManager(), cacheParams);
+            return imageFetcher;
+        }
+    }
+
+    private static class FileListAdapter extends FileAdapter {
+
+        FileListAdapter(Context context, List<File> rootDirs) {
+            super(context, rootDirs);
         }
 
         @Override
@@ -416,64 +523,87 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             return convertView;
         }
 
-        private void loadFileThumb(String path, ImageView ivThumb) {
-            int type = FileUtil.getFileType(path);
-            switch (type) {
-                case FileManager.PICTURE:
-                case FileManager.VIDEO:
-                    if (mImageFetcher != null) {
-                        mImageFetcher.loadImage(path, ivThumb);
-                    }
-                    break;
-
-                case FileManager.MUSIC:
-                    ivThumb.setImageResource(R.drawable.img_music);
-                    break;
-
-                case FileManager.OTHERS:
-                    ivThumb.setImageResource(R.drawable.img_file);
-                    break;
-
-                case FileManager.APP:
-                    ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         private static class ViewHolder {
             ImageView mIvFileThumb;
             TextView mTvFileName;
             TextView mTvFileDesc;
             ImageView mIvChecked;
         }
+    }
 
-        private boolean isRootDir(String path) {
-            if (mRootDirs != null && mRootDirs.size() > 0) {
-                for (File file : mRootDirs) {
-                    if (path.equals(file.getAbsolutePath())) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+    private static class FileGridAdapter extends FileAdapter {
+
+        FileGridAdapter(Context context, List<File> rootDirs) {
+            super(context, rootDirs);
         }
 
-        private ImageFetcher createImageFetcher(FragmentActivity activity, int imageSize, int defaultImageId) {
-            ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(activity,
-                    Const.IMAGE_CACHE_DIR);
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final ViewHolder holder;
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.item_main_storage_grid_style, null);
+                holder = new ViewHolder();
+                holder.mIvFileThumb = (ImageView) convertView.findViewById(R.id.iv_main_storage_style_grid_item_icon);
+                holder.mTvFileName = (TextView) convertView.findViewById(R.id.tv_main_storage_style_grid_item_name);
+                holder.mIvChecked = (ImageView) convertView.findViewById(R.id.iv_main_storage_style_grid_item_selected);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-            cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of
-            // app memory
+            File file = getItem(position);
+            if (isRootDir(file.getAbsolutePath())) {
+                holder.mIvChecked.setVisibility(View.INVISIBLE);
 
-            // The ImageFetcher takes care of loading images into our ImageView
-            // children asynchronously
-            ImageFetcher imageFetcher = new ImageFetcher(activity, imageSize);
-            imageFetcher.setLoadingImage(defaultImageId);
-            imageFetcher.addImageCache(activity.getSupportFragmentManager(), cacheParams);
-            return imageFetcher;
+                holder.mTvFileName.setText(FileUtil.isInternalStoragePath(mInflater.getContext(),
+                        file.getAbsolutePath()) ? mInflater.getContext().getString(
+                        R.string.main_internal_storage) : file.getName().toUpperCase());
+            } else {
+                holder.mIvChecked.setVisibility(View.VISIBLE);
+                holder.mTvFileName.setText(file.getName());
+            }
+
+            // icon
+            if (file.isDirectory()) {
+                if (isRootDir(file.getAbsolutePath())) {
+                    boolean isInternalStorage = FileUtil.isInternalStoragePath(mInflater.getContext(), file.getAbsolutePath());
+                    holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone : R.drawable.img_sdcard);
+                } else {
+                    holder.mIvFileThumb.setImageResource(R.drawable.img_folder);
+                }
+            } else {
+                loadFileThumb(file.getAbsolutePath(), holder.mIvFileThumb);
+            }
+
+            // 选中标识
+            if (FileManager.getInstance().isSelected(file)) {
+                holder.mIvChecked.setSelected(true);
+            } else {
+                holder.mIvChecked.setSelected(false);
+            }
+            holder.mIvChecked.setTag(position);
+            holder.mIvChecked.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    boolean isSelected = holder.mIvChecked.isSelected();
+                    File file = getItem(position);
+                    if (!isSelected) {
+                        FileManager.getInstance().addSelected(file);
+                    } else {
+                        FileManager.getInstance().removeSelected(file);
+                    }
+                    holder.mIvChecked.setSelected(!isSelected);
+                }
+            });
+
+            return convertView;
+        }
+
+        private static class ViewHolder {
+            ImageView mIvFileThumb;
+            TextView mTvFileName;
+            ImageView mIvChecked;
         }
     }
 }

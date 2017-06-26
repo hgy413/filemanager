@@ -41,6 +41,17 @@
             android:footerDividersEnabled="false"
             android:listSelector="@drawable/main_storage_style_list_item_selector" />
 
+        <GridView
+            android:id="@+id/gv_main_storage_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="3"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"
+            android:visibility="gone"/>
+
     </FrameLayout>
 
 </LinearLayout>
