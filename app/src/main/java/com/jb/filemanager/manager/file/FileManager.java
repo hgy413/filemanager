@@ -50,14 +50,12 @@ public class FileManager {
     public static final int SCHEDULE = 10;
 
 
-    public static final int LOADER_PICTURE = 0;
+    public static final int LOADER_IMAGE = 0;
     public static final int LOADER_VIDEO = 1;
-    public static final int LOADER_MUSIC = 2;
-    public static final int LOADER_FILES = 3;
-    public static final int LOADER_APPS = 4;
-    public static final int LOADER_MEDIA = 5;
-    public static final int LOADER_CAMERA = 10;
-    public static final int LOADER_CONVERSATION = 11;
+    public static final int LOADER_APP = 2;
+    public static final int LOADER_AUDIO = 3;
+    public static final int LOADER_DOC = 4;
+    public static final int LOADER_FILES = 5;
 
     private static FileManager sInstance;
 

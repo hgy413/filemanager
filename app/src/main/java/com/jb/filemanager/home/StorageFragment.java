@@ -70,12 +70,10 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getLoaderManager().initLoader(FileManager.LOADER_FILES, null, this);
+
         mLvFiles.setAdapter(mListAdapter);
         mGvFiles.setAdapter(mGridAdapter);
-
-        if (!mPathStack.isEmpty()) {
-            getLoaderManager().initLoader(FileManager.LOADER_FILES, null, this);
-        }
 
         if (mStorageList != null && mStorageList.size() > 1) {
             mListAdapter.setListItems(mStorageList);
@@ -182,6 +180,13 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         });
         mGvFiles.setAdapter(mGridAdapter);
         return rootView;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        getLoaderManager().destroyLoader(FileManager.LOADER_FILES);
+        super.onDestroy();
     }
 
     // implements OnKeyListener start

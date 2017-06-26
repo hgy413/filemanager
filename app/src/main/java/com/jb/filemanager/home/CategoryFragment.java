@@ -1,11 +1,19 @@
 package com.jb.filemanager.home;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -15,8 +23,11 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.home.bean.CategoryBean;
+import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bill wang on 2017/6/22.
@@ -25,7 +36,48 @@ import java.util.ArrayList;
 
 public class CategoryFragment extends Fragment {
 
+    private static final String[] PHOTO_PROJECTION = new String[] {
+            MediaStore.Images.Media.SIZE };
+
+    private static final String[] VIDEO_PROJECTION = new String[] {
+            MediaStore.Video.Media.SIZE };
+
+    private static final String[] AUDIO_PROJECTION = new String[] {
+            MediaStore.Audio.Media.SIZE};
+
+    private static final String[] DOC_PROJECTION = new String[] {
+            MediaStore.Files.FileColumns.SIZE};
+
     private GridView mCategoryView;
+
+    private boolean mIsInternalStorage;
+
+    private LoaderManager.LoaderCallbacks<Cursor> mPhotoLoaderCallback;
+    private long mPhotoSize;
+
+    private LoaderManager.LoaderCallbacks<Cursor> mVideoLoaderCallback;
+    private long mAudioSize;
+
+    LoaderManager.LoaderCallbacks<Cursor> mAudioLoaderCallback;
+    private long mVideoSize;
+
+    LoaderManager.LoaderCallbacks<List<Long>> mAppLoaderCallback;
+    private long mAppSize;
+
+    LoaderManager.LoaderCallbacks<Cursor> mDocLoaderCallback;
+    private long mDocSize;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mPhotoLoaderCallback = getImageLoaderCallback();
+        mVideoLoaderCallback = getVideoLoaderCallback();
+        mAppLoaderCallback = getAppLoaderCallback();
+        mAudioLoaderCallback = getAudioLoaderCallback();
+        mDocLoaderCallback = getDocLoaderCallback();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -91,6 +143,225 @@ public class CategoryFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(FileManager.LOADER_IMAGE, null, mPhotoLoaderCallback);
+        getLoaderManager().initLoader(FileManager.LOADER_VIDEO, null, mVideoLoaderCallback);
+        getLoaderManager().initLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
+        getLoaderManager().initLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
+        getLoaderManager().initLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getLoaderManager().restartLoader(FileManager.LOADER_IMAGE, null, mPhotoLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_VIDEO, null, mVideoLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
+    }
+
+    @Override
+    public void onDestroy() {
+        getLoaderManager().destroyLoader(FileManager.LOADER_IMAGE);
+        getLoaderManager().destroyLoader(FileManager.LOADER_VIDEO);
+        getLoaderManager().destroyLoader(FileManager.LOADER_APP);
+        getLoaderManager().destroyLoader(FileManager.LOADER_AUDIO);
+        getLoaderManager().destroyLoader(FileManager.LOADER_DOC);
+
+        mAppLoaderCallback = null;
+        mAudioLoaderCallback = null;
+        mDocLoaderCallback = null;
+        mPhotoLoaderCallback = null;
+        mVideoLoaderCallback = null;
+
+        super.onDestroy();
+    }
+
+    private LoaderManager.LoaderCallbacks<Cursor> getImageLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                Uri uri = mIsInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+                return new CursorLoader(getActivity(),
+                        uri,
+                        PHOTO_PROJECTION,
+                        MediaStore.Images.Media.SIZE + "!= 0 AND " + MediaStore.Images.Media.DATA + " IS NOT NULL",
+                        null,
+                        MediaStore.Images.Media.DEFAULT_SORT_ORDER);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null) {
+                    try {
+                        long size = 0L;
+                        while (cursor.moveToNext()) {
+                            size += cursor.getLong(0);
+                        }
+                        mPhotoSize = size;
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        };
+    }
+
+    private LoaderManager.LoaderCallbacks<Cursor> getVideoLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                Uri uri = mIsInternalStorage ? MediaStore.Video.Media.INTERNAL_CONTENT_URI : MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+
+                return new CursorLoader(getActivity(),
+                        uri,
+                        VIDEO_PROJECTION,
+                        MediaStore.Video.Media.SIZE + "!= 0 AND " + MediaStore.Video.Media.DATA + " IS NOT NULL",
+                        null,
+                        MediaStore.Video.Media.DEFAULT_SORT_ORDER);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null) {
+                    try {
+                        long size = 0L;
+                        while (cursor.moveToNext()) {
+                            size += cursor.getLong(0);
+                        }
+                        mVideoSize = size;
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        };
+    }
+
+    private LoaderManager.LoaderCallbacks<Cursor> getAudioLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                Uri uri = mIsInternalStorage ? MediaStore.Audio.Media.INTERNAL_CONTENT_URI : MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+                return new CursorLoader(getActivity(),
+                        uri,
+                        AUDIO_PROJECTION,
+                        MediaStore.Audio.Media.SIZE + "!= 0 AND " + MediaStore.Audio.Media.DATA + " IS NOT NULL",
+                        null,
+                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null) {
+                    try {
+                        long size = 0L;
+                        while (cursor.moveToNext()) {
+                            size += cursor.getLong(0);
+                        }
+                        mAudioSize = size;
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        };
+    }
+
+    private LoaderManager.LoaderCallbacks<List<Long>> getAppLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<List<Long>>() {
+            @Override
+            public Loader<List<Long>> onCreateLoader(int id, Bundle args) {
+                return new AppSizeLoader(getContext());
+            }
+
+            @Override
+            public void onLoadFinished(Loader<List<Long>> loader, List<Long> data) {
+                if (data != null && data.size() > 0) {
+                    long size = 0L;
+                    for (Long appSize : data) {
+                        size += appSize;
+                    }
+                    mAppSize = size;
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<List<Long>> loader) {
+
+            }
+        };
+    }
+
+    private LoaderManager.LoaderCallbacks<Cursor> getDocLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                Uri uri = mIsInternalStorage ? MediaStore.Files.getContentUri("internal") : MediaStore.Files.getContentUri("external");
+
+
+                String selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+                        + "or " + MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+                        + "or " + MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+                        + "or " + MediaStore.Files.FileColumns.MIME_TYPE + "=?";
+                String mimeTypePdf = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf");
+                String mimeTypeTxt = MimeTypeMap.getSingleton().getMimeTypeFromExtension("txt");
+                String mimeTypeDoc = MimeTypeMap.getSingleton().getMimeTypeFromExtension("doc");
+                String mimeTypeDocx = MimeTypeMap.getSingleton().getMimeTypeFromExtension("docx");
+
+                String[] selectionArgs = new String[]{ mimeTypePdf, mimeTypeTxt, mimeTypeDoc, mimeTypeDocx };
+
+                return new CursorLoader(getActivity(),
+                        uri,
+                        DOC_PROJECTION,
+                        selectionMimeType,
+                        selectionArgs,
+                        null);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null) {
+                    try {
+                        long size = 0L;
+                        while (cursor.moveToNext()) {
+                            size += cursor.getLong(0);
+                        }
+                        mAudioSize = size;
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        };
+    }
 
     private static class CategoryAdapter extends BaseAdapter {
 
@@ -165,11 +436,11 @@ public class CategoryFragment extends Fragment {
             }
             return convertView;
         }
-    }
 
-    private static class ViewHolder {
-        ImageView mIvIcon;
-        TextView mTvName;
-        TextView mTvNumber;
+        private static class ViewHolder {
+            ImageView mIvIcon;
+            TextView mTvName;
+            TextView mTvNumber;
+        }
     }
 }
