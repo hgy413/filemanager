@@ -456,7 +456,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void finishActivity() {
-
+        super.onBackPressed();
     }
 
     // implements View.OnClickListener

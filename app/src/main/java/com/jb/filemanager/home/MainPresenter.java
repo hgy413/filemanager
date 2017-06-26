@@ -3,6 +3,7 @@ package com.jb.filemanager.home;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.jb.filemanager.R;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.home.event.SelectFileEvent;
 
@@ -26,6 +27,8 @@ class MainPresenter implements MainContract.Presenter {
 
     private boolean mIsInSearchMode;
     private int mCurrentTab = 0;
+
+    private long mExitTime;
 
     private IOnEventMainThreadSubscriber<SelectFileEvent> mSelectFileEvent = new IOnEventMainThreadSubscriber<SelectFileEvent>() {
         @Subscribe(threadMode = ThreadMode.MAIN)
@@ -84,7 +87,12 @@ class MainPresenter implements MainContract.Presenter {
                     mIsInSearchMode = false;
                     mView.showNormalStatus(mCurrentTab);
                 } else {
-                    mView.finishActivity();
+                    if (System.currentTimeMillis() - mExitTime > 2000) {
+                        mExitTime = System.currentTimeMillis();
+                        Toast.makeText(mSupport.getContext(), R.string.main_double_click_exit_app_tips, Toast.LENGTH_SHORT).show();
+                    } else {
+                        mView.finishActivity();
+                    }
                 }
             } else {
                 // 首页没有非系统返回
