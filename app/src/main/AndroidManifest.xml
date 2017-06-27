@@ -290,7 +290,7 @@
         <!-- authorities命名规则为"包名.commerce.MPSharedPreferences"，如短信配置为"com.jb.gosms.commerce.MPSharedPreferences" -->
         <provider
             android:name="com.jiubang.commerce.buychannel.MPSharedPreferences"
-            android:authorities="com.ace.network.commerce.MPSharedPreferences"
+            android:authorities="com.jb.filemanager.commerce.MPSharedPreferences"
             android:exported="false" />
         <!-- "买量SDK相关声明 end" -->
 
