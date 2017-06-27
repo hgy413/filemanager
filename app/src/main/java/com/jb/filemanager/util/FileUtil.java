@@ -3,6 +3,7 @@ package com.jb.filemanager.util;
 import android.content.Context;
 import android.os.Environment;
 import android.os.storage.StorageManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -10,7 +11,12 @@ import com.jb.filemanager.manager.file.FileManager;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,6 +27,7 @@ import java.util.Locale;
  *
  */
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileUtil {
 
     public static final String HIDDEN_PREFIX = ".";
@@ -183,4 +190,161 @@ public class FileUtil {
         }
         return false;
     }
+
+    public static boolean copyFilesToDest(ArrayList<File> fileArrayList, String destDir) {
+        boolean result = true;
+        if (checkCanPaste(fileArrayList, destDir)) {
+            for (File file : fileArrayList) {
+                result = result && copyFileOrDirectory(file.getAbsolutePath(), destDir);
+            }
+        }
+        return result;
+    }
+
+    public static boolean cutFilesToDest(ArrayList<File> fileArrayList, String destDir) {
+        boolean result = true;
+        if (checkCanPaste(fileArrayList, destDir)) {
+            for (File file : fileArrayList) {
+                result = result && file.renameTo(new File(destDir + File.separator + file.getName()));
+            }
+        }
+        return result;
+    }
+
+    public static boolean createFolder(String fullPath) {
+        boolean result = false;
+        try {
+            File file = new File(fullPath);
+            result = file.mkdirs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static ArrayList<File> deleteSelectedFiles(ArrayList<File> deleteFiles) {
+        ArrayList<File> result = new ArrayList<>();
+        for (File file : deleteFiles) {
+            result.addAll(deleteRecursive(file));
+        }
+        return result;
+    }
+
+    public static boolean renameSelectedFile(File file, String newFilePath) {
+        boolean result = false;
+        if (file != null && file.exists() && !TextUtils.isEmpty(newFilePath)) {
+            result = file.renameTo(new File(newFilePath));
+        }
+        return result;
+    }
+
+    public static int[] countFolderAndFile(File parent) {
+        return countFolderAndFileRecursive(parent);
+    }
+
+    // private start
+    private static ArrayList<File> deleteRecursive(File fileOrDirectory) {
+        ArrayList<File> result = new ArrayList<>();
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                result.addAll(deleteRecursive(child));
+            }
+            fileOrDirectory.delete();
+        } else {
+            boolean success = fileOrDirectory.delete();
+            if (!success) {
+                result.add(fileOrDirectory);
+            }
+        }
+        return result;
+    }
+
+    private static int[] countFolderAndFileRecursive(File parent) {
+        int[] result = new int[2];
+        int folder = 0;
+        int file = 0;
+        if (parent != null && parent.exists() && parent.isDirectory()) {
+            File[] childFiles = parent.listFiles();
+            for (File child : childFiles) {
+                if (child.isDirectory()) {
+                    int[] temp = countFolderAndFileRecursive(child);
+                    folder += temp[0];
+                    file += temp[1];
+
+                    folder++;
+                } else {
+                    file++;
+                }
+            }
+        }
+        result[0] = folder;
+        result[1] = file;
+        return result;
+    }
+
+    private static boolean checkCanPaste(ArrayList<File> fileArrayList, String destDir) {
+        boolean result = false;
+        if (fileArrayList != null && fileArrayList.size() > 0 && !TextUtils.isEmpty(destDir)) {
+            result = true;
+            for (File file : fileArrayList) {
+                if (destDir.startsWith(file.getAbsolutePath())) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static boolean copyFileOrDirectory(String srcDir, String dstDir) {
+        boolean result = true;
+        try {
+            File src = new File(srcDir);
+            File dst = new File(dstDir, src.getName());
+
+            if (src.isDirectory()) {
+
+                String files[] = src.list();
+                for (String file : files) {
+                    String src1 = (new File(src, file).getPath());
+                    String dst1 = dst.getPath();
+                    copyFileOrDirectory(src1, dst1);
+
+                }
+            } else {
+                copyFile(src, dst);
+            }
+        } catch (Exception e) {
+            result = false;
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!destFile.getParentFile().exists())
+            destFile.getParentFile().mkdirs();
+
+        if (!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        } finally {
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
+        }
+    }
+
+    // private end
 }

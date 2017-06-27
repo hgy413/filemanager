@@ -26,6 +26,7 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtil;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
 
 import java.io.File;
@@ -49,7 +50,8 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private ViewPager mVpPhoneStorage;
     private ViewPager.SimpleOnPageChangeListener mViewPageChangeListener;
     private TabLayout mTlViewPageTab;
-    private LinearLayout mLlBottomOperateContainer;
+    private LinearLayout mLlBottomOperateFirstContainer;
+    private LinearLayout mLlBottomOperateSecondContainer;
 
     private View mViewSearchMask;
 
@@ -194,29 +196,44 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             mTlViewPageTab.setupWithViewPager(mVpPhoneStorage);
         }
 
-        mLlBottomOperateContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_container);
-        if (mLlBottomOperateContainer != null) {
-            TextView cut = (TextView)mLlBottomOperateContainer.findViewById(R.id.tv_main_bottom_cut);
+        mLlBottomOperateFirstContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_first_container);
+        if (mLlBottomOperateFirstContainer != null) {
+            TextView cut = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_main_bottom_operate_first_container_cut);
             if (cut != null) {
                 cut.getPaint().setAntiAlias(true);
                 cut.setOnClickListener(this);
             }
 
-            TextView copy = (TextView)mLlBottomOperateContainer.findViewById(R.id.tv_main_bottom_copy);
+            TextView copy = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_main_bottom_operate_first_container_copy);
             if (copy != null) {
                 copy.getPaint().setAntiAlias(true);
                 copy.setOnClickListener(this);
             }
 
-            TextView paste = (TextView)mLlBottomOperateContainer.findViewById(R.id.tv_main_bottom_delete);
+            TextView paste = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_main_bottom_operate_first_container_delete);
             if (paste != null) {
                 paste.getPaint().setAntiAlias(true);
                 paste.setOnClickListener(this);
             }
 
-            ImageView more = (ImageView)mLlBottomOperateContainer.findViewById(R.id.iv_main_bottom_more);
+            ImageView more = (ImageView) mLlBottomOperateFirstContainer.findViewById(R.id.iv_main_bottom_operate_first_container_more);
             if (more != null) {
                 more.setOnClickListener(this);
+            }
+        }
+
+        mLlBottomOperateSecondContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_second_container);
+        if (mLlBottomOperateSecondContainer != null) {
+            TextView cancel = (TextView) mLlBottomOperateSecondContainer.findViewById(R.id.tv_main_bottom_operate_second_container_cancel);
+            if (cancel != null) {
+                cancel.getPaint().setAntiAlias(true);
+                cancel.setOnClickListener(this);
+            }
+
+            TextView ok = (TextView) mLlBottomOperateSecondContainer.findViewById(R.id.tv_main_bottom_operate_second_container_paste);
+            if (ok != null) {
+                ok.getPaint().setAntiAlias(true);
+                ok.setOnClickListener(this);
             }
         }
 
@@ -396,8 +413,8 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
 
         // 设置好参数之后再show
-        popupWindow.showAsDropDown(mLlBottomOperateContainer,
-                mLlBottomOperateContainer.getWidth() - contentView.getWidth(),
+        popupWindow.showAsDropDown(mLlBottomOperateFirstContainer,
+                mLlBottomOperateFirstContainer.getWidth() - contentView.getWidth(),
                 5);
 
         if (details != null) {
@@ -506,7 +523,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             size.setText(ConvertUtil.getReadableSize(file.length()));
 
             if (file.isDirectory()) {
-                int[] counts = FileManager.getInstance().countFolderAndFile(file);
+                int[] counts = FileUtil.countFolderAndFile(file);
                 containValue.setText(getString(R.string.main_dialog_single_detail_contain, counts[0], counts[1]));
             } else {
                 containTitle.setVisibility(View.GONE);
@@ -538,7 +555,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             Integer folderTotalCount = 0;
             Integer fileTotalCount = 0;
             for (File file : files) {
-                int[] count = FileManager.getInstance().countFolderAndFile(file);
+                int[] count = FileUtil.countFolderAndFile(file);
                 filesSize += file.length();
                 folderTotalCount += count[0];
                 fileTotalCount += count[1];
@@ -605,13 +622,23 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
-    public void updateSelectedFileChange() {
+    public void updateView() {
         if (mPresenter != null) {
-            ArrayList<File> selectedFiles = mPresenter.getSelectedFiles();
-            if (selectedFiles != null && selectedFiles.size() > 0) {
-                mLlBottomOperateContainer.setVisibility(View.VISIBLE);
-            } else {
-                mLlBottomOperateContainer.setVisibility(View.GONE);
+            int status = mPresenter.getStatus();
+            switch (status) {
+                case MainPresenter.MAIN_STATUS_NORMAL:
+                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                    mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                    break;
+                case MainPresenter.MAIN_STATUS_SELECT:
+                    mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
+                    mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                    break;
+                case MainPresenter.MAIN_STATUS_CUT:
+                case MainPresenter.MAIN_STATUS_COPY:
+                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                    mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
+                    break;
             }
         }
     }
@@ -651,24 +678,34 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     mPresenter.onClickActionMoreButton();
                 }
                 break;
-            case R.id.tv_main_bottom_cut:
+            case R.id.tv_main_bottom_operate_first_container_cut:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateCutButton();
                 }
                 break;
-            case R.id.tv_main_bottom_copy:
+            case R.id.tv_main_bottom_operate_first_container_copy:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateCopyButton();
                 }
                 break;
-            case R.id.tv_main_bottom_delete:
+            case R.id.tv_main_bottom_operate_first_container_delete:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateDeleteButton();
                 }
                 break;
-            case R.id.iv_main_bottom_more:
+            case R.id.iv_main_bottom_operate_first_container_more:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateMoreButton();
+                }
+                break;
+            case R.id.tv_main_bottom_operate_second_container_cancel:
+                if (mPresenter != null) {
+                    mPresenter.onClickOperateCancelButton();
+                }
+                break;
+            case R.id.tv_main_bottom_operate_second_container_paste:
+                if (mPresenter != null) {
+                    mPresenter.onClickOperatePasteButton();
                 }
                 break;
             default:

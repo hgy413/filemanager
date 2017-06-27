@@ -6,8 +6,10 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -129,17 +131,33 @@ class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public void onClickActionNewFolderButton() {
+        if (mView != null) {
+            mView.showNewFolderDialog();
+        }
+    }
+
+    @Override
+    public void onClickActionSortByButton() {
+        if (mView != null) {
+            mView.showSortByDialog();
+        }
+    }
+
+    @Override
     public void onClickOperateCutButton() {
-        // TODO
-
-
-        Toast.makeText(mSupport.getContext(), "Cut", Toast.LENGTH_LONG).show();
+        if (mView != null) {
+            mStatus = MAIN_STATUS_CUT;
+            mView.updateView();
+        }
     }
 
     @Override
     public void onClickOperateCopyButton() {
-        // TODO
-        Toast.makeText(mSupport.getContext(), "Copy", Toast.LENGTH_LONG).show();
+        if (mView != null) {
+            mStatus = MAIN_STATUS_COPY;
+            mView.updateView();
+        }
     }
 
     @Override
@@ -188,29 +206,45 @@ class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void onClickActionNewFolderButton() {
+    public void onClickOperateCancelButton() {
         if (mView != null) {
-            mView.showNewFolderDialog();
+            resetStatus();
+            mView.updateView();
         }
     }
 
     @Override
-    public void onClickActionSortByButton() {
+    public void onClickOperatePasteButton() {
         if (mView != null) {
-            mView.showSortByDialog();
+            ArrayList<File> copyList = new ArrayList<>(mSelectedFiles);
+            if (mStatus == MAIN_STATUS_COPY) {
+                FileUtil.copyFilesToDest(copyList, mCurrentPath);
+            } else if (mStatus == MAIN_STATUS_CUT) {
+                FileUtil.cutFilesToDest(copyList, mCurrentPath);
+            }
+
+            resetStatus();
+            mView.updateView();
         }
     }
 
     @Override
     public boolean onClickConfirmCreateFolderButton(String name) {
         // TODO 判断输入格式是否符合规定
-        return FileManager.getInstance().createFolder(name);
+        return FileUtil.createFolder(name);
     }
 
     @Override
     public boolean onClickConfirmDeleteButton() {
-        ArrayList<File> deleteFailedFiles = FileManager.getInstance().deleteSelectedFiles(mSelectedFiles);
-        return (deleteFailedFiles == null || deleteFailedFiles.size() == 0);
+        boolean result = false;
+        if (mView != null) {
+            ArrayList<File> deleteFailedFiles = FileUtil.deleteSelectedFiles(mSelectedFiles);
+            result = (deleteFailedFiles == null || deleteFailedFiles.size() == 0);
+
+            resetStatus();
+            mView.updateView();
+        }
+        return result;
     }
 
     @Override
@@ -218,7 +252,7 @@ class MainPresenter implements MainContract.Presenter {
         // TODO 判断输入格式是否符合规定
         boolean result = false;
         if (!TextUtils.isEmpty(mCurrentPath) && mSelectedFiles != null && mSelectedFiles.size() == 1) {
-            result = FileManager.getInstance().renameSelectedFile(mSelectedFiles.get(0), mCurrentPath + File.separator + name);
+            result = FileUtil.renameSelectedFile(mSelectedFiles.get(0), mCurrentPath + File.separator + name);
         }
         return result;
     }
@@ -237,30 +271,30 @@ class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void addSelected(File file) {
-        if (file != null) {
-            try {
-                if (!mSelectedFiles.contains(file)) {
-                    mSelectedFiles.add(file);
-                    mView.updateSelectedFileChange();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    public void addOrRemoveSelected(File file) {
+        switch (mStatus) {
+            case MAIN_STATUS_NORMAL:
+            case MAIN_STATUS_SELECT:
+                if (file != null) {
+                    try {
+                        if (mSelectedFiles.contains(file)) {
+                            mSelectedFiles.remove(file);
+                        } else {
+                            mSelectedFiles.add(file);
+                        }
 
-    @Override
-    public void removeSelected(File file) {
-        if (file != null) {
-            try {
-                if (mSelectedFiles.contains(file)) {
-                    mSelectedFiles.remove(file);
-                    mView.updateSelectedFileChange();
+                        if (mSelectedFiles.size() > 0) {
+                            mStatus = MAIN_STATUS_SELECT;
+                        } else {
+                            mStatus = MAIN_STATUS_NORMAL;
+                        }
+
+                        mView.updateView();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                break;
         }
     }
 
@@ -277,5 +311,11 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public String getCurrentPath() {
         return mCurrentPath;
+    }
+
+
+    private void resetStatus() {
+        mSelectedFiles.clear();
+        mStatus = MAIN_STATUS_NORMAL;
     }
 }

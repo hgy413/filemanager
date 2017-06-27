@@ -27,7 +27,7 @@ public class MainContract {
         void showNewFolderDialog();
         void showSortByDialog();
 
-        void updateSelectedFileChange();
+        void updateView();
 
         void openDrawer(int openType);
         void finishActivity();
@@ -48,25 +48,27 @@ public class MainContract {
         void onClickDrawerButton();
         void onClickActionSearchButton();
         void onClickActionMoreButton();
+        void onClickActionNewFolderButton();
+        void onClickActionSortByButton();
+
         void onClickOperateCutButton();
         void onClickOperateCopyButton();
         void onClickOperateDeleteButton();
         void onClickOperateMoreButton();
         void onClickOperateDetailButton();
         void onClickOperateRenameButton();
-        void onClickActionNewFolderButton();
-        void onClickActionSortByButton();
+        void onClickOperateCancelButton();
+        void onClickOperatePasteButton();
 
         boolean onClickConfirmCreateFolderButton(String name);
         boolean onClickConfirmDeleteButton();
         boolean onClickConfirmRenameButton(String name);
 
         boolean isSelected(File file);
-        public void addSelected(File file);
-        public void removeSelected(File file);
-        public ArrayList<File> getSelectedFiles();
-        public void updateCurrentPath(String path);
-        public String getCurrentPath();
+        void addOrRemoveSelected(File file);
+        ArrayList<File> getSelectedFiles();
+        void updateCurrentPath(String path);
+        String getCurrentPath();
     }
 
     interface Support {

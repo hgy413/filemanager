@@ -89,7 +89,7 @@
         </android.support.v4.view.ViewPager>
 
         <LinearLayout
-            android:id="@+id/ll_main_bottom_operate_container"
+            android:id="@+id/ll_main_bottom_operate_first_container"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
@@ -98,7 +98,7 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/tv_main_bottom_cut"
+                android:id="@+id/tv_main_bottom_operate_first_container_cut"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -111,7 +111,7 @@
                 android:textSize="16dp"/>
 
             <TextView
-                android:id="@+id/tv_main_bottom_copy"
+                android:id="@+id/tv_main_bottom_operate_first_container_copy"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -124,7 +124,7 @@
                 android:textSize="16dp"/>
 
             <TextView
-                android:id="@+id/tv_main_bottom_delete"
+                android:id="@+id/tv_main_bottom_operate_first_container_delete"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -137,7 +137,7 @@
                 android:textSize="16dp"/>
 
             <ImageView
-                android:id="@+id/iv_main_bottom_more"
+                android:id="@+id/iv_main_bottom_operate_first_container_more"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -147,6 +147,42 @@
                 android:src="@drawable/ic_operate_bar_more"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_main_bottom_operate_second_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="#77000000"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_main_bottom_operate_second_container_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:drawablePadding="3dp"
+                android:text="Cancel"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_main_bottom_operate_second_container_paste"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:drawablePadding="3dp"
+                android:text="Copy"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+        </LinearLayout>
+
 
         <View
             android:id="@+id/view_home_search_mask"
