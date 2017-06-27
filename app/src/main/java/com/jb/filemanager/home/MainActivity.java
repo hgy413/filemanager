@@ -22,7 +22,6 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
 import com.jb.filemanager.function.splash.SplashActivity;
-import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtil;

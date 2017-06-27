@@ -5,11 +5,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

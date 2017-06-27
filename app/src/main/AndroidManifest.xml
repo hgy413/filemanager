@@ -104,6 +104,12 @@
             </intent-filter>
         </activity>
 
+        <!-- 图片管理页 -->
+        <activity
+            android:name=".function.image.ImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <!-- 隐私页 -->
         <activity
             android:name=".function.privacy.PrivacyActivity"

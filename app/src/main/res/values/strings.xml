@@ -58,4 +58,6 @@
     <string name="feedback_tip_send_report">Yes, Report!</string>
     <string name="feedback_tip_no">No</string>
 
+    <string name="image_title">Image</string>
+
 </resources>

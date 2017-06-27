@@ -1,6 +1,7 @@
 package com.jb.filemanager.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.Logger;
@@ -134,9 +136,14 @@ public class CategoryFragment extends Fragment {
 
         mCategoryView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                // TODO
-                CategoryBean bean = (CategoryBean) mCategoryView.getItemAtPosition(position);
-                Toast.makeText(parent.getContext(), bean.getCategoryName(), Toast.LENGTH_SHORT).show();
+                switch (position) {
+                    case 0:
+                        // 图片管理
+                        startActivity(new Intent(getContext(), ImageActivity.class));
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
