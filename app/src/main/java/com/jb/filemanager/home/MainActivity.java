@@ -457,7 +457,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showRenameDialog() {
-        // TODO
         View dialogView = View.inflate(this, R.layout.dialog_main_rename, null);
         TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_rename_confirm);
         TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_rename_cancel);
@@ -480,7 +479,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     if (success) {
                         dialog.dismiss();
                     } else {
-                        // TODO
+                        // TODO 处理失败
                     }
                 }
             }
@@ -491,7 +490,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showDetailSingleFile(File file) {
-        // TODO
         if (file != null && file.exists()) {
             View dialogView = View.inflate(this, R.layout.dialog_main_single_file_detail, null);
             TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_confirm);
@@ -530,7 +528,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showDetailMultiFile(ArrayList<File> files) {
-        // TODO
         if (files != null && files.size() > 0) {
             View dialogView = View.inflate(this, R.layout.dialog_main_multi_files_detail, null);
             TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_confirm);
@@ -569,7 +566,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showNewFolderDialog() {
-        // TODO
         View dialogView = View.inflate(this, R.layout.dialog_main_create_folder, null);
         TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_confirm);
         TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_cancel);
@@ -593,7 +589,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     if (success) {
                         dialog.dismiss();
                     } else {
-                        // TODO
+                        // TODO 处理失败
                     }
                 }
             }
