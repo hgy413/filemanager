@@ -31,4 +31,23 @@
         <item name="android:windowIsTranslucent">false</item>
     </style>
 
+    <!-- 自定义弹出框基础样式， 自定义样式的Dialog如需定义theme, 请继承此theme -->
+    <style name="base_dialog_theme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- 屏幕背景设置是否变暗 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 出现及消失的动画 -->
+        <item name="android:windowAnimationStyle">@style/animation_baseDialog</item>
+    </style>
+
+    <!-- Dialog使用的动画样式 -->
+    <style name="animation_baseDialog" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/base_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/base_dialog_exit</item>
+    </style>
+
 </resources>

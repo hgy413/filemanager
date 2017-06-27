@@ -58,6 +58,7 @@ public class FileManager {
     public static final int LOADER_FILES = 5;
 
     private static FileManager sInstance;
+    private String mCurrentPath;
 
     private ArrayList<File> mSelectedFiles = new ArrayList<>();
 
@@ -112,4 +113,19 @@ public class FileManager {
         return mSelectedFiles;
     }
 
+    public void updateCurrentPath(String path) {
+        mCurrentPath = path;
+    }
+
+    public boolean createFolder(String folderName) {
+        boolean result = false;
+        try {
+            String path = mCurrentPath + File.separator + folderName;
+            File file = new File(path);
+            result = file.mkdirs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

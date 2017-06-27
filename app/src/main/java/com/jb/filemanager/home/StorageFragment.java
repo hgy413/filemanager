@@ -265,6 +265,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     }
 
     private void updateCurrentDir(File file) {
+        FileManager.getInstance().updateCurrentPath(file.getAbsolutePath());
+
         String currentPath = "";
         int count = mStorageList.size();
         for (int i = 0; i < count; i++) {

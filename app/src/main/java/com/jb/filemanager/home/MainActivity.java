@@ -23,6 +23,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
 import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.util.APIUtil;
 
 import java.io.File;
@@ -427,6 +428,37 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     public void showNewFolderDialog() {
         // TODO
+        View dialogView = View.inflate(this, R.layout.dialog_main_create_folder, null);
+        TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_confirm);
+        TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_cancel);
+        final EditText editText = (EditText) dialogView.findViewById(R.id.et_main_create_folder_input);
+
+        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        }); // 取消按钮点击事件
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mPresenter != null) {
+                    boolean success = mPresenter.onClickConfirmCreateFolderButton(editText.getText().toString());
+                    if (success) {
+                        dialog.dismiss();
+                    } else {
+                        // TODO
+                    }
+                }
+            }
+        }); // 确定按钮点击事件
+
+        dialog.show();
+
         Toast.makeText(this, "显示创建文件夹", Toast.LENGTH_SHORT).show();
     }
 

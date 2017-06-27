@@ -51,6 +51,8 @@ public class MainContract {
         void onClickActionNewFolderButton();
         void onClickActionSortByButton();
 
+        boolean onClickConfirmCreateFolderButton(String name);
+
     }
 
     interface Support {

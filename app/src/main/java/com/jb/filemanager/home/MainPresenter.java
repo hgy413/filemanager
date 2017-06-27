@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.jb.filemanager.R;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.home.event.SelectFileEvent;
+import com.jb.filemanager.manager.file.FileManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -185,5 +186,10 @@ class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.showSortByDialog();
         }
+    }
+
+    @Override
+    public boolean onClickConfirmCreateFolderButton(String name) {
+        return FileManager.getInstance().createFolder(name);
     }
 }
