@@ -176,20 +176,24 @@ class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onClickOperateDetailButton() {
-        // TODO
-        Toast.makeText(mSupport.getContext(), "Detail", Toast.LENGTH_LONG).show();
+        if (mView != null) {
+            ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
+            if (files != null && files.size() == 1) {
+                mView.showDetailSingleFile(files.get(0));
+            } else {
+                mView.showDetailMultiFile(files);
+            }
+        }
     }
 
     @Override
     public void onClickOperateRenameButton() {
-        // TODO
         if (mView != null) {
             ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
             if (files != null && files.size() == 1) {
                 mView.showNewFolderDialog();
             }
         }
-        Toast.makeText(mSupport.getContext(), "Rename", Toast.LENGTH_LONG).show();
     }
 
     @Override

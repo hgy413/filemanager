@@ -22,6 +22,8 @@ public class MainContract {
 
         void showDeleteConfirmDialog();
         void showRenameDialog();
+        void showDetailSingleFile(File file);
+        void showDetailMultiFile(ArrayList<File> files);
         void showNewFolderDialog();
         void showSortByDialog();
 

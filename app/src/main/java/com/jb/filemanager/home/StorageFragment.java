@@ -130,10 +130,9 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                 }
 
                 File file = adapter.getItem(position);
-                if (file.isDirectory() && !FileManager.getInstance().isSelected(file)) {
-                    mPathStack.push(file);
-                    restartLoad();
-                } else {
+
+                ArrayList<File> currentSelected = FileManager.getInstance().getSelectedFiles();
+                if ((currentSelected != null && currentSelected.size() > 0) || !file.isDirectory()) {
                     FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
                             .getTag();
                     if (holder != null) {
@@ -145,7 +144,11 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                             FileManager.getInstance().removeSelected(file);
                         }
                     }
+                } else {
+                    mPathStack.push(file);
+                    restartLoad();
                 }
+
             }
         });
         mLvFiles.setAdapter(mListAdapter);
@@ -199,10 +202,10 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                 restartLoad();
                 return true;
             } else if (mPathStack.size() == 1) {
-                mPathStack.pop();
                 if (mStorageList.size() == 1) {
                     return false;
                 } else {
+                    mPathStack.pop();
                     mHLvDirs.setVisibility(View.GONE);
                     mListAdapter.setListItems(mStorageList);
                     mGridAdapter.setListItems(mStorageList);

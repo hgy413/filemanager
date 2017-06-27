@@ -137,6 +137,20 @@ public class FileManager {
         return result;
     }
 
+    public boolean renameSelectedFile(String newName) {
+        boolean result = false;
+        if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
+            File file = mSelectedFiles.get(0);
+            result = file.renameTo(new File(mCurrentPath + File.separator + newName));
+        }
+        return result;
+    }
+
+    public int[] countFolderAndFile(File parent) {
+        return countFolderAndFileRecursive(parent);
+    }
+
+    // private start
     private ArrayList<File> deleteRecursive(File fileOrDirectory) {
         ArrayList<File> result = new ArrayList<>();
         if (fileOrDirectory.isDirectory()) {
@@ -152,12 +166,28 @@ public class FileManager {
         return result;
     }
 
-    public boolean renameSelectedFile(String newName) {
-        boolean result = false;
-        if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
-            File file = mSelectedFiles.get(0);
-            result = file.renameTo(new File(mCurrentPath + File.separator + newName));
+    private int[] countFolderAndFileRecursive(File parent) {
+        int[] result = new int[2];
+        int folder = 0;
+        int file = 0;
+        if (parent != null && parent.exists() && parent.isDirectory()) {
+            File[] childFiles = parent.listFiles();
+            for (File child : childFiles) {
+                if (child.isDirectory()) {
+                    int[] temp = countFolderAndFileRecursive(child);
+                    folder += temp[0];
+                    file += temp[1];
+
+                    folder++;
+                } else {
+                    file++;
+                }
+            }
         }
+        result[0] = folder;
+        result[1] = file;
         return result;
     }
+
+    // private end
 }

@@ -17,6 +17,7 @@
     <string name="main_category_item_number">(%1$d)</string>
     <string name="main_internal_storage">Internal storage</string>
     <string name="main_double_click_exit_app_tips">Press back again to exit Ace Network.</string>
+    <string name="main_dialog_single_detail_contain">%1$d folder(s), %2$d file(s)</string>
 
 
     <!-- 抽屉栏 -->
