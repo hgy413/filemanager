@@ -206,7 +206,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 copy.setOnClickListener(this);
             }
 
-            TextView paste = (TextView)mLlBottomOperateContainer.findViewById(R.id.tv_main_bottom_paste);
+            TextView paste = (TextView)mLlBottomOperateContainer.findViewById(R.id.tv_main_bottom_delete);
             if (paste != null) {
                 paste.getPaint().setAntiAlias(true);
                 paste.setOnClickListener(this);
@@ -426,6 +426,34 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
+    public void showDeleteConfirmDialog() {
+        View dialogView = View.inflate(this, R.layout.dialog_main_delete_confirm, null);
+        TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_delete_confirm_confirm);
+        TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_delete_confirm_cancel);
+
+        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        }); // 取消按钮点击事件
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (mPresenter != null) {
+                    mPresenter.onClickConfirmDeleteButton();
+                }
+            }
+        }); // 确定按钮点击事件
+
+        dialog.show();
+    }
+
+    @Override
     public void showNewFolderDialog() {
         // TODO
         View dialogView = View.inflate(this, R.layout.dialog_main_create_folder, null);
@@ -458,8 +486,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         }); // 确定按钮点击事件
 
         dialog.show();
-
-        Toast.makeText(this, "显示创建文件夹", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -523,9 +549,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     mPresenter.onClickOperateCopyButton();
                 }
                 break;
-            case R.id.tv_main_bottom_paste:
+            case R.id.tv_main_bottom_delete:
                 if (mPresenter != null) {
-                    mPresenter.onClickOperatePasteButton();
+                    mPresenter.onClickOperateDeleteButton();
                 }
                 break;
             case R.id.iv_main_bottom_more:

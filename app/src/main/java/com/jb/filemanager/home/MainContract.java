@@ -20,6 +20,7 @@ public class MainContract {
         void showActionMoreOperatePopWindow();
         void showBottomMoreOperatePopWindow(boolean multiSelected);
 
+        void showDeleteConfirmDialog();
         void showNewFolderDialog();
         void showSortByDialog();
 
@@ -44,7 +45,7 @@ public class MainContract {
         void onClickActionMoreButton();
         void onClickOperateCutButton();
         void onClickOperateCopyButton();
-        void onClickOperatePasteButton();
+        void onClickOperateDeleteButton();
         void onClickOperateMoreButton();
         void onClickOperateDetailButton();
         void onClickOperateRenameButton();
@@ -52,7 +53,7 @@ public class MainContract {
         void onClickActionSortByButton();
 
         boolean onClickConfirmCreateFolderButton(String name);
-
+        void onClickConfirmDeleteButton();
     }
 
     interface Support {

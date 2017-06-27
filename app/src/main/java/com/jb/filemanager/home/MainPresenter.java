@@ -149,9 +149,16 @@ class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void onClickOperatePasteButton() {
-        // TODO
-        Toast.makeText(mSupport.getContext(), "Paste", Toast.LENGTH_LONG).show();
+    public void onClickOperateDeleteButton() {
+        if (mView != null) {
+            ArrayList<File> selectedFiles = FileManager.getInstance().getSelectedFiles();
+            if (selectedFiles != null && selectedFiles.size() > 0) {
+                mView.showDeleteConfirmDialog();
+            } else {
+                // TODO
+                Toast.makeText(mSupport.getContext(), "no selected file", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -191,5 +198,10 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public boolean onClickConfirmCreateFolderButton(String name) {
         return FileManager.getInstance().createFolder(name);
+    }
+
+    @Override
+    public void onClickConfirmDeleteButton() {
+        FileManager.getInstance().deleteSelectedFiles();
     }
 }

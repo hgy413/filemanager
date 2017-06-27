@@ -128,4 +128,18 @@ public class FileManager {
         }
         return result;
     }
+
+    public void deleteSelectedFiles() {
+        for (File file : mSelectedFiles) {
+            deleteRecursive(file);
+        }
+    }
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
 }

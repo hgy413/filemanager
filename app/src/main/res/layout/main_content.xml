@@ -124,7 +124,7 @@
                 android:textSize="16dp"/>
 
             <TextView
-                android:id="@+id/tv_main_bottom_paste"
+                android:id="@+id/tv_main_bottom_delete"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -132,7 +132,7 @@
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_drawer_feedback"
                 android:drawablePadding="3dp"
-                android:text="Paste"
+                android:text="Delete"
                 android:textColor="#FFFFFF"
                 android:textSize="16dp"/>
 
