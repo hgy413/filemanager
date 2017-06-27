@@ -39,4 +39,6 @@ public class IPreferencesIds {
 
     // 设置是否显示隐藏文件
     public final static String KEY_SETTING_SHOW_HIDDEN_FILES = "key_setting_show_hidden_files";
+
+    public static final String KEY_CLEAN_SCAN_TIME = "key_clean_scan_time";
 }

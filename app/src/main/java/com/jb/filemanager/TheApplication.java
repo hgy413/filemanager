@@ -35,6 +35,8 @@ import com.jiubang.commerce.daemon.DaemonClient;
 import com.jiubang.commerce.daemon.DaemonConfigurations;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.reflect.Method;
 
 /**
@@ -51,6 +53,7 @@ public class TheApplication extends Application {
     private ScheduleTaskHandler mTaskHandler;
     private AlarmEight mAlarmEight;
 
+    private final static EventBus GLOBAL_EVENT_BUS = EventBus.getDefault();
     /**
      * 异步线程，用于处理一般比较短暂的耗时操作，如数据库读写操作等<br>
      */
@@ -441,5 +444,31 @@ public class TheApplication extends Application {
         handler.removeCallbacksAndMessages(null);
     }
 
+    /**
+     * 获取一个全局的EventBus实例<br>
+     *
+     * @return
+     */
+    public static EventBus getGlobalEventBus() {
+        return GLOBAL_EVENT_BUS;
+    }
+
+    /**
+     * 使用全局EventBus post一个事件<br>
+     *
+     * @param event
+     */
+    public static void postEvent(Object event) {
+        GLOBAL_EVENT_BUS.post(event);
+    }
+
+    /**
+     * 使用全局EventBus post一个Sticky事件<br>
+     *
+     * @param event
+     */
+    public static void postStickyEvent(Object event) {
+        GLOBAL_EVENT_BUS.postSticky(event);
+    }
 
 }

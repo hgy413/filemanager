@@ -27,6 +27,14 @@ public class Const {
     public static final String ROOT_FOLDER_NAME = "filemanager";
     public static final String FILE_MANAGER_DIR = SDCARD + File.separator + ROOT_FOLDER_NAME;
     public static final String IMAGE_CACHE_DIR = FILE_MANAGER_DIR + "thumbs";
+    public final static String BOOST_DIR = SDCARD + File.separator + ROOT_FOLDER_NAME;
+
+    // 本地图片缓存路径
+    public static final String CACHE_DIR = BOOST_DIR + "/cache";
+    // 备份路径
+    public static final String BACK_UP_PATH_STRING = BOOST_DIR + "/backup/";
+    public static final String BACK_UP_PATH = BACK_UP_PATH_STRING;
+
 
     // crash 路径
     public static final String LOG_DIR = FILE_MANAGER_DIR + "/log/";

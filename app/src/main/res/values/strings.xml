@@ -60,4 +60,34 @@
 
     <string name="image_title">Image</string>
 
+
+
+    <!-- 文件类型 -->
+    <string name="filetype_video">Video</string>
+    <string name="filetype_image">Picture</string>
+    <string name="filetype_music">Music</string>
+    <string name="filetype_document">Document</string>
+    <string name="filetype_apk">Apk</string>
+    <string name="filetype_text">Text</string>
+    <string name="filetype_audio">Audio</string>
+    <string name="filetype_compression">Compression</string>
+    <string name="common_others">Others</string>
+
+
+    <string name="clean_days_ago"> days old</string>
+    <string name="clean_group_residue">Residual Files</string>
+    <string name="clean_group_cache">Cache Junk</string>
+    <string name="clean_group_temp">System Temp Files</string>
+    <string name="clean_group_apk">Obsolete apks</string>
+    <string name="clean_group_big_file">Big File</string>
+    <string name="clean_group_ad">AD Junk</string>
+    <string name="clean_group_memory">Memory Junk</string>
+
+    <string name="clean_item_sys_cache">System Cache</string>
+    <string name="gallery_thumbnails">Gallery Thumbnails</string>
+
+    <string name="clean_subitem_detail_result_0">%1$s &lt;font color="#0083ff">Your files will not be affected after cleaning.&lt;/font></string>
+    <string name="clean_subitem_detail_result_1">%1$s &lt;font color="#0083ff">Cleaning is completely safe.&lt;/font></string>
+    <string name="clean_subitem_detail_result_2">%1$s &lt;font color="#FF8517">They will need to be redownloaded.&lt;/font></string>
+    <string name="clean_subitem_detail_result_10">%1$s &lt;font color="#FF8517">Cleaning will remove these forever!&lt;/font></string>
 </resources>

@@ -20,11 +20,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -36,7 +32,9 @@ import android.widget.Toast;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.scanframe.bean.appBean.RunningAppBean;
 import com.jb.filemanager.manager.PackageManagerLocker;
+import com.jb.filemanager.manager.ProcessManager;
 import com.jb.filemanager.util.device.Machine;
 
 import java.io.BufferedReader;
@@ -50,8 +48,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+
 import static com.jb.ga0.commerce.util.topApp.TopHelper.sNotALauncher;
-import static com.jiubang.commerce.buychannel.buyChannel.utils.AppInfoUtils.GOOGLE_ADVERTING_DEFAULT_ID;
 
 /**
  * @version 1.0.0
@@ -1239,5 +1237,34 @@ public class AppUtils {
             }
         }
         return sChannel;
+    }
+
+    /**
+     * 查询手机内所有应用
+     *
+     * @param context
+     * @return
+     */
+    public static List<String> getInstalledPackagesPackageNameOnly(
+            Context context) {
+        List<PackageInfo> paklist = getInstalledPackages(context);
+        List<String> packNames = new ArrayList<String>();
+        for (PackageInfo packageInfo : paklist) {
+            packNames.add(packageInfo.packageName);
+        }
+        return packNames;
+    }
+
+    /**
+     * 获取正在运行的应用, 未过滤
+     *
+     * @param context
+     * @return
+     * @author xiaoyu
+     */
+    public static List<RunningAppBean> getRunningApps(Context context) {
+        List<RunningAppBean> result = ProcessManager.getInstance(context)
+                .getRunningAppList();
+        return result;
     }
 }
