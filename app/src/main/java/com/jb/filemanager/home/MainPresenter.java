@@ -151,13 +151,7 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateDeleteButton() {
         if (mView != null) {
-            ArrayList<File> selectedFiles = FileManager.getInstance().getSelectedFiles();
-            if (selectedFiles != null && selectedFiles.size() > 0) {
-                mView.showDeleteConfirmDialog();
-            } else {
-                // TODO
-                Toast.makeText(mSupport.getContext(), "no selected file", Toast.LENGTH_SHORT).show();
-            }
+            mView.showDeleteConfirmDialog();
         }
     }
 
