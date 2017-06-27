@@ -158,8 +158,19 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateMoreButton() {
         if (mView != null) {
-//            mView.showBottomMoreOperatePopWindow(true);
-            mView.showBottomMoreOperatePopWindow(false);
+            ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
+            if (files != null) {
+                int size = files.size();
+                // 这里size 只可能是大于等于1，没有选中文件的时候应该不会出现底部操作栏
+                switch (size) {
+                    case 1:
+                        mView.showBottomMoreOperatePopWindow(false);
+                        break;
+                    default:
+                        mView.showBottomMoreOperatePopWindow(true);
+                        break;
+                }
+            }
         }
     }
 
@@ -172,6 +183,12 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateRenameButton() {
         // TODO
+        if (mView != null) {
+            ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
+            if (files != null && files.size() == 1) {
+                mView.showNewFolderDialog();
+            }
+        }
         Toast.makeText(mSupport.getContext(), "Rename", Toast.LENGTH_LONG).show();
     }
 
@@ -195,7 +212,13 @@ class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void onClickConfirmDeleteButton() {
-        FileManager.getInstance().deleteSelectedFiles();
+    public boolean onClickConfirmDeleteButton() {
+        ArrayList<File> deleteFailedFiles = FileManager.getInstance().deleteSelectedFiles();
+        return (deleteFailedFiles == null || deleteFailedFiles.size() == 0);
+    }
+
+    @Override
+    public boolean onClickConfirmRenameButton(String name) {
+        return FileManager.getInstance().renameSelectedFile(name);
     }
 }

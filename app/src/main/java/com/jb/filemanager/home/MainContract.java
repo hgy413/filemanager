@@ -21,6 +21,7 @@ public class MainContract {
         void showBottomMoreOperatePopWindow(boolean multiSelected);
 
         void showDeleteConfirmDialog();
+        void showRenameDialog();
         void showNewFolderDialog();
         void showSortByDialog();
 
@@ -53,7 +54,8 @@ public class MainContract {
         void onClickActionSortByButton();
 
         boolean onClickConfirmCreateFolderButton(String name);
-        void onClickConfirmDeleteButton();
+        boolean onClickConfirmDeleteButton();
+        boolean onClickConfirmRenameButton(String name);
     }
 
     interface Support {

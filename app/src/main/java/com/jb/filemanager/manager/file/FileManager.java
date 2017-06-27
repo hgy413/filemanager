@@ -129,17 +129,35 @@ public class FileManager {
         return result;
     }
 
-    public void deleteSelectedFiles() {
+    public ArrayList<File> deleteSelectedFiles() {
+        ArrayList<File> result = new ArrayList<>();
         for (File file : mSelectedFiles) {
-            deleteRecursive(file);
+            result.addAll(deleteRecursive(file));
         }
+        return result;
     }
 
-    private void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : fileOrDirectory.listFiles())
-                deleteRecursive(child);
+    private ArrayList<File> deleteRecursive(File fileOrDirectory) {
+        ArrayList<File> result = new ArrayList<>();
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                result.addAll(deleteRecursive(child));
+            }
+        } else {
+            boolean success = fileOrDirectory.delete();
+            if (!success) {
+                result.add(fileOrDirectory);
+            }
+        }
+        return result;
+    }
 
-        fileOrDirectory.delete();
+    public boolean renameSelectedFile(String newName) {
+        boolean result = false;
+        if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
+            File file = mSelectedFiles.get(0);
+            result = file.renameTo(new File(mCurrentPath + File.separator + newName));
+        }
+        return result;
     }
 }
