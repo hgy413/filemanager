@@ -1,16 +1,11 @@
 package com.jb.filemanager.home;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
-import com.jb.filemanager.home.event.SelectFileEvent;
 import com.jb.filemanager.manager.file.FileManager;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +18,11 @@ import java.util.ArrayList;
 @SuppressWarnings("StatementWithEmptyBody")
 class MainPresenter implements MainContract.Presenter {
 
+    public static final int MAIN_STATUS_NORMAL = 0;
+    public static final int MAIN_STATUS_SELECT = 1;
+    public static final int MAIN_STATUS_CUT = 2;
+    public static final int MAIN_STATUS_COPY = 3;
+
     private MainContract.View mView;
     private MainContract.Support mSupport;
 
@@ -31,26 +31,14 @@ class MainPresenter implements MainContract.Presenter {
 
     private long mExitTime;
 
-    private IOnEventMainThreadSubscriber<SelectFileEvent> mSelectFileEvent = new IOnEventMainThreadSubscriber<SelectFileEvent>() {
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        @Override
-        public void onEventMainThread(SelectFileEvent event) {
-            File file = event.mFile;
-            try {
-                if (file != null && mView != null) {
-                    mView.updateSelectedFileChange();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
+    private int mStatus = MAIN_STATUS_NORMAL;
+
+    private ArrayList<File> mSelectedFiles = new ArrayList<>();
+    private String mCurrentPath;
 
     MainPresenter(MainContract.View view, MainContract.Support support) {
         mView = view;
         mSupport = support;
-
-        EventBus.getDefault().register(mSelectFileEvent);
     }
 
     @Override
@@ -70,7 +58,6 @@ class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(mSelectFileEvent);
         mView = null;
         mSupport = null;
     }
@@ -107,6 +94,11 @@ class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public int getStatus() {
+        return mStatus;
+    }
+
+    @Override
     public void onSwitchTab(int pos) {
         if (mView != null) {
             mCurrentTab = pos;
@@ -139,6 +131,8 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateCutButton() {
         // TODO
+
+
         Toast.makeText(mSupport.getContext(), "Cut", Toast.LENGTH_LONG).show();
     }
 
@@ -158,9 +152,8 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateMoreButton() {
         if (mView != null) {
-            ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
-            if (files != null) {
-                int size = files.size();
+            if (mSelectedFiles != null) {
+                int size = mSelectedFiles.size();
                 // 这里size 只可能是大于等于1，没有选中文件的时候应该不会出现底部操作栏
                 switch (size) {
                     case 1:
@@ -177,11 +170,10 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateDetailButton() {
         if (mView != null) {
-            ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
-            if (files != null && files.size() == 1) {
-                mView.showDetailSingleFile(files.get(0));
+            if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
+                mView.showDetailSingleFile(mSelectedFiles.get(0));
             } else {
-                mView.showDetailMultiFile(files);
+                mView.showDetailMultiFile(mSelectedFiles);
             }
         }
     }
@@ -189,8 +181,7 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateRenameButton() {
         if (mView != null) {
-            ArrayList<File> files = FileManager.getInstance().getSelectedFiles();
-            if (files != null && files.size() == 1) {
+            if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
                 mView.showNewFolderDialog();
             }
         }
@@ -218,13 +209,73 @@ class MainPresenter implements MainContract.Presenter {
 
     @Override
     public boolean onClickConfirmDeleteButton() {
-        ArrayList<File> deleteFailedFiles = FileManager.getInstance().deleteSelectedFiles();
+        ArrayList<File> deleteFailedFiles = FileManager.getInstance().deleteSelectedFiles(mSelectedFiles);
         return (deleteFailedFiles == null || deleteFailedFiles.size() == 0);
     }
 
     @Override
     public boolean onClickConfirmRenameButton(String name) {
         // TODO 判断输入格式是否符合规定
-        return FileManager.getInstance().renameSelectedFile(name);
+        boolean result = false;
+        if (!TextUtils.isEmpty(mCurrentPath) && mSelectedFiles != null && mSelectedFiles.size() == 1) {
+            result = FileManager.getInstance().renameSelectedFile(mSelectedFiles.get(0), mCurrentPath + File.separator + name);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isSelected(File file) {
+        boolean result = false;
+        if (file != null) {
+            try {
+                result = mSelectedFiles.contains(file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void addSelected(File file) {
+        if (file != null) {
+            try {
+                if (!mSelectedFiles.contains(file)) {
+                    mSelectedFiles.add(file);
+                    mView.updateSelectedFileChange();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void removeSelected(File file) {
+        if (file != null) {
+            try {
+                if (mSelectedFiles.contains(file)) {
+                    mSelectedFiles.remove(file);
+                    mView.updateSelectedFileChange();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<File> getSelectedFiles() {
+        return mSelectedFiles;
+    }
+
+    @Override
+    public void updateCurrentPath(String path) {
+        mCurrentPath = path;
+    }
+
+    @Override
+    public String getCurrentPath() {
+        return mCurrentPath;
     }
 }

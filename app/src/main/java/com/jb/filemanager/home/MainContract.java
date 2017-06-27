@@ -42,6 +42,8 @@ public class MainContract {
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
 
+        int getStatus();
+
         void onSwitchTab(int tabPos);
         void onClickDrawerButton();
         void onClickActionSearchButton();
@@ -58,6 +60,13 @@ public class MainContract {
         boolean onClickConfirmCreateFolderButton(String name);
         boolean onClickConfirmDeleteButton();
         boolean onClickConfirmRenameButton(String name);
+
+        boolean isSelected(File file);
+        public void addSelected(File file);
+        public void removeSelected(File file);
+        public ArrayList<File> getSelectedFiles();
+        public void updateCurrentPath(String path);
+        public String getCurrentPath();
     }
 
     interface Support {

@@ -1,12 +1,10 @@
 package com.jb.filemanager.manager.file;
 
-import com.jb.filemanager.Const;
-import com.jb.filemanager.home.event.SelectFileEvent;
+import android.text.TextUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 
 /**
@@ -58,9 +56,7 @@ public class FileManager {
     public static final int LOADER_FILES = 5;
 
     private static FileManager sInstance;
-    private String mCurrentPath;
 
-    private ArrayList<File> mSelectedFiles = new ArrayList<>();
 
     public static FileManager getInstance() {
         synchronized (FileManager.class) {
@@ -71,57 +67,10 @@ public class FileManager {
         }
     }
 
-    public boolean isSelected(File file) {
-        boolean result = false;
-        if (file != null) {
-            try {
-                result = mSelectedFiles.contains(file);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
-    public void addSelected(File file) {
-        if (file != null) {
-            try {
-                if (!mSelectedFiles.contains(file)) {
-                    mSelectedFiles.add(file);
-                    EventBus.getDefault().post(new SelectFileEvent(file));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void removeSelected(File file) {
-        if (file != null) {
-            try {
-                if (mSelectedFiles.contains(file)) {
-                    mSelectedFiles.remove(file);
-                    EventBus.getDefault().post(new SelectFileEvent(file));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public ArrayList<File> getSelectedFiles() {
-        return mSelectedFiles;
-    }
-
-    public void updateCurrentPath(String path) {
-        mCurrentPath = path;
-    }
-
-    public boolean createFolder(String folderName) {
+    public boolean createFolder(String fullPath) {
         boolean result = false;
         try {
-            String path = mCurrentPath + File.separator + folderName;
-            File file = new File(path);
+            File file = new File(fullPath);
             result = file.mkdirs();
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,19 +78,18 @@ public class FileManager {
         return result;
     }
 
-    public ArrayList<File> deleteSelectedFiles() {
+    public ArrayList<File> deleteSelectedFiles(ArrayList<File> deleteFiles) {
         ArrayList<File> result = new ArrayList<>();
-        for (File file : mSelectedFiles) {
+        for (File file : deleteFiles) {
             result.addAll(deleteRecursive(file));
         }
         return result;
     }
 
-    public boolean renameSelectedFile(String newName) {
+    public boolean renameSelectedFile(File file, String newFilePath) {
         boolean result = false;
-        if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
-            File file = mSelectedFiles.get(0);
-            result = file.renameTo(new File(mCurrentPath + File.separator + newName));
+        if (file != null && file.exists() && !TextUtils.isEmpty(newFilePath)) {
+            result = file.renameTo(new File(newFilePath));
         }
         return result;
     }

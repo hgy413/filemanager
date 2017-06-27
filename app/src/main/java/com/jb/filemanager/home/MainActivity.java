@@ -606,11 +606,13 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void updateSelectedFileChange() {
-        ArrayList<File> selectedFiles = FileManager.getInstance().getSelectedFiles();
-        if (selectedFiles != null && selectedFiles.size() > 0) {
-            mLlBottomOperateContainer.setVisibility(View.VISIBLE);
-        } else {
-            mLlBottomOperateContainer.setVisibility(View.GONE);
+        if (mPresenter != null) {
+            ArrayList<File> selectedFiles = mPresenter.getSelectedFiles();
+            if (selectedFiles != null && selectedFiles.size() > 0) {
+                mLlBottomOperateContainer.setVisibility(View.VISIBLE);
+            } else {
+                mLlBottomOperateContainer.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -698,7 +700,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 }
                     break;
                 case 1: {
-                    fragment = new StorageFragment();
+                    StorageFragment storageFragment = new StorageFragment();
+                    storageFragment.setPresenter(mPresenter);
+                    fragment = storageFragment;
 //                    Bundle args = new Bundle();
 //                    fragment.setArguments(args);
                 }

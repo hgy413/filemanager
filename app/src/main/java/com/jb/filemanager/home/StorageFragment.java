@@ -32,6 +32,7 @@ import com.jb.filemanager.util.images.ImageCache;
 import com.jb.filemanager.util.images.ImageFetcher;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -54,6 +55,12 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     private FileListAdapter mListAdapter;
     private FileGridAdapter mGridAdapter;
 
+    private WeakReference<MainContract.Presenter> mMainPresenterRef;
+
+    public void setPresenter(MainContract.Presenter presenter) {
+        mMainPresenterRef = new WeakReference<>(presenter);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +69,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         mStorageList = new ArrayList<>();
         initStoragePath();
 
-        mListAdapter = new FileListAdapter(getActivity(), mStorageList);
-        mGridAdapter = new FileGridAdapter(getActivity(), mStorageList);
+        mListAdapter = new FileListAdapter(getActivity(), mStorageList, mMainPresenterRef.get());
+        mGridAdapter = new FileGridAdapter(getActivity(), mStorageList, mMainPresenterRef.get());
     }
 
     @Override
@@ -131,24 +138,29 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
                 File file = adapter.getItem(position);
 
-                ArrayList<File> currentSelected = FileManager.getInstance().getSelectedFiles();
-                if ((currentSelected != null && currentSelected.size() > 0) || !file.isDirectory()) {
-                    FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
-                            .getTag();
-                    if (holder != null) {
-                        boolean isSelected = holder.mIvChecked.isSelected();
-                        holder.mIvChecked.setSelected(!isSelected);
-                        if (!isSelected) {
-                            FileManager.getInstance().addSelected(file);
-                        } else {
-                            FileManager.getInstance().removeSelected(file);
-                        }
-                    }
-                } else {
-                    mPathStack.push(file);
-                    restartLoad();
-                }
+                int status;
+                if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+                    MainContract.Presenter presenter = mMainPresenterRef.get();
+                    status = presenter.getStatus();
 
+                    if (status == MainPresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
+                        // 选择模式或者是单个文件点击处理
+                        FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
+                                .getTag();
+                        if (holder != null) {
+                            boolean isSelected = holder.mIvChecked.isSelected();
+                            holder.mIvChecked.setSelected(!isSelected);
+                            if (!isSelected) {
+                                presenter.addSelected(file);
+                            } else {
+                                presenter.removeSelected(file);
+                            }
+                        }
+                    } else {
+                        mPathStack.push(file);
+                        restartLoad();
+                    }
+                }
             }
         });
         mLvFiles.setAdapter(mListAdapter);
@@ -162,20 +174,23 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                     return;
                 }
 
-                File file = adapter.getItem(position);
-                if (file.isDirectory() && !FileManager.getInstance().isSelected(file)) {
-                    mPathStack.push(file);
-                    restartLoad();
-                } else {
-                    FileGridAdapter.ViewHolder holder = (FileGridAdapter.ViewHolder) view
-                            .getTag();
-                    if (holder != null) {
-                        boolean isSelected = holder.mIvChecked.isSelected();
-                        holder.mIvChecked.setSelected(!isSelected);
-                        if (!isSelected) {
-                            FileManager.getInstance().addSelected(file);
-                        } else {
-                            FileManager.getInstance().removeSelected(file);
+                if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+                    MainContract.Presenter presenter = mMainPresenterRef.get();
+                    File file = adapter.getItem(position);
+                    if (file.isDirectory() && !presenter.isSelected(file)) {
+                        mPathStack.push(file);
+                        restartLoad();
+                    } else {
+                        FileGridAdapter.ViewHolder holder = (FileGridAdapter.ViewHolder) view
+                                .getTag();
+                        if (holder != null) {
+                            boolean isSelected = holder.mIvChecked.isSelected();
+                            holder.mIvChecked.setSelected(!isSelected);
+                            if (!isSelected) {
+                                presenter.addSelected(file);
+                            } else {
+                                presenter.removeSelected(file);
+                            }
                         }
                     }
                 }
@@ -268,7 +283,9 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     }
 
     private void updateCurrentDir(File file) {
-        FileManager.getInstance().updateCurrentPath(file.getAbsolutePath());
+        if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+            mMainPresenterRef.get().updateCurrentPath(file.getAbsolutePath());
+        }
 
         String currentPath = "";
         int count = mStorageList.size();
@@ -454,8 +471,11 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     private static class FileListAdapter extends FileAdapter {
 
-        FileListAdapter(Context context, List<File> rootDirs) {
+        WeakReference<MainContract.Presenter> mMainPresenterRef;
+
+        FileListAdapter(Context context, List<File> rootDirs, MainContract.Presenter presenter) {
             super(context, rootDirs);
+            mMainPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
@@ -509,27 +529,30 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             }
 
             // 选中标识
-            if (FileManager.getInstance().isSelected(file)) {
-                holder.mIvChecked.setSelected(true);
-            } else {
-                holder.mIvChecked.setSelected(false);
-            }
-            holder.mIvChecked.setTag(position);
-            holder.mIvChecked.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    boolean isSelected = holder.mIvChecked.isSelected();
-                    File file = getItem(position);
-                    if (!isSelected) {
-                        FileManager.getInstance().addSelected(file);
-                    } else {
-                        FileManager.getInstance().removeSelected(file);
-                    }
-                    holder.mIvChecked.setSelected(!isSelected);
+            if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+                if (mMainPresenterRef.get().isSelected(file)) {
+                    holder.mIvChecked.setSelected(true);
+                } else {
+                    holder.mIvChecked.setSelected(false);
                 }
-            });
+                holder.mIvChecked.setTag(position);
+                holder.mIvChecked.setOnClickListener(new View.OnClickListener() {
 
+                    @Override
+                    public void onClick(View v) {
+                        if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+                            boolean isSelected = holder.mIvChecked.isSelected();
+                            File file = getItem(position);
+                            if (!isSelected) {
+                                mMainPresenterRef.get().addSelected(file);
+                            } else {
+                                mMainPresenterRef.get().removeSelected(file);
+                            }
+                            holder.mIvChecked.setSelected(!isSelected);
+                        }
+                    }
+                });
+            }
             return convertView;
         }
 
@@ -543,8 +566,11 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     private static class FileGridAdapter extends FileAdapter {
 
-        FileGridAdapter(Context context, List<File> rootDirs) {
+        WeakReference<MainContract.Presenter> mMainPresenterRef;
+
+        FileGridAdapter(Context context, List<File> rootDirs, MainContract.Presenter presenter) {
             super(context, rootDirs);
+            mMainPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
@@ -586,26 +612,31 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             }
 
             // 选中标识
-            if (FileManager.getInstance().isSelected(file)) {
-                holder.mIvChecked.setSelected(true);
-            } else {
-                holder.mIvChecked.setSelected(false);
-            }
-            holder.mIvChecked.setTag(position);
-            holder.mIvChecked.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    boolean isSelected = holder.mIvChecked.isSelected();
-                    File file = getItem(position);
-                    if (!isSelected) {
-                        FileManager.getInstance().addSelected(file);
-                    } else {
-                        FileManager.getInstance().removeSelected(file);
-                    }
-                    holder.mIvChecked.setSelected(!isSelected);
+            if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+                if (mMainPresenterRef.get().isSelected(file)) {
+                    holder.mIvChecked.setSelected(true);
+                } else {
+                    holder.mIvChecked.setSelected(false);
                 }
-            });
+                holder.mIvChecked.setTag(position);
+                holder.mIvChecked.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
+                            boolean isSelected = holder.mIvChecked.isSelected();
+                            File file = getItem(position);
+                            if (!isSelected) {
+                                mMainPresenterRef.get().addSelected(file);
+                            } else {
+                                mMainPresenterRef.get().removeSelected(file);
+                            }
+                            holder.mIvChecked.setSelected(!isSelected);
+                        }
+                    }
+                });
+            }
+
 
             return convertView;
         }
