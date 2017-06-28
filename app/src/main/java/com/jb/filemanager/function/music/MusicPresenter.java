@@ -3,6 +3,7 @@ package com.jb.filemanager.function.music;
 import android.content.Intent;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 /**
@@ -11,6 +12,12 @@ import java.io.File;
  */
 
 public class MusicPresenter implements MusicContract.Presenter {
+
+    public static final int MUSIC_STATUS_NORMAL = 0;
+    public static final int MUSIC_STATUS_SELECT = 1;
+
+    private ArrayList<File> mSelectedFiles = new ArrayList<>();
+    private int mStatus = MUSIC_STATUS_NORMAL;
 
     private MusicContract.View mView;
     private MusicContract.Support mSupport;
@@ -64,6 +71,37 @@ public class MusicPresenter implements MusicContract.Presenter {
 
     @Override
     public boolean isSelected(File file) {
-        return false;
+        boolean result = false;
+        if (file != null) {
+            try {
+                result = mSelectedFiles.contains(file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void addOrRemoveSelected(File file) {
+        if (file != null) {
+            try {
+                if (mSelectedFiles.contains(file)) {
+                    mSelectedFiles.remove(file);
+                } else {
+                    mSelectedFiles.add(file);
+                }
+
+                if (mSelectedFiles.size() > 0) {
+                    mStatus = MUSIC_STATUS_SELECT;
+                } else {
+                    mStatus = MUSIC_STATUS_NORMAL;
+                }
+
+                mView.updateView();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

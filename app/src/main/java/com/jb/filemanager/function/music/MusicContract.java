@@ -14,6 +14,8 @@ import java.io.File;
 public class MusicContract {
     interface View {
         void finishActivity();
+
+        void updateView();
     }
 
     interface Presenter {
@@ -26,6 +28,7 @@ public class MusicContract {
         void onPressHomeKey();
 
         boolean isSelected(File file);
+        void addOrRemoveSelected(File file);
     }
 
     interface Support {

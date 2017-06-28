@@ -10,7 +10,6 @@ import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.text.format.Formatter;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.CursorTreeAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +31,8 @@ import com.jb.filemanager.util.images.Utils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bill wang on 2017/6/28.
@@ -231,6 +231,11 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
         super.onBackPressed();
     }
 
+    @Override
+    public void updateView() {
+        // TODO
+    }
+
     // implements LoaderManager.LoaderCallbacks<Cursor>
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -299,10 +304,13 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
         private LayoutInflater mInflater;
         private WeakReference<MusicContract.Presenter> mPresenterRef;
 
+        private Map<String, Integer> mChildCheckedCount;
+
         public MusicAdapter(Context context) {
             super(null, context, true);
             mContext = context;
             mInflater = LayoutInflater.from(context);
+            mChildCheckedCount = new HashMap<>();
         }
 
         public void setPresenter(MusicContract.Presenter presenter) {
@@ -330,7 +338,7 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
             View convertView = mInflater.inflate(R.layout.item_music_group, parent, false);
             GroupViewHolder holder = new GroupViewHolder();
             holder.mTvGroupName = (TextView) convertView.findViewById(R.id.tv_music_group_item_title);
-            holder.mIvSelectedGroup = (ImageView) convertView.findViewById(R.id.iv_music_group_item_select);
+            holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_group_item_select);
             convertView.setTag(holder);
             return convertView;
         }
@@ -339,6 +347,74 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
         protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
             final GroupViewHolder holder = (GroupViewHolder) view.getTag();
             final String groupName = cursor.getString(INDEX_GROUP_NAME);
+            String groupStart = cursor.getString(INDEX_GROUP_START);
+            String groupEnd = cursor.getString(INDEX_GROUP_END);
+            long start = 0L;
+            long end = 0L;
+            try {
+                start = Long.valueOf(groupStart);
+                end = Long.valueOf(groupEnd);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Cursor clickedCursor = queryData(mContext, start, end);
+            int clickedCount = clickedCursor.getCount();
+            if (mChildCheckedCount.get(groupName) == clickedCount && clickedCount > 0) {
+                holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
+            } else if (clickedCount > 0) {
+                holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_unchecked);
+            } else {
+                holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_style_grid);
+            }
+
+            final long startFinal = start;
+            final long endFinal = end;
+            holder.mIvSelect.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Cursor clickedCursor = queryData(mContext, startFinal, endFinal);
+                    if (clickedCursor != null) {
+                        int clickedCount = clickedCursor.getCount();
+                        Integer childCheckedCount = mChildCheckedCount.get(groupName);
+                        if (childCheckedCount == null) {
+                            childCheckedCount = 0;
+                        }
+                        boolean isChecked = childCheckedCount == clickedCount
+                                && clickedCount > 0;
+                        try {
+                            if (!isChecked) {
+                                mChildCheckedCount.put(groupName, clickedCount);
+                            } else {
+                                mChildCheckedCount.put(groupName, 0);
+                            }
+
+                            while (clickedCursor.moveToNext()) {
+                                String path = clickedCursor.getString(INDEX_CHILD_PATH);
+                                if (!TextUtils.isEmpty(path)) {
+                                    File file = new File(path);
+                                    if (file.exists() && file.isFile()) {
+                                        if (mPresenterRef != null && mPresenterRef.get() != null) {
+                                            if (isChecked) {
+                                                if (mPresenterRef.get().isSelected(file)) {
+                                                    mPresenterRef.get().addOrRemoveSelected(file);
+                                                }
+                                            } else {
+                                                if (!mPresenterRef.get().isSelected(file)) {
+                                                    mPresenterRef.get().addOrRemoveSelected(file);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } finally {
+                            clickedCursor.close();
+                        }
+                        notifyDataSetChanged();
+                    }
+                }
+            });
             holder.mTvGroupName.setText(groupName);
         }
 
@@ -377,6 +453,7 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
             if (mPresenterRef != null && mPresenterRef.get() != null) {
                 boolean isSelected = mPresenterRef.get().isSelected(new File(path));
                 holder.mIvSelect.setSelected(isSelected);
+                // TODO
             }
         }
 
@@ -388,16 +465,16 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
                     MediaStore.Audio.Media.DISPLAY_NAME);
         }
 
-        public static class ChildViewHolder {
+        private static class ChildViewHolder {
             ImageView mIvCover;
             TextView mTvName;
             TextView mTvInfo;
             ImageView mIvSelect;
         }
 
-        public static class GroupViewHolder {
+        private static class GroupViewHolder {
             TextView mTvGroupName;
-            ImageView mIvSelectedGroup;
+            ImageView mIvSelect;
         }
     }
 
