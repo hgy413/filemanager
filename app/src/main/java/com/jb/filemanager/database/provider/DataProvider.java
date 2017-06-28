@@ -7,8 +7,8 @@ import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.database.DatabaseHelper;
-import com.jb.filemanager.database.dao.dao.CleanIgnoreDao;
-import com.jb.filemanager.database.dao.dao.CleanScanOvertimeDAO;
+import com.jb.filemanager.database.dao.CleanIgnoreDao;
+import com.jb.filemanager.database.dao.CleanScanOvertimeDAO;
 import com.jb.filemanager.database.params.InsertParams;
 import com.jb.filemanager.database.table.AccessibilityIgnoreListTable;
 import com.jb.filemanager.database.table.IgnoreListTable;
