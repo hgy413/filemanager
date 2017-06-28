@@ -358,12 +358,13 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Cursor clickedCursor = queryData(mContext, start, end);
-            int clickedCount = clickedCursor.getCount();
+            Cursor childCursor = queryData(mContext, start, end);
+            int childCount = childCursor.getCount();
             if (mChildCheckedCount.containsKey(groupName)) {
-                if (mChildCheckedCount.get(groupName) == clickedCount && clickedCount > 0) {
+                int selectCount = mChildCheckedCount.get(groupName);
+                if (selectCount == childCount && childCount > 0) {
                     holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
-                } else if (clickedCount > 0) {
+                } else if (selectCount > 0) {
                     holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_unchecked);
                 } else {
                     holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_style_grid);
