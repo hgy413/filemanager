@@ -195,27 +195,27 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             mTlViewPageTab.setupWithViewPager(mVpPhoneStorage);
         }
 
-        mLlBottomOperateFirstContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_first_container);
+        mLlBottomOperateFirstContainer = (LinearLayout) findViewById(R.id.ll_common_operate_bar_container);
         if (mLlBottomOperateFirstContainer != null) {
-            TextView cut = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_main_bottom_operate_first_container_cut);
+            TextView cut = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_cut);
             if (cut != null) {
                 cut.getPaint().setAntiAlias(true);
                 cut.setOnClickListener(this);
             }
 
-            TextView copy = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_main_bottom_operate_first_container_copy);
+            TextView copy = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_copy);
             if (copy != null) {
                 copy.getPaint().setAntiAlias(true);
                 copy.setOnClickListener(this);
             }
 
-            TextView paste = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_main_bottom_operate_first_container_delete);
+            TextView paste = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_delete);
             if (paste != null) {
                 paste.getPaint().setAntiAlias(true);
                 paste.setOnClickListener(this);
             }
 
-            ImageView more = (ImageView) mLlBottomOperateFirstContainer.findViewById(R.id.iv_main_bottom_operate_first_container_more);
+            TextView more = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_more);
             if (more != null) {
                 more.setOnClickListener(this);
             }
@@ -677,22 +677,22 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     mPresenter.onClickActionMoreButton();
                 }
                 break;
-            case R.id.tv_main_bottom_operate_first_container_cut:
+            case R.id.tv_common_operate_bar_cut:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateCutButton();
                 }
                 break;
-            case R.id.tv_main_bottom_operate_first_container_copy:
+            case R.id.tv_common_operate_bar_copy:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateCopyButton();
                 }
                 break;
-            case R.id.tv_main_bottom_operate_first_container_delete:
+            case R.id.tv_common_operate_bar_delete:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateDeleteButton();
                 }
                 break;
-            case R.id.iv_main_bottom_operate_first_container_more:
+            case R.id.tv_common_operate_bar_more:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateMoreButton();
                 }
