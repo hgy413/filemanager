@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:background="@drawable/bg_dialog_backup"
+    android:minHeight="240dp">
+
+    <TextView
+        android:id="@+id/dialog_sub_item_detail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="29dp"
+        android:layout_marginRight="29dp"
+        android:layout_marginTop="32dp"
+        android:textColor="#333333"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/dialog_sub_item_detail_message1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_sub_item_detail_title"
+        android:layout_marginLeft="29dp"
+        android:layout_marginRight="29dp"
+        android:text="message1"
+        android:layout_marginTop="16dp"
+        android:textColor="#666666"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/dialog_sub_item_detail_message2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_sub_item_detail_message1"
+        android:layout_marginLeft="29dp"
+        android:text="message2"
+        android:layout_marginTop="8dp"
+        android:textColor="#666666"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/dialog_sub_item_detail_message3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_sub_item_detail_message2"
+        android:layout_marginLeft="29dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#666666"
+        android:text="message3"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:id="@+id/dialog_sub_item_detail_btn_group"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dialog_sub_item_detail_btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_item_detail_btn_selector"
+            android:gravity="center"
+            android:text="@string/common_cancel"
+            android:textColor="#999999"
+            android:textSize="14sp"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:background="#cccccc"/>
+
+        <TextView
+            android:id="@+id/dialog_sub_item_detail_btn_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_item_detail_btn_selector"
+            android:gravity="center"
+            android:text="@string/common_view"
+            android:textColor="#0083ff"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignBottom="@id/dialog_sub_item_detail_btn_group"
+        android:layout_marginLeft="29dp"
+        android:layout_marginBottom="61dp"
+        android:layout_marginRight="29dp"
+        android:background="#eeeeee"/>
+</RelativeLayout>

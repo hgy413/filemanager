@@ -157,10 +157,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
-        <activity android:name=".function.trash.CleanTrashActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"
-            />
+        <activity
+            android:name=".function.trash.CleanTrashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity
+            android:name=".function.fileexplorer.FileBrowserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
         <!-- 守护进程 start -->
         <!-- 后台监测应用流量使用的服务 -->

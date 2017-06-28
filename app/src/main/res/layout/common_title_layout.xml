@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jb.filemanager.function.fileexplorer.CommonTitle
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_alignParentTop="true">
+
+    <View
+        android:id="@+id/common_title_panel_background_color"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <View
+        android:id="@+id/common_title_panel_background_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/storage_main_act_bg"
+        android:visibility="invisible"/>
+
+    <LinearLayout
+        android:id="@+id/common_title_panel_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.jb.filemanager.function.fileexplorer.ClickTransparentLayout
+                android:id="@+id/common_title_back_and_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/white_arrow_back"/>
+
+                <TextView
+                    android:id="@+id/common_title_main_text"
+                    style="@style/common_title_main_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="56dp"
+                    android:ellipsize="middle"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/app_name"
+                    android:textStyle="normal"/>
+            </com.jb.filemanager.function.fileexplorer.ClickTransparentLayout>
+        </LinearLayout>
+
+        <com.jb.filemanager.function.fileexplorer.ClickTransparentLayout
+            android:id="@+id/common_title_main_extra_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="right"
+            android:minWidth="48dp"
+            android:paddingRight="16dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/common_title_main_extra_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:contentDescription="@null"
+                android:duplicateParentState="true"
+                android:focusableInTouchMode="false"/>
+        </com.jb.filemanager.function.fileexplorer.ClickTransparentLayout>
+
+    </LinearLayout>
+
+</com.jb.filemanager.function.fileexplorer.CommonTitle>

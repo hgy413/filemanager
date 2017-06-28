@@ -23,4 +23,13 @@
     <color name="privacy_btu_shallow">#4FC1E9</color>
     <color name="privacy_btu_deep">#5D9CEC</color>
 
+    <color name="status_bar_color">#1E000000</color>
+    <!-- 充电锁 -->
+    <color name="power_saving_dialog_detail">#656D78</color>
+    <color name="power_saving_dialog_detail2">#ED5565</color>
+    <color name="power_saving_dialog_btn_ok">#38CCAB</color>
+    <color name="power_saving_dialog_btn_cancel">#AAB2BD</color>
+    <color name="power_saving_dialog_title">#434A54</color>
+    <color name="power_saving_menu_item_normal">#FFFFFFFF</color>
+    <color name="power_saving_menu_item_pressed">#FFEDEDED</color>
 </resources>

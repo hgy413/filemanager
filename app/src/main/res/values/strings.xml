@@ -4,6 +4,10 @@
     <!-- Common -->
     <string name="details">Details</string>
     <string name="common_action_bar_title">File Manager</string>
+    <string name="common_view">View</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_sure">Sure</string>
+    <string name="common_ok">OK</string>
 
 
     <string name="gp_not_connect">Unable to open connection</string>
@@ -151,4 +155,32 @@
     <string name="dialog_completely_delete">completely delete</string>
     <string name="dialog_delete_photo">Are you sure you delete the photo(s) ?</string>
     <string name="applock_wrong_times_txt">%1$d times</string>
+
+
+    <string name="pcs">pcs</string>
+    <string name="junk_file_ignore_list">Junk File Ignore List</string>
+    <string name="long_press_items_in_junk_files_to_add">Long press items in Junk Files to add to Ignore List.</string>
+    <string name="these_items_will_not_be_scan_as_junk_files">These items will not be scan as junk files.</string>
+    <string name="add_to_ignore_list">Add to Ignore List</string>
+    <string name="will_not_be_scanned">&lt;font color="#0084ff">%1$s&lt;/font> will not be scanned</string>
+    <string name="will_be_scanned">&lt;font color="#0084ff">%1$s&lt;/font> will be scanned</string>
+    <string name="clean_dialog_message_contain">Contain</string>
+    <string name="clean_dialog_message_folder">folders</string>
+    <string name="clean_dialog_message_file">files</string>
+    <string name="clean_dialog_message_path">Path</string>
+    <string name="clean_dialog_file_yes_btn">Open</string>
+    <string name="clean_dialog_media_yes_btn">Play</string>
+    <string name="clean_dialog_folder_yes_btn">View</string>
+    <string name="clean_dialog_app_cache_yes_btn">Manual Cleanup</string>
+    <string name="clean_file_browser_no_files">No Files</string>
+    <string name="clean_subitem_detail_connect">This is %1$s of %2$s</string>
+    <string name="common_comma">，</string>
+    <string name="clean_subitem_detail_warn_desc_pre">&lt;font color="#FF8517">Be careful! &lt;/font>%1$s</string>
+    <string name="no_enough_storage">There is no enough storage in SD card</string>
+    <string name="backup_dialog_prgress">&lt;font color="#333333">%1$d&lt;/font>/%2$d</string>
+    <string name="version">Version</string>
+    <string name="path">Path</string>
+    <string name="size">Size</string>
+    <string name="file_open_as">Open as</string>
+
 </resources>

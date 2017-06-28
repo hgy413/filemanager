@@ -14,9 +14,11 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -24,7 +26,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+
 import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
+
+import static com.jb.filemanager.util.file.FileUtil.indexOfExtension;
+
 
 /**
  * Created by bill wang on 2017/6/23.
@@ -371,6 +377,7 @@ public class FileUtil {
     // private end
 
     /**
+<<<<<<< cd68d768d714c4a084b3d42ddf7b3879c9218a09
      * 统一获取raw文件流中数据:全部数据
      */
     public static String getAllStrDataFromRaw(Context context, int rawId) {
@@ -520,6 +527,8 @@ public class FileUtil {
     }
 
     /**
+=======
+>>>>>>> 添加打开弹窗
      * Gets the extension of a filename.
      * <p>
      * This method returns the textual part of the filename after the last dot.

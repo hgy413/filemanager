@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp" >
+
+    <View
+        android:id="@+id/mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/unit"
+        style="@style/common_file_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:ellipsize="end"
+        android:paddingRight="16dp"
+        android:paddingTop="4.5dp"
+        android:singleLine="true"
+        android:text="MB"
+        tools:ignore="HardcodedText,RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/size"
+        style="@style/common_file_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/unit"
+        android:layout_toLeftOf="@+id/unit"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:paddingRight="2dp"
+        android:singleLine="true"
+        android:text="34"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher"
+        tools:ignore="RtlSymmetry" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/size"
+        android:layout_toRightOf="@+id/icon"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/common_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:fadingEdge="horizontal"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="ZBoost"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/time"
+            style="@style/common_item_info_gray"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fadingEdge="horizontal"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="2015-03-05 12:00"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+</RelativeLayout>
