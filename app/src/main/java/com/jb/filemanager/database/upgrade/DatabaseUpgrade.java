@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.jb.filemanager.database.BaseDatabaseHelper;
 
-
 /**
  * 数据库升级
  * <p/>
@@ -27,30 +26,16 @@ public class DatabaseUpgrade extends BaseDatabaseHelper.AbstractDatabaseUpgrade 
 
         // Method[] methods = getClass().getDeclaredMethods();
         while (oldVersion < newVersion) {
-            /*if (oldVersion == 1) {
+            if (oldVersion == 1) {
                 upgrade1To2(db);
             }
-            if (oldVersion == 2) {
-                upgrade2To3(db);
-            }
-            if (oldVersion == 3) {
-                upgrade3To4(db);
-            }
-            if (oldVersion == 4) {
-                upgrade4To5(db);
-            }
-            if (oldVersion == 5) {
-                upgrade5To6(db);
-            }
-            if (oldVersion == 6) {
-                upgrade6To7(db);
-            }
-            if (oldVersion == 7) {
-                upgrade7To8(db);
-            }*/
             oldVersion++;
         }
         return false;
-
     }
+
+    public void upgrade1To2(SQLiteDatabase db) {
+//        db.execSQL();
+    }
+
 }

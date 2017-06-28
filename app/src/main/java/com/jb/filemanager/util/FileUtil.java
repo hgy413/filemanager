@@ -14,6 +14,8 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
+import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 
 /**
  * Created by bill wang on 2017/6/23.
@@ -31,6 +35,24 @@ import java.util.Locale;
 public class FileUtil {
 
     public static final String HIDDEN_PREFIX = ".";
+
+    /**
+     * The Unix separator character.
+     */
+    private static final char UNIX_SEPARATOR = '/';
+
+    /**
+     * sdcard head
+     */
+    public final static String SDCARD = Environment
+            .getExternalStorageDirectory().getPath();
+
+    /**
+     * The extension separator character.
+     *
+     * @since 1.4
+     */
+    public static final char EXTENSION_SEPARATOR = '.';
 
     public FileUtil() {
 
@@ -347,4 +369,299 @@ public class FileUtil {
     }
 
     // private end
+
+    /**
+     * 统一获取raw文件流中数据:全部数据
+     */
+    public static String getAllStrDataFromRaw(Context context, int rawId) {
+        String strData = null;
+        if (context == null) {
+            return strData;
+        }
+        // 从资源获取流
+        InputStream is = null;
+        try {
+            is = context.getResources().openRawResource(rawId);
+            if (is != null) {
+                byte[] buffer = new byte[is.available()];
+                int len = is.read(buffer); // 读取流内容
+                if (len > 0) {
+                    strData = new String(buffer, 0, len).trim(); // 生成字符串
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return strData;
+    }
+
+    /**
+     * 根据给定路径参数删除单个文件的方法 私有方法，供内部其它方法调用
+     *
+     * @param filePath 要删除的文件路径
+     * @return 成功返回true, 失败返回false
+     */
+    public static boolean deleteFile(String filePath) {
+        // 定义返回结果
+        boolean result = false;
+        // //判断路径参数是否为空
+        // if(filePath == null || "".equals(filePath)) {
+        // //如果路径参数为空
+        // System.out.println("文件路径不能为空~！");
+        // } else {
+        // //如果路径参数不为空
+        // File file = new File(filePath);
+        // //判断给定路径下要删除的文件是否存在
+        // if( !file.exists() ) {
+        // //如果文件不存在
+        // System.out.println("指定路径下要删除的文件不存在~！");
+        // } else {
+        // //如果文件存在，就调用方法删除
+        // result = file.delete();
+        // }
+        // }
+
+        if (filePath != null && !"".equals(filePath.trim())) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                result = file.delete();
+            }
+        }
+        return result;
+    }
+
+
+    public static String getNameFromFilepath(String filepath) {
+        if (!TextUtils.isEmpty(filepath)) {
+            int pos = filepath.lastIndexOf(UNIX_SEPARATOR);
+            if (pos != -1) {
+                return filepath.substring(pos + 1);
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Gets the name minus the path from a full filename.
+     * <p>
+     * This method will handle a file in either Unix or Windows format. The text
+     * after the last forward or backslash is returned.
+     * <p>
+     * <pre>
+     * a/b/c.txt --> c.txt
+     * a.txt     --> a.txt
+     * a/b/c     --> c
+     * a/b/c/    --> ""
+     * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is
+     * running on.
+     *
+     * @param filename the filename to query, null returns null
+     * @return the name of the file without the path, or an empty string if none
+     * exists
+     */
+    public static String getName(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfLastSeparator(filename);
+        return filename.substring(index + 1);
+    }
+
+
+    /**
+     * Returns the index of the last directory separator character.
+     * <p>
+     * This method will handle a file in either Unix or Windows format. The
+     * position of the last forward or backslash is returned.
+     * <p>
+     * The output will be the same irrespective of the machine that the code is
+     * running on.
+     *
+     * @param filename the filename to find the last path separator in, null returns
+     *                 -1
+     * @return the index of the last separator character, or -1 if there is no
+     * such character
+     * @see -io-2.4.jar -> FilenameUtils(这里去掉了关于windows路径分隔符的判断)
+     */
+    public static int indexOfLastSeparator(String filename) {
+        if (filename == null) {
+            return -1;
+        }
+        return filename.lastIndexOf(UNIX_SEPARATOR);
+    }
+
+
+    /**
+     * 指定路径文件是否存在
+     *
+     * @param filePath
+     * @return
+     * @author huyong
+     */
+    public static boolean isFileExist(String filePath) {
+        boolean result = false;
+        try {
+            File file = new File(filePath);
+            result = file.exists();
+            file = null;
+        } catch (Exception e) {
+        }
+        return result;
+    }
+
+    /**
+     * Gets the extension of a filename.
+     * <p>
+     * This method returns the textual part of the filename after the last dot.
+     * There must be no directory separator after the dot.
+     * <p>
+     * <pre>
+     * foo.txt      --> "txt"
+     * a/b/c.jpg    --> "jpg"
+     * a/b.txt/c    --> ""
+     * a/b/c        --> ""
+     * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is
+     * running on.
+     *
+     * @param filename the filename to retrieve the extension of.
+     * @return the extension of the file or an empty string if none exists or
+     * {@code null} if the filename is {@code null}.
+     * @see -io-2.4.jar -> FilenameUtils
+     */
+    public static String getExtension(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfExtension(filename);
+        if (index == -1) {
+            return "";
+        } else {
+            return filename.substring(index + 1);
+        }
+    }
+
+    /**
+     * Returns the index of the last extension separator character, which is a
+     * dot.
+     * <p>
+     * This method also checks that there is no directory separator after the
+     * last dot. To do this it uses {@link #indexOfLastSeparator(String)} which
+     * will handle a file in either Unix or Windows format.
+     * <p>
+     * The output will be the same irrespective of the machine that the code is
+     * running on.
+     *
+     * @param filename the filename to find the last path separator in, null returns
+     *                 -1
+     * @return the index of the last separator character, or -1 if there is no
+     * such character
+     * @see -io-2.4.jar -> FilenameUtils
+     */
+    public static int indexOfExtension(String filename) {
+        if (filename == null) {
+            return -1;
+        }
+        int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
+        int lastSeparator = indexOfLastSeparator(filename);
+        return lastSeparator > extensionPos ? -1 : extensionPos;
+    }
+
+    /*
+     * @param path 要删除的文件夹路径
+     *
+     * @return 是否成功
+     */
+    public static boolean deleteCategory(String path) {
+        if (path == null || "".equals(path)) {
+            return false;
+        }
+
+        File file = new File(path);
+        if (!file.exists()) {
+            return false;
+        }
+
+        if (file.isDirectory()) {
+            deleteDirectory(path);
+        }
+
+        return file.delete();
+    }
+
+    /**
+     * 复制文件，仅支持非目录文件的复制
+     *
+     * @param srcStr
+     * @param decStr
+     * @return
+     */
+    public static boolean copyFile(String srcStr, String decStr) {
+        // 前提
+        File srcFile = new File(srcStr);
+        if (!srcFile.exists()) {
+            return false;
+        }
+        File decFile = new File(decStr);
+        if (!decFile.exists()) {
+            File parent = decFile.getParentFile();
+            parent.mkdirs();
+
+            try {
+                decFile.createNewFile();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            input = new FileInputStream(srcFile);
+            output = new FileOutputStream(decFile);
+            byte[] data = new byte[4 * 1024]; // 4k
+            while (true) {
+                int len = input.read(data);
+                if (len <= 0) {
+                    break;
+                }
+                output.write(data, 0, len);
+
+                // just test how it will perform when a exception occure on
+                // backing up
+                // throw new IOException();
+            }
+        } catch (Exception e) {
+            return false;
+        } finally {
+            if (null != input) {
+                try {
+                    input.close();
+                } catch (Exception e2) {
+                }
+            }
+            if (null != output) {
+                try {
+                    output.flush();
+                    output.close();
+                } catch (Exception e2) {
+                }
+            }
+        }
+
+        return true;
+    }
+
 }

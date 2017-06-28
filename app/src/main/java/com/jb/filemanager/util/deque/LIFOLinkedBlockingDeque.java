@@ -1,7 +1,6 @@
 package com.jb.filemanager.util.deque;
 
 import java.util.concurrent.LinkedBlockingDeque;
-
 /**
  * 
  * <br>类描述:{@link LinkedBlockingDeque} using LIFO algorithm

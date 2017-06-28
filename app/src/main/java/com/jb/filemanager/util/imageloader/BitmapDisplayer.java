@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
 
-
 /**
  * Displays {@link Bitmap} in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware}. Implementations can
  * apply some changes to Bitmap or any animation for displaying Bitmap.<br />

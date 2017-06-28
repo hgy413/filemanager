@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
 
-
 /**
  * 加载图片任务：本地图片加载
  * 

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import com.jb.filemanager.util.imageloader.imageaware.ImageViewAware;
 import com.jb.filemanager.util.imageloader.shape.RoundImageFactory;
 
-
 /**
  * 本地图片的图片加载器 <br>
  * 加载时候若显示为色块，则是由于还未onLayout获取不到ImageView的尺寸，ImageViewAware已经封装解决了这部分的问题。

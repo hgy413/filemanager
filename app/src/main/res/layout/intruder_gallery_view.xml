@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="235dp"
+    android:layout_height="372dp"
+    android:background="@drawable/shape_gallery_img_bg" >
+
+    <ImageView
+        android:id="@+id/intruder_gallery_view_img"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:maxHeight="362dp"
+        android:maxWidth="225dp"
+        android:scaleType="fitXY"
+        tools:ignore="ContentDescription" />
+
+</RelativeLayout>

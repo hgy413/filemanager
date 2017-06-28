@@ -5,6 +5,7 @@ package com.jb.filemanager.util;
  */
 
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -20,13 +21,20 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.jb.filemanager.Const;
@@ -50,6 +58,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import static com.jb.ga0.commerce.util.topApp.TopHelper.sNotALauncher;
+import static com.jiubang.commerce.buychannel.buyChannel.utils.AppInfoUtils.GOOGLE_ADVERTING_DEFAULT_ID;
+import static com.jiubang.commerce.utils.AppUtils.getDefaultLauncher;
 
 /**
  * @version 1.0.0
@@ -816,7 +826,7 @@ public class AppUtils {
      * @return 对应的包名或当出错时为null
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static ComponentName getTopActivity(Context context) {
+    public static ComponentName getTopActivity(Context context) {
         if (Machine.HAS_SDK_LOLLIPOP) {
             throw new IllegalStateException(
                     "getTopActivity() has no mean for above LOLLIPOP!");
@@ -1241,6 +1251,7 @@ public class AppUtils {
 
     /**
      * 查询手机内所有应用
+     * 获取设置的包名
      *
      * @param context
      * @return
@@ -1266,5 +1277,219 @@ public class AppUtils {
         List<RunningAppBean> result = ProcessManager.getInstance(context)
                 .getRunningAppList();
         return result;
+    }
+
+    public static List<String> getSettingPackageName(Context context) {
+        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+        return queryIntentActivities(context, intent);
+    }
+
+    /**
+     * 获取卸载应用程序的包名
+     *
+     * @param context
+     * @return
+     */
+    public static List<String> getUnInstallPackageName(Context context) {
+        return queryIntentActivities(context, new Intent(Intent.ACTION_DELETE, Uri.parse("package:")));
+    }
+
+    /**
+     * 获取安装应用程序的包
+     *
+     * @param context
+     * @return
+     */
+    public static List<String> getInstallPackageName(Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(FileUtil.SDCARD)), "application/vnd.android.package-archive");
+        return queryIntentActivities(context, intent);
+    }
+
+    public static List<String> queryIntentActivities(Context context, Intent intent) {
+        List<String> list = new ArrayList<String>();
+        List<ResolveInfo> resolveInfos = PackageManagerLocker.getInstance().queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            list.add(resolveInfo.activityInfo.packageName);
+        }
+        return list.isEmpty() ? null : list;
+    }
+
+    /**
+     * 根据包名获取应用Icon
+     */
+    public static Bitmap loadAppIcon(Context context, String appPackageName) {
+        Bitmap bitmap = null;
+        BitmapDrawable drawable = (BitmapDrawable) getApplicationDrawable(
+                context, appPackageName);
+        if (drawable != null) {
+            bitmap = drawable.getBitmap();
+        } else if (drawable == null) {
+            // 兼容未安装应用
+            BitmapDrawable drawable2 = (BitmapDrawable) getApplicationDrawableIfNotInstalled(
+                    context, appPackageName);
+            if (drawable2 != null) {
+                bitmap = drawable2.getBitmap();
+            } else {
+                BitmapDrawable drawable3 = (BitmapDrawable) context
+                        .getResources().getDrawable(
+                                R.drawable.common_default_app_icon);
+                bitmap = drawable3.getBitmap();
+            }
+        }
+        return bitmap;
+    }
+
+
+    private static Drawable getApplicationDrawable(Context context,
+                                                   String pkgName) {
+        Drawable drawable = null;
+        drawable = PackageManagerLocker.getInstance().getApplicationIcon(pkgName);
+        if (!(drawable instanceof BitmapDrawable)) {
+            drawable = null;
+        }
+        return drawable;
+    }
+
+    private static Drawable getApplicationDrawableIfNotInstalled(
+            Context context, String path) {
+        try {
+            PackageInfo packageInfo = PackageManagerLocker.getInstance().getPackageArchiveInfo(path,
+                    PackageManager.GET_ACTIVITIES);
+
+            if (packageInfo != null) {
+                ApplicationInfo appInfo = packageInfo.applicationInfo;
+                appInfo.sourceDir = path;
+                appInfo.publicSourceDir = path;
+                try {
+                    return PackageManagerLocker.getInstance().getApplicationIcon(appInfo);
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * 获取应用ICON图标
+     *
+     * @param context
+     * @param pkgInfo
+     * @return
+     */
+    public static Drawable getIconByPkgInfo(Context context, PackageInfo pkgInfo) {
+        if (pkgInfo != null) {
+            return PackageManagerLocker.getInstance().getApplicationIcon(pkgInfo.applicationInfo);
+        }
+        return null;
+    }
+
+    /**
+     * 打开软键盘<br>
+     *
+     * @param context
+     * @param editText
+     */
+    public static void showSoftInputFromWindow(Context context, EditText editText) {
+        final InputMethodManager imm = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+    }
+
+    /**
+     * 关闭软键盘<br>
+     *
+     * @param context
+     * @param editText
+     */
+    public static void hideSoftInputFromWindow(Context context, EditText editText) {
+        final InputMethodManager imm = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    /**
+     * 获取在功能菜单出现的程序列表
+     *
+     * @param context 上下文
+     * @return 程序列表，类型是 List<ResolveInfo>
+     */
+    public static List<ResolveInfo> getLauncherApps(Context context) {
+        List<ResolveInfo> infos = null;
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        try {
+            infos = PackageManagerLocker.getInstance().queryIntentActivities(intent, 0);
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return infos;
+    }
+
+    public static void gotoLauncherWithoutChoice(Context context, String usePkgname) {
+        try {
+            Intent intent = null;
+            String launcher = getDefaultLauncher(context);
+            if (null == launcher && !android.text.TextUtils.isEmpty(usePkgname)) {
+                launcher = usePkgname;
+            }
+            if (null != launcher) {
+                Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+                intentToResolve.addCategory(Intent.CATEGORY_HOME);
+                intentToResolve.setPackage(launcher);
+                ResolveInfo ri = PackageManagerLocker.getInstance().resolveActivity(intentToResolve, 0);
+                if (ri != null) {
+                    intent = new Intent(intentToResolve);
+                    intent.setClassName(ri.activityInfo.applicationInfo.packageName, ri.activityInfo.name);
+                    intent.setAction(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                } else {
+                    intent = PackageManagerLocker.getInstance().getLaunchIntentForPackage(launcher);
+                    if (null == intent) {
+                        intent = new Intent(Intent.ACTION_MAIN);
+                        intent.setPackage(launcher);
+                    }
+                }
+            } else {
+                intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 判断当前是否亮屏(跟ACTION_SCREEN_ON的意义一样，when the device wakes up and becomes interactive)
+     *
+     * @param context
+     * @return
+     */
+    @SuppressLint("NewApi")
+    @SuppressWarnings("deprecation")
+    public static boolean isScreenOn(Context context) {
+        if (Machine.HAS_SDK_KITKAT_WATCH) {
+            // If you use API20 or more:
+            DisplayManager dm = (DisplayManager) context
+                    .getSystemService(Context.DISPLAY_SERVICE);
+            for (Display display : dm.getDisplays()) {
+                if (display.getState() != Display.STATE_OFF) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        // If you use less than API20:
+        PowerManager powerManager = (PowerManager) context
+                .getSystemService(Context.POWER_SERVICE);
+        return powerManager.isScreenOn();
     }
 }

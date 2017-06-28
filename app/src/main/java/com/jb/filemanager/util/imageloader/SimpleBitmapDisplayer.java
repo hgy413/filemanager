@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
 
-
 /**
  * Just displays {@link Bitmap} in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware}
  *

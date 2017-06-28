@@ -12,6 +12,10 @@ import com.jb.filemanager.database.table.IgnoreListTable;
 import com.jb.filemanager.database.upgrade.DatabaseUpgrade;
 
 
+import com.jb.filemanager.database.table.AntiPeepTable;
+import com.jb.filemanager.database.table.LockerSceneItemTable;
+import com.jb.filemanager.database.table.LockerSceneTable;
+import com.jb.filemanager.database.table.LockerTable;
 /**
  * @version 1.0.0
  */
@@ -20,18 +24,7 @@ public class DatabaseHelper extends BaseDatabaseHelper {
     public static final String LOG_TAG = ">>> DatabaseHelper";
 
     private Context mContext;
-    /**
-     * 数据库当前版本号(数据库每次升级该字段加1)
-     * modify by nieyh {@link #DB_VERSION} = 1 <b> 原始版本：applock <b/>
-     * modify by xiaoyu {@link #DB_VERSION} = 2 <b> 增加DuplicatedPhoto <b/>
-     * modify by nieyh {@link #DB_VERSION} = 3 <b> 增加权限警报 <b/>
-     * modify by xiaoyu {@link #DB_VERSION} = 4 <b> 增加扫描白名单 & 频率</b>
-     * modify by nieyh {@link #DB_VERSION} = 5 <b> 增加apk文件路径</b>
-     * modify by nieyh {@link #DB_VERSION} = 6 <b> 增加缓存清理的记录</b>
-     * modify by xiaoyu {@link #DB_VERSION} = 7 <b> 增加通知栏拦截白名单</b>2017-3-22 18:00:53
-     * modify by xiaoyu {@link #DB_VERSION} = 8 <b> 增加省电加速白名单</b>2017-4-1 15:21:05
-     */
-    private final static int DB_VERSION = 8;
+    private final static int DB_VERSION = 0;
 
     /**
      * 数据库名
@@ -66,7 +59,6 @@ public class DatabaseHelper extends BaseDatabaseHelper {
     public void onCreate(SQLiteDatabase db) {
         db.beginTransaction();
         try {
-            // TODO: 2016/10/17 在此创建表
             // 白名单
             db.execSQL(CleanIgnoreTable.CREATE_TABLE);
             db.execSQL(CleanScanOvertimeTable.CREATE_TABLE);
@@ -74,6 +66,11 @@ public class DatabaseHelper extends BaseDatabaseHelper {
             //缓存垃圾清理记录
             db.execSQL(CacheTrashRecordTable.CREATE_TABLE);
 
+            // app locker
+            db.execSQL(LockerTable.CREATE_TABLE);
+            db.execSQL(LockerSceneTable.CREATE_TABLE);
+            db.execSQL(LockerSceneItemTable.CREATE_TABLE);
+            db.execSQL(AntiPeepTable.CREATE_TABLE);
             mIsNewDB = true;
             db.setTransactionSuccessful();
         } catch (Exception e) {

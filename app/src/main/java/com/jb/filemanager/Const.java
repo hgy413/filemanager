@@ -25,6 +25,7 @@ public class Const {
 
     // 程序路径
     public static final String ROOT_FOLDER_NAME = "filemanager";
+    public final static String BOOST_DIR = SDCARD + File.separator + ROOT_FOLDER_NAME;
     public static final String FILE_MANAGER_DIR = SDCARD + File.separator + ROOT_FOLDER_NAME;
     public static final String IMAGE_CACHE_DIR = FILE_MANAGER_DIR + "thumbs";
     public final static String BOOST_DIR = SDCARD + File.separator + ROOT_FOLDER_NAME;

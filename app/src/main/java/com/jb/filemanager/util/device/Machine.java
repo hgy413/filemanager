@@ -44,6 +44,7 @@ import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
 import static android.os.Build.VERSION_CODES.KITKAT;
+import static android.os.Build.VERSION_CODES.KITKAT_WATCH;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 /**
@@ -120,6 +121,11 @@ public class Machine {
      * SDK >= 19
      */
     public static final boolean HAS_SDK_KITKAT = SDK_VERSION >= KITKAT;
+    /**
+     * SDK >= 20
+     */
+    public static final boolean HAS_SDK_KITKAT_WATCH = SDK_VERSION >= KITKAT_WATCH;
+    /**
     /**
      * SDK >= 21 android版本是否为5.0以上
      */

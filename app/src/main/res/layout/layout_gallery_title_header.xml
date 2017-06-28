@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <TextView
+        android:id="@+id/layout_gallery_title_header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="2015.11.23 15:23"
+        android:textColor="#FF737373"
+        android:textSize="14dp" />
+
+</RelativeLayout>

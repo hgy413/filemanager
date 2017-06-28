@@ -1,6 +1,5 @@
 package com.jb.filemanager.database.table;
 
-
 import com.jb.filemanager.database.DatabaseUtils;
 
 /**

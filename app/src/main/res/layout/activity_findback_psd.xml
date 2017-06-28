@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_findback_psd_root_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/activity_findback_psd_title"
+        layout="@layout/layout_common_title" />
+
+    <View
+        android:id="@+id/activity_findback_psd_common_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/activity_findback_psd_title"
+        android:background="#f2f2f2" />
+
+    <TextView
+        android:id="@+id/activity_findback_psd_top_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_below="@id/activity_findback_psd_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:gravity="left"
+        android:text="@string/set_graphic_password_message_set_question"
+        android:textColor="#cccccc"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:id="@+id/activity_findback_psd_set_problem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/activity_findback_psd_top_tip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:paddingTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activity_findback_psd_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="fdsafas"
+                android:gravity="left"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"
+                android:textColor="#333333"
+                android:textSize="16dp" />
+
+            <View
+                android:id="@+id/activity_findback_psd_bottom_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_marginTop="2dp"
+                android:background="#cccccc" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/activity_findback_psd_question_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginTop="35dp"
+            android:background="@null"
+            android:gravity="left"
+            android:hint="@string/set_graphic_password_message_edit_hint"
+            android:paddingBottom="2dp"
+            android:textColor="#999999"
+            android:textColorHint="#999999"
+            android:textSize="16dp" />
+
+        <View
+            android:id="@+id/activity_findback_psd_bottom_line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:background="#219eff" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/activity_findback_psd_question_save"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="#f5f5f5"
+        android:gravity="center"
+        android:text="@string/applock_common_finish"
+        android:textColor="#0084ff"
+        android:textSize="14sp"/>
+
+</RelativeLayout>

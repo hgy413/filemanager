@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="303dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/applock_back_tip_dialog_tip_1"
+            android:textColor="#ffffff"
+            android:textSize="16dp" />
+
+        <View
+            android:layout_width="126dp"
+            android:layout_height="126dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp" />
+
+        <LinearLayout
+            android:id="@+id/dialog_back_tip_layout_body"
+            android:layout_width="190dp"
+            android:layout_height="123dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="122dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_about_logo"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_back_tip_layout_body"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/applock_back_tip_dialog_tip_2"
+            android:textColor="#ffffff"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/dialog_back_tip_layout_exit"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            android:gravity="center"
+            android:text="@string/applock_back_tip_dialog_tip_4"
+            android:textColor="#ffffff"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/dialog_back_tip_layout_activate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_above="@id/dialog_back_tip_layout_exit"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            android:gravity="center"
+            android:text="@string/applock_back_tip_dialog_tip_3"
+            android:textColor="#ffffff"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="48dp"
+    tools:background="@color/colorAccent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/view_search_bar_edit"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:textCursorDrawable="@null"
+            android:focusableInTouchMode="true"
+            android:lines="1"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="26dp"
+            android:textSize="13dp"
+            android:textColor="#ffffff"
+            android:src="@drawable/ic_about_logo" />
+
+        <ImageView
+            android:id="@+id/view_search_bar_search"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_about_logo"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_search_bar_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="8dp"
+        android:background="@android:color/white" />
+
+</RelativeLayout>

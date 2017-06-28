@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_intruder_vert_gallery_root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:background="@color/colorAccent"
+    android:orientation="vertical">
+
+    <!-- Title -->
+    <RelativeLayout
+        android:id="@+id/fragment_intruder_vert_gallery_title"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/fragment_intruder_vert_gallery_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:padding="16dp"
+            android:src="@drawable/ic_about_logo" />
+
+        <TextView
+            android:id="@+id/fragment_intruder_vert_gallery_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/fragment_intruder_vert_gallery_icon"
+            android:text="@string/app_lock_setting_reveal_intruder"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+
+        <ImageView
+            android:id="@+id/fragment_intruder_vert_gallery_setting"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_about_logo"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+
+    <!--背景色-->
+    <View
+        android:id="@+id/fragment_intruder_vert_gallery_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fragment_intruder_vert_gallery_title"
+        android:background="#f2f2f2" />
+
+    <com.swift.boost.function.trash.view.floatingelv.FloatingGroupExpandableListView
+        android:id="@+id/fragment_intruder_vert_gallery_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fragment_intruder_vert_gallery_title"
+        android:background="#f2f2f2"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="false"
+        android:listSelector="@android:color/transparent"
+        android:overScrollFooter="@null"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+    <include
+        android:id="@+id/fragment_intruder_vert_gallery_no_data"
+        layout="@layout/layout_intruder_gallery_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fragment_intruder_vert_gallery_title"
+        android:visibility="gone" />
+
+    <com.swift.boost.view.ProgressWheel
+        android:id="@+id/fragment_intruder_vert_gallery_progress_wheel"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        wheel:matProg_barColor="#0d96fc"
+        wheel:matProg_barWidth="3dp"
+        wheel:matProg_progressIndeterminate="true" />
+
+</RelativeLayout>

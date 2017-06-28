@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 按钮点击时间，可通过该id控制点击间隔 -->
+    <item name="component_click_time" type="id" />
+    <item name="fgelv_tag_changed_visibility" type="id"/>
+
+    <item name="file_type_text" type="id"/>
+    <item name="file_type_image" type="id"/>
+    <item name="file_type_audio" type="id"/>
+    <item name="file_type_video" type="id"/>
+    <item name="checkbox_tag_mixbean" type="id" />
+</resources>

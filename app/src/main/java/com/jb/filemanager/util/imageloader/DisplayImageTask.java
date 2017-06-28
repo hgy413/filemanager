@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
 
-
 /**
  * 显示图片
  * @author chendongcheng

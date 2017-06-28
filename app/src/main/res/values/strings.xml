@@ -94,4 +94,61 @@
     <string name="clean_subitem_detail_result_2">%1$s &lt;font color="#FF8517">They will need to be redownloaded.&lt;/font></string>
     <string name="clean_subitem_detail_result_10">%1$s &lt;font color="#FF8517">Cleaning will remove these forever!&lt;/font></string>
     <string name="trash">trash</string>
+    <!--应用锁-->
+    <string name="activity_applock_title">App lock</string>
+    <string name="applock_pre_header_text1_new">Top %1$d app(s) recommended to locked up</string>
+    <string name="applock_pre_header_text2_new">Ensure the private data of these app(s)</string>
+    <string name="applock_pre_operate_txt">Lock</string>
+    <string name="set_graphic_password_message_save">Save</string>
+    <string name="set_graphic_password_message_draw">Setting the unlock pattern of app(s)</string>
+    <string name="set_number_password_message_draw">Setting the unlock pincode of app(s)</string>
+    <string name="set_graphic_password_message_too_short">Connect at least 4 dots.</string>
+    <string name="set_graphic_password_message_redraw">Drawing the pattern again to confirm it</string>
+    <string name="set_number_password_message_redraw">Inputing the pincode again to confirm it</string>
+    <string name="set_graphic_password_message_wrong">Error, try again!</string>
+    <string name="set_graphic_password_message_set_question">if you forget the password you can be reset it by answering insecure question</string>
+    <string name="set_graphic_password_message_edit_hint">Enter the answer</string>
+    <string name="set_graphic_password_answer_edit_short_tip">Please enter the answer</string>
+    <string name="app_lock_setting_reveal_intruder_tip" >Take a photo of someone entering wrong code</string>
+    <string name="app_lock_group_apps_name">APP</string>
+    <string name="intruder_shot_info_title">Shot intruders</string>
+    <string name="intruder_shot_info_desc">Input wrong code over %1$d times would be taken pic as a intruder.</string>
+    <string name="intruder_shot_info_open_fail_tip">Failed to open, please open the camera access</string>
+    <string name="intruder_main_no_content">Input wrong code over allows would be take pic as a intruder.</string>
+    <string name="applock_common_ok">ok</string>
+    <string-array name="pupup_window_reset_psd_questions">
+        <item>Which movie do you like?</item>
+        <item>What\'s your name?</item>
+        <item>What time your birthday?</item>
+    </string-array>
+    <!-- 应用锁设置页 -->
+    <string name="app_lock_setting_title">AppLock Setting</string>
+    <string name="app_lock_setting_passcode">Passcode</string>
+    <string name="app_lock_setting_intruder">Intruders</string>
+    <string name="app_lock_setting_reveal_intruder">Reveal intruders</string>
+    <string name="app_lock_setting_intruder_wrong_times">Wrong password allows</string>
+    <string name="app_lock_setting_passcode_change_passcode">Change Passcode</string>
+    <string name="app_lock_setting_passcode_change_security_question">Change security issues</string>
+    <string name="app_lock_setting_passcode_type_number">Pincode</string>
+    <string name="app_lock_setting_passcode_type_pattern">Pattern passcode</string>
+    <string name="app_lock_app_lock_tip">Locked %1$s</string>
+    <string name="app_lock_app_unlock_tip">Unlocked %1$s</string>
+    <string name="app_lock_app_all_lock_tip">Locked all apps</string>
+    <string name="app_lock_app_all_unlock_tip">All locks have been released</string>
+    <string name="applock_pre_header_last_step_text1">One more step for Android 5.0+ users</string>
+    <string name="applock_pre_header_last_step_text2">Turn on switch for Swift Cleaner to get full protection</string>
+    <string name="applock_pre_header_last_step_text3">permit usage access</string>
+    <string name="app_lock_anti_peep_img_app_info">&lt;font color="#FFFFFF">Catch you! Unlock my &lt;/font>&lt;font color="#ff0000">%1$s&lt;/font></string>
+    <string name="applock_intruder_guide_btu_tip">Check</string>
+    <string name="applock_float_view_forget_psd">Forget?</string>
+    <string name="applock_forget_psd_title">Retrieve password</string>
+    <string name="applock_common_finish">Finish</string>
+    <string name="applock_retrieve_psd_error_tip">The answer is wrong. Please re-enter.</string>
+    <string name="applock_back_tip_dialog_tip_1">Hold on a second</string>
+    <string name="applock_back_tip_dialog_tip_2">With features activated.Any snoopers who look for your apps can be captured.</string>
+    <string name="applock_back_tip_dialog_tip_3">Go Activate!</string>
+    <string name="applock_back_tip_dialog_tip_4">Exit</string>
+    <string name="dialog_completely_delete">completely delete</string>
+    <string name="dialog_delete_photo">Are you sure you delete the photo(s) ?</string>
+    <string name="applock_wrong_times_txt">%1$d times</string>
 </resources>

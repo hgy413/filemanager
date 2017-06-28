@@ -6,7 +6,6 @@ import android.provider.MediaStore;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
 
-
 /**
  * 视频文件预览图加载任务
  *

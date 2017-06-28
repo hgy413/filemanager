@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
 
-
 /**
  * 音乐文件专辑图加载任务
  * @author chenbenbin

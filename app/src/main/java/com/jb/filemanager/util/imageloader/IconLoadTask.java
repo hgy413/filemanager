@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.PackageManagerLocker;
 
-
 /**
  * 加载图片任务：应用图标&APK
  *
@@ -50,7 +49,7 @@ class IconLoadTask extends AbstractImageLoadTask {
                 } else {
                     BitmapDrawable drawable3 = (BitmapDrawable) mContext
                             .getResources().getDrawable(
-                                    R.mipmap.ic_launcher);
+                                    R.drawable.common_default_app_icon);
                     bitmap = drawable3.getBitmap();
                 }
 

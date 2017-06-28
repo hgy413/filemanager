@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/view_applock_float_layout_blur_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/view_applock_float_layout_shade"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.85"
+        android:background="#2c3d4a" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_common_title" />
+
+        <ImageView
+            android:id="@+id/view_applock_float_layout_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="33dp"
+            android:src="@mipmap/ic_launcher"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/view_applock_float_layout_appname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="@string/app_name"
+            android:textColor="#ffffff"
+            android:textSize="12dp" />
+
+        <com.swift.boost.view.PatternView
+            android:id="@+id/view_applock_float_layout_patternview"
+            android:layout_width="270dp"
+            android:layout_height="270dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="13dp"
+            app:pl_aspect="square"
+            app:pl_dot_line_width="3dp"
+            app:pl_dot_size="15dp"
+            app:pl_dot_size_activated="25dp"
+            app:pl_errorColor="#ff8314"
+            app:pl_regularColor="#ffffff"
+            app:pl_successColor="#ffffff" />
+
+        <com.swift.boost.function.applock.view.NumberLockerView
+            android:id="@+id/view_applock_float_layout_numberview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="17dp"/>
+
+        <TextView
+            android:id="@+id/view_applock_float_layout_forget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/applock_float_view_forget_psd"
+            android:layout_marginTop="33dp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+</FrameLayout>
