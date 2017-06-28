@@ -1,4 +1,4 @@
-package com.jb.filemanager.database.dao.dao;
+package com.jb.filemanager.database.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
