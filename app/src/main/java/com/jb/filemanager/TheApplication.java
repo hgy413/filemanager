@@ -220,6 +220,8 @@ public class TheApplication extends Application {
     private void onCreateForIntelligentPreloadServiceProcess() {
         // 这个进程里也要先初始化完统计sdk再初始化广告sdk
         initStatistics();
+        // 初始化买量SDK
+        BuyUserManager.initSingleton(getAppContext());
         // 用到广告sdk的进程都需要先初始化统计sdk
         initAdSdk();
     }

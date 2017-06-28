@@ -60,6 +60,9 @@
 
     <string name="image_title">Image</string>
 
+    <!-- 音乐管理页 -->
+    <string name="music_title">Music</string>
+
 
 
     <!-- 文件类型 -->

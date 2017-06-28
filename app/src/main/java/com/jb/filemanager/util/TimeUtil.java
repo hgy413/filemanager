@@ -14,6 +14,7 @@ public class TimeUtil {
     public static final SimpleDateFormat DATE_FORMATTER_HOUR = new SimpleDateFormat("mm:ss", Locale.US);
     public static final SimpleDateFormat DATE_FORMATTER_SHORT = new SimpleDateFormat("HH:mm", Locale.US);
     public static final SimpleDateFormat DATA_SHORT_FORMATTER_DATE = new SimpleDateFormat("yyyyMMdd", Locale.US);
+    public static final SimpleDateFormat DATE_FORMATTER_MM_SS = new SimpleDateFormat("mm:ss", Locale.US);
 
     public static final long MILLIS_MINUTE = 60 * 1000L;
     public static final long MILLIS_HOUR = 60 * MILLIS_MINUTE;
@@ -375,5 +376,21 @@ public class TimeUtil {
                 return second + "s";
             }
         }
+    }
+
+    public static long getStartMillsInDay(long time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTimeInMillis();
+    }
+
+    /*
+     * 获取分秒时间
+     * */
+    public static String getMSTime(long time) {
+        return getTime(time, DATE_FORMATTER_MM_SS);
     }
 }

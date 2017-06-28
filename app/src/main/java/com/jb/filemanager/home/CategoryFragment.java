@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.image.ImageActivity;
+import com.jb.filemanager.function.music.MusicActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.Logger;
@@ -141,6 +142,8 @@ public class CategoryFragment extends Fragment {
                         // 图片管理
                         startActivity(new Intent(getContext(), ImageActivity.class));
                         break;
+                    case 1:
+                        startActivity(new Intent(getContext(), MusicActivity.class));
                     default:
                         break;
                 }

@@ -2,6 +2,8 @@ package com.jb.filemanager.function.music;
 
 import android.content.Intent;
 
+import java.io.File;
+
 
 /**
  * Created by bill wang on 2017/6/28.
@@ -60,4 +62,8 @@ public class MusicPresenter implements MusicContract.Presenter {
         // nothing to do
     }
 
+    @Override
+    public boolean isSelected(File file) {
+        return false;
+    }
 }

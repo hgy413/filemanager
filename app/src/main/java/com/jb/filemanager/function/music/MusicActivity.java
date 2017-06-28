@@ -6,8 +6,11 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +18,21 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.CursorTreeAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.util.ConvertUtil;
+import com.jb.filemanager.util.Logger;
+import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 import com.jb.filemanager.util.images.Utils;
+
+import java.io.File;
+import java.lang.ref.WeakReference;
 
 /**
  * Created by bill wang on 2017/6/28.
@@ -33,6 +44,35 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
         View.OnClickListener {
 
     private static final int LOADER_ID = 1;
+    private static final String GROUP_ID = "_id";
+    private static final String GROUP_NAME = "name";
+    private static final String GROUP_START = "start";
+    private static final String GROUP_END = "end";
+
+    private static final int INDEX_GROUP_NAME = 1;
+    private static final int INDEX_GROUP_START = 2;
+    private static final int INDEX_GROUP_END = 3;
+
+    public static final int INDEX_CHILD_ID = 0;
+    public static final int INDEX_CHILD_DISPLAY_NAME = 1;
+    public static final int INDEX_CHILD_SIZE = 2;
+    public static final int INDEX_CHILD_PATH = 3;
+    public static final int INDEX_CHILD_DATE_MODIFIED = 4;
+    public static final int INDEX_CHILD_MIME_TYPE = 5;
+    public static final int INDEX_CHILD_DURATION = 6;
+    public static final int INDEX_CHILD_ARTIST = 7;
+
+    private static final String[] PROJECTION_MUSIC = {
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.DISPLAY_NAME,
+            MediaStore.Audio.Media.SIZE,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.DATE_MODIFIED,
+            MediaStore.Audio.Media.MIME_TYPE,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.ARTIST
+    };
+
 
     private MusicContract.Presenter mPresenter;
 
@@ -194,23 +234,45 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
     // implements LoaderManager.LoaderCallbacks<Cursor>
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader loader = new CursorLoader(this,
-                MediaStore.Audio.Media.INTERNAL_CONTENT_URI,
+        return new CursorLoader(this,
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 new String[] { MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DATE_MODIFIED },
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
-                MediaStore.Audio.Media.DISPLAY_NAME);;
-        return loader;
+                MediaStore.Audio.Media.DATE_MODIFIED + " desc");
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.getCount() > 0) {
             try {
+                int group = 0;
+                long lastModify = 0L;
+                String[] columnNames = { GROUP_ID, GROUP_NAME, GROUP_START, GROUP_END };
+                MatrixCursor matrixCursor = new MatrixCursor(columnNames, columnNames.length);
+
                 while (data.moveToNext()) {
                     String path = data.getString(0);
                     long modify = data.getLong(1);
+                    Logger.e("wangzq", path + " " + String.valueOf(modify));
 
+                    boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
+                    if (!isSameDay) {
+                        // modify 的单位是秒
+                        lastModify = modify;
+                        String timeString = TimeUtil.getTime(modify * 1000);
+                        long startMills = TimeUtil.getStartMillsInDay(modify);
+                        long endMills = startMills + TimeUtil.MILLIS_IN_DAY;
+
+                        String[] row = new String[] { String.valueOf(group), timeString, String.valueOf(startMills), String.valueOf(endMills) };
+                        matrixCursor.addRow(row);
+                    }
+                }
+
+                mAdapter.changeCursor(matrixCursor);
+                int groupCount = matrixCursor.getCount();
+                for (int i = 0; i < groupCount; i++) {
+                    mElvMusic.expandGroup(i);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -233,36 +295,109 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
 
     private static class MusicAdapter extends CursorTreeAdapter {
 
+        private Context mContext;
         private LayoutInflater mInflater;
+        private WeakReference<MusicContract.Presenter> mPresenterRef;
 
         public MusicAdapter(Context context) {
             super(null, context, true);
+            mContext = context;
             mInflater = LayoutInflater.from(context);
+        }
+
+        public void setPresenter(MusicContract.Presenter presenter) {
+            mPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
         protected Cursor getChildrenCursor(Cursor groupCursor) {
-            return null;
+            String groupStart = groupCursor.getString(INDEX_GROUP_START);
+            String groupEnd = groupCursor.getString(INDEX_GROUP_END);
+            long start = 0L;
+            long end = 0L;
+            try {
+                start = Long.valueOf(groupStart);
+                end = Long.valueOf(groupEnd);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return queryData(mContext, start, end);
         }
 
         @Override
         protected View newGroupView(Context context, Cursor cursor, boolean isExpanded, ViewGroup parent) {
-            return null;
+            View convertView = mInflater.inflate(R.layout.item_music_group, parent, false);
+            GroupViewHolder holder = new GroupViewHolder();
+            holder.mTvGroupName = (TextView) convertView.findViewById(R.id.tv_music_group_item_title);
+            holder.mIvSelectedGroup = (ImageView) convertView.findViewById(R.id.iv_music_group_item_select);
+            convertView.setTag(holder);
+            return convertView;
         }
 
         @Override
         protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
-
+            final GroupViewHolder holder = (GroupViewHolder) view.getTag();
+            final String groupName = cursor.getString(INDEX_GROUP_NAME);
+            holder.mTvGroupName.setText(groupName);
         }
 
         @Override
         protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent) {
-            return null;
+            View convertView = mInflater.inflate(R.layout.item_music_child, parent, false);
+            ChildViewHolder holder = new ChildViewHolder();
+            holder.mIvCover = (ImageView) convertView.findViewById(R.id.iv_music_child_item_cover);
+            holder.mTvName = (TextView) convertView.findViewById(R.id.tv_music_child_item_name);
+            holder.mTvInfo = (TextView) convertView.findViewById(R.id.tv_music_child_item_info);
+            holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_child_item_select);
+            convertView.setTag(holder);
+            return convertView;
         }
 
         @Override
         protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
+            ChildViewHolder holder = (ChildViewHolder) view.getTag();
+            String path = cursor.getString(INDEX_CHILD_PATH);
+            String name = cursor.getString(INDEX_CHILD_DISPLAY_NAME);
+            long size = cursor.getLong(INDEX_CHILD_SIZE);
+            long duration = cursor.getLong(INDEX_CHILD_DURATION);
+            String artist = cursor.getString(INDEX_CHILD_ARTIST);
+            // 当获得的fileName为空时，从filePath中获得文件名
+            if (TextUtils.isEmpty(name)) {
+                name = "";
+                if (!TextUtils.isEmpty(path)) {
+                    name = path.substring(path.lastIndexOf(File.separator) + 1);
+                }
+            }
 
+            holder.mTvName.setText(name);
+            holder.mIvCover.setImageResource(R.drawable.ic_default_music);
+            holder.mTvInfo.setText(artist + " " + ConvertUtil.getReadableSize(size) + " " + TimeUtil.getMSTime(duration));
+
+            if (mPresenterRef != null && mPresenterRef.get() != null) {
+                boolean isSelected = mPresenterRef.get().isSelected(new File(path));
+                holder.mIvSelect.setSelected(isSelected);
+            }
+        }
+
+        private Cursor queryData(Context context, long start, long end) {
+            return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    PROJECTION_MUSIC,
+                    MediaStore.Audio.Media.SIZE + " > 0" + " AND " + MediaStore.Audio.Media.DATE_MODIFIED + " > ?" + " AND " + MediaStore.Audio.Media.DATE_MODIFIED + "<= ?",
+                    new String[]{String.valueOf(start), String.valueOf(end)},
+                    MediaStore.Audio.Media.DISPLAY_NAME);
+        }
+
+        public static class ChildViewHolder {
+            ImageView mIvCover;
+            TextView mTvName;
+            TextView mTvInfo;
+            ImageView mIvSelect;
+        }
+
+        public static class GroupViewHolder {
+            TextView mTvGroupName;
+            ImageView mIvSelectedGroup;
         }
     }
 

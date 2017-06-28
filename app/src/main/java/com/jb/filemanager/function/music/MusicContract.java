@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import java.io.File;
+
 /**
  * Created by bill wang on 2017/6/28.
  *
@@ -22,6 +24,8 @@ public class MusicContract {
         void onActivityResult(int requestCode, int resultCode, Intent data);
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
+
+        boolean isSelected(File file);
     }
 
     interface Support {
