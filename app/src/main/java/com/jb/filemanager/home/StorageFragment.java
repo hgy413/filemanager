@@ -30,6 +30,7 @@ import com.jb.filemanager.ui.widget.HorizontalListView;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.images.ImageCache;
 import com.jb.filemanager.util.images.ImageFetcher;
+import com.jb.filemanager.util.images.ImageUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -375,7 +376,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             mInflater = LayoutInflater.from(context);
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
-            mImageFetcher = createImageFetcher((FragmentActivity) context, mImageSize, R.drawable.img_picture);
+            mImageFetcher = ImageUtils.createImageFetcher((FragmentActivity) context, mImageSize, R.drawable.img_picture);
             mRootDirs = rootDirs;
         }
 
@@ -448,21 +449,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                 }
             }
             return false;
-        }
-
-        ImageFetcher createImageFetcher(FragmentActivity activity, int imageSize, int defaultImageId) {
-            ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(activity,
-                    Const.IMAGE_CACHE_DIR);
-
-            cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of
-            // app memory
-
-            // The ImageFetcher takes care of loading images into our ImageView
-            // children asynchronously
-            ImageFetcher imageFetcher = new ImageFetcher(activity, imageSize);
-            imageFetcher.setLoadingImage(defaultImageId);
-            imageFetcher.addImageCache(activity.getSupportFragmentManager(), cacheParams);
-            return imageFetcher;
         }
     }
 
