@@ -19,6 +19,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.about.AboutActivity;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.setting.SettingActivity;
+import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.statistics.bean.Statistics101Bean;
@@ -36,6 +37,7 @@ public class MainDrawer implements View.OnClickListener {
 
     public static final String FEED_BACK = "feed_back";
     private static final String ABOUT = "about";
+    private static final String CLEAN_TRASH = "clean_trash";
     private ActionBarDrawerToggle mDrawerToggle;
     private QuickClickGuard mQuickClickGuard;
     private DrawerLayout mDrawerLayout;
@@ -148,6 +150,9 @@ public class MainDrawer implements View.OnClickListener {
                     case ABOUT:
                         jumpToAbout();
                         break;
+                    case CLEAN_TRASH:
+                        jumpToCleanCrash();
+                        break;
                     default:
                         break;
                 }
@@ -160,9 +165,11 @@ public class MainDrawer implements View.OnClickListener {
 
         DrawerItemBean feedback = new DrawerItemBean(mActivity.getString(R.string.drawer_feedback), R.drawable.ic_drawer_feedback, FEED_BACK);
         DrawerItemBean about = new DrawerItemBean(mActivity.getString(R.string.drawer_about), R.drawable.ic_drawer_about, ABOUT);
+        DrawerItemBean trash = new DrawerItemBean(mActivity.getString(R.string.trash), R.drawable.ic_drawer_about, CLEAN_TRASH);
 
         itemBeanArrayList.add(feedback);
         itemBeanArrayList.add(about);
+        itemBeanArrayList.add(trash);
         return itemBeanArrayList;
     }
 
@@ -248,6 +255,10 @@ public class MainDrawer implements View.OnClickListener {
         }
     }
 
+    private void jumpToCleanCrash() {
+        closeDrawerWithDelay(0);
+        delayStartActivity(new Intent(mActivity, CleanTrashActivity.class));
+    }
 
     private void jumpToAbout() {
         closeDrawerWithDelay(0);

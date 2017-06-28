@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="0% has done"/>
 
-        <com.jb.filemanager.function.trashfiles.view.floatingelv.FloatingGroupExpandableListView
+        <com.jb.filemanager.function.trash.view.floatingelv.FloatingGroupExpandableListView
             android:id="@+id/clean_trash_expandable_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

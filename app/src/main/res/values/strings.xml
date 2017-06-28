@@ -90,4 +90,5 @@
     <string name="clean_subitem_detail_result_1">%1$s &lt;font color="#0083ff">Cleaning is completely safe.&lt;/font></string>
     <string name="clean_subitem_detail_result_2">%1$s &lt;font color="#FF8517">They will need to be redownloaded.&lt;/font></string>
     <string name="clean_subitem_detail_result_10">%1$s &lt;font color="#FF8517">Cleaning will remove these forever!&lt;/font></string>
+    <string name="trash">trash</string>
 </resources>

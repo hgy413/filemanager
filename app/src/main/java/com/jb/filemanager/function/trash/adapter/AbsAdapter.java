@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trashfiles.adapter;
+package com.jb.filemanager.function.trash.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trashfiles;
+package com.jb.filemanager.function.trash;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,12 +17,14 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanPathEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
-import com.jb.filemanager.function.trashfiles.adapter.CleanListAdapter;
-import com.jb.filemanager.function.trashfiles.presenter.CleanTrashPresenter;
-import com.jb.filemanager.function.trashfiles.presenter.Contract;
-import com.jb.filemanager.function.trashfiles.view.floatingelv.FloatingGroupExpandableListView;
+import com.jb.filemanager.function.trash.adapter.CleanListAdapter;
+import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
+import com.jb.filemanager.function.trash.presenter.Contract;
+import com.jb.filemanager.function.trash.view.floatingelv.FloatingGroupExpandableListView;
+import com.jb.filemanager.function.trash.view.floatingelv.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.WindowUtil;
+import com.jb.filemanager.util.imageloader.IconLoader;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -36,7 +38,6 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView {
 
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
-    ;
     private boolean mIsScanning;
 
     private TextView mTvScanProgress;
@@ -51,6 +52,9 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clean_trash);
+        IconLoader.ensureInitSingleton(TheApplication.getAppContext());
+        IconLoader.getInstance().bindServicer(this);
+        com.jb.filemanager.util.imageloader.ImageLoader.getInstance(TheApplication.getAppContext());
         initView();
         initData();
     }
@@ -63,6 +67,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button);
 
         mAdapter = new CleanListAdapter(mPresenter.getDataGroup(), this);
+        mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
     }
 
     private void initData() {
@@ -81,6 +86,15 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private void keepScreenOn(boolean keep) {
         WindowUtil.keepScreenOn(getWindow(), keep);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        IconLoader.getInstance().unbindServicer(this);
+        if (TheApplication.getGlobalEventBus().isRegistered(mSubscriber)) {
+            TheApplication.getGlobalEventBus().unregister(mSubscriber);
+        }
     }
 
     @Override

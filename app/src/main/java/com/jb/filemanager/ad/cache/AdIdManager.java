@@ -10,7 +10,7 @@ import com.jb.filemanager.util.Logger;
  */
 public class AdIdManager {
 
-    private static final String LOGER_TAG = "AdManager";
+    private static final String LOGER_TAG = "AdTrashManager";
 
     /**
      * 应用分发的错误虚拟广告ID

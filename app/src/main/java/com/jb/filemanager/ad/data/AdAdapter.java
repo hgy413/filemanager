@@ -12,7 +12,7 @@ import com.jiubang.commerce.ad.bean.AdModuleInfoBean;
 import com.mopub.mobileads.MoPubView;
 
 /**
- * AdManager 和 展示层之间的适配器
+ * AdTrashManager 和 展示层之间的适配器
  * @author chenhewen
  *
  */

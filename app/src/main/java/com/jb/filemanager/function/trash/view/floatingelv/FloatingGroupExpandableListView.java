@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trashfiles.view.floatingelv;
+package com.jb.filemanager.function.trash.view.floatingelv;
 
 import android.content.Context;
 import android.database.DataSetObserver;

@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trashfiles.presenter;
+package com.jb.filemanager.function.trash.presenter;
 
 import android.content.Context;
 import android.os.AsyncTask;

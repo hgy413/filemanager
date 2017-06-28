@@ -5,6 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.jb.filemanager.database.provider.DuplicatePhotoTable;
+import com.jb.filemanager.database.table.CacheTrashRecordTable;
+import com.jb.filemanager.database.table.CleanIgnoreTable;
+import com.jb.filemanager.database.table.CleanScanOvertimeTable;
+import com.jb.filemanager.database.table.IgnoreListTable;
 import com.jb.filemanager.database.upgrade.DatabaseUpgrade;
 
 
@@ -67,28 +72,28 @@ public class DatabaseHelper extends BaseDatabaseHelper {
             /*db.execSQL(LockerTable.CREATE_TABLE);
             db.execSQL(LockerSceneTable.CREATE_TABLE);
             db.execSQL(LockerSceneItemTable.CREATE_TABLE);
-            db.execSQL(AntiPeepTable.CREATE_TABLE);
+            db.execSQL(AntiPeepTable.CREATE_TABLE);*/
             // 重复照片
             db.execSQL(DuplicatePhotoTable.CREATE_TABLE);
             //应用权限
-            db.execSQL(AppPermissionsTable.CREATE_TABLE);
+//            db.execSQL(AppPermissionsTable.CREATE_TABLE);
             // 白名单
             db.execSQL(CleanIgnoreTable.CREATE_TABLE);
             db.execSQL(CleanScanOvertimeTable.CREATE_TABLE);
             db.execSQL(IgnoreListTable.CREATE_TABLE);
             // 2017年3月6日19:55:30
-            db.execSQL(AppLaunchStatisticsTable.CREATE_TABLE);
+//            db.execSQL(AppLaunchStatisticsTable.CREATE_TABLE);
 
             //apk路径
-            db.execSQL(ApkPathTable.CREATE_TABLE);
+//            db.execSQL(ApkPathTable.CREATE_TABLE);
             //缓存垃圾清理记录
             db.execSQL(CacheTrashRecordTable.CREATE_TABLE);
 
             // 通知栏拦截白名单2017年3月22日18:10:18
-            db.execSQL(NotificationWhiteListTable.CREATE_TABLE);
+//            db.execSQL(NotificationWhiteListTable.CREATE_TABLE);
 
             // 省电加速白名单
-            db.execSQL(BatteryBoostIgnoreListTable.CREATE_TABLE);*/
+//            db.execSQL(BatteryBoostIgnoreListTable.CREATE_TABLE);
 
             mIsNewDB = true;
             db.setTransactionSuccessful();

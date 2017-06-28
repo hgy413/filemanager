@@ -150,7 +150,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
-        <activity android:name=".function.trashfiles.CleanTrashActivity"
+        <activity android:name=".function.trash.CleanTrashActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"
             />

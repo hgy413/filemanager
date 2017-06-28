@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/item_trash_child_bg_selector">
+        android:background="@drawable/ic_drawer_about">
 
         <ImageView
             android:id="@+id/item_child_indivator"
             android:layout_width="14dp"
             android:contentDescription="@null"
-            android:src="@drawable/trash_child_indicator"
+            android:src="@drawable/ic_drawer_about"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
@@ -43,7 +43,7 @@
             android:textColor="#333333"
             android:textSize="16sp"/>
 
-        <com.swift.boost.view.GroupSelectBox
+        <com.jb.filemanager.commomview.GroupSelectBox
             android:id="@+id/item_child_select_button"
             android:layout_width="48dp"
             android:layout_height="match_parent"

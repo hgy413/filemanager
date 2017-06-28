@@ -20,13 +20,13 @@ import java.util.HashSet;
  * 广告文件扫描管理<br>
  */
 
-public class AdManager {
-    private static AdManager sInstance;
+public class AdTrashManager {
+    private static AdTrashManager sInstance;
     private ArrayList<AdBean> mAdBeanList = new ArrayList<>();
     private AdDataManager mDataManager;
     private Context mContext;
 
-    private AdManager(Context context) {
+    private AdTrashManager(Context context) {
         mContext = context.getApplicationContext();
         mDataManager = AdDataManager.getInstance(mContext);
         mAdBeanList.clear();
@@ -34,9 +34,9 @@ public class AdManager {
         TheApplication.getGlobalEventBus().register(mEventReceiver);
     }
 
-    public static AdManager getInstance(Context context) {
+    public static AdTrashManager getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new AdManager(context);
+            sInstance = new AdTrashManager(context);
         }
         return sInstance;
     }

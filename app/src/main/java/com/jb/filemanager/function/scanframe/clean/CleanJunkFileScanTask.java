@@ -46,7 +46,7 @@ import com.jb.filemanager.function.scanframe.clean.util.CleanListUtils;
 import com.jb.filemanager.function.scanframe.clean.util.FileListComparator;
 import com.jb.filemanager.function.scanframe.manager.MemoryTrashManager;
 import com.jb.filemanager.function.scanframe.manager.SysCacheManager;
-import com.jb.filemanager.function.scanframe.manager.ad.AdManager;
+import com.jb.filemanager.function.scanframe.manager.ad.AdTrashManager;
 import com.jb.filemanager.function.scanframe.manager.residue.ResidualFileManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
@@ -666,7 +666,7 @@ public class CleanJunkFileScanTask extends ScanTask implements ITask {
             unRegisterAppCacheUpdateEvent();
             mEventManager.sendSDCardScanDoneEvent();
             ResidualFileManager.getInstance(mContext).updateDataIfNeed();
-            /*AdManager.getInstance(mContext).updateDataIfNeed();*/
+            /*AdTrashManager.getInstance(mContext).updateDataIfNeed();*/
             //uploadStatistics();
             //mCleanTimer.setDefaultNotifySize(CleanCheckedFileSizeEvent.getJunkFileAllSize(true));
             mEventManager.sendJunkScanDoneEvent();
@@ -993,7 +993,7 @@ public class CleanJunkFileScanTask extends ScanTask implements ITask {
             return;
         }
         long adTime = System.currentTimeMillis();
-        ArrayList<AdBean> adList = AdManager.getInstance(mContext).getAdList(sdPath, getAdIgnoreList());
+        ArrayList<AdBean> adList = AdTrashManager.getInstance(mContext).getAdList(sdPath, getAdIgnoreList());
         for (AdBean bean : adList) {
             if (mIsSwitch || mIsStop) {
                 return;

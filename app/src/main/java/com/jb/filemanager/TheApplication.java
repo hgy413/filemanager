@@ -21,6 +21,11 @@ import com.jb.filemanager.function.daemon.AssistantReceiver;
 import com.jb.filemanager.function.daemon.AssistantService;
 import com.jb.filemanager.function.daemon.DaemonReceiver;
 import com.jb.filemanager.function.daemon.DaemonService;
+import com.jb.filemanager.function.scanframe.clean.CacheManager;
+import com.jb.filemanager.function.scanframe.clean.CleanManager;
+import com.jb.filemanager.function.scanframe.clean.event.GlobalDataLoadingDoneEvent;
+import com.jb.filemanager.function.scanframe.manager.ad.AdTrashManager;
+import com.jb.filemanager.function.scanframe.manager.residue.ResidualFileManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.statistics.AlarmEight;
@@ -196,11 +201,20 @@ public class TheApplication extends Application {
         //初始化广告SDK
         AdManager.initSingleton(this);
 
+        //异步调用方法
+        ResidualFileManager.getInstance(getApplicationContext());
+        CacheManager.getInstance(getApplicationContext());
+        // 初始化广告垃圾扫描
+        AdTrashManager.getInstance(getAppContext());
+        CleanManager.getInstance(getApplicationContext()).startJunkFileScanTask();
+
+
         // 主进程启动完毕,更新上一次启动的版本号和时间 **这句永远在最后
         appLaunchFinished();
 
         // 将主进程的主线程设置成严苛模式 包括线程耗时以及内存泄露部分
         initStrictMode();
+        TheApplication.getGlobalEventBus().post(new GlobalDataLoadingDoneEvent());
     }
 
     private void onCreateForIntelligentPreloadServiceProcess() {

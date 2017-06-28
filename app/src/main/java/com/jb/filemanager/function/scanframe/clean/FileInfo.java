@@ -1,7 +1,8 @@
 package com.jb.filemanager.function.scanframe.clean;
 
-import com.swift.boost.function.scanframe.bean.common.FileType;
-import com.swift.boost.util.FileTypeUtil;
+
+import com.jb.filemanager.function.scanframe.bean.common.FileType;
+import com.jb.filemanager.util.FileTypeUtil;
 
 /**
  * SD卡文件信息

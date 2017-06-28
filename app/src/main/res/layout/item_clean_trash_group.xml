@@ -7,7 +7,7 @@
     android:minHeight="54dp"
     android:orientation="vertical">
 
-    <com.swift.boost.function.trash.view.ShaderLine
+    <com.jb.filemanager.function.trash.view.ShaderLine
         android:id="@+id/item_group_top_shader"
         android:layout_width="match_parent"
         android:layout_height="4dp"
@@ -63,7 +63,7 @@
             android:textColor="#666666"
             android:textSize="16dp"/>
 
-        <com.swift.boost.view.ProgressWheel
+        <com.jb.filemanager.commomview.ProgressWheel
             android:id="@+id/item_group_pb"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -75,7 +75,7 @@
             wheel:matProg_barWidth="2dp"
             wheel:matProg_progressIndeterminate="true"/>
 
-        <com.swift.boost.view.GroupSelectBox
+        <com.jb.filemanager.commomview.GroupSelectBox
             android:id="@+id/item_group_iv_select"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -87,7 +87,7 @@
             android:visibility="gone"/>
     </RelativeLayout>
 
-    <com.swift.boost.function.trash.view.ShaderLine
+    <com.jb.filemanager.function.trash.view.ShaderLine
         android:id="@+id/item_group_bottom_shader"
         android:layout_width="match_parent"
         android:layout_height="4dp"

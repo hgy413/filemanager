@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trashfiles.presenter;
+package com.jb.filemanager.function.trash.presenter;
 
 /**
  * Created by xiaoyu on 2017/2/3 15:07.

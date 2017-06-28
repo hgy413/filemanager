@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trashfiles.adapter;
+package com.jb.filemanager.function.trash.adapter;
 
 import android.app.Activity;
 import android.util.SparseIntArray;
@@ -25,7 +25,7 @@ import com.jb.filemanager.function.scanframe.clean.CleanEventManager;
 import com.jb.filemanager.function.scanframe.clean.event.CleanCheckedFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanNoneCheckedEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanProgressDoneEvent;
-import com.jb.filemanager.function.trashfiles.view.ShaderLine;
+import com.jb.filemanager.function.trash.view.ShaderLine;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.file.FileSizeFormatter;
 import com.jb.filemanager.util.imageloader.IconLoader;
