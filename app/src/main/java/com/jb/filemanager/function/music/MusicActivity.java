@@ -89,10 +89,10 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
         int imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
         mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.ic_default_music);
 
-        initView();
-
         mPresenter = new MusicPresenter(this, new MusicSupport());
         mPresenter.onCreate(getIntent());
+
+        initView();
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
@@ -175,6 +175,7 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
         mElvMusic = (ExpandableListView) findViewById(R.id.elv_music);
         if (mElvMusic != null) {
             mAdapter = new MusicAdapter(this);
+            mAdapter.setPresenter(mPresenter);
             mElvMusic.setAdapter(mAdapter);
 
             mElvMusic.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -359,10 +360,14 @@ public class MusicActivity extends BaseActivity implements LoaderManager.LoaderC
             }
             Cursor clickedCursor = queryData(mContext, start, end);
             int clickedCount = clickedCursor.getCount();
-            if (mChildCheckedCount.get(groupName) == clickedCount && clickedCount > 0) {
-                holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
-            } else if (clickedCount > 0) {
-                holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_unchecked);
+            if (mChildCheckedCount.containsKey(groupName)) {
+                if (mChildCheckedCount.get(groupName) == clickedCount && clickedCount > 0) {
+                    holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
+                } else if (clickedCount > 0) {
+                    holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_unchecked);
+                } else {
+                    holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_style_grid);
+                }
             } else {
                 holder.mIvSelect.setImageResource(R.drawable.ic_main_storage_style_grid);
             }
