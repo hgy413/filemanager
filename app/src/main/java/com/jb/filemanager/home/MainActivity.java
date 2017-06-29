@@ -22,6 +22,7 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
 import com.jb.filemanager.function.splash.SplashActivity;
+import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtil;
@@ -623,21 +624,25 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     public void updateView() {
         if (mPresenter != null) {
-            int status = mPresenter.getStatus();
-            switch (status) {
-                case MainPresenter.MAIN_STATUS_NORMAL:
-                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
-                    mLlBottomOperateSecondContainer.setVisibility(View.GONE);
-                    break;
-                case MainPresenter.MAIN_STATUS_SELECT:
-                    mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
-                    mLlBottomOperateSecondContainer.setVisibility(View.GONE);
-                    break;
-                case MainPresenter.MAIN_STATUS_CUT:
-                case MainPresenter.MAIN_STATUS_COPY:
-                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
-                    mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
-                    break;
+            ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
+            ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
+            if ((copyList != null && copyList.size() > 0) || (cutList != null && cutList.size() > 0)) {
+                mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
+            } else {
+                int status = mPresenter.getStatus();
+                switch (status) {
+                    case MainPresenter.MAIN_STATUS_NORMAL:
+                        mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                        break;
+                    case MainPresenter.MAIN_STATUS_SELECT:
+                        mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
+                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

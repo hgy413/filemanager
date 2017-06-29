@@ -1,9 +1,5 @@
 package com.jb.filemanager.manager.file;
 
-import android.text.TextUtils;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -57,6 +53,8 @@ public class FileManager {
 
     private static FileManager sInstance;
 
+    private ArrayList<File> mCopyFiles;
+    private ArrayList<File> mCutFiles;
 
     public static FileManager getInstance() {
         synchronized (FileManager.class) {
@@ -68,4 +66,33 @@ public class FileManager {
     }
 
 
+    public void setCopyFiles(ArrayList<File> copyFiles) {
+        clearCopyFiles();
+        mCopyFiles = copyFiles;
+    }
+
+    public void setCutFiles(ArrayList<File> cutFiles) {
+        clearCutFiles();
+        mCutFiles = cutFiles;
+    }
+
+    public ArrayList<File> getCopyFiles() {
+        return mCopyFiles;
+    }
+
+    public ArrayList<File> getCutFiles() {
+        return mCutFiles;
+    }
+
+    public void clearCopyFiles() {
+        if (mCopyFiles != null) {
+            mCopyFiles.clear();
+        }
+    }
+
+    public void clearCutFiles() {
+        if (mCutFiles != null) {
+            mCutFiles.clear();
+        }
+    }
 }

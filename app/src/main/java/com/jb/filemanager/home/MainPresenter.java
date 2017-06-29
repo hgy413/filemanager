@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -20,8 +21,6 @@ class MainPresenter implements MainContract.Presenter {
 
     public static final int MAIN_STATUS_NORMAL = 0;
     public static final int MAIN_STATUS_SELECT = 1;
-    public static final int MAIN_STATUS_CUT = 2;
-    public static final int MAIN_STATUS_COPY = 3;
 
     private MainContract.View mView;
     private MainContract.Support mSupport;
@@ -145,7 +144,8 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateCutButton() {
         if (mView != null) {
-            mStatus = MAIN_STATUS_CUT;
+            FileManager.getInstance().setCutFiles(mSelectedFiles);
+            resetStatus();
             mView.updateView();
         }
     }
@@ -153,7 +153,8 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateCopyButton() {
         if (mView != null) {
-            mStatus = MAIN_STATUS_COPY;
+            FileManager.getInstance().setCopyFiles(mSelectedFiles);
+            resetStatus();
             mView.updateView();
         }
     }
@@ -206,7 +207,8 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperateCancelButton() {
         if (mView != null) {
-            resetStatus();
+            FileManager.getInstance().clearCopyFiles();
+            FileManager.getInstance().clearCutFiles();
             mView.updateView();
         }
     }
@@ -214,14 +216,16 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperatePasteButton() {
         if (mView != null) {
-            ArrayList<File> copyList = new ArrayList<>(mSelectedFiles);
-            if (mStatus == MAIN_STATUS_COPY) {
+            ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
+            ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
+            if (copyList != null && copyList.size() > 0) {
                 FileUtil.copyFilesToDest(copyList, mCurrentPath);
-            } else if (mStatus == MAIN_STATUS_CUT) {
+            } else if (cutList != null && cutList.size() > 0) {
                 FileUtil.cutFilesToDest(copyList, mCurrentPath);
             }
 
-            resetStatus();
+            FileManager.getInstance().clearCopyFiles();
+            FileManager.getInstance().clearCutFiles();
             mView.updateView();
         }
     }
