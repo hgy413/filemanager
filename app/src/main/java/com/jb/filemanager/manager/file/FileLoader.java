@@ -13,6 +13,7 @@ import com.jb.filemanager.util.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -32,9 +33,18 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
     private List<File> mData;
     private String mPath;
 
+    private Comparator<File> mSort;
+
     public FileLoader(Context context, String path) {
         super(context);
         this.mPath = path;
+        mSort = FileUtil.sComparator;
+    }
+
+    public FileLoader(Context context, String path, Comparator<File> sort) {
+        super(context);
+        this.mPath = path;
+        this.mSort = sort;
     }
 
     @Override
@@ -54,8 +64,8 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
         // List file in this directory with the directory filter
         final File[] dirs = pathDir.listFiles(showHiddenFile ? FileUtil.sDirFilterWithHidden : FileUtil.sDirFilter);
         if (dirs != null) {
-            // Sort the folders alphabetically
-            Arrays.sort(dirs, FileUtil.sComparator);
+            // Sort the folders
+            Arrays.sort(dirs, mSort);
             // Add each folder to the File list for the list adapter
             for (File dir : dirs)
                 list.add(dir);
@@ -64,8 +74,8 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
         // List file in this directory with the file filter
         final File[] files = pathDir.listFiles(showHiddenFile ? FileUtil.sFileFilterWithHidden : FileUtil.sFileFilter);
         if (files != null) {
-            // Sort the files alphabetically
-            Arrays.sort(files, FileUtil.sComparator);
+            // Sort the files
+            Arrays.sort(files, mSort);
             // Add each file to the File list for the list adapter
             for (File file : files)
                 list.add(file);

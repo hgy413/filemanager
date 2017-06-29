@@ -2,6 +2,7 @@ package com.jb.filemanager.manager.file;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by bill wang on 2017/6/23.
@@ -56,6 +57,8 @@ public class FileManager {
     private ArrayList<File> mCopyFiles;
     private ArrayList<File> mCutFiles;
 
+    private Comparator<File> mFileSort;
+
     public static FileManager getInstance() {
         synchronized (FileManager.class) {
             if (sInstance == null) {
@@ -94,5 +97,13 @@ public class FileManager {
         if (mCutFiles != null) {
             mCutFiles.clear();
         }
+    }
+
+    public void setFileSort(Comparator<File> sort) {
+        mFileSort = sort;
+    }
+
+    public Comparator<File> getFileSort() {
+        return mFileSort;
     }
 }

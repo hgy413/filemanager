@@ -121,6 +121,160 @@ public class FileUtil {
         }
     };
 
+    /*
+     * File and folder comparator. 名称升序
+     */
+    public static Comparator<File> sNameAscendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            // Sort alphabetically by lower case, which is much cleaner
+            return f1.getName().toLowerCase().compareTo(
+                    f2.getName().toLowerCase());
+        }
+    };
+
+    /*
+     * File and folder comparator. 名称降序
+     */
+    public static Comparator<File> sNameDescendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            return f2.getName().toLowerCase().compareTo(
+                    f1.getName().toLowerCase());
+        }
+    };
+
+    /*
+     * File and folder comparator. 大小升序
+     */
+    public static Comparator<File> sSizeAscendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.valueOf(f1.length()).compareTo(f2.length());
+        }
+    };
+
+    /*
+     * File and folder comparator. 大小降序
+     */
+    public static Comparator<File> sSizeDescendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.valueOf(f2.length()).compareTo(f1.length());
+        }
+    };
+
+    /*
+     * File and folder comparator. 日期升序
+     */
+    public static Comparator<File> sDateAscendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+        }
+    };
+
+    /*
+     * File and folder comparator. 日期降序
+     */
+    public static Comparator<File> sDateDescendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.valueOf(f2.lastModified()).compareTo(f1.lastModified());
+        }
+    };
+
+    /*
+     * File and folder comparator. 类型升序
+     */
+    public static Comparator<File> sTypeAscendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            String f1Path = f1.getAbsolutePath();
+            String f2Path = f2.getAbsolutePath();
+
+            int file1LastDot = f1Path.lastIndexOf(".");
+            int file2LastDot = f2Path.lastIndexOf(".");
+            if (file1LastDot < 0 && file2LastDot < 0) {
+                return f1.getName().toLowerCase().compareTo(
+                        f2.getName().toLowerCase());
+            } else if (file1LastDot < 0 && file2LastDot >= 0) {
+                return 1;
+            } else if (file1LastDot >= 0 && file2LastDot < 0) {
+                return -1;
+            } else {
+                try {
+                    if (f1Path.length() <= file1LastDot + 1 && f2Path.length() <= file2LastDot + 1) {
+                        return f1.getName().toLowerCase().compareTo(
+                                f2.getName().toLowerCase());
+                    } else if (f1Path.length() <= file1LastDot + 1) {
+                        return 1;
+                    } else if (f2Path.length() <= file2LastDot + 1) {
+                        return -1;
+                    } else {
+                        String f1Type = f1.getAbsolutePath().substring(file1LastDot + 1).toLowerCase(Locale.getDefault());
+                        String f2Type = f2.getAbsolutePath().substring(file2LastDot + 1).toLowerCase(Locale.getDefault());
+                        if (f1Type.equals(f2Type)) {
+                            return f1.getName().toLowerCase().compareTo(
+                                    f2.getName().toLowerCase());
+                        } else {
+                            return f1Type.compareTo(f2Type);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+    };
+
+    /*
+     * File and folder comparator. 类型降序
+     */
+    public static Comparator<File> sTypeDescendComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            String f1Path = f1.getAbsolutePath();
+            String f2Path = f2.getAbsolutePath();
+
+            int file1LastDot = f1Path.lastIndexOf(".");
+            int file2LastDot = f2Path.lastIndexOf(".");
+            if (file1LastDot < 0 && file2LastDot < 0) {
+                return f2.getName().toLowerCase().compareTo(
+                        f1.getName().toLowerCase());
+            } else if (file1LastDot < 0 && file2LastDot >= 0) {
+                return -1;
+            } else if (file1LastDot >= 0 && file2LastDot < 0) {
+                return 1;
+            } else {
+                try {
+                    if (f1Path.length() <= file1LastDot + 1 && f2Path.length() <= file2LastDot + 1) {
+                        return f2.getName().toLowerCase().compareTo(
+                                f1.getName().toLowerCase());
+                    } else if (f1Path.length() <= file1LastDot + 1) {
+                        return -1;
+                    } else if (f2Path.length() <= file2LastDot + 1) {
+                        return 1;
+                    } else {
+                        String f1Type = f1.getAbsolutePath().substring(file1LastDot + 1).toLowerCase(Locale.getDefault());
+                        String f2Type = f2.getAbsolutePath().substring(file2LastDot + 1).toLowerCase(Locale.getDefault());
+                        if (f1Type.equals(f2Type)) {
+                            return f2.getName().toLowerCase().compareTo(
+                                    f1.getName().toLowerCase());
+                        } else {
+                            return f2Type.compareTo(f1Type);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+    };
+
+
     private static String[] getVolumePathsFor14(Context context) {
         List<String> availablePaths = new ArrayList<>();
         StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);

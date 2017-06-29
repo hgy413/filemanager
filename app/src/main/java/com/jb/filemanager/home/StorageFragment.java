@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
+import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
@@ -31,6 +33,10 @@ import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.images.ImageCache;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -58,6 +64,15 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     private WeakReference<MainContract.Presenter> mMainPresenterRef;
 
+    private IOnEventMainThreadSubscriber<SortByChangeEvent> mSortChangeEvent = new IOnEventMainThreadSubscriber<SortByChangeEvent>() {
+
+        @Override
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(SortByChangeEvent event) {
+            restartLoad();
+        }
+    };
+
     public void setPresenter(MainContract.Presenter presenter) {
         mMainPresenterRef = new WeakReference<>(presenter);
     }
@@ -72,6 +87,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         mListAdapter = new FileListAdapter(getActivity(), mStorageList, mMainPresenterRef.get());
         mGridAdapter = new FileGridAdapter(getActivity(), mStorageList, mMainPresenterRef.get());
+
+        EventBus.getDefault().register(mSortChangeEvent);
     }
 
     @Override
@@ -201,6 +218,10 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     @Override
     public void onDestroy() {
+        if (EventBus.getDefault().isRegistered(mSortChangeEvent)) {
+            EventBus.getDefault().unregister(mSortChangeEvent);
+        }
+
         getLoaderManager().destroyLoader(FileManager.LOADER_FILES);
         super.onDestroy();
     }
@@ -236,9 +257,9 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     @Override
     public Loader<List<File>> onCreateLoader(int id, Bundle args) {
         if (mPathStack != null && !mPathStack.isEmpty()) {
-            return new FileLoader(getActivity(), mPathStack.lastElement().getAbsolutePath());
+            return new FileLoader(getActivity(), mPathStack.lastElement().getAbsolutePath(), FileManager.getInstance().getFileSort());
         }
-        return new FileLoader(getActivity(), null);
+        return new FileLoader(getActivity(), null, FileManager.getInstance().getFileSort());
     }
 
     @Override

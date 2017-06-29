@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +23,15 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
 import com.jb.filemanager.function.splash.SplashActivity;
+import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtil;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -617,8 +621,64 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showSortByDialog() {
-        // TODO
-        Toast.makeText(this, "显示排序dialog", Toast.LENGTH_SHORT).show();
+        View dialogView = View.inflate(this, R.layout.dialog_main_sort, null);
+        TextView descendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_descending);
+        TextView ascendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_ascending);
+        final RadioGroup itemGroup = (RadioGroup) dialogView.findViewById(R.id.rg_main_sort_by);
+
+        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
+
+        descendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int checkId = itemGroup.getCheckedRadioButtonId();
+                switch (checkId) {
+                    case R.id.rb_main_sort_by_name:
+                        FileManager.getInstance().setFileSort(FileUtil.sNameDescendComparator);
+                        break;
+                    case R.id.rb_main_sort_by_date:
+                        FileManager.getInstance().setFileSort(FileUtil.sDateDescendComparator);
+                        break;
+                    case R.id.rb_main_sort_by_type:
+                        FileManager.getInstance().setFileSort(FileUtil.sTypeDescendComparator);
+                        break;
+                    case R.id.rb_main_sort_by_size:
+                        FileManager.getInstance().setFileSort(FileUtil.sSizeDescendComparator);
+                        break;
+                    default:
+                        break;
+                }
+                EventBus.getDefault().post(new SortByChangeEvent());
+                dialog.dismiss();
+            }
+        }); // 降序按钮点击事件
+
+        ascendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int checkId = itemGroup.getCheckedRadioButtonId();
+                switch (checkId) {
+                    case R.id.rb_main_sort_by_name:
+                        FileManager.getInstance().setFileSort(FileUtil.sNameAscendComparator);
+                        break;
+                    case R.id.rb_main_sort_by_date:
+                        FileManager.getInstance().setFileSort(FileUtil.sDateAscendComparator);
+                        break;
+                    case R.id.rb_main_sort_by_type:
+                        FileManager.getInstance().setFileSort(FileUtil.sTypeAscendComparator);
+                        break;
+                    case R.id.rb_main_sort_by_size:
+                        FileManager.getInstance().setFileSort(FileUtil.sSizeAscendComparator);
+                        break;
+                    default:
+                        break;
+                }
+                EventBus.getDefault().post(new SortByChangeEvent());
+                dialog.dismiss();
+            }
+        }); // 升序按钮点击事件
+
+        dialog.show();
     }
 
     @Override
