@@ -12,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.applock.activity.AppLockSettingActivity;
 import com.jb.filemanager.function.applock.adapter.FloatBarGalleryAdapter;
 import com.jb.filemanager.function.applock.model.bean.IntruderDisplayBean;
 import com.jb.filemanager.function.applock.presenter.IntruderGalleryContract;
 import com.jb.filemanager.function.applock.presenter.IntruderGalleryPresenter;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
-import com.jb.filemanager.ui.widget.ProgressWheel;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.QuickClickGuard;

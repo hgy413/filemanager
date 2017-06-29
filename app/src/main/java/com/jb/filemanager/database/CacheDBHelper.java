@@ -29,7 +29,7 @@ public class CacheDBHelper extends BaseDatabaseHelper {
     /**
      * 数据库当前版本号(数据库每次升级该字段加1)
      */
-    private final static int DB_VERSION = 1;
+    private final static int DB_VERSION = 6;
 
     private static final String DB_PATH = Environment.getDataDirectory()
             .getAbsolutePath()

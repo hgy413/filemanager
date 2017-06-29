@@ -47,7 +47,7 @@
             android:textColor="#ffffff"
             android:textSize="12dp" />
 
-        <com.swift.boost.view.PatternView
+        <com.jb.filemanager.function.applock.view.PatternView
             android:id="@+id/view_applock_float_layout_patternview"
             android:layout_width="270dp"
             android:layout_height="270dp"
@@ -61,7 +61,7 @@
             app:pl_regularColor="#ffffff"
             app:pl_successColor="#ffffff" />
 
-        <com.swift.boost.function.applock.view.NumberLockerView
+        <com.jb.filemanager.function.applock.view.NumberLockerView
             android:id="@+id/view_applock_float_layout_numberview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

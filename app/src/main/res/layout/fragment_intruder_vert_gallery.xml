@@ -55,7 +55,7 @@
         android:layout_below="@id/fragment_intruder_vert_gallery_title"
         android:background="#f2f2f2" />
 
-    <com.swift.boost.function.trash.view.floatingelv.FloatingGroupExpandableListView
+    <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
         android:id="@+id/fragment_intruder_vert_gallery_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -80,7 +80,7 @@
         android:layout_below="@id/fragment_intruder_vert_gallery_title"
         android:visibility="gone" />
 
-    <com.swift.boost.view.ProgressWheel
+    <com.jb.filemanager.commomview.ProgressWheel
         android:id="@+id/fragment_intruder_vert_gallery_progress_wheel"
         android:layout_width="60dp"
         android:layout_height="60dp"

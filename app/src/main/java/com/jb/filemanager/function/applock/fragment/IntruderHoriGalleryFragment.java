@@ -14,14 +14,14 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.applock.activity.AppLockSettingActivity;
 import com.jb.filemanager.function.applock.adapter.HoriGalleryAdapter;
 import com.jb.filemanager.function.applock.model.bean.IntruderDisplaySubBean;
 import com.jb.filemanager.function.applock.presenter.IntruderHoriGalleryContract;
 import com.jb.filemanager.function.applock.presenter.IntruderHoriGalleryPersenter;
 import com.jb.filemanager.function.applock.presenter.IntruderHoriGallerySupport;
-import com.jb.filemanager.function.applock.view.HorizontalListView;
-import com.jb.filemanager.ui.widget.ProgressWheel;
+import com.jb.filemanager.ui.widget.HorizontalListView;
 import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.device.Machine;
 

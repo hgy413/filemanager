@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
-import com.jb.filemanager.ui.widget.GroupSelectBox;
 
 import java.util.List;
 

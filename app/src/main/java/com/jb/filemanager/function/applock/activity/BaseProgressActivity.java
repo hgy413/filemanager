@@ -10,7 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jb.filemanager.ui.widget.ProgressWheel;
+import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.Logger;
 

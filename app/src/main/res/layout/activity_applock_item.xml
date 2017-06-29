@@ -25,7 +25,7 @@
         android:layout_toRightOf="@id/activity_applock_item_icon"
         android:textColor="#FF333333" />
 
-    <com.jb.filemanager.ui.widget.GroupSelectBox
+    <com.jb.filemanager.commomview.GroupSelectBox
         android:id="@+id/activity_applock_item_selectbox"
         android:layout_width="56dp"
         android:layout_height="56dp"

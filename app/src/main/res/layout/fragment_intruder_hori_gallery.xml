@@ -40,7 +40,7 @@
 
     </LinearLayout>
 
-    <com.swift.boost.function.applock.view.HorizontalListView
+    <com.jb.filemanager.ui.widget.HorizontalListView
         android:id="@+id/fragment_intruder_hori_gallery_horilist"
         android:layout_width="match_parent"
         android:layout_height="370dp"
@@ -63,7 +63,7 @@
         android:textSize="20dp"
         android:textStyle="bold" />
 
-    <com.swift.boost.view.ProgressWheel
+    <com.jb.filemanager.commomview.ProgressWheel
         android:id="@+id/fragment_intruder_hori_gallery_progress_wheel"
         android:layout_width="60dp"
         android:layout_height="60dp"

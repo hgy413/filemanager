@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
-import com.jb.filemanager.ui.widget.GroupSelectBox;
 
 import java.util.List;
 

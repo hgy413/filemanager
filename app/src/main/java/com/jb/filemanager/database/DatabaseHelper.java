@@ -29,7 +29,7 @@ public class DatabaseHelper extends BaseDatabaseHelper {
     /**
      * 数据库名
      */
-    private static final String DATABASE_NAME = "boost.db";
+    private static final String DATABASE_NAME = "filemanager.db";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, DB_VERSION);

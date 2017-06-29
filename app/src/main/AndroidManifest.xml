@@ -38,6 +38,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <!-- 改变网络状态	快捷栏 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <!-- 允许访问摄像头进行拍照	快捷栏 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- 允许读写系统设置项	若干模块 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <!-- 允许程序扩展或收缩状态栏	快捷栏 -->
@@ -56,7 +58,7 @@
     <!-- 必须 Push所需的权限，其中自定义权限的作用是防止应用服务被恶意软件利用 -->
     <!-- 注意拷贝的时候与自己应用一样的权限要删除，重复权限会导致应用意外停止 -->
     <permission
-        android:name="com.ace.network.permission.SERVICE"
+        android:name="com.jb.filemanager.permission.SERVICE"
         android:protectionLevel="normal"/>
 
     <!-- 获取正在运行的任务列表权限，智能预加载需要权限 -->
@@ -73,12 +75,10 @@
     <!-- 杀进程	内存查杀 -->
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <!-- pushService权限 -->
-    <uses-permission android:name="com.ace.network.permission.SERVICE"/>
+    <uses-permission android:name="com.jb.filemanager.permission.SERVICE"/>
 
     <!-- 自动重启相关，能添加最好，不添加也可以 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!-- TrafficContentProvider权限 -->
-    <uses-permission android:name="com.ace.network.provider.permission"/>
 
 
     <application
@@ -180,6 +180,41 @@
             android:name=".function.apkmanager.ApkManagerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.AppLockPreActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.AppLockActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.AppLockSettingActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.PsdSettingActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.IntruderHoriGalleryActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.IntruderVertGalleryActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.RetrievePasswordActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <activity android:name=".function.applock.activity.IntruderOpenGuideActivity"
+                  android:excludeFromRecents="true"
+                  android:noHistory="true"
+                  android:screenOrientation="portrait"
+                  android:taskAffinity=":IntruderOpenGuideTask"
+                  android:theme="@style/Pop.Activity.Theme"/>
 
         <!-- 守护进程 start -->
         <!-- 后台监测应用流量使用的服务 -->

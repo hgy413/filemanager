@@ -167,20 +167,20 @@ public class TheApplication extends Application {
      * 将主进程的主线程设置成严苛模式 包括线程耗时以及内存泄露部分
      * */
     private void initStrictMode() {
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectCustomSlowCalls() //API等级11，使用StrictMode.noteSlowCode
-                    .detectAll()
-                    .penaltyLog() //在Logcat 中打印违规异常信息
-                    .build());
-
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects() //API等级11
-                    .detectActivityLeaks()
-                    .penaltyLog() //在Logcat 中打印违规异常信息
-                    .build());
-        }
+//        if (BuildConfig.DEBUG) {
+//            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                    .detectCustomSlowCalls() //API等级11，使用StrictMode.noteSlowCode
+//                    .detectAll()
+//                    .penaltyLog() //在Logcat 中打印违规异常信息
+//                    .build());
+//
+//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                    .detectLeakedSqlLiteObjects()
+//                    .detectLeakedClosableObjects() //API等级11
+//                    .detectActivityLeaks()
+//                    .penaltyLog() //在Logcat 中打印违规异常信息
+//                    .build());
+//        }
     }
 
     private void onCreateForMainProcess() {
@@ -208,7 +208,7 @@ public class TheApplication extends Application {
         // 初始化广告垃圾扫描
         AdTrashManager.getInstance(getAppContext());
         CleanManager.getInstance(getApplicationContext()).startJunkFileScanTask();
-//        应用锁
+        //应用锁
 //        AppLockerCenter.getInstance();
         // 主进程启动完毕,更新上一次启动的版本号和时间 **这句永远在最后
         appLaunchFinished();
