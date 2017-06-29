@@ -197,4 +197,10 @@
     <string name="googleplay_dialog_sure_btn">OK, SURE</string>
     <string name="googleplay_dialog_love_btn">I LOVE IT!</string>
 
+    <!-- 版本更新 -->
+    <string name="update_notice">New Version</string>
+    <string name="update_update">Update</string>
+    <string name="update_later">Later</string>
+    <!-- 更新 -->
+    <string name="update_cancel">Cancel</string>
 </resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/dialog_common_margin"
+    android:layout_marginRight="@dimen/dialog_common_margin" >
+
+    <TextView
+        android:id="@+id/confirm_common_dialog_title"
+        style="@style/dialog_common_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/dialog_common_padding_top"
+        android:layout_marginBottom="@dimen/dialog_common_padding_text1"
+        android:layout_marginLeft="@dimen/dialog_common_padding_left"
+        android:layout_marginRight="@dimen/dialog_common_padding_left"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+
+    <LinearLayout
+        android:id="@+id/confirm_common_dialog_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:id="@+id/confirm_common_dialog_cancel"
+            style="@style/dialog_common_button_cancel"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:text="@string/common_cancel"
+            android:singleLine="true"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/confirm_common_dialog_confirm"
+            style="@style/dialog_common_button_ok"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:singleLine="true"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/confirm_common_dialog_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d2d3d3"
+        android:layout_above="@id/confirm_common_dialog_button_container"
+        />
+
+    <RelativeLayout
+        android:id="@+id/confirm_common_dialog_contentview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/confirm_common_dialog_divider"
+        android:layout_below="@id/confirm_common_dialog_title"
+        android:layout_marginBottom="@dimen/dialog_common_padding_top"
+        android:layout_marginLeft="@dimen/dialog_common_padding_left"
+        android:layout_marginRight="@dimen/dialog_common_padding_left" />
+
+</RelativeLayout>

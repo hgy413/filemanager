@@ -31,6 +31,7 @@ import com.jb.filemanager.function.rate.presenter.RateContract;
 import com.jb.filemanager.function.rate.presenter.RatePresenter;
 import com.jb.filemanager.function.rate.presenter.RateSupport;
 import com.jb.filemanager.function.splash.SplashActivity;
+import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
@@ -65,14 +66,16 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private TabLayout mTlViewPageTab;
     private LinearLayout mLlBottomOperateFirstContainer;
     private LinearLayout mLlBottomOperateSecondContainer;
+    ///评分引导
     private RatePresenter mRatePresenter;
+    //应用更新提醒
+    private AppUpdatePresenter mAppUpdatePresenter;
 
     private View mViewSearchMask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRatePresenter = new RatePresenter(this, new RateSupport());
     }
 
     @Override
@@ -81,6 +84,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         if (mPresenter != null) {
             mPresenter.onResume();
         }
+//        if (mAppUpdatePresenter != null) {
+//            mAppUpdatePresenter.onResume();
+//        }
     }
 
     @Override
@@ -142,6 +148,10 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
         mPresenter = new MainPresenter(this, new MainSupport());
         mPresenter.onCreate(getIntent());
+
+        mRatePresenter = new RatePresenter(this, new RateSupport());
+        mAppUpdatePresenter = new AppUpdatePresenter(this);
+
 
         initDrawer(this);
     }
