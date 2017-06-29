@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:minHeight="70dp">
+
+    <ImageView
+        android:id="@+id/clean_ignore_list_item_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:contentDescription="@null"/>
+
+    <ImageView
+        android:id="@+id/clean_ignore_list_item_icon_small"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignBottom="@id/clean_ignore_list_item_icon"
+        android:layout_alignRight="@id/clean_ignore_list_item_icon"
+        android:contentDescription="@null"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="60dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/clean_ignore_list_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:textColor="#333333"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/clean_ignore_list_item_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:textColor="#666666"
+            android:singleLine="true"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/clean_ignore_list_item_remove"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:checked="true"
+        android:contentDescription="@null"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="23dp"
+        android:paddingBottom="23dp"
+        android:src="@drawable/wl_remove"/>
+
+    <!-- <include
+         layout="@layout/common_listview_divider_level1_layout"
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/common_listview_divider_height_level1"
+         android:layout_alignParentBottom="true"
+         android:layout_marginBottom="@dimen/common_listview_divider_margin_bottom"/>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00FFFFFF"
+        android:visibility="gone"/>
+
+</RelativeLayout>

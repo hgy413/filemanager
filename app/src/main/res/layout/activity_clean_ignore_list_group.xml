@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:minHeight="50dp"
+                android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/clean_ignore_list_group_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:contentDescription="@null"/>
+
+    <TextView
+        android:id="@+id/clean_ignore_list_group_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:ellipsize="middle"
+        android:maxLines="2"
+        android:textColor="#666666"
+        android:layout_marginLeft="60dp"
+        android:textSize="16sp"/>
+
+   <!-- <include
+        layout="@layout/common_listview_divider_level0_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_listview_divider_height_level0"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/common_listview_divider_margin_bottom"/>-->
+
+</RelativeLayout>

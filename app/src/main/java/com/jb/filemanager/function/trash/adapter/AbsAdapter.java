@@ -23,6 +23,10 @@ public abstract class AbsAdapter<T extends BaseGroupsDataBean> extends
 	protected LayoutInflater mLayoutInflater;
 	protected Context mContext;
 
+	public AbsAdapter(List<T> groups) {
+		mGroups = groups;
+	}
+
 	public AbsAdapter(List<T> groups, Context context) {
 		mGroups = groups;
 		mContext = context;

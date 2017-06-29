@@ -1,8 +1,10 @@
 package com.jb.filemanager.function.trash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
 import com.jb.filemanager.function.trash.view.floatingelv.FloatingGroupExpandableListView;
 import com.jb.filemanager.function.trash.view.floatingelv.WrapperExpandableListAdapter;
+import com.jb.filemanager.function.trashignore.activity.TrashIgnoreActivity;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.WindowUtil;
 import com.jb.filemanager.util.imageloader.IconLoader;
@@ -40,6 +43,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
     private boolean mIsScanning;
 
+    private Button mBtnIgnore;
     private TextView mTvScanProgress;
     private TextView mTvChosenSize;
     private TextView mTvTrashPath;
@@ -60,6 +64,13 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     private void initView() {
+        mBtnIgnore = (Button) findViewById(R.id.btn_ignore);
+        mBtnIgnore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CleanTrashActivity.this, TrashIgnoreActivity.class));
+            }
+        });
         mTvScanProgress = (TextView) findViewById(R.id.tv_scan_progress);
         mTvChosenSize = (TextView) findViewById(R.id.tv_chosen_size);
         mTvTrashPath = (TextView) findViewById(R.id.tv_trash_path);

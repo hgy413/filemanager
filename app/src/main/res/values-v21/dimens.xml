@@ -1,0 +1,11 @@
+<resources>
+    <dimen name="system_status_bar_height">20dp</dimen>
+    <dimen name="system_status_bar_height2">4dp</dimen>
+    <dimen name="system_status_bar_height3">24dp</dimen>
+    <dimen name="dp_photo_blue_bg_height">239dp</dimen>
+    <dimen name="dp_photo_detail_title_height">73dp</dimen>
+    <dimen name="storage_title_height">68dp</dimen>
+    <dimen name="music_manager_title_height">68dp</dimen>
+    <dimen name="trash_ignore_status_bar_height">24dp</dimen>
+    <dimen name="trash_ignore_title_height">72dp</dimen>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#f2f2f2"
+              android:orientation="vertical">
+    <!-- Title -->
+    <LinearLayout
+        android:id="@+id/trash_ignore_title_group"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/trash_ignore_title_height"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/trash_ignore_status_bar_height">
+
+        <ImageView
+            android:id="@+id/trash_ignore_iv_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@null"
+            android:padding="16dp"
+            android:src="@drawable/white_arrow_back"/>
+
+        <TextView
+            android:id="@+id/trash_ignore_tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/junk_file_ignore_list"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <!-- no data tip -->
+    <TextView
+        android:id="@+id/trash_ignore_no_data_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="147dp"
+        android:drawablePadding="30dp"
+        android:drawableTop="@drawable/trash_ignore_no_item_tip"
+        android:gravity="center"
+        android:text="@string/long_press_items_in_junk_files_to_add"
+        android:textColor="#cccccc"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+    <!-- data section -->
+    <TextView
+        android:id="@+id/trash_ignore_has_data_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="13dp"
+        android:text="@string/these_items_will_not_be_scan_as_junk_files"
+        android:textColor="#999999"
+        android:textSize="12sp"/>
+
+    <com.jb.filemanager.function.trash.view.floatingelv.FloatingGroupExpandableListView
+        android:id="@+id/trash_ignore_flv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollFooter="@null"
+        android:overScrollMode="never"
+        android:groupIndicator="@null"
+        android:childIndicator="@null"
+        android:scrollbars="none"/>
+</LinearLayout>

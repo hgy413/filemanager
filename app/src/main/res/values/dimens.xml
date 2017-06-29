@@ -13,4 +13,7 @@
     <dimen name="dialog_common_padding_text2">12dp</dimen>
     <dimen name="dialog_common_margin">16dp</dimen>
     <dimen name="dialog_common_padding_text1">18dp</dimen>
+
+    <dimen name="trash_ignore_status_bar_height">0dp</dimen>
+    <dimen name="trash_ignore_title_height">48dp</dimen>
 </resources>
