@@ -1,6 +1,11 @@
 package com.jb.filemanager.manager.file;
 
+import com.jb.filemanager.manager.file.task.CopyFileTask;
+import com.jb.filemanager.manager.file.task.CutFileTask;
+import com.jb.filemanager.manager.file.task.PasteFileParam;
+
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -71,12 +76,12 @@ public class FileManager {
 
     public void setCopyFiles(ArrayList<File> copyFiles) {
         clearCopyFiles();
-        mCopyFiles = copyFiles;
+        mCopyFiles = new ArrayList<>(copyFiles);
     }
 
     public void setCutFiles(ArrayList<File> cutFiles) {
         clearCutFiles();
-        mCutFiles = cutFiles;
+        mCutFiles = new ArrayList<>(cutFiles);
     }
 
     public ArrayList<File> getCopyFiles() {
@@ -90,12 +95,14 @@ public class FileManager {
     public void clearCopyFiles() {
         if (mCopyFiles != null) {
             mCopyFiles.clear();
+            mCopyFiles = null;
         }
     }
 
     public void clearCutFiles() {
         if (mCutFiles != null) {
             mCutFiles.clear();
+            mCutFiles = null;
         }
     }
 
@@ -105,5 +112,79 @@ public class FileManager {
 
     public Comparator<File> getFileSort() {
         return mFileSort;
+    }
+
+    public void doPaste(String destDir, final Listener listener) {
+        if (mCopyFiles != null && mCopyFiles.size() > 0) {
+            PasteFileParam param = new PasteFileParam();
+            param.mSourceFiles = new ArrayList<> (mCopyFiles);
+            param.mDestDir = destDir;
+
+            new CopyFileTask(new CopyFileTask.Listener() {
+
+                @Override
+                public void onProgressUpdate(File file) {
+                    // TODO 是否有其他操作还不清楚
+                    if (listener != null) {
+                        listener.onPasteProgressUpdate(file);
+                    }
+                }
+
+                @Override
+                public void onPreExecute() {
+                    // TODO 是否有其他操作还不清楚
+                    if (listener != null) {
+                        listener.onPastePreExecute();
+                    }
+                }
+
+                @Override
+                public void onPostExecute(Boolean aBoolean) {
+                    // TODO 是否有其他操作还不清楚
+                    if (listener != null) {
+                        listener.onPastePostExecute(aBoolean);
+                    }
+                }
+            }).execute(param);
+        } else if (mCutFiles != null && mCutFiles.size() > 0) {
+            PasteFileParam param = new PasteFileParam();
+            param.mSourceFiles = new ArrayList<> (mCutFiles);
+            param.mDestDir = destDir;
+
+            new CutFileTask(new CutFileTask.Listener() {
+
+                @Override
+                public void onProgressUpdate(File file) {
+                    // TODO 是否有其他操作还不清楚
+                    if (listener != null) {
+                        listener.onPasteProgressUpdate(file);
+                    }
+                }
+
+                @Override
+                public void onPreExecute() {
+                    // TODO 是否有其他操作还不清楚
+                    if (listener != null) {
+                        listener.onPastePreExecute();
+                    }
+                }
+
+                @Override
+                public void onPostExecute(Boolean aBoolean) {
+                    // TODO 是否有其他操作还不清楚
+                    if (listener != null) {
+                        listener.onPastePostExecute(aBoolean);
+                    }
+                }
+            }).execute(param);
+        } else {
+            listener.onPastePostExecute(false);
+        }
+    }
+
+    public interface Listener {
+        void onPasteProgressUpdate(File file);
+        void onPastePreExecute();
+        void onPastePostExecute(Boolean aBoolean);
     }
 }

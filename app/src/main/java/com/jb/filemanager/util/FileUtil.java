@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
@@ -28,8 +27,6 @@ import java.util.Locale;
 
 
 import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
-
-import static com.jb.filemanager.util.file.FileUtil.indexOfExtension;
 
 
 /**
@@ -373,26 +370,6 @@ public class FileUtil {
         return false;
     }
 
-    public static boolean copyFilesToDest(ArrayList<File> fileArrayList, String destDir) {
-        boolean result = true;
-        if (checkCanPaste(fileArrayList, destDir)) {
-            for (File file : fileArrayList) {
-                result = result && copyFileOrDirectory(file.getAbsolutePath(), destDir);
-            }
-        }
-        return result;
-    }
-
-    public static boolean cutFilesToDest(ArrayList<File> fileArrayList, String destDir) {
-        boolean result = true;
-        if (checkCanPaste(fileArrayList, destDir)) {
-            for (File file : fileArrayList) {
-                result = result && file.renameTo(new File(destDir + File.separator + file.getName()));
-            }
-        }
-        return result;
-    }
-
     public static boolean createFolder(String fullPath) {
         boolean result = false;
         try {
@@ -464,7 +441,7 @@ public class FileUtil {
         return result;
     }
 
-    private static boolean checkCanPaste(ArrayList<File> fileArrayList, String destDir) {
+    public static boolean checkCanPaste(ArrayList<File> fileArrayList, String destDir) {
         boolean result = false;
         if (fileArrayList != null && fileArrayList.size() > 0 && !TextUtils.isEmpty(destDir)) {
             result = true;
@@ -478,7 +455,7 @@ public class FileUtil {
         return result;
     }
 
-    private static boolean copyFileOrDirectory(String srcDir, String dstDir) {
+    public static boolean copyFileOrDirectory(String srcDir, String dstDir) {
         boolean result = true;
         try {
             File src = new File(srcDir);

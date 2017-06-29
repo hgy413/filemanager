@@ -216,13 +216,22 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickOperatePasteButton() {
         if (mView != null) {
-            ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
-            ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
-            if (copyList != null && copyList.size() > 0) {
-                FileUtil.copyFilesToDest(copyList, mCurrentPath);
-            } else if (cutList != null && cutList.size() > 0) {
-                FileUtil.cutFilesToDest(copyList, mCurrentPath);
-            }
+            FileManager.getInstance().doPaste(mCurrentPath, new FileManager.Listener() {
+                @Override
+                public void onPasteProgressUpdate(File file) {
+
+                }
+
+                @Override
+                public void onPastePreExecute() {
+
+                }
+
+                @Override
+                public void onPastePostExecute(Boolean aBoolean) {
+
+                }
+            });
 
             FileManager.getInstance().clearCopyFiles();
             FileManager.getInstance().clearCutFiles();
