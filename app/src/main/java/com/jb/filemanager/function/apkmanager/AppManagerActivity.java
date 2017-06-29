@@ -14,7 +14,7 @@ import com.jb.filemanager.util.imageloader.IconLoader;
 
 public class AppManagerActivity extends BaseActivity implements AppManagerContract.View {
 
-    private AppPresenter mPresenter;
+    private AppManagerPresenter mPresenter;
     private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
     private EditText mEtCommonActionBarWithSearchSearch;
@@ -28,7 +28,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         setContentView(R.layout.activity_apk_manager);
         IconLoader.ensureInitSingleton(this);
         IconLoader.getInstance().bindServicer(this);
-        mPresenter = new AppPresenter(this, new AppSupport());
+        mPresenter = new AppManagerPresenter(this, new AppManagerSupport());
         mPresenter.onCreate(getIntent());
 
         initView();

@@ -16,13 +16,13 @@ import java.util.List;
  * Date: 2017/6/29 13:37
  */
 
-class AppPresenter implements AppManagerContract.Presenter {
+class AppManagerPresenter implements AppManagerContract.Presenter {
     private AppManagerContract.View mView;
     private AppManagerContract.Support mSupport;
     private List<AppChildBean> mUserAppBean;
     private List<AppChildBean> mSystemAppBean;
 
-    AppPresenter(AppManagerContract.View view, AppManagerContract.Support support) {
+    AppManagerPresenter(AppManagerContract.View view, AppManagerContract.Support support) {
         mView = view;
         mSupport = support;
     }
@@ -36,6 +36,7 @@ class AppPresenter implements AppManagerContract.Presenter {
             if (appBean.mIsSysApp) {
                 mSystemAppBean.add(appBean);
             } else {
+                appBean.mIsCheckd = true;
                 mUserAppBean.add(appBean);
             }
         }

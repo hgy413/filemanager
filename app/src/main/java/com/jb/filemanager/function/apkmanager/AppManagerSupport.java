@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 2017/6/29 13:37
  */
 
-class AppSupport implements AppManagerContract.Support {
+class AppManagerSupport implements AppManagerContract.Support {
     @Override
     public List<AppChildBean> getInstallAppInfo() {
         PackageManager packageManager = TheApplication.getAppContext().getPackageManager();

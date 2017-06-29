@@ -45,20 +45,18 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
             public void onClick(View view) {
                 if (appGroupBean.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {
                     appGroupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
+                    for (AppChildBean childBean : appGroupBean.getChildren()) {
+                        childBean.mIsCheckd = false;
+                    }
                 } else {
                     appGroupBean.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
+                    for (AppChildBean childBean : appGroupBean.getChildren()) {
+                        childBean.mIsCheckd = true;
+                    }
                 }
                 notifyDataSetChanged();
             }
         });
-        /*viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (appGroupBean.mIsExpand){
-
-                }
-            }
-        });*/
         return convertView;
     }
 

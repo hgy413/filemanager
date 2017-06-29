@@ -15,7 +15,11 @@
         android:id="@+id/elv_apk"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:groupIndicator="@null"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none">
 
     </ExpandableListView>
 </LinearLayout>
