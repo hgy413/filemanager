@@ -5,20 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by bill wang on 2017/6/28.
  *
  */
 
-public class MusicContract {
+public interface MusicContract {
     interface View {
-        void finishActivity();
 
-        void updateView();
+        void finishActivity();
+        void updateView(List<MusicInfo> list);
     }
 
     interface Presenter {
+        void start();
+
         void onCreate(Intent intent);
         void onResume();
         void onPause();
@@ -34,5 +37,7 @@ public class MusicContract {
     interface Support {
         Context getContext();
         Application getApplication();
+
+        List<MusicInfo> getAllMusic();
     }
 }
