@@ -157,18 +157,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!--垃圾扫描页-->
         <activity
             android:name=".function.trash.CleanTrashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!--垃圾清理的文件预览页-->
         <activity
             android:name=".function.fileexplorer.FileBrowserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!--垃圾清理的白名单页-->
         <activity
             android:name=".function.trashignore.activity.TrashIgnoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
+        <!--首页的apk管理-->
+        <activity
+            android:name=".function.apkmanager.ApkManagerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
