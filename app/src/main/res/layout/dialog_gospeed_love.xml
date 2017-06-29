@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_about_logo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_about_logo"
+                android:text="@string/googleplay_dialog_love_titel"
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="@string/googleplay_dialog_love_tipword"
+                android:textColor="#444444"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/dialog_gospeed_love_star_1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_about_logo"/>
+
+                <ImageView
+                    android:id="@+id/dialog_gospeed_love_star_2"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@id/dialog_gospeed_love_star_1"
+                    android:src="@drawable/ic_about_logo"/>
+
+                <ImageView
+                    android:id="@+id/dialog_gospeed_love_star_3"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@id/dialog_gospeed_love_star_2"
+                    android:src="@drawable/ic_about_logo"/>
+
+                <ImageView
+                    android:id="@+id/dialog_gospeed_love_star_4"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@id/dialog_gospeed_love_star_3"
+                    android:src="@drawable/ic_about_logo"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_toRightOf="@id/dialog_gospeed_love_star_4"
+                    android:src="@drawable/ic_about_logo"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginStart="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/googleplay_love_rate_no_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="13"
+            android:gravity="center"
+            android:text="@string/googleplay_dialog_thanks_btn"
+            android:textColor="#4FAAFF"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/googleplay_love_rate_yes_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="21dp"
+            android:layout_marginStart="21dp"
+            android:layout_weight="15"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="@string/googleplay_dialog_sure_btn"
+            android:textColor="#f5f5f5"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+</RelativeLayout>

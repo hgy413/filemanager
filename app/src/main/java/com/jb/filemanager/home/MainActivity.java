@@ -21,12 +21,21 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
+import com.jb.filemanager.function.rate.dialog.RateDialog;
+import com.jb.filemanager.function.rate.dialog.RateFeedbackDialog;
+import com.jb.filemanager.function.rate.dialog.RateGuideDialog;
+import com.jb.filemanager.function.rate.dialog.RateToGpDialog;
+import com.jb.filemanager.function.rate.presenter.RateContract;
+import com.jb.filemanager.function.rate.presenter.RatePresenter;
+import com.jb.filemanager.function.rate.presenter.RateSupport;
 import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.util.APIUtil;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.ConvertUtil;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
@@ -36,7 +45,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends PrivacyGuardActivity implements MainContract.View, View.OnClickListener {
+public class MainActivity extends PrivacyGuardActivity implements MainContract.View, View.OnClickListener, RateContract.View {
 
     public static final String ACTION_AGREE_PRIVACY = "action_agree_privacy";
 
@@ -56,12 +65,14 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private TabLayout mTlViewPageTab;
     private LinearLayout mLlBottomOperateFirstContainer;
     private LinearLayout mLlBottomOperateSecondContainer;
+    private RatePresenter mRatePresenter;
 
     private View mViewSearchMask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRatePresenter = new RatePresenter(this, new RateSupport());
     }
 
     @Override
@@ -777,10 +788,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         }
     }
 
-
-
-
-
     // private class
 
     // Since this is an object collection, use a FragmentStatePagerAdapter,
@@ -835,5 +842,74 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             }
             return result;
         }
+    }
+
+
+    /******
+     * 评分引导
+     * */
+    private RateDialog mRateCheerDialog;
+    private RateDialog mRateFeedBackDialog;
+    private RateDialog mRateLoveDialog;
+
+    @Override
+    public void showCheerDialog(RateDialog.OnPressListener onPressListener) {
+        if (mRateCheerDialog == null) {
+            mRateCheerDialog = new RateGuideDialog(this);
+            mRateCheerDialog.setOnPressListener(onPressListener);
+        }
+        mRateCheerDialog.show();
+    }
+
+    @Override
+    public void showFeedBackDialog(RateDialog.OnPressListener onPressListener) {
+        if (mRateFeedBackDialog == null) {
+            mRateFeedBackDialog = new RateFeedbackDialog(this);
+            mRateFeedBackDialog.setOnPressListener(onPressListener);
+        }
+        mRateFeedBackDialog.show();
+    }
+
+    @Override
+    public void showLoveDialog(RateDialog.OnPressListener onPressListener) {
+        if (mRateLoveDialog == null) {
+            mRateLoveDialog = new RateToGpDialog(this);
+            mRateLoveDialog.setOnPressListener(onPressListener);
+        }
+        mRateLoveDialog.show();
+    }
+
+    @Override
+    public void dismissCheerDialog() {
+        if (mRateCheerDialog != null) {
+            mRateCheerDialog.dismiss();
+            mRateCheerDialog = null;
+        }
+    }
+
+    @Override
+    public void dismissFeedBackDialog() {
+        if (mRateFeedBackDialog != null) {
+            mRateFeedBackDialog.dismiss();
+            mRateFeedBackDialog = null;
+        }
+    }
+
+    @Override
+    public void dismissLoveDialog() {
+        if (mRateLoveDialog != null) {
+            mRateLoveDialog.dismiss();
+            mRateLoveDialog = null;
+        }
+    }
+
+    @Override
+    public void gotoFeedBack() {
+        startActivity(new Intent(this, FeedbackActivity.class));
+    }
+
+    @Override
+    public boolean gotoGp() {
+        return AppUtils.openGP(this);
     }
 }

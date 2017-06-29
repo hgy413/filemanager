@@ -63,4 +63,20 @@ public class IPreferencesIds {
     public static final String KEY_INTRUDER_SETTING_CHANGED = "key_intruder_setting_changed";
     //返回弹窗提示次数
     public static final String KEY_BACK_TIP_DIALOG_SHOW_TIMES = "key_back_tip_dialog_show_times";
+
+    //评分引导新增
+    //短时间内离开gp
+    public static final String KEY_EXIT_GP_SHORT_TIME = "key_rate_stimeexit";
+    //上次dismiss时间
+    public static final String KEY_LAST_TIME = "key_rate_last";
+    //评价成功
+    public static final String KEY_RATE_SUCCESS = "key_rate_success";
+    //评分引导出现次数
+    public static final String KEY_APPEAR_TIMES = "key_rate_appeartimes";
+    //是否再次弹出 点击No之后
+    public static final String KEY_IS_POP = "key_rate_ispop";
+    //对话框是否已经展示过
+    public static final String KEY_IS_SHOW_DIALOG_ONE = "key_is_show_dialog_one";
+    public static final String KEY_IS_SHOW_DIALOG_TWO = "key_is_show_dialog_two";
+    public static final String KEY_IS_SHOW_DIALOG_THIRD = "key_is_show_dialog_third";
 }
