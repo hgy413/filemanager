@@ -1,5 +1,9 @@
 package com.jb.filemanager.manager.file;
 
+import android.content.Intent;
+
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.duplicate.DuplicateFilesActivity;
 import com.jb.filemanager.manager.file.task.CopyFileTask;
 import com.jb.filemanager.manager.file.task.CutFileTask;
 import com.jb.filemanager.manager.file.task.PasteFileParam;

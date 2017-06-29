@@ -104,6 +104,12 @@
             </intent-filter>
         </activity>
 
+        <!-- 重复文件对话框页 -->
+        <activity
+            android:name=".function.duplicate.DuplicateFilesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <!-- 图片管理页 -->
         <activity
             android:name=".function.image.ImageActivity"
