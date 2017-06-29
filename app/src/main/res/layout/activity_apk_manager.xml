@@ -5,12 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jb.filemanager.function.apkmanager.ApkManagerActivity">
+    android:background="@color/ad_color_8acb29"
+    android:orientation="vertical"
+    tools:context="com.jb.filemanager.function.apkmanager.AppManagerActivity">
 
     <include layout="@layout/common_action_bar_with_search" />
 
     <ExpandableListView
         android:id="@+id/elv_apk"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

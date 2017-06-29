@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.apkmanager.ApkManagerActivity;
+import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.function.music.MusicActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
@@ -146,7 +146,7 @@ public class CategoryFragment extends Fragment {
                         break;
                     case 5:
                         //apk管理
-                        startActivity(new Intent(getContext(), ApkManagerActivity.class));
+                        startActivity(new Intent(getContext(), AppManagerActivity.class));
                         break;
                     default:
                         break;

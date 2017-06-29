@@ -10,26 +10,30 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.util.imageloader.IconLoader;
 
-public class ApkManagerActivity extends BaseActivity implements ApkManagerContract.View {
+public class AppManagerActivity extends BaseActivity implements AppManagerContract.View {
 
-    private ApkPresenter mPresenter;
+    private AppPresenter mPresenter;
     private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
     private EditText mEtCommonActionBarWithSearchSearch;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private ExpandableListView mElvApk;
+    private AppManagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apk_manager);
+        IconLoader.ensureInitSingleton(this);
+        IconLoader.getInstance().bindServicer(this);
+        mPresenter = new AppPresenter(this, new AppSupport());
+        mPresenter.onCreate(getIntent());
 
         initView();
         initData();
         initClick();
-        mPresenter = new ApkPresenter(this, new ApkSupport());
-        mPresenter.onCreate(getIntent());
     }
 
     @Override
@@ -43,7 +47,8 @@ public class ApkManagerActivity extends BaseActivity implements ApkManagerContra
 
     @Override
     public void initData() {
-
+        mAdapter = new AppManagerAdapter(mPresenter.getAppInfo());
+        mElvApk.setAdapter(mAdapter);
     }
 
     @Override
@@ -79,6 +84,7 @@ public class ApkManagerActivity extends BaseActivity implements ApkManagerContra
         }
 
         super.onDestroy();
+        IconLoader.getInstance().unbindServicer(this);
     }
 
     @Override

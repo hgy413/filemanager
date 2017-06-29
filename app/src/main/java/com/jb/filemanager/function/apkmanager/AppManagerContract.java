@@ -2,6 +2,8 @@ package com.jb.filemanager.function.apkmanager;
 
 import android.content.Intent;
 
+import java.util.List;
+
 /**
  * Desc:
  * Author lqf
@@ -9,7 +11,7 @@ import android.content.Intent;
  * Date: 2017/6/29 11:40
  */
 
-public class ApkManagerContract {
+public class AppManagerContract {
     interface View {
         void initView();
         void initData();
@@ -25,9 +27,10 @@ public class ApkManagerContract {
         void onActivityResult(int requestCode, int resultCode, Intent data);
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
+        List<AppGroupBean> getAppInfo();
     }
 
     interface Support {
-
+        List<AppChildBean> getInstallAppInfo();
     }
 }

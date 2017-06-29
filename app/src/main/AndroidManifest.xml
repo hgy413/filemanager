@@ -183,7 +183,7 @@
 
         <!--首页的apk管理-->
         <activity
-            android:name=".function.apkmanager.ApkManagerActivity"
+            android:name=".function.apkmanager.AppManagerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 

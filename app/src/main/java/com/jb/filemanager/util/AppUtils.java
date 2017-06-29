@@ -1492,4 +1492,14 @@ public class AppUtils {
                 .getSystemService(Context.POWER_SERVICE);
         return powerManager.isScreenOn();
     }
+
+    /**
+     * 获取Strings资源文件
+     *
+     * @param resId
+     * @return
+     */
+    public static String getString(int resId) {
+        return TheApplication.getAppContext().getResources().getString(resId);
+    }
 }

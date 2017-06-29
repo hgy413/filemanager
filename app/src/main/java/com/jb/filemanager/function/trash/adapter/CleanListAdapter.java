@@ -789,74 +789,10 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         }
         // 是否直接更新勾选框的状态(即不需要弹窗)
         boolean isUpdateCheckBoxDirectly = true;
-//        switch (child.getGroupType()) {
-//            case RESIDUE:
-//                if (child.isAllSelected()) {
-//                    // 选中状态
-//                    isUpdateCheckBoxDirectly = true;
-//                    break;
-//                }
-//                ResidueBean residueBean = (ResidueBean) child;
-//                HashSet<FileType> fileType = residueBean.getFileType();
-//                if (fileType.isEmpty()) {
-//                    // 不包含敏感文件
-//                    isUpdateCheckBoxDirectly = true;
-//                    break;
-//                }
-                // 显示敏感文件的弹窗
-//                mResidueDialog.setOkText(R.string.common_select);
-//                mResidueDialog.setCancelText(R.string.common_cancel);
-//                updateResidueDialog(mResidueDialog, residueBean);
-//                mResidueDialog
-//                        .setOnConfirmListener(new ResidueDialog.OnConfirmListener() {
-//                            @SuppressWarnings("deprecation")
-//                            @Override
-//                            public void onConfirm(boolean isConfirm) {
-//                                if (isConfirm) {
-//                                    StatisticsTools
-//                                            .uploadClickData(StatisticsConstants.CLEAN_SEN_CHE);
-//                                    updateItemSelectBox(group, child);
-//                                }
-//                            }
-//                        });
-//                break;
-//            case BIG_FILE:
-//                FileBean bean = (FileBean) child;
-//                if (bean.getFileFlag().equals(FileFlag.GALLERY_THUMBNAILS)
-//                        && !bean.isCheck()) {
-                    // 缩略图缓存清理提示框
-//                    mGalleryDialog.setOnConfirmListener(new OnConfirmListener() {
-//                        @Override
-//                        public void onConfirm(boolean isConfirm) {
-//                            if (isConfirm) {
-//                                updateItemSelectBox(group, child);
-//                            }
-//                        }
-//                    });
-//                    mGalleryDialog.showDialog();
-//                } else {
-//                    isUpdateCheckBoxDirectly = true;
-//                }
-//                break;
-//            default:
-//                isUpdateCheckBoxDirectly = true;
-//                break;
-//        }
         if (isUpdateCheckBoxDirectly) {
             updateItemSelectBox(group, child);
         }
     }
-
-//    private int getImageType(FileType type) {
-//        switch (type) {
-//            case MUSIC:
-//                return ImageLoaderBean.IMAGE_TYPE_MUSIC;
-//            case VIDEO:
-//                return ImageLoaderBean.IMAGE_TYPE_VIDEO;
-//            default:
-//                return ImageLoaderBean.IMAGE_TYPE_PICTURE;
-//        }
-//    }
 
     private void updateItemSelectBox(final CleanGroupsBean group,
                                      final ItemBean item) {
