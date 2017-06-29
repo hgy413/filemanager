@@ -17,6 +17,7 @@ import com.jb.filemanager.abtest.ABTest;
 import com.jb.filemanager.ad.AdManager;
 import com.jb.filemanager.alarmtask.ScheduleTaskHandler;
 import com.jb.filemanager.buyuser.BuyUserManager;
+import com.jb.filemanager.function.applock.manager.AppLockerCenter;
 import com.jb.filemanager.function.daemon.AssistantReceiver;
 import com.jb.filemanager.function.daemon.AssistantService;
 import com.jb.filemanager.function.daemon.DaemonReceiver;
@@ -207,8 +208,8 @@ public class TheApplication extends Application {
         // 初始化广告垃圾扫描
         AdTrashManager.getInstance(getAppContext());
         CleanManager.getInstance(getApplicationContext()).startJunkFileScanTask();
-
-
+//        应用锁
+//        AppLockerCenter.getInstance();
         // 主进程启动完毕,更新上一次启动的版本号和时间 **这句永远在最后
         appLaunchFinished();
 

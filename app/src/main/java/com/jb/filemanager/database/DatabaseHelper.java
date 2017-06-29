@@ -24,7 +24,7 @@ public class DatabaseHelper extends BaseDatabaseHelper {
     public static final String LOG_TAG = ">>> DatabaseHelper";
 
     private Context mContext;
-    private final static int DB_VERSION = 0;
+    private final static int DB_VERSION = 1;
 
     /**
      * 数据库名
