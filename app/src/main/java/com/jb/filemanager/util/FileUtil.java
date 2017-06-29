@@ -208,9 +208,9 @@ public class FileUtil {
                         return f1.getName().toLowerCase().compareTo(
                                 f2.getName().toLowerCase());
                     } else if (f1Path.length() <= file1LastDot + 1) {
-                        return 1;
-                    } else if (f2Path.length() <= file2LastDot + 1) {
                         return -1;
+                    } else if (f2Path.length() <= file2LastDot + 1) {
+                        return 1;
                     } else {
                         String f1Type = f1.getAbsolutePath().substring(file1LastDot + 1).toLowerCase(Locale.getDefault());
                         String f2Type = f2.getAbsolutePath().substring(file2LastDot + 1).toLowerCase(Locale.getDefault());
@@ -253,9 +253,9 @@ public class FileUtil {
                         return f2.getName().toLowerCase().compareTo(
                                 f1.getName().toLowerCase());
                     } else if (f1Path.length() <= file1LastDot + 1) {
-                        return -1;
-                    } else if (f2Path.length() <= file2LastDot + 1) {
                         return 1;
+                    } else if (f2Path.length() <= file2LastDot + 1) {
+                        return -1;
                     } else {
                         String f1Type = f1.getAbsolutePath().substring(file1LastDot + 1).toLowerCase(Locale.getDefault());
                         String f2Type = f2.getAbsolutePath().substring(file2LastDot + 1).toLowerCase(Locale.getDefault());
