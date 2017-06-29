@@ -40,7 +40,7 @@ public class LockerReceiverManager {
     /**
      * 屏幕关闭的时候 关闭顶部应用的检测.<br>
      *     {@link ScreenStateEvent} 屏幕状态事件 <br>
-     *     由{@link com.swift.boost.receiver.ScreenStateReceiver} 屏幕监听器发送
+     *     由{@link com.jb.filemanager.receiver.ScreenStateReceiver} 屏幕监听器发送
      * @param event
      */
     @Subscribe

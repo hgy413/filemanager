@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.jb.filemanager.database.table.AppPermissionsTable;
 import com.jb.filemanager.database.table.CacheTrashRecordTable;
 import com.jb.filemanager.database.table.CleanIgnoreTable;
 import com.jb.filemanager.database.table.CleanScanOvertimeTable;
@@ -71,6 +72,9 @@ public class DatabaseHelper extends BaseDatabaseHelper {
             db.execSQL(LockerSceneTable.CREATE_TABLE);
             db.execSQL(LockerSceneItemTable.CREATE_TABLE);
             db.execSQL(AntiPeepTable.CREATE_TABLE);
+
+            // 权限检测
+            db.execSQL(AppPermissionsTable.CREATE_TABLE);
             mIsNewDB = true;
             db.setTransactionSuccessful();
         } catch (Exception e) {

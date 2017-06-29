@@ -53,4 +53,15 @@
     <declare-styleable name="slideButton">
         <attr name="default_checked" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="round_imageview">
+        <attr name="border_color" format="color"/>
+        <attr name="border_width" format="dimension"/>
+        <attr name="circle" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="RoundFrameLayout">
+        <attr name="corner_radius" format="dimension" />
+        <attr name="corner_side" format="integer" />
+    </declare-styleable>
 </resources>

@@ -216,6 +216,14 @@
                   android:taskAffinity=":IntruderOpenGuideTask"
                   android:theme="@style/Pop.Activity.Theme"/>
 
+        <activity
+            android:name=".function.permissionalarm.view.PermissionAlarmPopActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity=":PermissionAlarm"
+            android:theme="@style/Pop.Activity.Theme"/>
+
         <!-- 守护进程 start -->
         <!-- 后台监测应用流量使用的服务 -->
         <receiver android:name=".function.daemon.DaemonReceiver"/>

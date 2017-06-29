@@ -50,13 +50,13 @@ public class Const {
      * 参看AndroidManifest.xml中的配置:<br>
      * <provider
      * android:name="com.gau.go.gostaticsdk.StaticDataContentProvider"
-     * android:authorities="com.ace.network.staticsdkprovider" />
+     * android:authorities="com.jb.filemanager.staticsdkprovider" />
      */
     public static final String STATISTICS_SDK_PROVIDER_AUTHORITIES = "com.jb.filemanager.staticsdkprovider";
 
     // About 跳转
-    public static final String ABOUT_GOOGLE_PLAY_M = "market://details?id=com.ace.network";
-    public static final String ABOUT_GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=com.ace.network";
+    public static final String ABOUT_GOOGLE_PLAY_M = "market://details?id=com.jb.filemanager";
+    public static final String ABOUT_GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=com.jb.filemanager";
 
     // 广告政策
     public static final String FACEBOOK_AD_CHOICE_URL = "https://m.facebook.com/ads/ad_choices";

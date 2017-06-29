@@ -5,6 +5,8 @@ package com.jb.filemanager.manager.spm;
  */
 
 public class IPreferencesIds {
+
+    public static final String APP_NAME = "ace_network";
     public static final String KEY_FIRST_LAUNCH_VERSION_CODE = "key_first_launch_version_code";
     public static final String KEY_FIRST_LAUNCH_TIME = "key_first_launch_time";
     public static final String KEY_FIRST_INSTALL_TIME = "key_first_install_time";
@@ -79,4 +81,13 @@ public class IPreferencesIds {
     public static final String KEY_IS_SHOW_DIALOG_ONE = "key_is_show_dialog_one";
     public static final String KEY_IS_SHOW_DIALOG_TWO = "key_is_show_dialog_two";
     public static final String KEY_IS_SHOW_DIALOG_THIRD = "key_is_show_dialog_third";
+
+    //权限警报
+    public static final String KEY_PERMISSION_ALARM_USER_HAS_CHANGE = "key_permission_alarm_user_has_change";
+    //权限警报
+    public static final String KEY_PERMISSION_ALARM_ENABLE = "key_permission_alarm_enable";
+    //买量用户是否展示开关
+    public static final String KEY_PERMISSION_ALARM_SWITCHER_BUY_USER_SHOW = "key_permission_alert_switcher_buy_user_show";
+    //权限对话框展示次数
+    public static final String KEY_PERMISSION_DLG_SHOW_TIMES = "key_permission_dlg_show_times";
 }

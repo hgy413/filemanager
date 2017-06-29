@@ -22,6 +22,7 @@ import com.jb.filemanager.function.daemon.AssistantReceiver;
 import com.jb.filemanager.function.daemon.AssistantService;
 import com.jb.filemanager.function.daemon.DaemonReceiver;
 import com.jb.filemanager.function.daemon.DaemonService;
+import com.jb.filemanager.function.permissionalarm.manager.PermissionAlarmManager;
 import com.jb.filemanager.function.scanframe.clean.CacheManager;
 import com.jb.filemanager.function.scanframe.clean.CleanManager;
 import com.jb.filemanager.function.scanframe.clean.event.GlobalDataLoadingDoneEvent;
@@ -210,6 +211,8 @@ public class TheApplication extends Application {
         CleanManager.getInstance(getApplicationContext()).startJunkFileScanTask();
         //应用锁
 //        AppLockerCenter.getInstance();
+        //权限警报管理器准备工作
+        PermissionAlarmManager.getInstance().toReady();
         // 主进程启动完毕,更新上一次启动的版本号和时间 **这句永远在最后
         appLaunchFinished();
 
