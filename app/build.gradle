@@ -83,15 +83,15 @@ andResGuard {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.jb.filemanager"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         multiDexEnabled = true
         manifestPlaceholders = [COM_JB_FILEMANAGER_CHANNEL_VALUE: "200"]
     }
