@@ -1,8 +1,10 @@
 package com.jb.filemanager.function.music;
 
-import android.app.Application;
-import android.content.Context;
+
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 
 import java.io.File;
 
@@ -16,6 +18,10 @@ public class MusicContract {
         void finishActivity();
 
         void updateView();
+
+        void changeCursor(MatrixCursor cursor);
+
+        Cursor queryData(long start, long end);
     }
 
     interface Presenter {
@@ -29,10 +35,15 @@ public class MusicContract {
 
         boolean isSelected(File file);
         void addOrRemoveSelected(File file);
+
+        void restartLoader();
+
+        Cursor queryDate(long start, long end);
     }
 
     interface Support {
-        Context getContext();
-        Application getApplication();
+        Loader<Cursor> getAllMusicCursor();
+
+        Cursor queryData(long start, long end);
     }
 }
