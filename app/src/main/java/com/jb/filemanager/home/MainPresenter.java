@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -219,17 +220,12 @@ class MainPresenter implements MainContract.Presenter {
             FileManager.getInstance().doPaste(mCurrentPath, new FileManager.Listener() {
                 @Override
                 public void onPasteProgressUpdate(File file) {
-
-                }
-
-                @Override
-                public void onPastePreExecute() {
-
+                    Logger.e("wangzq", "on paste: " + file.getAbsolutePath());
                 }
 
                 @Override
                 public void onPastePostExecute(Boolean aBoolean) {
-
+                    Logger.e("wangzq", "on paste result: " + aBoolean.toString());
                 }
             });
 

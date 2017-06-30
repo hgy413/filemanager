@@ -1,15 +1,9 @@
 package com.jb.filemanager.manager.file;
 
-import android.content.Intent;
-
-import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.duplicate.DuplicateFilesActivity;
 import com.jb.filemanager.manager.file.task.CopyFileTask;
 import com.jb.filemanager.manager.file.task.CutFileTask;
-import com.jb.filemanager.manager.file.task.PasteFileParam;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -120,11 +114,7 @@ public class FileManager {
 
     public void doPaste(String destDir, final Listener listener) {
         if (mCopyFiles != null && mCopyFiles.size() > 0) {
-            PasteFileParam param = new PasteFileParam();
-            param.mSourceFiles = new ArrayList<> (mCopyFiles);
-            param.mDestDir = destDir;
-
-            new CopyFileTask(new CopyFileTask.Listener() {
+            new CopyFileTask(mCopyFiles, destDir, new CopyFileTask.Listener() {
 
                 @Override
                 public void onProgressUpdate(File file) {
@@ -135,27 +125,15 @@ public class FileManager {
                 }
 
                 @Override
-                public void onPreExecute() {
-                    // TODO 是否有其他操作还不清楚
-                    if (listener != null) {
-                        listener.onPastePreExecute();
-                    }
-                }
-
-                @Override
                 public void onPostExecute(Boolean aBoolean) {
                     // TODO 是否有其他操作还不清楚
                     if (listener != null) {
                         listener.onPastePostExecute(aBoolean);
                     }
                 }
-            }).execute(param);
+            }).start();
         } else if (mCutFiles != null && mCutFiles.size() > 0) {
-            PasteFileParam param = new PasteFileParam();
-            param.mSourceFiles = new ArrayList<> (mCutFiles);
-            param.mDestDir = destDir;
-
-            new CutFileTask(new CutFileTask.Listener() {
+            new CutFileTask(mCutFiles, destDir, new CutFileTask.Listener() {
 
                 @Override
                 public void onProgressUpdate(File file) {
@@ -166,21 +144,13 @@ public class FileManager {
                 }
 
                 @Override
-                public void onPreExecute() {
-                    // TODO 是否有其他操作还不清楚
-                    if (listener != null) {
-                        listener.onPastePreExecute();
-                    }
-                }
-
-                @Override
                 public void onPostExecute(Boolean aBoolean) {
                     // TODO 是否有其他操作还不清楚
                     if (listener != null) {
                         listener.onPastePostExecute(aBoolean);
                     }
                 }
-            }).execute(param);
+            }).start();
         } else {
             listener.onPastePostExecute(false);
         }
@@ -188,7 +158,6 @@ public class FileManager {
 
     public interface Listener {
         void onPasteProgressUpdate(File file);
-        void onPastePreExecute();
         void onPastePostExecute(Boolean aBoolean);
     }
 }

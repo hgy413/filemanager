@@ -37,6 +37,12 @@ import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileUtil {
 
+    public static final int PASTE_CHECK_SUCCESS = 0;
+    public static final int PASTE_CHECK_ERROR_UNKNOWN = -1;
+    public static final int PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE = -2;
+    public static final int PASTE_CHECK_ERROR_DEST_IN_SOURCE = -3;
+
+
     public static final String HIDDEN_PREFIX = ".";
 
     /**
@@ -441,13 +447,16 @@ public class FileUtil {
         return result;
     }
 
-    public static boolean checkCanPaste(ArrayList<File> fileArrayList, String destDir) {
-        boolean result = false;
+    public static int checkCanPaste(ArrayList<File> fileArrayList, String destDir) {
+        int result = PASTE_CHECK_ERROR_UNKNOWN;
         if (fileArrayList != null && fileArrayList.size() > 0 && !TextUtils.isEmpty(destDir)) {
-            result = true;
+            result = PASTE_CHECK_SUCCESS;
+
+            // TODO @wangzq 检查空间
+
             for (File file : fileArrayList) {
                 if (destDir.startsWith(file.getAbsolutePath())) {
-                    result = false;
+                    result = PASTE_CHECK_ERROR_DEST_IN_SOURCE;
                     break;
                 }
             }

@@ -1,10 +1,7 @@
 package com.jb.filemanager.manager.file.task;
 
-import android.text.TextUtils;
-
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.FileUtil;
-import com.jb.filemanager.util.images.AsyncTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,6 +12,11 @@ import java.util.ArrayList;
  */
 
 public class CopyFileTask {
+
+    public static final int COPY_SUCCESS_START = 0;
+    public static final int COPY_ERROR_UNKNOWN = -1;
+    public static final int COPY_ERROR_NOT_ENOUGH_SPACE = -2;
+    public static final int COPY_ERROR_DEST_IN_SOURCE = -3;
 
     private Thread mWorkerThread;
     private Listener mListener;
@@ -32,21 +34,19 @@ public class CopyFileTask {
             public void run() {
                 boolean result = false;
                 if (mSource != null && mSource.size() > 0) {
-                    if (FileUtil.checkCanPaste(mSource, mDest)) {
-                        result = true;
-                        for (final File file : mSource) {
-                            TheApplication.postRunOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mListener != null) {
-                                        mListener.onProgressUpdate(file);
-                                    }
+                    result = true;
+                    for (final File file : mSource) {
+                        TheApplication.postRunOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mListener != null) {
+                                    mListener.onProgressUpdate(file);
                                 }
-                            });
-                            result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
+                            }
+                        });
+                        result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
 
-                            // TODO wait for handle duplicated
-                        }
+                        // TODO wait for handle duplicated
                     }
                 }
 
@@ -63,15 +63,34 @@ public class CopyFileTask {
         });
     }
 
-    public void start() {
+    public int start() {
+        int resultCode = COPY_SUCCESS_START;
         if (mWorkerThread != null) {
-            mWorkerThread.start();
+            int checkResult = FileUtil.checkCanPaste(mSource, mDest);
+
+            switch (checkResult) {
+                case FileUtil.PASTE_CHECK_SUCCESS:
+                    mWorkerThread.start();
+                    break;
+                case FileUtil.PASTE_CHECK_ERROR_UNKNOWN:
+                    resultCode = COPY_ERROR_UNKNOWN;
+                    break;
+                case FileUtil.PASTE_CHECK_ERROR_DEST_IN_SOURCE:
+                    resultCode = COPY_ERROR_DEST_IN_SOURCE;
+                    break;
+                case FileUtil.PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE:
+                    resultCode = COPY_ERROR_NOT_ENOUGH_SPACE;
+                    break;
+                default:
+                    break;
+            }
+
         }
+        return resultCode;
     }
 
     public interface Listener {
         void onProgressUpdate(File file);
-        void onPreExecute();
         void onPostExecute(Boolean aBoolean);
     }
 }
