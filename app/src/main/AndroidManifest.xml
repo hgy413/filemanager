@@ -122,6 +122,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!-- 压缩包 -->
+        <activity
+            android:name=".function.zipfile.ZipFileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
 
         <!-- 隐私页 -->
         <activity

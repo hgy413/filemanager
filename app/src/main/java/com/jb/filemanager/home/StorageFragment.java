@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.home.event.SortByChangeEvent;
@@ -30,7 +29,6 @@ import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.HorizontalListView;
 import com.jb.filemanager.util.FileUtil;
-import com.jb.filemanager.util.images.ImageCache;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 
@@ -41,6 +39,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -82,6 +81,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         super.onCreate(savedInstanceState);
 
         mPathStack = new Stack<>();
+        Iterator<File> iterator = mPathStack.iterator();
         mStorageList = new ArrayList<>();
         initStoragePath();
 

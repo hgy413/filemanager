@@ -393,4 +393,20 @@ public class TimeUtil {
     public static String getMSTime(long time) {
         return getTime(time, DATE_FORMATTER_MM_SS);
     }
+
+    /**
+     * 获取传入时间的年月日的时间值
+     * @param time t
+     * @return l
+     */
+    public static long getYMDTime(long time) {
+        String format = DATE_FORMATTER_DATE.format(new Date(time));
+        try {
+            Date parse = DATE_FORMATTER_DATE.parse(format);
+            return parse.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

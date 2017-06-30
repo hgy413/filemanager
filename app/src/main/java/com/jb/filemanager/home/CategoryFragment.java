@@ -25,6 +25,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.function.music.MusicActivity;
+import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 
@@ -147,6 +148,8 @@ public class CategoryFragment extends Fragment {
                     case 5:
                         //apk管理
                         startActivity(new Intent(getContext(), AppManagerActivity.class));
+                    case 2:
+                        startActivity(new Intent(getContext(), ZipFileActivity.class));
                         break;
                     default:
                         break;

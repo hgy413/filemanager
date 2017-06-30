@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="48dp"
+              android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/item_zip_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@null"/>
+
+    <TextView
+        android:id="@+id/item_zip_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_blue_light"/>
+
+    <TextView
+        android:id="@+id/item_zip_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_blue_light"/>
+
+    <ImageView
+        android:id="@+id/item_zip_checkbox"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@null"/>
+</LinearLayout>
