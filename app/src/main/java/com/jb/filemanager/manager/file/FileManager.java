@@ -1,11 +1,17 @@
 package com.jb.filemanager.manager.file;
 
+import android.content.Intent;
+import android.text.TextUtils;
+
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.duplicate.DuplicateFilesActivity;
 import com.jb.filemanager.manager.file.task.CopyFileTask;
 import com.jb.filemanager.manager.file.task.CutFileTask;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * Created by bill wang on 2017/6/23.
@@ -62,6 +68,8 @@ public class FileManager {
 
     private Comparator<File> mFileSort;
 
+    private HashMap<String, Object> mPasteLockers;
+
     public static FileManager getInstance() {
         synchronized (FileManager.class) {
             if (sInstance == null) {
@@ -117,6 +125,19 @@ public class FileManager {
             new CopyFileTask(mCopyFiles, destDir, new CopyFileTask.Listener() {
 
                 @Override
+                public void onDuplicate(CopyFileTask task, File file) {
+                    if (mPasteLockers == null) {
+                        mPasteLockers = new HashMap<>();
+                    }
+                    mPasteLockers.put(file.getAbsolutePath(), task);
+
+                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilesActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    TheApplication.getInstance().startActivity(intent);
+                }
+
+                @Override
                 public void onProgressUpdate(File file) {
                     // TODO 是否有其他操作还不清楚
                     if (listener != null) {
@@ -136,6 +157,19 @@ public class FileManager {
             new CutFileTask(mCutFiles, destDir, new CutFileTask.Listener() {
 
                 @Override
+                public void onDuplicate(CutFileTask task, File file) {
+                    if (mPasteLockers == null) {
+                        mPasteLockers = new HashMap<>();
+                    }
+                    mPasteLockers.put(file.getAbsolutePath(), task);
+
+                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilesActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    TheApplication.getInstance().startActivity(intent);
+                }
+
+                @Override
                 public void onProgressUpdate(File file) {
                     // TODO 是否有其他操作还不清楚
                     if (listener != null) {
@@ -153,6 +187,17 @@ public class FileManager {
             }).start();
         } else {
             listener.onPastePostExecute(false);
+        }
+    }
+
+    public void continuePaste(String path, boolean skip) {
+        if (!TextUtils.isEmpty(path) && mPasteLockers != null && mPasteLockers.containsKey(path)) {
+            Object task = mPasteLockers.remove(path);
+            if (task instanceof CopyFileTask) {
+                ((CopyFileTask) task).continueCopy(skip);
+            } else if (task instanceof CutFileTask) {
+                ((CutFileTask) task).continueCut(skip);
+            }
         }
     }
 

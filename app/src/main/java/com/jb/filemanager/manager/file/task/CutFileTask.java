@@ -24,6 +24,8 @@ public class CutFileTask {
 
     private ArrayList<File> mSource;
     private String mDest;
+    private final Object mLocker = new Object();
+    private boolean mIsSkip = true;
 
     public CutFileTask(ArrayList<File> source, String dest, Listener listener) {
 
@@ -45,9 +47,29 @@ public class CutFileTask {
                                 }
                             }
                         });
-                        result = result && file.renameTo(new File(mDest + File.separator + file.getName()));
 
-                        // TODO wait for handle duplicated
+                        File test = new File(mDest + File.separator + file.getName());
+                        if (test.exists() && ((test.isDirectory() && file.isDirectory()) || ((test.isFile() && file.isFile())))) {
+                            try {
+                                synchronized (mLocker) {
+                                    TheApplication.postRunOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (mListener != null) {
+                                                mListener.onDuplicate(CutFileTask.this, file);
+                                            }
+                                        }
+                                    });
+                                    mLocker.wait();
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (!mIsSkip) {
+                            result = result && file.renameTo(new File(mDest + File.separator + file.getName()));
+                        }
                     }
                 }
 
@@ -90,7 +112,15 @@ public class CutFileTask {
         return resultCode;
     }
 
+    public void continueCut(boolean isSkip) {
+        synchronized (mLocker) {
+            mIsSkip = isSkip;
+            mLocker.notify();
+        }
+    }
+
     public interface Listener {
+        void onDuplicate(CutFileTask task, File file);
         void onProgressUpdate(File file);
         void onPostExecute(Boolean aBoolean);
     }

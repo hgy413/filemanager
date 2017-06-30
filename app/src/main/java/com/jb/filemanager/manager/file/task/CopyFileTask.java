@@ -23,6 +23,8 @@ public class CopyFileTask {
 
     private ArrayList<File> mSource;
     private String mDest;
+    private final Object mLocker = new Object();
+    private boolean mIsSkip = true;
 
     public CopyFileTask(ArrayList<File> source, String dest, Listener listener) {
 
@@ -44,9 +46,29 @@ public class CopyFileTask {
                                 }
                             }
                         });
-                        result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
 
-                        // TODO wait for handle duplicated
+                        File test = new File(mDest + File.separator + file.getName());
+                        if (test.exists() && ((test.isDirectory() && file.isDirectory()) || ((test.isFile() && file.isFile())))) {
+                            try {
+                                synchronized (mLocker) {
+                                    TheApplication.postRunOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (mListener != null) {
+                                                mListener.onDuplicate(CopyFileTask.this, file);
+                                            }
+                                        }
+                                    });
+                                    mLocker.wait();
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (!mIsSkip) {
+                            result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
+                        }
                     }
                 }
 
@@ -89,7 +111,15 @@ public class CopyFileTask {
         return resultCode;
     }
 
+    public void continueCopy(boolean isSkip) {
+        synchronized (mLocker) {
+            mIsSkip = isSkip;
+            mLocker.notify();
+        }
+    }
+
     public interface Listener {
+        void onDuplicate(CopyFileTask task, File file);
         void onProgressUpdate(File file);
         void onPostExecute(Boolean aBoolean);
     }
