@@ -2,63 +2,70 @@ package com.jb.filemanager.manager.file.task;
 
 import android.text.TextUtils;
 
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.images.AsyncTask;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by bill wang on 2017/6/29.
  *
  */
 
-public class CopyFileTask extends AsyncTask<PasteFileParam, File, Boolean> {
+public class CopyFileTask {
 
+    private Thread mWorkerThread;
     private Listener mListener;
 
-    public CopyFileTask(Listener listener) {
-        mListener = listener;
-    }
+    private ArrayList<File> mSource;
+    private String mDest;
 
-    @Override
-    protected Boolean doInBackground(PasteFileParam... params) {
-        boolean result = false;
-        if (params != null && params.length == 1) {
-            PasteFileParam param = params[0];
-            if (param != null
-                    && !TextUtils.isEmpty(param.mDestDir)
-                    && param.mSourceFiles != null
-                    && param.mSourceFiles.size() > 0) {
-                result = true;
-                if (FileUtil.checkCanPaste(param.mSourceFiles, param.mDestDir)) {
-                    for (File file : param.mSourceFiles) {
-                        publishProgress(file);
-                        result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), param.mDestDir);
+    public CopyFileTask(ArrayList<File> source, String dest, Listener listener) {
+
+        mListener = listener;
+        mSource = new ArrayList<> (source);
+        mDest = dest;
+        mWorkerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean result = false;
+                if (mSource != null && mSource.size() > 0) {
+                    if (FileUtil.checkCanPaste(mSource, mDest)) {
+                        result = true;
+                        for (final File file : mSource) {
+                            TheApplication.postRunOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mListener != null) {
+                                        mListener.onProgressUpdate(file);
+                                    }
+                                }
+                            });
+                            result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
+
+                            // TODO wait for handle duplicated
+                        }
                     }
                 }
+
+                final boolean finalResult = result;
+                TheApplication.postRunOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mListener != null) {
+                            mListener.onPostExecute(finalResult);
+                        }
+                    }
+                });
             }
-        }
-        return result;
+        });
     }
 
-    @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        if (mListener != null) {
-            mListener.onPostExecute(aBoolean);
-        }
-    }
-
-    @Override
-    protected void onProgressUpdate(File... values) {
-        if (mListener != null && values != null && values.length > 0) {
-            mListener.onProgressUpdate(values[0]);
-        }
-    }
-
-    @Override
-    protected void onPreExecute() {
-        if (mListener != null) {
-            mListener.onPreExecute();
+    public void start() {
+        if (mWorkerThread != null) {
+            mWorkerThread.start();
         }
     }
 
