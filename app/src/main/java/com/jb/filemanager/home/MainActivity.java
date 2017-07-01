@@ -34,6 +34,7 @@ import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.util.APIUtil;
@@ -548,38 +549,13 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     public void showDetailMultiFile(ArrayList<File> files) {
         if (files != null && files.size() > 0) {
-            View dialogView = View.inflate(this, R.layout.dialog_main_multi_files_detail, null);
-            TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_confirm);
-            TextView size = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_size_value);
-            TextView containValue = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_contain_value);
-
-            long filesSize = 0L;
-            Integer folderTotalCount = 0;
-            Integer fileTotalCount = 0;
-            for (File file : files) {
-                int[] count = FileUtil.countFolderAndFile(file);
-                filesSize += file.length();
-                folderTotalCount += count[0];
-                fileTotalCount += count[1];
-
-                if (file.isDirectory()) {
-                    folderTotalCount++;
-                } else {
-                    fileTotalCount++;
-                }
-            }
-            size.setText(ConvertUtil.getReadableSize(filesSize));
-            containValue.setText(getString(R.string.main_dialog_single_detail_contain, folderTotalCount, fileTotalCount));
-
-            final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
-            okButton.setOnClickListener(new View.OnClickListener() {
+            MultiFileDetailDialog multiFileDetailDialog = new MultiFileDetailDialog(this, files, new MultiFileDetailDialog.Listener() {
                 @Override
-                public void onClick(View v) {
+                public void onConfirm(MultiFileDetailDialog dialog) {
                     dialog.dismiss();
                 }
-            }); // 确定按钮点击事件
-
-            dialog.show();
+            });
+            multiFileDetailDialog.show();
         }
     }
 
