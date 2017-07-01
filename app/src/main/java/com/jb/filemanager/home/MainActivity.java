@@ -35,6 +35,7 @@ import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
+import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.ConvertUtil;
@@ -533,38 +534,14 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     public void showDetailSingleFile(File file) {
         if (file != null && file.exists()) {
-            View dialogView = View.inflate(this, R.layout.dialog_main_single_file_detail, null);
-            TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_confirm);
-            TextView name = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_name_value);
-            TextView location = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_location_value);
-            TextView modifyTime = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_modify_time_value);
-            TextView size = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_size_value);
-            TextView containTitle = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_contain_title);
-            TextView containValue = (TextView) dialogView.findViewById(R.id.tv_main_single_file_detail_contain_value);
 
-            name.setText(file.getName());
-            location.setText(file.getAbsolutePath());
-            modifyTime.setText(TimeUtil.getTime(file.lastModified()));
-            size.setText(ConvertUtil.getReadableSize(file.length()));
-
-            if (file.isDirectory()) {
-                int[] counts = FileUtil.countFolderAndFile(file);
-                containValue.setText(getString(R.string.main_dialog_single_detail_contain, counts[0], counts[1]));
-            } else {
-                containTitle.setVisibility(View.GONE);
-                containValue.setVisibility(View.GONE);
-            }
-
-            final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
-
-            okButton.setOnClickListener(new View.OnClickListener() {
+            SingleFileDetailDialog singleFileDetailDialog = new SingleFileDetailDialog(this, file, new SingleFileDetailDialog.Listener() {
                 @Override
-                public void onClick(View v) {
+                public void onConfirm(SingleFileDetailDialog dialog) {
                     dialog.dismiss();
                 }
-            }); // 确定按钮点击事件
-
-            dialog.show();
+            });
+            singleFileDetailDialog.show();
         }
     }
 
