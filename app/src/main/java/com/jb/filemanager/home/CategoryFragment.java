@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
-import com.jb.filemanager.function.music.MusicActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
+import com.jb.filemanager.function.musics.MusicActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 

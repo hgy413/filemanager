@@ -8,11 +8,11 @@
 
     <include layout="@layout/common_action_bar_with_search" />
 
-    <ExpandableListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/elv_music"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ExpandableListView>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

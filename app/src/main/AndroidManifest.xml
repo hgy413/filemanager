@@ -118,7 +118,7 @@
 
         <!-- 音乐管理页 -->
         <activity
-            android:name=".function.music.MusicActivity"
+            android:name=".function.musics.MusicActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 

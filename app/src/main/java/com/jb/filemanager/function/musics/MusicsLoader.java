@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class MusicsLoader extends AsyncTaskLoader{
     }
 
     @Override
-    public Map<String, List<MusicInfo>> loadInBackground() {
+    public Map<String, ArrayList<MusicInfo>> loadInBackground() {
         return mMusicSupport.getAllMusicInfo();
     }
 }

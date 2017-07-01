@@ -1,5 +1,8 @@
 package com.jb.filemanager.function.musics;
 
+import android.content.Intent;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,12 +12,16 @@ import java.util.Map;
 
 public interface MusicContract {
     interface View {
+        void showMusicList(Map<String, ArrayList<MusicInfo>> mMusicMaps);
     }
 
     interface Presenter {
+        void onCreate(Intent intent);
+
+        void onClickBackButton(boolean b);
     }
 
     interface Support {
-        Map<String, List<MusicInfo>> getAllMusicInfo();
+        Map<String, ArrayList<MusicInfo>> getAllMusicInfo();
     }
 }

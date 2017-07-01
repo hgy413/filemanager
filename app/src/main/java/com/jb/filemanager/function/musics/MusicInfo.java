@@ -20,10 +20,10 @@ public class MusicInfo {
 
     public String mId;
     public String mName;
-    public int mSize;
+    public long mSize;
     public String mFullPath;
     public long mModified;
     public String mType;
-    public String mDuration;
+    public long mDuration;
     public String mArtist;
 }
