@@ -1,6 +1,10 @@
 package com.jb.filemanager.function.apkmanager;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,8 +18,11 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
+import java.util.List;
+
 public class AppManagerActivity extends BaseActivity implements AppManagerContract.View, View.OnClickListener {
 
+    public static final int UNINSTALL_APP_REQUEST_CODE = 101;
     private AppManagerPresenter mPresenter;
     private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
@@ -25,6 +32,8 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
     private AppManagerAdapter mAdapter;
     private TextView mTvBottomDelete;
     private int mChosenCount;
+    private List<AppGroupBean> mAppInfo;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         initView();
         initData();
         initClick();
+        initBroadcastReceiver();
     }
 
     @Override
@@ -53,7 +63,8 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
 
     @Override
     public void initData() {
-        mAdapter = new AppManagerAdapter(mPresenter.getAppInfo());
+        mAppInfo = mPresenter.getAppInfo();
+        mAdapter = new AppManagerAdapter(mAppInfo);
         mAdapter.setOnItemChosenListener(new AppManagerAdapter.OnItemChosenListener() {
             @Override
             public void onItemChosen(int chosenCount) {
@@ -67,6 +78,35 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
     @Override
     public void initClick() {
         mTvBottomDelete.setOnClickListener(this);
+        mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
+    }
+
+    @Override
+    public void initBroadcastReceiver() {
+        //监听应用的安装卸载广播   刷系列表
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (mPresenter != null) {
+                    mPresenter.refreshData();
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addDataScheme("package");
+        registerReceiver(mReceiver, intentFilter);
+    }
+
+    @Override
+    public void releaseBroadcastReceiver() {
+        unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    public void refreshList() {
+        mAdapter.setListData(mPresenter.getAppInfo());
     }
 
     private void handleBottomDeleteShow(int chosenCount) {
@@ -104,7 +144,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         if (mPresenter != null) {
             mPresenter.onDestroy();
         }
-
+        releaseBroadcastReceiver();
         super.onDestroy();
         IconLoader.getInstance().unbindServicer(this);
     }
@@ -137,9 +177,26 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
             return;
         }
         switch (view.getId()) {
+            case R.id.tv_common_action_bar_title:
+                finishActivity();
+                break;
             case R.id.tv_bottom_delete:
                 Toast.makeText(AppManagerActivity.this, mChosenCount + "个app被选中了呢   欧尼酱", Toast.LENGTH_SHORT).show();
+                List<AppChildBean> children = mAppInfo.get(0).getChildren();
+                for (AppChildBean childBean : children) {
+                    if (childBean.mIsCheckd) {
+                        uninstallApp(childBean.mPackageName);
+                    }
+                }
                 break;
         }
+    }
+
+    //卸载应用程序
+    public void uninstallApp(String pkgName) {
+        Intent uninstall_intent = new Intent();
+        uninstall_intent.setAction(Intent.ACTION_DELETE);
+        uninstall_intent.setData(Uri.parse("package:" + pkgName));
+        startActivityForResult(uninstall_intent, UNINSTALL_APP_REQUEST_CODE);
     }
 }

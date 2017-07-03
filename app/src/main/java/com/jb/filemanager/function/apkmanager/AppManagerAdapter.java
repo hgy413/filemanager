@@ -160,6 +160,13 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         }
     }
 
+    public void setListData(List<AppGroupBean> groups){
+        mGroups.clear();
+        mGroups.addAll(groups);
+        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中
+        notifyDataSetChanged();
+    }
+
     public void setOnItemChosenListener(@NonNull OnItemChosenListener itemChosnListener) {
         this.mOnItemChosenListener = itemChosnListener;
     }

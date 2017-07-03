@@ -60,7 +60,16 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AppManagerActivity.UNINSTALL_APP_REQUEST_CODE) {
+            //卸载完应用  所有数据重新获取
+            refreshData();
+        }
+    }
 
+    @Override
+    public void refreshData() {
+        onCreate(null);
+        mView.refreshList();
     }
 
     @Override

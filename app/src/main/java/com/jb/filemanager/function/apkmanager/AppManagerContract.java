@@ -16,6 +16,9 @@ public class AppManagerContract {
         void initView();
         void initData();
         void initClick();
+        void initBroadcastReceiver();
+        void releaseBroadcastReceiver();
+        void refreshList();
         void finishActivity();
     }
 
@@ -25,6 +28,9 @@ public class AppManagerContract {
         void onPause();
         void onDestroy();
         void onActivityResult(int requestCode, int resultCode, Intent data);
+
+        void refreshData();
+
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
         List<AppGroupBean> getAppInfo();
