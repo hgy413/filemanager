@@ -6,7 +6,7 @@
               android:background="@android:color/white"
               android:orientation="vertical">
 
-    <com.jb.filemanager.ui.widget.ProgressWheel
+    <com.jb.filemanager.commomview.ProgressWheel
         android:id="@+id/zip_progress"
         android:layout_width="40dp"
         android:layout_height="40dp"
