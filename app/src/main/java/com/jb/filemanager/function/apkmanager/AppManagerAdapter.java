@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.apkmanager;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
 import java.util.List;
@@ -24,8 +26,13 @@ import java.util.List;
 class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
 
 
+    private static final String TAG = "mCheckedCount";
+    private int mCheckedCount;
+    private OnItemChosenListener mOnItemChosenListener;
+
     AppManagerAdapter(List<AppGroupBean> groups) {
         super(groups);
+        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中
     }
 
     @Override
@@ -54,6 +61,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
                         childBean.mIsCheckd = true;
                     }
                 }
+                handleCheckedCount();
                 notifyDataSetChanged();
             }
         });
@@ -96,7 +104,29 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         } else {
             appGroupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
         }
+        handleCheckedCount();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
+    public void handleCheckedCount() {
+        mCheckedCount = 0;
+        for (AppGroupBean groupBean : mGroups) {
+            List<AppChildBean> children = groupBean.getChildren();
+            for (AppChildBean childBean : children) {
+                if (childBean.mIsCheckd) {
+                    mCheckedCount++;
+                }
+            }
+            if (mOnItemChosenListener != null) {
+                mOnItemChosenListener.onItemChosen(mCheckedCount);
+            }
+        }
+        Logger.d(TAG, ":    " + mCheckedCount);
     }
 
     @Override
@@ -128,5 +158,13 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
             mTvAppSize = (TextView) convertView.findViewById(R.id.tv_app_size);
             mItemCheckBox = (ItemCheckBox) convertView.findViewById(R.id.icb_child_check);
         }
+    }
+
+    public void setOnItemChosenListener(@NonNull OnItemChosenListener itemChosnListener) {
+        this.mOnItemChosenListener = itemChosnListener;
+    }
+
+    interface OnItemChosenListener {
+        void onItemChosen(int chosenCount);
     }
 }
