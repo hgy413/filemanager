@@ -197,6 +197,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!--app管理的搜索结果页-->
+        <activity
+            android:name=".function.apkmanager.searchresult.AppManagerSearchResultActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <activity android:name=".function.applock.activity.AppLockPreActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>

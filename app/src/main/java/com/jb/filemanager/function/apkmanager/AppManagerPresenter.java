@@ -73,10 +73,10 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
     }
 
     @Override
-    public void onClickBackButton(boolean systemBack) {
+    public void onClickBackButton(boolean isSearchBack) {
         if (mView != null) {
-            if (systemBack) {
-                mView.finishActivity();
+            if (isSearchBack) {
+                mView.refreshTitle();
             } else {
                 mView.finishActivity();
             }

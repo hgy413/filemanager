@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/common_action_bar_with_search"/>
+        <include layout="@layout/app_manager_title_with_search"/>
 
         <ExpandableListView
             android:id="@+id/elv_apk"
@@ -41,4 +41,17 @@
         android:textSize="18dp"
         android:textStyle="bold"
         android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/fl_progress_container"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_50">
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 </RelativeLayout>
