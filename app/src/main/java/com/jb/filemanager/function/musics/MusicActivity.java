@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.musics;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,12 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
@@ -23,7 +21,6 @@ import com.jb.filemanager.util.ConvertUtil;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-import com.jb.filemanager.util.images.Utils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -41,7 +38,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     private MusicContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
     private RecyclerView mRvMuscicList;
-    private Map<String, ArrayList<MusicInfo>> mMusicDateArrayMap;
+    private GroupList<String, MusicInfo> mMusicDataArrayMap;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +56,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     }
     // private start
 
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView() {
         TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
@@ -69,6 +67,34 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         }
 
         mRvMuscicList = (RecyclerView) findViewById(R.id.elv_music);
+        int height = 40;
+        // 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+        float pxValue = this.getResources().getDisplayMetrics().density;
+        height =  (int) (pxValue / height + 0.5f);
+        StickyDecoration decoration = StickyDecoration.Builder
+                .init(new GroupListener() {
+                    @Override
+                    public String getGroupName(int position) {
+                        //获取组名，用于判断是否是同一组
+                        return mMusicDataArrayMap.getGroupKey(position);
+                    }
+
+                    @Override
+                    public View getGroupView(int position) {
+                        //获取自定定义的组View
+                        if (position < mMusicDataArrayMap.size()) {
+                            View view = getLayoutInflater().inflate(R.layout.item_music_group, null, false);
+                            ((TextView) view.findViewById(R.id.tv_music_group_item_title))
+                                    .setText(mMusicDataArrayMap.getGroupKey(position));
+                            view.findViewById(R.id.iv_music_group_item_select);
+                            return view;
+                        } else {
+                            return null;
+                        }
+                    }
+                })
+                .setGroupHeight(height)   //设置高度
+                .build();
         if (mRvMuscicList != null) {
             LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mRvMuscicList.setLayoutManager(manager);
@@ -185,20 +211,20 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     }
 
     @Override
-    public void showMusicList(Map<String, ArrayList<MusicInfo>> mMusicMaps) {
-        mMusicDateArrayMap = mMusicMaps;
+    public void showMusicList(GroupList<String, MusicInfo> mMusicMaps) {
+        mMusicDataArrayMap = mMusicMaps;
         mRvMuscicList.invalidate();
     }
 
 
     public class RecyclerListAdapter extends RecyclerView.Adapter {
         private Context mContext;
-        private Map<String, ArrayList<MusicInfo>> mMusicDataMap;
+        private GroupList<String, MusicInfo> mMusicDataMap;
         private LayoutInflater mInflater;
 
-        public RecyclerListAdapter(@NonNull Context context, Map<String, ArrayList<MusicInfo>> map) {
+        public RecyclerListAdapter(@NonNull Context context, GroupList<String, MusicInfo> mapList) {
             mContext = checkNotNull(context);
-            mMusicDataMap = map;
+            mMusicDataMap = mapList;
         }
 
         @Override
@@ -238,11 +264,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
 
         @Override
         public int getItemCount() {
-            int count = 0;
-            for (int i = 0; mMusicDataMap != null && i < mMusicDataMap.size(); i++) {
-                count += mMusicDataMap.get(i).size();
-            }
-            return 0;
+            return mMusicDataMap.itemSize();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

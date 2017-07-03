@@ -7,9 +7,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
@@ -19,12 +16,12 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
  */
 
 public class MusicPresenter implements MusicContract.Presenter,
-        LoaderManager.LoaderCallbacks<Map<String, ArrayList<MusicInfo>>> {
+        LoaderManager.LoaderCallbacks<GroupList<String, MusicInfo>> {
     private final MusicContract.View mView;
     private final MusicContract.Support mSupport;
     private final LoaderManager mLoaderManager;
     private final MusicsLoader mMusicLoader;
-    private Map<String, ArrayList<MusicInfo>> mMusicMaps;
+    private GroupList<String, MusicInfo> mMusicMaps;
     public MusicPresenter(@NonNull MusicContract.View view, @NonNull MusicContract.Support support,
                           @NonNull MusicsLoader loader, @NonNull LoaderManager manager){
         mView = checkNotNull(view);
@@ -34,12 +31,12 @@ public class MusicPresenter implements MusicContract.Presenter,
 
     }
     @Override
-    public Loader<Map<String, ArrayList<MusicInfo>>> onCreateLoader(int id, Bundle args) {
+    public Loader<GroupList<String,MusicInfo>> onCreateLoader(int id, Bundle args) {
         return mMusicLoader;
     }
 
     @Override
-    public void onLoadFinished(Loader<Map<String, ArrayList<MusicInfo>>> loader, Map<String, ArrayList<MusicInfo>> data) {
+    public void onLoadFinished(Loader<GroupList<String, MusicInfo>> loader, GroupList<String, MusicInfo> data) {
         mMusicMaps = data;
         if (mMusicMaps == null) {
             //Todo 显示没有音乐提示
@@ -50,7 +47,7 @@ public class MusicPresenter implements MusicContract.Presenter,
     }
 
     @Override
-    public void onLoaderReset(Loader<Map<String, ArrayList<MusicInfo>>> loader) {
+    public void onLoaderReset(Loader<GroupList<String, MusicInfo>> loader) {
 
     }
 

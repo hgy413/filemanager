@@ -1,22 +1,22 @@
 package com.jb.filemanager.function.musics;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.support.annotation.ColorInt;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.graphics.Color;
+import android.view.ViewGroup;
+
 /**
  * Created by gavin
  * View悬浮
  * 利用分割线实现悬浮
  */
-
-         import android.graphics.Bitmap;
-         import android.graphics.Canvas;
-         import android.graphics.Color;
-         import android.graphics.Paint;
-         import android.graphics.Rect;
-         import android.support.annotation.ColorInt;
-         import android.support.v7.widget.RecyclerView;
-         import android.text.TextUtils;
-         import android.util.Log;
-         import android.view.View;
-         import android.view.ViewGroup;
 
 
 public class StickyDecoration extends RecyclerView.ItemDecoration {
@@ -26,7 +26,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
     private GroupListener mGroupListener;
 
     private int mGroupHeight = 80;  //悬浮栏高度
-    private boolean isAlignLeft = true; //是否靠右边
+    private boolean isAlignLeft = true; //是否靠左边
     private Paint mGroutPaint;
 
     private StickyDecoration(GroupListener groupListener) {

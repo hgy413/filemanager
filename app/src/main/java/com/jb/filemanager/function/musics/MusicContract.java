@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface MusicContract {
     interface View {
-        void showMusicList(Map<String, ArrayList<MusicInfo>> mMusicMaps);
+        void showMusicList(GroupList<String, MusicInfo> mMusicMaps);
     }
 
     interface Presenter {

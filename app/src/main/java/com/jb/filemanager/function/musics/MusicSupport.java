@@ -44,14 +44,14 @@ public class MusicSupport implements MusicContract.Support {
     }
 
     @Override
-    public Map<String, ArrayList<MusicInfo>> getAllMusicInfo() {
+    public GroupList<String, MusicInfo> getAllMusicInfo() {
         Cursor cursor = mResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 MUSIC_PROPERTIES,
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
                 MUSIC_PROPERTIES[4]
                 );
-        Map<String, ArrayList<MusicInfo>> map = new ArrayMap<>();
+        GroupList<String, MusicInfo> list = new GroupList<>();
         long lastModify = 0L;
         long modify = 0l;
         MusicInfo info = null;
@@ -64,16 +64,16 @@ public class MusicSupport implements MusicContract.Support {
                     lastModify = modify;
                     modify = info.mModified;
                     infoList = new ArrayList<>();
-                    map.put((TimeUtil.getDateByMillisecond(modify)).toString(), infoList);
+                    list.put((TimeUtil.getDateByMillisecond(modify)).toString(), infoList);
                 } else {
-                    infoList = map.get((TimeUtil.getDateByMillisecond(modify)).toString());
+                    infoList = list.get((TimeUtil.getDateByMillisecond(modify)).toString());
                 }
                 if (infoList != null) {
                     infoList.add(info);
                 }
             }
         }
-        return map;
+        return list;
     }
 
     protected MusicInfo cursorToMusicInfo(@NonNull Cursor cursor) {
