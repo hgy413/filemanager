@@ -148,6 +148,7 @@ public class CategoryFragment extends Fragment {
                     case 5:
                         //apk管理
                         startActivity(new Intent(getContext(), AppManagerActivity.class));
+                        break;
                     case 2:
                         startActivity(new Intent(getContext(), ZipFileActivity.class));
                         break;
