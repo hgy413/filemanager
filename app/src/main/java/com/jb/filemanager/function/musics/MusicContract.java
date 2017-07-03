@@ -19,6 +19,8 @@ public interface MusicContract {
         void onCreate(Intent intent);
 
         void onClickBackButton(boolean b);
+
+        void start();
     }
 
     interface Support {

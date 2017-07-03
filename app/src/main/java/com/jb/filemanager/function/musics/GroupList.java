@@ -13,8 +13,8 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
 
     public int itemSize(){
         int count = 0;
-        for (int i = 0; i < super.size(); i++) {
-            count += super.get(i).size();
+        for (int i = 0; i < size(); i++) {
+            count += valueAt(i).size();
         }
         return count;
     }
@@ -24,10 +24,24 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
         int groupIndex = 0;
         int i = 0;
         for(i = 0; i < groupSize ; i++){
-            if (index > this.get(i).size()) {
-                index -= this.get(i).size();
+            if (index > this.valueAt(i).size()) {
+                index -= this.valueAt(i).size();
             } else {
                 return this.keyAt(i);
+            }
+        }
+        return null;
+    }
+
+    public V getItem(int index) {
+        int groupSize = this.size();
+        int groupIndex = 0;
+        int i = 0;
+        for(i = 0; i < groupSize ; i++){
+            if (index > this.valueAt(i).size()) {
+                index -= this.valueAt(i).size();
+            } else {
+                return valueAt(i).get(index);
             }
         }
         return null;

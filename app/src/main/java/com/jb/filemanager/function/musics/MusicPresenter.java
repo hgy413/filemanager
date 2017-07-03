@@ -17,6 +17,8 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 public class MusicPresenter implements MusicContract.Presenter,
         LoaderManager.LoaderCallbacks<GroupList<String, MusicInfo>> {
+
+    private static final int LOADER_ID = 1;
     private final MusicContract.View mView;
     private final MusicContract.Support mSupport;
     private final LoaderManager mLoaderManager;
@@ -65,5 +67,10 @@ public class MusicPresenter implements MusicContract.Presenter,
                 ((AppCompatActivity)mView).finish();
             }
         }
+    }
+
+    @Override
+    public void start() {
+        mLoaderManager.initLoader(LOADER_ID, null, this).forceLoad();
     }
 }

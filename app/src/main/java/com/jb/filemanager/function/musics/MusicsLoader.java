@@ -3,11 +3,6 @@ package com.jb.filemanager.function.musics;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import static com.mopub.common.Preconditions.NoThrow.checkNotNull;
 
 /**
@@ -23,7 +18,13 @@ public class MusicsLoader extends AsyncTaskLoader{
     }
 
     @Override
-    public Map<String, ArrayList<MusicInfo>> loadInBackground() {
-        return mMusicSupport.getAllMusicInfo();
+    protected void onStartLoading() {
+        super.onStartLoading();
+        //forceLoad();
+    }
+
+    @Override
+    public GroupList<String, MusicInfo> loadInBackground() {
+        return (GroupList)mMusicSupport.getAllMusicInfo();
     }
 }

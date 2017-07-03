@@ -2,13 +2,10 @@ package com.jb.filemanager.function.musics;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +18,6 @@ import com.jb.filemanager.util.ConvertUtil;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-
-import java.util.ArrayList;
-import java.util.Map;
-
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
@@ -39,7 +32,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     private ImageFetcher mImageFetcher;
     private RecyclerView mRvMuscicList;
     private GroupList<String, MusicInfo> mMusicDataArrayMap;
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    private RecyclerListAdapter mMusicListAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,25 +45,23 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.ic_default_music);
         mPresenter.onCreate(getIntent());
         initView();
-
     }
     // private start
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView() {
         TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
         if (back != null) {
             back.getPaint().setAntiAlias(true);
-            back.setText(R.string.image_title);
+            back.setText(R.string.music_title);
             back.setOnClickListener(this);
         }
 
         mRvMuscicList = (RecyclerView) findViewById(R.id.elv_music);
         int height = 40;
         // 根据手机的分辨率从 px(像素) 的单位 转成为 dp
-        float pxValue = this.getResources().getDisplayMetrics().density;
-        height =  (int) (pxValue / height + 0.5f);
+        float scale = this.getResources().getDisplayMetrics().density;
+        height =  (int) (height * scale + 0.5f);
         StickyDecoration decoration = StickyDecoration.Builder
                 .init(new GroupListener() {
                     @Override
@@ -95,49 +86,30 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                 })
                 .setGroupHeight(height)   //设置高度
                 .build();
-        if (mRvMuscicList != null) {
-            LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            mRvMuscicList.setLayoutManager(manager);
-            // mAdapter = new MusicAdapter(this);
-           // mRvMuscicList.setAdapter(mAdapter);
-
-            mRvMuscicList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                }
-            });
-//                    setOnScrollListener(new AbsListView.OnScrollListener() {
-//                @Override
-//                public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-//                    // Pause fetcher to ensure smoother scrolling when flinging
-//                    if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-//                        // Before Honeycomb pause image loading on scroll to help
-//                        // with performance
-//                        if (!Utils.hasHoneycomb()) {
-//                            mImageFetcher.setPauseWork(true);
-//                        }
-//                    } else {
-//                        mImageFetcher.setPauseWork(false);
-//                    }
-//                }
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRvMuscicList.setLayoutManager(manager);
+//        if (mRvMuscicList != null) {
+//            // mAdapter = new MusicAdapter(this);
+//           // mRvMuscicList.setAdapter(mAdapter);
 //
+//            mRvMuscicList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
 //                @Override
-//                public void onScroll(AbsListView absListView,
-//                                     int firstVisibleItem,
-//                                     int visibleItemCount,
-//                                     int totalItemCount) {
+//                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//
 //                }
 //            });
-        }
+//        }
+        mRvMuscicList.addItemDecoration(decoration);
+        mMusicListAdapter = new RecyclerListAdapter(this, mMusicDataArrayMap);
+        mRvMuscicList.setAdapter(mMusicListAdapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        if (mPresenter != null) {
-//            mPresenter.onResume();
-//        }
+        if (mPresenter != null) {
+            mPresenter.start();
+        }
         if (mImageFetcher != null) {
             mImageFetcher.setExitTasksEarly(false);
         }
@@ -213,18 +185,20 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     @Override
     public void showMusicList(GroupList<String, MusicInfo> mMusicMaps) {
         mMusicDataArrayMap = mMusicMaps;
-        mRvMuscicList.invalidate();
+        int i = mMusicDataArrayMap.itemSize();
+        mMusicListAdapter.notifyDataSetChanged();
     }
 
 
     public class RecyclerListAdapter extends RecyclerView.Adapter {
         private Context mContext;
-        private GroupList<String, MusicInfo> mMusicDataMap;
+        //private GroupList<String, MusicInfo> mMusicDataArrayMap;
         private LayoutInflater mInflater;
 
         public RecyclerListAdapter(@NonNull Context context, GroupList<String, MusicInfo> mapList) {
+            mInflater = MusicActivity.this.getLayoutInflater();
             mContext = checkNotNull(context);
-            mMusicDataMap = mapList;
+            mMusicDataArrayMap = mapList;
         }
 
         @Override
@@ -232,6 +206,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             View convertView = mInflater.inflate(R.layout.item_music_child, parent, false);
             ViewHolder holder = new ViewHolder(convertView);
             holder.mIvCover = (ImageView) convertView.findViewById(R.id.iv_music_child_item_cover);
+            holder.mIvCover.setImageResource(R.drawable.ic_default_music);
             holder.mTvName = (TextView) convertView.findViewById(R.id.tv_music_child_item_name);
             holder.mTvInfo = (TextView) convertView.findViewById(R.id.tv_music_child_item_info);
             holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_child_item_select);
@@ -242,18 +217,8 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ViewHolder viewHolder = (ViewHolder)holder;
-            ArrayList<MusicInfo> musicArray;
-            MusicInfo info = null;
-            int last = position;
-            for (int i = 0; mMusicDataMap != null && i < mMusicDataMap.size(); i++) {
-                musicArray = mMusicDataMap.get(i);
-                if (last < musicArray.size()) {
-                    info = musicArray.get(i);
-                    break;
-                } else {
-                    last -= musicArray.size();
-                }
-            }
+            MusicInfo info = mMusicDataArrayMap.getItem(position);
+
             if (info != null) {
                 viewHolder.mTvName.setText(info.mName);
                 viewHolder.mTvInfo.setText(info.mArtist + " " +
@@ -264,7 +229,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
 
         @Override
         public int getItemCount() {
-            return mMusicDataMap.itemSize();
+            return mMusicDataArrayMap != null ? mMusicDataArrayMap.itemSize() : 0;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

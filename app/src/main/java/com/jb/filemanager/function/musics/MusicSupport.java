@@ -13,6 +13,7 @@ import com.jb.filemanager.util.TimeUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,14 +60,16 @@ public class MusicSupport implements MusicContract.Support {
 
         while(cursor.moveToNext()) {
             if (null != (info = cursorToMusicInfo(cursor))) {
+                modify = info.mModified;
                 boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
                 if (!isSameDay) {
                     lastModify = modify;
-                    modify = info.mModified;
                     infoList = new ArrayList<>();
-                    list.put((TimeUtil.getDateByMillisecond(modify)).toString(), infoList);
+                    String date = (TimeUtil.getYandMandD(new Date(modify))).toString();
+                    list.put(date, infoList);
                 } else {
-                    infoList = list.get((TimeUtil.getDateByMillisecond(modify)).toString());
+                    String date = (TimeUtil.getYandMandD(new Date(modify))).toString();
+                    infoList = list.get(date);
                 }
                 if (infoList != null) {
                     infoList.add(info);
@@ -97,17 +100,8 @@ public class MusicSupport implements MusicContract.Support {
                         info.mName = info.mFullPath.substring(info.mFullPath.lastIndexOf(File.separator) + 1);
                     }
                 }
-//                if (mPresenterRef != null && mPresenterRef.get() != null) {
-//                    if (isChecked) {
-//                        if (mPresenterRef.get().isSelected(file)) {
-//                            mPresenterRef.get().addOrRemoveSelected(file);
-//                        }
-//                    } else {
-//                        if (!mPresenterRef.get().isSelected(file)) {
-//                            mPresenterRef.get().addOrRemoveSelected(file);
-//                        }
-//                    }
-//                }
+            } else {
+                info = null;
             }
         }
         return info;
