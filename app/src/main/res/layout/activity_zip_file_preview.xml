@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hahahahah"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="40dp"/>
+
+    <com.jb.filemanager.function.zipfile.view.BreadcrumbNavigation
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:paddingLeft="16dp"
+        android:background="#88000000"
+        android:paddingRight="16dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"/>
+    </com.jb.filemanager.function.zipfile.view.BreadcrumbNavigation>
+
+    <ListView
+        android:id="@+id/zip_pre_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

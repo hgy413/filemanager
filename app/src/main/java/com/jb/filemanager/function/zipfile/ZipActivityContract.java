@@ -1,7 +1,7 @@
 package com.jb.filemanager.function.zipfile;
 
-import com.jb.filemanager.function.zipfile.bean.ZipFileGroup;
-import com.jb.filemanager.function.zipfile.bean.ZipFileItem;
+import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
+import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 
 import java.util.List;
 
@@ -12,14 +12,14 @@ import java.util.List;
 public interface ZipActivityContract {
     interface View {
         void setWidgetsState(boolean isLoading);
-        void setListData(List<ZipFileGroup> data);
+        void setListData(List<ZipFileGroupBean> data);
         void notifyDataSetChanged();
-        void showOperationDialog(ZipFileItem fileItem);
+        void showOperationDialog(ZipFileItemBean fileItem);
     }
     interface Presenter{
         void onCreate();
         void onItemClick(int groupPosition, int childPosition);
-        void extractZipFile(ZipFileItem fileItem);
+        void extractZipFile(ZipFileItemBean fileItem);
         void onDestroy();
     }
 }

@@ -4,8 +4,8 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.zipfile.bean.ZipFileGroup;
-import com.jb.filemanager.function.zipfile.bean.ZipFileItem;
+import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
+import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.util.StorageUtil;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.file.FileUtil;
@@ -23,7 +23,7 @@ import java.util.List;
 public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
 
     private ZipActivityContract.View mView;
-    private List<ZipFileGroup> mGroupList = new ArrayList<>();
+    private List<ZipFileGroupBean> mGroupList = new ArrayList<>();
 
     public ZipFileActivityPresenter(ZipActivityContract.View view) {
         mView = view;
@@ -39,13 +39,13 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
     @Override
     public void onItemClick(int groupPosition, int childPosition) {
         if (mGroupList != null) {
-            ZipFileItem child = mGroupList.get(groupPosition).getChild(childPosition);
+            ZipFileItemBean child = mGroupList.get(groupPosition).getChild(childPosition);
             mView.showOperationDialog(child);
         }
     }
 
     @Override
-    public void extractZipFile(ZipFileItem fileItem) {
+    public void extractZipFile(ZipFileItemBean fileItem) {
 
     }
 
@@ -91,17 +91,18 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
                     if (!TextUtils.isEmpty(extension) && (extension.equalsIgnoreCase("zip")
                             || extension.equalsIgnoreCase("rar")
                             || extension.equalsIgnoreCase("7z"))) {
+//                    if (ZipUtils.isValidPackFile(file)) { // 很耗时
                         boolean exist = false;
-                        for (ZipFileGroup group : mGroupList) {
+                        for (ZipFileGroupBean group : mGroupList) {
                             if (group.getGroupTime() == TimeUtil.getYMDTime(file.lastModified())) {
                                 exist = true;
-                                group.getZipFileList().add(new ZipFileItem(file));
+                                group.getZipFileList().add(new ZipFileItemBean(file));
                             }
                         }
                         if (!exist) {
-                            List<ZipFileItem> list = new ArrayList<>();
-                            list.add(new ZipFileItem(file));
-                            mGroupList.add(new ZipFileGroup(list));
+                            List<ZipFileItemBean> list = new ArrayList<>();
+                            list.add(new ZipFileItemBean(file));
+                            mGroupList.add(new ZipFileGroupBean(list));
                         }
                     }
                 }
@@ -124,9 +125,9 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
         }
 
         private void sortResult() {
-            Collections.sort(mGroupList, new Comparator<ZipFileGroup>() {
+            Collections.sort(mGroupList, new Comparator<ZipFileGroupBean>() {
                 @Override
-                public int compare(ZipFileGroup o1, ZipFileGroup o2) {
+                public int compare(ZipFileGroupBean o1, ZipFileGroupBean o2) {
                     return (int) (o1.getGroupTime() - o2.getGroupTime());
                 }
             });

@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.zipfile;
+package com.jb.filemanager.function.zipfile.dialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +7,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.zipfile.bean.ZipFileItem;
+import com.jb.filemanager.function.zipfile.ZipFilePreViewActivity;
+import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.ui.dialog.BaseDialog;
 
 /**
@@ -20,9 +21,9 @@ import com.jb.filemanager.ui.dialog.BaseDialog;
 public class ZipFileOperationDialog extends BaseDialog implements View.OnClickListener {
 
     private Context mContext;
-    private ZipFileItem mFile;
+    private ZipFileItemBean mFile;
 
-    public ZipFileOperationDialog(Activity act, ZipFileItem fileItem) {
+    public ZipFileOperationDialog(Activity act, ZipFileItemBean fileItem) {
         super(act, true);
         mContext = getContext().getApplicationContext();
         mFile = fileItem;
@@ -48,6 +49,8 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_view:
                 Toast.makeText(mContext, "view", Toast.LENGTH_SHORT).show();
+                ZipFilePreViewActivity.browserFile(mContext, mFile.getFile().getPath(), null);
+                dismiss();
                 break;
             case R.id.btn_extract:
                 Toast.makeText(mContext, "extrace", Toast.LENGTH_SHORT).show();

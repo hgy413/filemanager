@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.jb.filemanager">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.jb.filemanager">
 
     <!-- 允许程序访问精良位置		?? -->
     <!-- 获取帐号权限，用于获取gmail帐号，必须配置 -->
@@ -99,8 +99,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -125,6 +125,10 @@
         <!-- 压缩包 -->
         <activity
             android:name=".function.zipfile.ZipFileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+        <activity
+            android:name=".function.zipfile.ZipFilePreViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
@@ -343,7 +347,8 @@
             </intent-filter>
         </receiver>
 
-        <provider android:name="com.gau.go.gostaticsdk.StaticDataContentProvider"
+        <provider
+            android:name="com.gau.go.gostaticsdk.StaticDataContentProvider"
             android:authorities="com.jb.filemanager.staticsdkprovider"/>
         <!-- authorities命名规则为"包名.chargelocker.MultiprocessSharedPreferences"，如短信配置为"com.jb.gosms.chargelocker.MultiprocessSharedPreferences" -->
         <provider
@@ -382,7 +387,7 @@
         <provider
             android:name="com.jiubang.commerce.buychannel.MPSharedPreferences"
             android:authorities="com.jb.filemanager.commerce.MPSharedPreferences"
-            android:exported="false" />
+            android:exported="false"/>
         <!-- "买量SDK相关声明 end" -->
 
     </application>

@@ -6,14 +6,14 @@ import java.io.File;
  * Created by xiaoyu on 2017/6/30 9:57.
  */
 
-public class ZipFileItem {
+public class ZipFileItemBean {
     private String mFileName;
     private long mFileSize;
     private boolean mSelected;
     private long mLastModifiedTime;
     private File mFile;
 
-    public ZipFileItem(File file) {
+    public ZipFileItemBean(File file) {
         if (file.exists() && file.isFile()) {
             mFile = file;
             mFileName = file.getName();

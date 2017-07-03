@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.zipfile.bean.ZipFileGroup;
-import com.jb.filemanager.function.zipfile.bean.ZipFileItem;
-import com.jb.filemanager.ui.widget.ProgressWheel;
+import com.jb.filemanager.commomview.ProgressWheel;
+import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
+import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
+import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
 import com.jb.filemanager.util.ConvertUtils;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     }
 
     @Override
-    public void setListData(List<ZipFileGroup> data) {
+    public void setListData(List<ZipFileGroupBean> data) {
         mAdapter = new ZipListAdapter(data);
         mListView.setAdapter(mAdapter);
     }
@@ -90,7 +91,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     }
 
     @Override
-    public void showOperationDialog(ZipFileItem fileItem) {
+    public void showOperationDialog(ZipFileItemBean fileItem) {
         if (mOperationDialog != null && mOperationDialog.isShowing()) {
             mOperationDialog.dismiss();
             mOperationDialog = null;
@@ -101,9 +102,9 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
 
     private class ZipListAdapter extends BaseExpandableListAdapter {
 
-        private List<ZipFileGroup> mGroupList;
+        private List<ZipFileGroupBean> mGroupList;
 
-        ZipListAdapter(List<ZipFileGroup> data) {
+        ZipListAdapter(List<ZipFileGroupBean> data) {
             mGroupList = data;
         }
 
@@ -118,12 +119,12 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         }
 
         @Override
-        public ZipFileGroup getGroup(int groupPosition) {
+        public ZipFileGroupBean getGroup(int groupPosition) {
             return mGroupList.get(groupPosition);
         }
 
         @Override
-        public ZipFileItem getChild(int groupPosition, int childPosition) {
+        public ZipFileItemBean getChild(int groupPosition, int childPosition) {
             return mGroupList.get(groupPosition).getChild(childPosition);
         }
 
@@ -154,7 +155,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
             } else {
                 holder = (ViewHolder) convertView.getTag(R.layout.group_zip_file);
             }
-            ZipFileGroup group = getGroup(groupPosition);
+            ZipFileGroupBean group = getGroup(groupPosition);
             holder.groupTime.setText(group.getGroupTimeStr());
             holder.groupCheckBox.setImageResource(R.drawable.choose_all);
             return convertView;
@@ -174,7 +175,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
             } else {
                 holder = (ViewHolder) convertView.getTag(R.layout.item_zip_file);
             }
-            ZipFileItem child = getChild(groupPosition, childPosition);
+            ZipFileItemBean child = getChild(groupPosition, childPosition);
             holder.icon.setImageResource(R.drawable.common_default_app_icon);
             holder.name.setText(child.getFileName());
             holder.size.setText(ConvertUtils.formatFileSize(child.getFileSize()));

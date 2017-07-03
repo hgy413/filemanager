@@ -8,14 +8,14 @@ import java.util.List;
  * Created by xiaoyu on 2017/6/29 17:45.
  */
 
-public class ZipFileGroup {
+public class ZipFileGroupBean {
     private long mGroupTime;
     private String mGroupTimeStr;
-    private List<ZipFileItem> mZipFileList;
+    private List<ZipFileItemBean> mZipFileList;
     private int mChildCount;
     private boolean mChecked;
 
-    public ZipFileGroup(List<ZipFileItem> list) {
+    public ZipFileGroupBean(List<ZipFileItemBean> list) {
         if (list != null && list.size() > 0) {
             mZipFileList = list;
             mGroupTime = TimeUtil.getYMDTime(list.get(0).getLastModifiedTime());
@@ -24,7 +24,7 @@ public class ZipFileGroup {
         }
     }
 
-    public ZipFileItem getChild(int position) {
+    public ZipFileItemBean getChild(int position) {
         return mZipFileList.get(position);
     }
 
@@ -36,11 +36,11 @@ public class ZipFileGroup {
         mGroupTime = groupTime;
     }
 
-    public List<ZipFileItem> getZipFileList() {
+    public List<ZipFileItemBean> getZipFileList() {
         return mZipFileList;
     }
 
-    public void setZipFileList(List<ZipFileItem> zipFileList) {
+    public void setZipFileList(List<ZipFileItemBean> zipFileList) {
         mZipFileList = zipFileList;
     }
 
