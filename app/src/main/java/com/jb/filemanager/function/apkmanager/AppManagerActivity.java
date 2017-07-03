@@ -250,7 +250,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
 //            inputManager.hideSoftInputFromWindow(mEtCommonActionBarWithSearchSearch.getWindowToken(), InputMethodManager.RESULT_HIDDEN);//手动隐藏输入法  貌似无效?? 至少米3上是有问题的
             /*mEtCommonActionBarWithSearchSearch.clearFocus();
             inputManager.toggleSoftInput(0,InputMethodManager.HIDE_NOT_ALWAYS);*/
-            hideInputMethod(this);
+//            hideInputMethod(this);
 //            onBackPressed();
             goToSearchResult(mEtCommonActionBarWithSearchSearch.getEditableText().toString());
             return;
@@ -262,7 +262,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         mEtCommonActionBarWithSearchSearch.requestFocus();//请求焦点
         mEtCommonActionBarWithSearchSearch.setText(mAppInfo.get(0).getChild(0).mAppName);//默认内容是第一个的APP的名字
         mEtCommonActionBarWithSearchSearch.selectAll();//全选
-        inputManager.showSoftInput(mEtCommonActionBarWithSearchSearch, InputMethodManager.RESULT_SHOWN);//手动调起输入法
+        inputManager.showSoftInput(mEtCommonActionBarWithSearchSearch, InputMethodManager.SHOW_IMPLICIT);//手动调起输入法
         mIsSearchInput = true;
     }
 
@@ -285,17 +285,20 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
 
     //去往搜索界面
     private void goToSearchResult(String keyTag) {
-//        mFlProgressContainer.setVisibility(View.VISIBLE);
-        /*mFlProgressContainer.requestFocus();
+        mFlProgressContainer.setVisibility(View.VISIBLE);
+        mFlProgressContainer.requestFocus();
         mFlProgressContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(AppManagerActivity.this, "please wait", Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
         mHandler = new Handler();
-        /*InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        /*mEtCommonActionBarWithSearchSearch.clearFocus();
+        mIvCommonActionBarWithSearchSearch.requestFocus();
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(mEtCommonActionBarWithSearchSearch.getWindowToken(), InputMethodManager.RESULT_HIDDEN);//手动隐藏输入法  貌似无效?? 至少米3上是有问题的*/
+        hideInputMethod(this);
         final ArrayList<SearchResultBean> mResultPackage = new ArrayList<>();
         Toast.makeText(AppManagerActivity.this, "我要搜索" + keyTag, Toast.LENGTH_SHORT).show();
         //在本界面处理搜索结果
