@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
+    android:id="@+id/ll_music_item_container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="48dp">
@@ -46,7 +47,7 @@
         android:gravity="center_vertical"
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_main_storage_style_grid" />
+        android:src="@drawable/ic_drawer_about" />
 
 
 </LinearLayout>

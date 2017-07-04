@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -22,6 +23,7 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
  * Created by bool on 17-6-30.
+ * 显示音乐列表
  */
 
 public class MusicActivity extends BaseActivity implements MusicContract.View,
@@ -33,10 +35,14 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     private RecyclerView mRvMuscicList;
     private GroupList<String, MusicInfo> mMusicDataArrayMap;
     private RecyclerListAdapter mMusicListAdapter;
+    private LinearLayout mLlBottomOperateFirstContainer;
+    private boolean[] mItemSelected;
+    private int mSelecedCount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
+        mItemSelected = new boolean[0];
         MusicSupport support = new MusicSupport();
         mPresenter = new MusicPresenter(this, support, new MusicsLoader(this, support),
                 getSupportLoaderManager());
@@ -102,6 +108,8 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         mRvMuscicList.addItemDecoration(decoration);
         mMusicListAdapter = new RecyclerListAdapter(this, mMusicDataArrayMap);
         mRvMuscicList.setAdapter(mMusicListAdapter);
+
+        mLlBottomOperateFirstContainer = (LinearLayout)findViewById(R.id.ll_common_operate_bar_container);
     }
 
     @Override
@@ -185,7 +193,11 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     @Override
     public void showMusicList(GroupList<String, MusicInfo> mMusicMaps) {
         mMusicDataArrayMap = mMusicMaps;
-        int i = mMusicDataArrayMap.itemSize();
+        mItemSelected = new boolean[mMusicMaps.itemSize()];
+        for (int i = 0; i < mItemSelected.length; i++) {
+            mItemSelected[i] = false;
+        }
+        mSelecedCount = 0;
         mMusicListAdapter.notifyDataSetChanged();
     }
 
@@ -210,6 +222,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             holder.mTvName = (TextView) convertView.findViewById(R.id.tv_music_child_item_name);
             holder.mTvInfo = (TextView) convertView.findViewById(R.id.tv_music_child_item_info);
             holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_child_item_select);
+            holder.setCliceListener();
             convertView.setTag(holder);
             return holder;
         }
@@ -232,14 +245,50 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             return mMusicDataArrayMap != null ? mMusicDataArrayMap.itemSize() : 0;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             ImageView mIvCover;
             TextView mTvName;
             TextView mTvInfo;
             ImageView mIvSelect;
             public ViewHolder(View itemView) {
                 super(itemView);
+                itemView.setOnClickListener(this);
             }
+
+            public void setCliceListener(){
+                mIvSelect.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                int posion = getAdapterPosition();
+                switch (v.getId()) {
+
+                    case R.id.iv_music_child_item_select:
+                        if (mItemSelected[posion]) {
+                            mItemSelected[posion] = false;
+                            mIvSelect.setImageResource(R.drawable.ic_drawer_about);
+                            MusicActivity.this.mSelecedCount--;
+                        } else {
+                            mItemSelected[posion] = true;
+                            mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
+                            MusicActivity.this.mSelecedCount++;
+                        }
+                        break;
+                    default:
+                        int i = v.getId();
+                        int j = R.id.iv_music_child_item_select;
+
+
+                }
+
+                if (MusicActivity.this.mSelecedCount > 0) {
+                    mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
+                } else {
+                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                }
+            }
+
         }
     }
 }

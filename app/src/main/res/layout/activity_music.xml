@@ -7,12 +7,20 @@
     android:background="#347865">
 
     <include layout="@layout/common_action_bar_with_search" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/elv_music"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/elv_music"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <include layout="@layout/common_operate_bar"/>
+
+    </FrameLayout>
+
 
 </LinearLayout>
