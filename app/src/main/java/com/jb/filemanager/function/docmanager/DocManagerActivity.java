@@ -325,14 +325,13 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 handleSearchButtonClick(mIsSearchInput);
                 break;
             case R.id.tv_common_operate_bar_copy:
-                Toast.makeText(DocManagerActivity.this, "copy", Toast.LENGTH_SHORT).show();
-                handleCheckedData();
+                handleDataCopy();
                 break;
             case R.id.tv_common_operate_bar_cut:
-                Toast.makeText(DocManagerActivity.this, "cut", Toast.LENGTH_SHORT).show();
+                handleDataCut();
                 break;
             case R.id.tv_common_operate_bar_delete:
-                Toast.makeText(DocManagerActivity.this, "delete", Toast.LENGTH_SHORT).show();
+                handleDataDelete();
                 break;
             case R.id.tv_common_operate_bar_more:
 //                Toast.makeText(DocManagerActivity.this, "more", Toast.LENGTH_SHORT).show();
@@ -396,8 +395,22 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     //处理选中的数据
-    private void handleCheckedData() {
+    private void handleDataCopy() {
+        List<DocChildBean> checkedDoc = getCheckedDoc();
+        Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will copy", Toast.LENGTH_SHORT).show();
+        // TODO: 2017/7/4 add by --miwo 此处应有复制的逻辑
+    }
 
+    private void handleDataDelete() {
+        List<DocChildBean> checkedDoc = getCheckedDoc();
+        Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will delete", Toast.LENGTH_SHORT).show();
+        // TODO: 2017/7/4 add by --miwo 此处应有删除的逻辑
+    }
+
+    private void handleDataCut() {
+        List<DocChildBean> checkedDoc = getCheckedDoc();
+        Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will cut", Toast.LENGTH_SHORT).show();
+        // TODO: 2017/7/4 add by --miwo 此处应有剪切的逻辑
     }
 
     private void handleSearchButtonClick(boolean isSearchMode) {
