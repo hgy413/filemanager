@@ -23,11 +23,8 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
-<<<<<<< HEAD
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
-=======
 import com.jb.filemanager.function.download.DownloadActivity;
->>>>>>> Download page
 import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.function.video.VideoActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
