@@ -167,6 +167,13 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mTvBottomDelete.setOnClickListener(this);
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
         mIvCommonActionBarWithSearchSearch.setOnClickListener(this);
+        mElvApk.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition,
+                                        int childPosition, long id) {
+                return false;
+            }
+        });
     }
 
     @Override
