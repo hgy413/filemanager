@@ -43,7 +43,9 @@
     <!-- 允许读写系统设置项	若干模块 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 允许程序扩展或收缩状态栏	快捷栏 -->
-    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+    <!--设置壁纸-->
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <!--
      充许用户在设置(设置 -> 安全 -> 高级 -> 有权查看使用情况的应用(Apps with
 	 * usage access))中授权后可访问用户的应用使用统计信息，如识当前打开的应用

@@ -8,11 +8,9 @@
 
     <include layout="@layout/common_action_bar_with_search" />
 
-    <ExpandableListView
-        android:id="@+id/elv_image"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_image_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ExpandableListView>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

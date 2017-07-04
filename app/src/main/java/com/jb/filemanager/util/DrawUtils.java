@@ -45,7 +45,9 @@ public class DrawUtils {
      * @return
      */
     public static Bitmap drawable2Bitmap(Drawable drawable) {
-
+        if (drawable == null) {
+            return null;
+        }
         int height = drawable.getIntrinsicHeight();
         int width = drawable.getIntrinsicWidth();
         Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888

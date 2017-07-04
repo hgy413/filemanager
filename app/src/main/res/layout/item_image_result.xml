@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:orientation="vertical"
+             android:layout_width="100dp"
+             android:layout_height="100dp"
+             tools:background="@color/ad_color_8acb29">
+
+    <ImageView
+        android:id="@+id/item_image_result_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_about_logo"/>
+
+    <com.jb.filemanager.commomview.GroupSelectBox
+        android:id="@+id/item_image_result_gsb"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_about_logo"
+        android:layout_gravity="right|bottom"/>
+
+</FrameLayout>
