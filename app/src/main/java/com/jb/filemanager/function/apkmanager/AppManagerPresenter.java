@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.util.AppUtils;
 
 import java.util.ArrayList;
@@ -19,8 +20,8 @@ import java.util.List;
 class AppManagerPresenter implements AppManagerContract.Presenter {
     private AppManagerContract.View mView;
     private AppManagerContract.Support mSupport;
-    private List<AppChildBean> mUserAppBean;
-    private List<AppChildBean> mSystemAppBean;
+    private List<AppItemInfo> mUserAppBean;
+    private List<AppItemInfo> mSystemAppBean;
 
     AppManagerPresenter(AppManagerContract.View view, AppManagerContract.Support support) {
         mView = view;
@@ -29,10 +30,10 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
 
     @Override
     public void onCreate(Intent intent) {
-        List<AppChildBean> installAppInfo = mSupport.getInstallAppInfo();
+        List<AppItemInfo> installAppInfo = mSupport.getInstallAppInfo();
         mUserAppBean = new ArrayList<>();
         mSystemAppBean = new ArrayList<>();
-        for (AppChildBean appBean : installAppInfo) {
+        for (AppItemInfo appBean : installAppInfo) {
             if (appBean.mIsSysApp) {
                 mSystemAppBean.add(appBean);
             } else {

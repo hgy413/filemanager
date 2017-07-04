@@ -3,6 +3,7 @@ package com.jb.filemanager.function.apkmanager;
 
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.adapter.BaseGroupsDataBean;
+import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 
 import java.util.List;
 
@@ -13,13 +14,13 @@ import java.util.List;
  * Date: 2017/6/29 15:02
  */
 
-public class AppGroupBean extends BaseGroupsDataBean<AppChildBean> {
+public class AppGroupBean extends BaseGroupsDataBean<AppItemInfo> {
 
     String mGroupTitle;
     GroupSelectBox.SelectState mSelectState;
     boolean mIsExpand;
 
-    protected AppGroupBean(List<AppChildBean> children, String title, GroupSelectBox.SelectState selectState, boolean isExpand) {
+    protected AppGroupBean(List<AppItemInfo> children, String title, GroupSelectBox.SelectState selectState, boolean isExpand) {
         super(children);
         mGroupTitle = title;
         mSelectState = selectState;

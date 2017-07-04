@@ -2,6 +2,8 @@ package com.jb.filemanager.function.apkmanager;
 
 import android.content.Intent;
 
+import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
+
 import java.util.List;
 
 /**
@@ -37,6 +39,6 @@ public class AppManagerContract {
     }
 
     interface Support {
-        List<AppChildBean> getInstallAppInfo();
+        List<AppItemInfo> getInstallAppInfo();
     }
 }

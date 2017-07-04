@@ -1,12 +1,8 @@
 package com.jb.filemanager.function.apkmanager;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
+import com.jb.filemanager.function.scanframe.clean.AppManager;
 
-import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.util.AppUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +13,7 @@ import java.util.List;
  */
 
 class AppManagerSupport implements AppManagerContract.Support {
-    @Override
+    /*@Override
     public List<AppChildBean> getInstallAppInfo() {
         PackageManager packageManager = TheApplication.getAppContext().getPackageManager();
         List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
@@ -30,5 +26,10 @@ class AppManagerSupport implements AppManagerContract.Support {
             baseAppBeenList.add(baseAppBean);
         }
         return baseAppBeenList;
+    }*/
+
+    @Override
+    public List<AppItemInfo> getInstallAppInfo() {
+        return AppManager.getIntance().getNotSystemApps();
     }
 }

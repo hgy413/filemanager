@@ -10,6 +10,8 @@ import com.jb.filemanager.function.scanframe.bean.appBean.BaseAppBean;
  */
 
 public class AppChildBean extends BaseAppBean {
-    boolean mIsCheckd;
-    String mAppSize;
+    public boolean mIsChecked;
+    public long mAppSize;
+    public int mVersionCode;
+    public String mVersionName;
 }

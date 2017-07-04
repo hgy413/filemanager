@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
+import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
+import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
@@ -52,13 +54,13 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
             public void onClick(View view) {
                 if (appGroupBean.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {
                     appGroupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
-                    for (AppChildBean childBean : appGroupBean.getChildren()) {
-                        childBean.mIsCheckd = false;
+                    for (AppItemInfo childBean : appGroupBean.getChildren()) {
+                        childBean.mIsChecked = false;
                     }
                 } else {
                     appGroupBean.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
-                    for (AppChildBean childBean : appGroupBean.getChildren()) {
-                        childBean.mIsCheckd = true;
+                    for (AppItemInfo childBean : appGroupBean.getChildren()) {
+                        childBean.mIsChecked = true;
                     }
                 }
                 handleCheckedCount();
@@ -73,17 +75,17 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child, parent, false);
         ChildItemViewHolder viewHolder = new ChildItemViewHolder(convertView);
         final AppGroupBean appGroupBean = mGroups.get(groupPosition);
-        final AppChildBean child = appGroupBean.getChild(childPosition);
-        IconLoader.getInstance().displayImage(child.mPackageName, viewHolder.mIvAppIcon);
+        final AppItemInfo child = appGroupBean.getChild(childPosition);
+        IconLoader.getInstance().displayImage(child.mAppPackageName, viewHolder.mIvAppIcon);
         viewHolder.mTvAppName.setText(child.mAppName);
-        viewHolder.mTvAppSize.setText(child.mAppSize);
+        viewHolder.mTvAppSize.setText(ConvertUtils.formatFileSize(child.mAppCodeSize));
         viewHolder.mItemCheckBox.setImageRes(R.drawable.choose_none,
                 R.drawable.choose_all);
-        viewHolder.mItemCheckBox.setChecked(child.mIsCheckd);
+        viewHolder.mItemCheckBox.setChecked(child.mIsChecked);
         viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                child.mIsCheckd = !child.mIsCheckd;
+                child.mIsChecked = !child.mIsChecked;
                 updateGroupState(appGroupBean);
             }
         });
@@ -93,9 +95,9 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     private void updateGroupState(AppGroupBean appGroupBean) {
         boolean isAllSelect = true;
         boolean isPartSelect = false;
-        for (AppChildBean childBean : appGroupBean.getChildren()) {
-            isAllSelect = isAllSelect && childBean.mIsCheckd;
-            isPartSelect = isPartSelect || childBean.mIsCheckd;
+        for (AppItemInfo childBean : appGroupBean.getChildren()) {
+            isAllSelect = isAllSelect && childBean.mIsChecked;
+            isPartSelect = isPartSelect || childBean.mIsChecked;
         }
         if (isAllSelect) {
             appGroupBean.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
@@ -116,9 +118,9 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     public void handleCheckedCount() {
         mCheckedCount = 0;
         for (AppGroupBean groupBean : mGroups) {
-            List<AppChildBean> children = groupBean.getChildren();
-            for (AppChildBean childBean : children) {
-                if (childBean.mIsCheckd) {
+            List<AppItemInfo> children = groupBean.getChildren();
+            for (AppItemInfo childBean : children) {
+                if (childBean.mIsChecked) {
                     mCheckedCount++;
                 }
             }

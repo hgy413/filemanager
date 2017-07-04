@@ -25,6 +25,7 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.searchresult.AppManagerSearchResultActivity;
 import com.jb.filemanager.function.apkmanager.searchresult.SearchResultBean;
+import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
@@ -235,10 +236,10 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
                 break;
             case R.id.tv_bottom_delete:
                 Toast.makeText(AppManagerActivity.this, mChosenCount + "个app被选中了呢   欧尼酱", Toast.LENGTH_SHORT).show();
-                List<AppChildBean> children = mAppInfo.get(0).getChildren();
-                for (AppChildBean childBean : children) {
-                    if (childBean.mIsCheckd) {
-                        uninstallApp(childBean.mPackageName);
+                List<AppItemInfo> children = mAppInfo.get(0).getChildren();
+                for (AppItemInfo childBean : children) {
+                    if (childBean.mIsChecked) {
+                        uninstallApp(childBean.mAppPackageName);
                     }
                 }
                 break;
@@ -310,15 +311,15 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         //在本界面处理搜索结果
         keyTag = keyTag.toLowerCase();
         for (AppGroupBean groupBean : mAppInfo) {
-            List<AppChildBean> children = groupBean.getChildren();
+            List<AppItemInfo> children = groupBean.getChildren();
             if (children == null || children.isEmpty()) {
                 continue;
             }
-            for (AppChildBean childBean : children) {
-                if (childBean.mAppName.toLowerCase().contains(keyTag) || childBean.mPackageName.toLowerCase().contains(keyTag)) {
+            for (AppItemInfo childBean : children) {
+                if (childBean.mAppName.toLowerCase().contains(keyTag) || childBean.mAppPackageName.toLowerCase().contains(keyTag)) {
                     SearchResultBean resultBean = new SearchResultBean();
                     resultBean.mAppName = childBean.mAppName;
-                    resultBean.mPackageName = childBean.mPackageName;
+                    resultBean.mPackageName = childBean.mAppPackageName;
                     mResultPackage.add(resultBean);
                 }
             }
