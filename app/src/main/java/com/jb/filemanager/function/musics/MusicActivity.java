@@ -137,6 +137,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             mPresenter.onClickBackButton(true);
         }
     }
+
     @Override
     protected void onPause() {
         if (mPresenter != null) {

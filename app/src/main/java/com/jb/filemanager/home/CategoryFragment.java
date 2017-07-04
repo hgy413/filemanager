@@ -23,8 +23,13 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
+<<<<<<< HEAD
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
+=======
+import com.jb.filemanager.function.download.DownloadActivity;
+>>>>>>> Download page
 import com.jb.filemanager.function.image.ImageActivity;
+import com.jb.filemanager.function.video.VideoActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.function.musics.MusicActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
@@ -92,12 +97,12 @@ public class CategoryFragment extends Fragment {
 
         // TODO test data
         CategoryBean bean1 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
+        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);//temp for music
         CategoryBean bean3 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
+        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_image, "download", 99);// temp for download
         CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_image, "doc", 13);//temp for doc
         CategoryBean bean6 = new CategoryBean(R.drawable.ic_main_category_image, "apk", 15);//temp for apk
-        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
+        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_image, "video", 199);// temp for video
         CategoryBean bean8 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
         CategoryBean bean9 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
         CategoryBean bean10 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
@@ -146,16 +151,22 @@ public class CategoryFragment extends Fragment {
                     case 1:
                         startActivity(new Intent(getContext(), MusicActivity.class));
                         break;
-                    case 5:
-                        //apk管理
-                        startActivity(new Intent(getContext(), AppManagerActivity.class));
-                        break;
                     case 2:
                         startActivity(new Intent(getContext(), ZipFileActivity.class));
                         break;
                     case 4:
                         //文档管理
                         startActivity(new Intent(getContext(), DocManagerActivity.class));
+                        break;
+                    case 3:
+                    startActivity(new Intent(getContext(), DownloadActivity.class));
+                        break;
+                    case 5:
+                    //apk管理
+                    startActivity(new Intent(getContext(), AppManagerActivity.class));
+                        break;
+                    case 7:
+                        startActivity(new Intent(getContext(), VideoActivity.class));
                         break;
                     default:
                         break;

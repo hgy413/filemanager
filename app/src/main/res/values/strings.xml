@@ -67,7 +67,10 @@
 
     <!-- 音乐管理页 -->
     <string name="music_title">Music</string>
-
+     <!--视频管理页 -->
+    <string name="video_title">Video</string>
+    <!-- 下载管理页 -->
+    <string name="download_title">Download</string>
 
 
     <!-- 文件类型 -->
@@ -114,7 +117,7 @@
     <string name="set_graphic_password_message_set_question">if you forget the password you can be reset it by answering insecure question</string>
     <string name="set_graphic_password_message_edit_hint">Enter the answer</string>
     <string name="set_graphic_password_answer_edit_short_tip">Please enter the answer</string>
-    <string name="app_lock_setting_reveal_intruder_tip" >Take a photo of someone entering wrong code</string>
+    <string name="app_lock_setting_reveal_intruder_tip">Take a photo of someone entering wrong code</string>
     <string name="app_lock_group_apps_name">APP</string>
     <string name="intruder_shot_info_title">Shot intruders</string>
     <string name="intruder_shot_info_desc">Input wrong code over %1$d times would be taken pic as a intruder.</string>

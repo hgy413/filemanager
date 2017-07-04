@@ -3,6 +3,7 @@ package com.jb.filemanager.function.musics;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
@@ -27,12 +28,13 @@ import static com.mopub.common.Preconditions.NoThrow.checkNotNull;
  */
 
 public class MusicSupport implements MusicContract.Support {
+    private static final Uri NUSIC_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     private static final String[] MUSIC_PROPERTIES = {
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.DISPLAY_NAME,
             MediaStore.Audio.Media.SIZE,
             MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.DATE_MODIFIED,
+            MediaStore.Audio.Media.DATE_ADDED,
             MediaStore.Audio.Media.MIME_TYPE,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.ARTIST
@@ -46,7 +48,7 @@ public class MusicSupport implements MusicContract.Support {
 
     @Override
     public GroupList<String, MusicInfo> getAllMusicInfo() {
-        Cursor cursor = mResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = mResolver.query(NUSIC_URI,
                 MUSIC_PROPERTIES,
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
@@ -107,8 +109,17 @@ public class MusicSupport implements MusicContract.Support {
         return info;
     }
 
-    int getMuscisNum() {
-        //mResolver.query()
-        return 0;
+    @Override
+    public int getMuscisNum() {
+        int musicCount = 0;
+        Cursor cursor = mResolver.query(NUSIC_URI,
+                new String[]{MediaStore.Audio.Media._COUNT},
+                MediaStore.Audio.Media.SIZE + " > 0 ",
+                null,
+                null);
+        if (cursor.moveToNext()){
+            musicCount = cursor.getInt(0);
+        }
+        return musicCount;
     }
 }

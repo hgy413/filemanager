@@ -25,5 +25,7 @@ public interface MusicContract {
 
     interface Support {
         Map<String, ArrayList<MusicInfo>> getAllMusicInfo();
+
+        int getMuscisNum();
     }
 }

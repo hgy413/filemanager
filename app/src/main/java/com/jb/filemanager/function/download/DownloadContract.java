@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.download;
 
+import com.jb.filemanager.function.musics.GroupList;
 import com.jb.filemanager.function.musics.MusicInfo;
 
 import java.util.List;
@@ -15,9 +16,13 @@ public class DownloadContract {
     }
 
     interface Presenter {
+        void onClickBackButton(boolean b);
+
+        void start();
     }
 
     interface Support {
 
+        GroupList<String, MusicInfo> getAllDownloadInfo();
     }
 }
