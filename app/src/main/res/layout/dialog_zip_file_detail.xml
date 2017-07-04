@@ -8,20 +8,20 @@
     <TextView
         android:id="@+id/file_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:textColor="@android:color/holo_blue_light"/>
 
     <TextView
         android:id="@+id/btn_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:text="View"
         android:textColor="@android:color/holo_blue_light"/>
 
     <TextView
         android:id="@+id/btn_extract"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:text="Extract"
         android:textColor="@android:color/holo_blue_light"/>
 

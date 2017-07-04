@@ -3,6 +3,7 @@ package com.jb.filemanager.function.zipfile;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,6 +57,7 @@ public class ZipFilePreViewActivity extends BaseActivity implements
      */
     private Stack<String> mPathStack = new Stack<>();
     private ProgressDialog mProgressDialog;
+    private LoadZipInnerFilesTask mTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +86,9 @@ public class ZipFilePreViewActivity extends BaseActivity implements
      * 加载文件内容列表
      */
     private void listFiles() {
-        LoadZipInnerFilesTask task = new LoadZipInnerFilesTask();
-        task.setListener(this);
-        task.execute(mZipFilePath, mRootDir, mPassword);
+        mTask = new LoadZipInnerFilesTask();
+        mTask.setListener(this);
+        mTask.execute(mZipFilePath, mRootDir, mPassword);
     }
 
     /**
@@ -121,6 +123,10 @@ public class ZipFilePreViewActivity extends BaseActivity implements
      */
     private void onLoadError() {
         Log.e("error", "打开文件失败");
+        Toast.makeText(this, "打开文件失败", Toast.LENGTH_SHORT).show();
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 
     /**
@@ -144,6 +150,15 @@ public class ZipFilePreViewActivity extends BaseActivity implements
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    Log.e("dialog", "进度条弹窗被取消");
+                    if (mTask != null) {
+                        mTask.cancel(true);
+                    }
+                }
+            });
         }
         mProgressDialog.show();
     }
@@ -170,9 +185,9 @@ public class ZipFilePreViewActivity extends BaseActivity implements
             }
         }
     }
-    // end -- 面包屑导航接口
+    //////////////////////////////// end -- 面包屑导航接口
 
-    // start -- item点击接口
+    //////////////////////////////// start -- item点击接口
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ZipPreviewFileBean item = mAdapter.getItem(position);
@@ -183,9 +198,9 @@ public class ZipFilePreViewActivity extends BaseActivity implements
             Toast.makeText(mActivity, "click file", Toast.LENGTH_SHORT).show();
         }
     }
-    // end -- item点击接口
+    ////////////////////////////////// end -- item点击接口
 
-    // start -- 加载文件内容任务接口
+    ////////////////////////////////// start -- 加载文件内容任务接口
     @Override
     public void onPreLoad() {
         Log.e("task", "开始加载");
@@ -216,13 +231,17 @@ public class ZipFilePreViewActivity extends BaseActivity implements
     @Override
     public void onCanceled() {
         Log.e("task", "任务取消");
+        // 路径出栈
+        mRootDir = mPathStack.pop();
+        mNavigation.back();
     }
-    // end -- 加载文件内容任务接口
+    /////////////////////// end -- 加载文件内容任务接口
 
     @Override
     public void onBackPressed() {
         backward();
     }
+
     /**
      * Adapter
      */

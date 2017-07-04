@@ -528,7 +528,7 @@ public final class ZipUtils {
      * 获取压缩包内指定目录的所有文件和文件夹
      *
      * @param file             压缩包文件
-     * @param targetParentPath 指定目录(根目录时传入"")
+     * @param targetParentPath 指定目录(根目录时传入"/")
      * @param password         密码
      * @return list, 一旦发生异常则返回null
      */
@@ -613,5 +613,42 @@ public final class ZipUtils {
      */
     public static List<ZipPreviewFileBean> listFiles(File file, String targetParentPath) throws ZipException, IOException {
         return listFiles(file, targetParentPath, null);
+    }
+
+    /**
+     * 验证压缩包文件是否加密
+     *
+     * @param file f
+     * @return b
+     */
+    public static boolean isPackFileEncrypted(File file) throws ZipException, IOException, RarException {
+        String extension = FileUtils.getFileExtension(file);
+        if ("zip".equalsIgnoreCase(extension)) {
+            return isZipEncrypted(file);
+        } else if ("rar".equalsIgnoreCase(extension)) {
+            return isRarEncrypted(file);
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否为rar格式的压缩包文件
+     *
+     * @param file f
+     * @return b
+     */
+    public static boolean isRarFormatFile(File file) {
+        String extension = FileUtils.getFileExtension(file);
+        return "rar".equalsIgnoreCase(extension);
+    }
+    /**
+     * 判断是否为zip格式的压缩包文件
+     *
+     * @param file f
+     * @return b
+     */
+    public static boolean isZipFormatFile(File file) {
+        String extension = FileUtils.getFileExtension(file);
+        return "zip".equalsIgnoreCase(extension);
     }
 }
