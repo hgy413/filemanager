@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.zipfile.ZipFilePreViewActivity;
+import com.jb.filemanager.function.zipfile.ZipFilePreviewActivity;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
 import com.jb.filemanager.ui.dialog.BaseDialog;
@@ -136,7 +136,7 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
             @Override
             public void run() {
                 dismissProgressDialog();
-                ZipFilePreViewActivity.browserFile(mContext, mFile.getFile().getPath(), null);
+                ZipFilePreviewActivity.browserFile(mContext, mFile.getFile().getPath(), null);
             }
         });
     }
@@ -153,7 +153,7 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
                 passwordInputDialog.setListener(new PasswordInputDialog.PasswordInputCallback() {
                     @Override
                     public void onInputFinish(String password) {
-                        ZipFilePreViewActivity.browserFile(mContext, mFile.getFile().getPath(), password);
+                        ZipFilePreviewActivity.browserFile(mContext, mFile.getFile().getPath(), password);
                     }
                 });
                 passwordInputDialog.show();

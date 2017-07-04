@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.zipfile;
+package com.jb.filemanager.function.zipfile.presenter;
 
 import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;

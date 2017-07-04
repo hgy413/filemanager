@@ -1,8 +1,9 @@
-package com.jb.filemanager.function.zipfile;
+package com.jb.filemanager.function.zipfile.task;
 
 import android.os.AsyncTask;
 
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
+import com.jb.filemanager.function.zipfile.listener.LoadZipInnerFilesListener;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
 
 import java.io.File;

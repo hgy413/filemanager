@@ -128,7 +128,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
         <activity
-            android:name=".function.zipfile.ZipFilePreViewActivity"
+            android:name=".function.zipfile.ZipFilePreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
