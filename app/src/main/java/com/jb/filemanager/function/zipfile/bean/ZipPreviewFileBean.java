@@ -25,9 +25,10 @@ public class ZipPreviewFileBean {
     private long mLastModifyTime;
     private long mSize;
     private long mCompressedSize;
+    private boolean mSelected = false;
+    private long mCrc;
     // 预留字段
     private int mFileType;
-    private boolean mSelected = false;
 
     /**
      * zip压缩包, 原生方式初始化
@@ -38,6 +39,7 @@ public class ZipPreviewFileBean {
         mIsDirectory = entry.isDirectory();
         mFullPath = FileUtils.removeEdgeSeparatorIfExist(entry.getName());
         mFileName = FileUtils.getFileName(entry.getName());
+        mCrc = entry.getCrc();
         mLastModifyTime = entry.getTime();
         mSize = mIsDirectory ? -1 : entry.getSize();
         mCompressedSize = mIsDirectory ? -1 : entry.getCompressedSize();
@@ -53,6 +55,7 @@ public class ZipPreviewFileBean {
         mFullPath = FileUtils.removeEdgeSeparatorIfExist(fileHeader.getFileName());
         mFileName = FileUtils.getFileName(fileHeader.getFileName());
         mLastModifyTime = fileHeader.getLastModFileTime();
+        mCrc = fileHeader.getCrc32();
         mSize = fileHeader.getUncompressedSize();
         mCompressedSize = fileHeader.getCompressedSize();
     }
@@ -68,6 +71,7 @@ public class ZipPreviewFileBean {
         mFullPath = FileUtils.removeEdgeSeparatorIfExist(mFullPath);
         mFileName = FileUtils.getFileName(mFullPath);
         mLastModifyTime = fileHeader.getMTime().getTime();
+        mCrc = fileHeader.getHeadCRC();
         mSize = fileHeader.getFullUnpackSize();
         mCompressedSize = fileHeader.getFullPackSize();
     }
@@ -126,6 +130,14 @@ public class ZipPreviewFileBean {
 
     public void setFileType(int fileType) {
         mFileType = fileType;
+    }
+
+    public long getCrc() {
+        return mCrc;
+    }
+
+    public void setCrc(long crc) {
+        mCrc = crc;
     }
 
     public boolean isSelected() {

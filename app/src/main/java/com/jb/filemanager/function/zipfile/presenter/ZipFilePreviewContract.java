@@ -16,6 +16,8 @@ public interface ZipFilePreviewContract {
         void navigationBackward(boolean isEmpty);
         void navigationForward(String path);
         void showToast(String toast);
+        void updateExtractDialog(String currentPath);
+        void onExtractFilesAccomplish();
     }
 
     interface Presenter {
@@ -25,5 +27,6 @@ public interface ZipFilePreviewContract {
         void onExtractFiles();
         void onBreadcrumbClick(String path);
         void onBackPressed();
+        void onExtractDialogCancel();
     }
 }

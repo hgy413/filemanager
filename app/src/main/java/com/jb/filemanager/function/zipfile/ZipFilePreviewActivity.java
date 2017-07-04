@@ -10,12 +10,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.zipfile.adapter.ZipInnerFilesAdapter;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
+import com.jb.filemanager.function.zipfile.dialog.ExtractFileDialog;
 import com.jb.filemanager.function.zipfile.presenter.ZipFilePreviewContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFilePreviewPresenter;
 import com.jb.filemanager.function.zipfile.view.BreadcrumbNavigation;
@@ -37,23 +39,27 @@ import java.util.List;
 public class ZipFilePreviewActivity extends BaseActivity implements
         BreadcrumbNavigation.OnBreadcrumbClickListener,
         AdapterView.OnItemClickListener,
-        ZipFilePreviewContract.View {
+        ZipFilePreviewContract.View, View.OnClickListener {
 
     public static final String EXTRA_FILE_PATH = "extra_file_path";
     public static final String EXTRA_PASSWORD = "extra_password"; // 保证传入的参数非空,或不传入
 
     private BreadcrumbNavigation mNavigation;
     private ListView mListView;
-    private List<ZipPreviewFileBean> mListData;
     private ZipInnerFilesAdapter mAdapter;
     private ProgressDialog mProgressDialog;
 
     private ZipFilePreviewPresenter mPresenter = new ZipFilePreviewPresenter(this);
+    private TextView mBtnExtract;
+    private ExtractFileDialog mExtractFileDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zip_file_preview);
+
+        mBtnExtract = (TextView) findViewById(R.id.zip_pre_btn_extract);
+        mBtnExtract.setOnClickListener(this);
 
         mNavigation = (BreadcrumbNavigation) findViewById(R.id.navigation);
         mNavigation.setOnBreadcrumbClickListener(this);
@@ -74,12 +80,9 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     @Override
     public void updateListData(List<ZipPreviewFileBean> data) {
         if (mAdapter == null) {
-            mListData = data;
-            mAdapter = new ZipInnerFilesAdapter(mListData);
+            mAdapter = new ZipInnerFilesAdapter(data);
             mListView.setAdapter(mAdapter);
         } else {
-            mListData.clear();
-            mListData.addAll(data);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -128,6 +131,31 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     }
 
     @Override
+    public void updateExtractDialog(String currentPath) {
+        if (mExtractFileDialog == null) {
+            mExtractFileDialog = new ExtractFileDialog(this);
+            mExtractFileDialog.setCanceledOnTouchOutside(false);
+            mExtractFileDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    mPresenter.onExtractDialogCancel();
+                }
+            });
+        }
+        mExtractFileDialog.updatePath(currentPath);
+        if (!mExtractFileDialog.isShowing()) {
+            mExtractFileDialog.show();
+        }
+    }
+
+    @Override
+    public void onExtractFilesAccomplish() {
+        if (mExtractFileDialog != null) {
+            mExtractFileDialog.dismiss();
+        }
+    }
+
+    @Override
     public void onBreadcrumbClick(BreadcrumbNavigation.BreadcrumbItem item, String path) {
         mPresenter.onBreadcrumbClick(path);
     }
@@ -140,6 +168,15 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     @Override
     public void onBackPressed() {
         mPresenter.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.zip_pre_btn_extract:
+                mPresenter.onExtractFiles();
+                break;
+        }
     }
 
     /**
