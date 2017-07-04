@@ -36,6 +36,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
     public static final int UNINSTALL_APP_REQUEST_CODE = 101;
     public static final String TAG = "AppManagerActivity";
     public static final String SEARCH_RESULT = "search_result";
+    public static final int SEARCH_RESULT_REQUEST_CODE = 102;
     private AppManagerPresenter mPresenter;
     private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
@@ -165,6 +166,11 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         mEtCommonActionBarWithSearchSearch.setVisibility(View.INVISIBLE);
         mTvCommonActionBarWithSearchTitle.setVisibility(View.VISIBLE);
         mIsSearchInput = false;
+    }
+
+    @Override
+    public void hideProgress() {
+        mFlProgressContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -302,13 +308,14 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         final ArrayList<SearchResultBean> mResultPackage = new ArrayList<>();
         Toast.makeText(AppManagerActivity.this, "我要搜索" + keyTag, Toast.LENGTH_SHORT).show();
         //在本界面处理搜索结果
+        keyTag = keyTag.toLowerCase();
         for (AppGroupBean groupBean : mAppInfo) {
             List<AppChildBean> children = groupBean.getChildren();
             if (children == null || children.isEmpty()) {
                 continue;
             }
             for (AppChildBean childBean : children) {
-                if (childBean.mAppName.contains(keyTag) || childBean.mPackageName.contains(keyTag)) {
+                if (childBean.mAppName.toLowerCase().contains(keyTag) || childBean.mPackageName.toLowerCase().contains(keyTag)) {
                     SearchResultBean resultBean = new SearchResultBean();
                     resultBean.mAppName = childBean.mAppName;
                     resultBean.mPackageName = childBean.mPackageName;
@@ -321,7 +328,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
             public void run() {
                 Intent intent = new Intent(AppManagerActivity.this, AppManagerSearchResultActivity.class);
                 intent.putExtra(SEARCH_RESULT, mResultPackage);
-//                startActivity(intent);
+                startActivityForResult(intent, SEARCH_RESULT_REQUEST_CODE);
             }
         }, 2500);
     }

@@ -36,7 +36,7 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
             if (appBean.mIsSysApp) {
                 mSystemAppBean.add(appBean);
             } else {
-                appBean.mIsCheckd = true;
+//                appBean.mIsCheckd = true;
                 mUserAppBean.add(appBean);
             }
         }
@@ -63,6 +63,9 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
         if (requestCode == AppManagerActivity.UNINSTALL_APP_REQUEST_CODE) {
             //卸载完应用  所有数据重新获取
             refreshData();
+        } else if (requestCode == AppManagerActivity.SEARCH_RESULT_REQUEST_CODE) {
+            refreshData();//在结果页可能操作了APP  所以刷新数据
+            mView.hideProgress();
         }
     }
 
@@ -91,7 +94,7 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
     @Override
     public List<AppGroupBean> getAppInfo() {
         List<AppGroupBean> appGroupBeen = new ArrayList<>();
-        AppGroupBean userApp = new AppGroupBean(mUserAppBean, AppUtils.getString(R.string.user_app), GroupSelectBox.SelectState.ALL_SELECTED, true);
+        AppGroupBean userApp = new AppGroupBean(mUserAppBean, AppUtils.getString(R.string.user_app), GroupSelectBox.SelectState.NONE_SELECTED, true);
         AppGroupBean systemApp = new AppGroupBean(mSystemAppBean, AppUtils.getString(R.string.system_app), GroupSelectBox.SelectState.NONE_SELECTED, false);
         appGroupBeen.add(userApp);
         appGroupBeen.add(systemApp);
