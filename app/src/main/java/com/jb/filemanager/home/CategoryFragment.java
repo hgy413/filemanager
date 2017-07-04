@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
+import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.function.musics.MusicActivity;
@@ -94,7 +95,7 @@ public class CategoryFragment extends Fragment {
         CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
         CategoryBean bean3 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
         CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
-        CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
+        CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_image, "doc", 13);//temp for doc
         CategoryBean bean6 = new CategoryBean(R.drawable.ic_main_category_image, "apk", 15);//temp for apk
         CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
         CategoryBean bean8 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
@@ -151,6 +152,10 @@ public class CategoryFragment extends Fragment {
                         break;
                     case 2:
                         startActivity(new Intent(getContext(), ZipFileActivity.class));
+                        break;
+                    case 4:
+                        //文档管理
+                        startActivity(new Intent(getContext(), DocManagerActivity.class));
                         break;
                     default:
                         break;

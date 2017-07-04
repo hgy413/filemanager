@@ -36,7 +36,7 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
             if (appBean.mIsSysApp) {
                 mSystemAppBean.add(appBean);
             } else {
-//                appBean.mIsCheckd = true;
+//                appBean.mIsChecked = true;
                 mUserAppBean.add(appBean);
             }
         }

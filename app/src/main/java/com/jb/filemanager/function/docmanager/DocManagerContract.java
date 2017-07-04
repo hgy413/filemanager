@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.apkmanager;
+package com.jb.filemanager.function.docmanager;
 
 import android.content.Intent;
 
@@ -8,17 +8,18 @@ import java.util.List;
  * Desc:
  * Author lqf
  * Email: liqf@m15.cn
- * Date: 2017/6/29 11:40
+ * Date: 2017/7/4 10:39
  */
 
-public class AppManagerContract {
-    interface View {
+public class DocManagerContract {
+    interface View{
         void initView();
         void initData();
+        void initList();
         void initClick();
+        void refreshList();
         void initBroadcastReceiver();
         void releaseBroadcastReceiver();
-        void refreshList();
         void finishActivity();
         void refreshTitle();
         void hideProgress();
@@ -33,10 +34,12 @@ public class AppManagerContract {
         void refreshData();
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
-        List<AppGroupBean> getAppInfo();
+        List<DocGroupBean> getDocInfo();
     }
 
     interface Support {
-        List<AppChildBean> getInstallAppInfo();
+        List<DocChildBean> getDocFileInfo();
+        List<DocChildBean> getTextFileInfo();
+        List<DocChildBean> getPdfFileInfo();
     }
 }

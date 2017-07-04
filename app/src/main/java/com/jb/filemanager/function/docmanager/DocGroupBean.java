@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.apkmanager;
+package com.jb.filemanager.function.docmanager;
 
 
 import com.jb.filemanager.commomview.GroupSelectBox;
@@ -10,23 +10,19 @@ import java.util.List;
  * Desc:
  * Author lqf
  * Email: liqf@m15.cn
- * Date: 2017/6/29 15:02
+ * Date: 2017/7/4 10:43
  */
 
-public class AppGroupBean extends BaseGroupsDataBean<AppChildBean> {
+public class DocGroupBean extends BaseGroupsDataBean<DocChildBean> {
 
     String mGroupTitle;
     GroupSelectBox.SelectState mSelectState;
     boolean mIsExpand;
 
-    protected AppGroupBean(List<AppChildBean> children, String title, GroupSelectBox.SelectState selectState, boolean isExpand) {
+    protected DocGroupBean(List<DocChildBean> children,String title, GroupSelectBox.SelectState selectState, boolean isExpand) {
         super(children);
         mGroupTitle = title;
         mSelectState = selectState;
         mIsExpand = isExpand;
-    }
-
-    public void setSelectState(GroupSelectBox.SelectState selectState) {
-        mSelectState = selectState;
     }
 }
