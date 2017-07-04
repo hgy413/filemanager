@@ -203,6 +203,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!--文档管理-->
+        <activity
+            android:name=".function.docmanager.DocManagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <activity android:name=".function.applock.activity.AppLockPreActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
