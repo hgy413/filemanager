@@ -29,18 +29,7 @@
         </ExpandableListView>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_bottom_delete"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:text="Delete"
-        android:textColor="@color/white"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        android:visibility="gone"/>
+    <include layout="@layout/common_operate_bar_modify"/>
 
     <FrameLayout
         android:id="@+id/fl_progress_container"

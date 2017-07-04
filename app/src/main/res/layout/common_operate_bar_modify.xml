@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/rl_common_operate_bar_container"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+    tools:ignore="SpUsage,ContentDescription">
+
+    <LinearLayout
+        android:id="@+id/ll_operate_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#77000000"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        tools:ignore="SpUsage,ContentDescription">
+        <TextView
+            android:id="@+id/tv_common_operate_bar_cut"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/ic_drawer_about"
+            android:gravity="center"
+            android:text="Cut"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/tv_common_operate_bar_copy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/ic_drawer_setting"
+            android:gravity="center"
+            android:text="Copy"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/tv_common_operate_bar_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/ic_drawer_feedback"
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/tv_common_operate_bar_more"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/ic_operate_bar_more"
+            android:gravity="center"
+            android:text="More"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_more_operate_container"
+        android:orientation="vertical"
+        android:background="#ddffdd"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content">
+        <Space
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/tv_bottom_detail"
+            android:textColor="@color/white"
+            android:text="detail"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:background="@color/ad_color_81b715"
+            android:layout_width="100dp"
+            android:layout_height="30dp"/>
+        <View
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/tv_bottom_open"
+            android:textColor="@color/white"
+            android:text="open with"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:background="@color/ad_color_81b715"
+            android:layout_width="100dp"
+            android:layout_height="30dp"/>
+        <View
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/tv_bottom_show_in_folder"
+            android:textColor="@color/white"
+            android:text="show in folder"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/ad_color_81b715"
+            android:layout_width="100dp"
+            android:layout_height="30dp"/>
+        <View
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </LinearLayout>
+</RelativeLayout>

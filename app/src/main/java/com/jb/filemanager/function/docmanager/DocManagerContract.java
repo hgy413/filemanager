@@ -23,6 +23,9 @@ public class DocManagerContract {
         void finishActivity();
         void refreshTitle();
         void hideProgress();
+        void showDocDetail(List<DocChildBean> docList);
+        void showInFolder(List<DocChildBean> docList);
+        void openWith(List<DocChildBean> docList);
     }
 
     interface Presenter {

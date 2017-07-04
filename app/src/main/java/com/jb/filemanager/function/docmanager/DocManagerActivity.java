@@ -3,7 +3,10 @@ package com.jb.filemanager.function.docmanager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -15,6 +18,7 @@ import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +42,18 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private EditText mEtCommonActionBarWithSearchSearch;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private ExpandableListView mElvApk;
+    private RelativeLayout mRlCommonOperateBarContainer;
+    private LinearLayout mLlOperateBar;
+    private TextView mTvCommonOperateBarCut;
+    private TextView mTvCommonOperateBarCopy;
+    private TextView mTvCommonOperateBarDelete;
+    private TextView mTvCommonOperateBarMore;
+    private LinearLayout mLlMoreOperateContainer;
+    private TextView mTvBottomDetail;
+    private TextView mTvBottomOpen;
+    private TextView mTvBottomShowInFolder;
+
     private DocManagerAdapter mAdapter;
-    private TextView mTvBottomDelete;
     private int mChosenCount;
     private List<DocGroupBean> mAppInfo;
     private BroadcastReceiver mReceiver;
@@ -47,6 +61,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private boolean mIsSearchProgress;
     private FrameLayout mFlProgressContainer;
     private Handler mHandler;
+    private boolean mIsMoreOperatorShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +84,18 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mEtCommonActionBarWithSearchSearch = (EditText) findViewById(R.id.et_common_action_bar_with_search_search);
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_with_search_search);
         mElvApk = (ExpandableListView) findViewById(R.id.elv_apk);
-        mTvBottomDelete = (TextView) findViewById(R.id.tv_bottom_delete);
         mFlProgressContainer = (FrameLayout) findViewById(R.id.fl_progress_container);
+        mRlCommonOperateBarContainer = (RelativeLayout) findViewById(R.id.rl_common_operate_bar_container);
+        mLlOperateBar = (LinearLayout) findViewById(R.id.ll_operate_bar);
+        mTvCommonOperateBarCut = (TextView) findViewById(R.id.tv_common_operate_bar_cut);
+        mTvCommonOperateBarCopy = (TextView) findViewById(R.id.tv_common_operate_bar_copy);
+        mTvCommonOperateBarDelete = (TextView) findViewById(R.id.tv_common_operate_bar_delete);
+        mTvCommonOperateBarMore = (TextView) findViewById(R.id.tv_common_operate_bar_more);
+        mLlMoreOperateContainer = (LinearLayout) findViewById(R.id.ll_more_operate_container);
+        mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
+        mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
+        mTvBottomShowInFolder = (TextView) findViewById(R.id.tv_bottom_show_in_folder);
+
 
         //监听搜索
         mEtCommonActionBarWithSearchSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -155,16 +180,17 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     private void handleBottomDeleteShow(int chosenCount) {
         mChosenCount = chosenCount;
+        hideMoreOperator();
         if (chosenCount == 0) {
-            mTvBottomDelete.setVisibility(View.GONE);
+            mRlCommonOperateBarContainer.setVisibility(View.GONE);
         } else {
-            mTvBottomDelete.setVisibility(View.VISIBLE);
+            mRlCommonOperateBarContainer.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void initClick() {
-        mTvBottomDelete.setOnClickListener(this);
+        mRlCommonOperateBarContainer.setOnClickListener(this);
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
         mIvCommonActionBarWithSearchSearch.setOnClickListener(this);
         mElvApk.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -174,6 +200,14 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 return false;
             }
         });
+
+        mTvCommonOperateBarCopy.setOnClickListener(this);
+        mTvCommonOperateBarCut.setOnClickListener(this);
+        mTvCommonOperateBarDelete.setOnClickListener(this);
+        mTvCommonOperateBarMore.setOnClickListener(this);
+        mTvBottomDetail.setOnClickListener(this);
+        mTvBottomOpen.setOnClickListener(this);
+        mTvBottomShowInFolder.setOnClickListener(this);
     }
 
     @Override
@@ -211,6 +245,21 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void hideProgress() {
         mFlProgressContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showDocDetail(List<DocChildBean> docList) {
+        Toast.makeText(DocManagerActivity.this, docList.size() + "个 文件的detail", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showInFolder(List<DocChildBean> docList) {
+        Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + " will show in folder", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void openWith(List<DocChildBean> docList) {
+        Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + "will open", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -266,7 +315,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             return;
         }
         switch (view.getId()){
-            case R.id.tv_bottom_delete:
+            case R.id.rl_common_operate_bar_container:
                 Toast.makeText(DocManagerActivity.this, "我是占位的bottom啦", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_common_action_bar_with_search_title:
@@ -275,7 +324,80 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             case R.id.iv_common_action_bar_with_search_search:
                 handleSearchButtonClick(mIsSearchInput);
                 break;
+            case R.id.tv_common_operate_bar_copy:
+                Toast.makeText(DocManagerActivity.this, "copy", Toast.LENGTH_SHORT).show();
+                handleCheckedData();
+                break;
+            case R.id.tv_common_operate_bar_cut:
+                Toast.makeText(DocManagerActivity.this, "cut", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_common_operate_bar_delete:
+                Toast.makeText(DocManagerActivity.this, "delete", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_common_operate_bar_more:
+//                Toast.makeText(DocManagerActivity.this, "more", Toast.LENGTH_SHORT).show();
+                if (mIsMoreOperatorShown) {
+                    hideMoreOperator();
+                } else {
+                    showMoreOperator(mChosenCount);
+                }
+                break;
+            case R.id.tv_bottom_detail:
+                showDocDetail(getCheckedDoc());
+                hideMoreOperator();
+                break;
+            case R.id.tv_bottom_show_in_folder:
+                showInFolder(getCheckedDoc());
+                hideMoreOperator();
+                break;
+            case R.id.tv_bottom_open:
+                openWith(getCheckedDoc());
+                hideMoreOperator();
+                break;
+            default:
+                break;
         }
+    }
+
+    private List<DocChildBean> getCheckedDoc() {
+        List<DocChildBean> mResultPackage = new ArrayList<>();
+        for (DocGroupBean groupBean : mAppInfo) {
+            List<DocChildBean> children = groupBean.getChildren();
+            if (children == null || children.isEmpty()) {
+                continue;
+            }
+            for (DocChildBean childBean : children) {
+                if (childBean.mIsChecked) {
+                    mResultPackage.add(childBean);
+                }
+            }
+        }
+        return mResultPackage;
+    }
+
+    //显示more的内容
+    private void showMoreOperator(int chosenCount) {
+        mIsMoreOperatorShown = true;
+        if (chosenCount == 1) {
+            mLlMoreOperateContainer.setVisibility(View.VISIBLE);
+            mTvBottomOpen.setVisibility(View.VISIBLE);
+            mTvBottomShowInFolder.setVisibility(View.VISIBLE);
+        } else {
+            mLlMoreOperateContainer.setVisibility(View.VISIBLE);
+            mTvBottomOpen.setVisibility(View.GONE);
+            mTvBottomShowInFolder.setVisibility(View.GONE);
+        }
+    }
+
+    //隐藏more的内容
+    private void hideMoreOperator() {
+        mIsMoreOperatorShown = false;
+        mLlMoreOperateContainer.setVisibility(View.GONE);
+    }
+
+    //处理选中的数据
+    private void handleCheckedData() {
+
     }
 
     private void handleSearchButtonClick(boolean isSearchMode) {
@@ -283,11 +405,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         //说明现在是搜索模式  那么点击搜索要进行搜索了(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(WidgetSearchActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  (WidgetSearchActivity是当前的Activity)
 
         if (isSearchMode) {
-//            inputManager.hideSoftInputFromWindow(mEtCommonActionBarWithSearchSearch.getWindowToken(), InputMethodManager.RESULT_HIDDEN);//手动隐藏输入法  貌似无效?? 至少米3上是有问题的
-            /*mEtCommonActionBarWithSearchSearch.clearFocus();
-            inputManager.toggleSoftInput(0,InputMethodManager.HIDE_NOT_ALWAYS);*/
-//            hideInputMethod(this);
-//            onBackPressed();
             goToSearchResult(mEtCommonActionBarWithSearchSearch.getEditableText().toString());
             return;
         }
@@ -300,5 +417,16 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mEtCommonActionBarWithSearchSearch.selectAll();//全选
         inputManager.showSoftInput(mEtCommonActionBarWithSearchSearch, InputMethodManager.SHOW_IMPLICIT);//手动调起输入法
         mIsSearchInput = true;
+    }
+
+    //唤起系统进行扫描  并接受扫描广播 更新数据
+    private void scanSdCard() {
+        IntentFilter intentfilter = new IntentFilter(Intent.ACTION_MEDIA_SCANNER_STARTED);
+        intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+        intentfilter.addDataScheme("file");
+        /*scanSdReceiver =newScanSdReceiver();
+        registerReceiver(scanSdReceiver, intentfilter);*/
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                Uri.parse("file://" + Environment.getExternalStorageDirectory().getAbsolutePath())));
     }
 }
