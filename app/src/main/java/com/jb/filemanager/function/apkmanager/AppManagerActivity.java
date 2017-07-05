@@ -26,6 +26,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.searchresult.AppManagerSearchResultActivity;
 import com.jb.filemanager.function.apkmanager.searchresult.SearchResultBean;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
+import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
@@ -109,7 +110,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
                 handleBottomDeleteShow(chosenCount);
             }
         });
-        mElvApk.setAdapter(mAdapter);
+        mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
         mAdapter.handleCheckedCount();
     }
 

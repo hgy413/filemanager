@@ -7,7 +7,7 @@
     android:minHeight="54dp"
     android:orientation="vertical">
 
-    <com.jb.filemanager.function.trash.view.ShaderLine
+    <com.jb.filemanager.ui.view.ShaderLine
         android:id="@+id/item_group_top_shader"
         android:layout_width="match_parent"
         android:layout_height="4dp"
@@ -87,7 +87,7 @@
             android:visibility="gone"/>
     </RelativeLayout>
 
-    <com.jb.filemanager.function.trash.view.ShaderLine
+    <com.jb.filemanager.ui.view.ShaderLine
         android:id="@+id/item_group_bottom_shader"
         android:layout_width="match_parent"
         android:layout_height="4dp"

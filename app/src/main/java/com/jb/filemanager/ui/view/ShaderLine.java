@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.trash.view;
+package com.jb.filemanager.ui.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

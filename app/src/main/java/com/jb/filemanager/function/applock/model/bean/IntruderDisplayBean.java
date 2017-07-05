@@ -1,6 +1,6 @@
 package com.jb.filemanager.function.applock.model.bean;
 
-import com.jb.filemanager.function.applock.adapter.BaseGroupsDataBean;
+import com.jb.filemanager.function.scanframe.bean.BaseGroupsDataBean;
 
 import java.util.ArrayList;
 

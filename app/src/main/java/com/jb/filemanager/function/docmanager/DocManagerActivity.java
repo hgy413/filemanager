@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
+import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
@@ -45,7 +47,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private TextView mTvCommonActionBarWithSearchTitle;
     private EditText mEtCommonActionBarWithSearchSearch;
     private ImageView mIvCommonActionBarWithSearchSearch;
-    private ExpandableListView mElvApk;
+    private FloatingGroupExpandableListView mElvApk;
     private RelativeLayout mRlCommonOperateBarContainer;
     private LinearLayout mLlOperateBar;
     private TextView mTvCommonOperateBarCut;
@@ -88,7 +90,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mTvCommonActionBarWithSearchTitle = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
         mEtCommonActionBarWithSearchSearch = (EditText) findViewById(R.id.et_common_action_bar_with_search_search);
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_with_search_search);
-        mElvApk = (ExpandableListView) findViewById(R.id.elv_apk);
+        mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
         mFlProgressContainer = (FrameLayout) findViewById(R.id.fl_progress_container);
         mRlCommonOperateBarContainer = (RelativeLayout) findViewById(R.id.rl_common_operate_bar_container);
         mLlOperateBar = (LinearLayout) findViewById(R.id.ll_operate_bar);
@@ -184,7 +186,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 handleBottomDeleteShow(chosenCount);
             }
         });
-        mElvApk.setAdapter(mAdapter);
+        mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
         mAdapter.handleCheckedCount();
     }
 

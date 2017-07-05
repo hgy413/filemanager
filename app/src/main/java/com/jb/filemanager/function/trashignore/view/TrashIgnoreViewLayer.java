@@ -9,10 +9,10 @@ import android.view.View;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreGroupBean;
-import com.jb.filemanager.function.trash.view.floatingelv.FloatingGroupExpandableListView;
-import com.jb.filemanager.function.trash.view.floatingelv.WrapperExpandableListAdapter;
 import com.jb.filemanager.function.trashignore.contract.Contract;
 import com.jb.filemanager.function.trashignore.view.adapter.TrashIgnoreAdapter;
+import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
+import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.APIUtil;
 
 import java.util.List;

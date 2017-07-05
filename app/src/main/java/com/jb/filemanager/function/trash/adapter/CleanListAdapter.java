@@ -40,7 +40,7 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.dialog.TrashIgnoreDialog;
 import com.jb.filemanager.function.trash.dialog.TrashItemDetailDialog;
 import com.jb.filemanager.function.trash.dialog.TrashSubItemDetailDialog;
-import com.jb.filemanager.function.trash.view.ShaderLine;
+import com.jb.filemanager.ui.view.ShaderLine;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileTypeUtil;
 import com.jb.filemanager.util.IntentUtil;

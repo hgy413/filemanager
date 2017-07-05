@@ -2,7 +2,7 @@ package com.jb.filemanager.function.apkmanager;
 
 
 import com.jb.filemanager.commomview.GroupSelectBox;
-import com.jb.filemanager.function.applock.adapter.BaseGroupsDataBean;
+import com.jb.filemanager.function.scanframe.bean.BaseGroupsDataBean;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 
 import java.util.List;

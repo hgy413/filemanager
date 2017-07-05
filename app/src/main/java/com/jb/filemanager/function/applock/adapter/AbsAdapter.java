@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
+import com.jb.filemanager.function.scanframe.bean.BaseGroupsDataBean;
+
 import java.util.List;
 
 /**
