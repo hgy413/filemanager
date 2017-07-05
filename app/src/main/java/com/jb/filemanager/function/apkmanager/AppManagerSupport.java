@@ -30,6 +30,6 @@ class AppManagerSupport implements AppManagerContract.Support {
 
     @Override
     public List<AppItemInfo> getInstallAppInfo() {
-        return AppManager.getIntance().getNotSystemApps();
+        return AppManager.getIntance().getAllApps();
     }
 }
