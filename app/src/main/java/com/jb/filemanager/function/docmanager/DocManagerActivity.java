@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -62,6 +63,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private FrameLayout mFlProgressContainer;
     private Handler mHandler;
     private boolean mIsMoreOperatorShown;
+    private BroadcastReceiver mScanSdReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,12 +224,36 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void initBroadcastReceiver() {
+        IntentFilter intentfilter = new IntentFilter(Intent.ACTION_MEDIA_SCANNER_STARTED);
+        intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+        intentfilter.addDataScheme("file");
+        mScanSdReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (Intent.ACTION_MEDIA_SCANNER_STARTED.equals(intent.getAction())) {
+                    mPresenter.scanStart();
+                } else if (Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(intent.getAction())) {
+                    mPresenter.scanFinished();
+                }
+            }
+        };
+        registerReceiver(mScanSdReceiver, intentfilter);
 
+        //扫描sd的广播在19以后只有系统才能发出   之后只能扫描制定的文件或者文件夹
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            final Uri contentUri = Uri.fromFile(Environment.getExternalStorageDirectory());
+            scanIntent.setData(contentUri);
+            sendBroadcast(scanIntent);
+        } else {
+            final Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory()));
+            sendBroadcast(intent);
+        }
     }
 
     @Override
     public void releaseBroadcastReceiver() {
-
+        unregisterReceiver(mScanSdReceiver);
     }
 
     @Override
@@ -430,16 +456,5 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mEtCommonActionBarWithSearchSearch.selectAll();//全选
         inputManager.showSoftInput(mEtCommonActionBarWithSearchSearch, InputMethodManager.SHOW_IMPLICIT);//手动调起输入法
         mIsSearchInput = true;
-    }
-
-    //唤起系统进行扫描  并接受扫描广播 更新数据
-    private void scanSdCard() {
-        IntentFilter intentfilter = new IntentFilter(Intent.ACTION_MEDIA_SCANNER_STARTED);
-        intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-        intentfilter.addDataScheme("file");
-        /*scanSdReceiver =newScanSdReceiver();
-        registerReceiver(scanSdReceiver, intentfilter);*/
-        sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-                Uri.parse("file://" + Environment.getExternalStorageDirectory().getAbsolutePath())));
     }
 }

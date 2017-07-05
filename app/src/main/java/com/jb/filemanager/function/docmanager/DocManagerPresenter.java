@@ -1,7 +1,9 @@
 package com.jb.filemanager.function.docmanager;
 
 import android.content.Intent;
+import android.widget.Toast;
 
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 
@@ -76,6 +78,18 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     @Override
     public void onPressHomeKey() {
 
+    }
+
+    @Override
+    public void scanStart() {
+        Toast.makeText(TheApplication.getAppContext(), "System Scan Start", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void scanFinished() {
+        Toast.makeText(TheApplication.getAppContext(), "System scan finish ,refresh the list", Toast.LENGTH_SHORT).show();
+        //更新数据
+        refreshData();
     }
 
     @Override

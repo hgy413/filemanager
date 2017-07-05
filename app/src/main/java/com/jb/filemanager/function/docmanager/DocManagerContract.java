@@ -37,6 +37,8 @@ public class DocManagerContract {
         void refreshData();
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
+        void scanStart();
+        void scanFinished();
         List<DocGroupBean> getDocInfo();
     }
 
