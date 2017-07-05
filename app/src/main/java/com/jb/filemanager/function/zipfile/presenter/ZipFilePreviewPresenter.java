@@ -86,7 +86,6 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
     public void onCanceled() {
         Log.e("task", "任务取消");
         // 回退操作:mRootDir, mPathStatck, Breadcrumb
-        undoLoad();
     }
 
     /**
@@ -99,6 +98,7 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     @Override
     public void onProgressDialogCancel() {
+        undoLoad();
         mTask.cancel(true);
     }
 
@@ -134,6 +134,10 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
             mPathStack.push(mRootDir);
             mRootDir = item.getFullPath();
             mView.navigationForward(mRootDir);
+
+            for (String s : mPathStack) {
+                Log.e("stack", s);
+            }
             loadFiles();
         } else {
             mView.showToast("click file");
@@ -164,8 +168,43 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
         }
     }
 
+    /**
+     * 加载过程中撤销操作
+     */
     private void undoLoad() {
-        // TODO: 2017/7/4 加载文件过程中被手动取消
+        // 3种情况
+        int delta = mPathStack.size() - mPathStackBack.size();
+        if (delta == 1) {
+            // 1. 点击列表item后forward加载过程中取消
+            mRootDir = mPathStack.pop();
+            mView.navigationBackward(false);
+        } else if (delta == -1) {
+            // 2. 点击物理返回键backward或点解Breadcrumb(一级)加载过程中取消
+            mPathStack.push(mRootDir);
+            mRootDir = mRootDirBack;
+            mView.navigationForward(mRootDir);
+        } else if (-delta > 1) {
+            // 3. 点击Breadcrumb后backward(多级)加载过程中取消
+            // a b c d e f
+            // mRootDir = f
+            // mStack= a b c d e -- size = 5
+            // mStackBack = a b c d e -- size = 5
+            // after click c
+            // mRootDir = c
+            // mStack = a b size = 2
+            // mStackBack = a b c d e f size = 5
+            // GOAL mStack = a b c d e f
+            delta = -delta;
+            int size = mPathStack.size();
+            for (int i = size; i < delta + size; i++) {
+                String item = mPathStackBack.get(i);
+                mPathStack.push(item);
+                if (i == size) continue;
+                mView.navigationForward(item);
+            }
+            mRootDir = mRootDirBack;
+            mView.navigationForward(mRootDir);
+        }
     }
 
     @Override
