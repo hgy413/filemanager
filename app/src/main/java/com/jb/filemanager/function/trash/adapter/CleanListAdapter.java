@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.commomview.ProgressWheel;
+import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.fileexplorer.FileBrowserActivity;
 import com.jb.filemanager.function.scanframe.bean.CleanGroupsBean;
 import com.jb.filemanager.function.scanframe.bean.adbean.AdBean;

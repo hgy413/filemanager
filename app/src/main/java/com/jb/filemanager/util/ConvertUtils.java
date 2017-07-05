@@ -187,4 +187,8 @@ public class ConvertUtils {
         DecimalFormat decimalFormat = new DecimalFormat(".0");
         return decimalFormat.format(value);
     }
+
+    public static String formatFileSize(double traffic) {
+        return getFormatterTraffic(traffic)[0] + getFormatterTraffic(traffic)[1];
+    }
 }

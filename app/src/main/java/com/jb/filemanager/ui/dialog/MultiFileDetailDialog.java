@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.util.ConvertUtil;
+import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -41,7 +41,7 @@ public class MultiFileDetailDialog extends ScreenWidthDialog {
                     fileTotalCount++;
                 }
             }
-            size.setText(ConvertUtil.getReadableSize(filesSize));
+            size.setText(ConvertUtils.getReadableSize(filesSize));
             containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, folderTotalCount, fileTotalCount));
 
             okButton.setOnClickListener(new View.OnClickListener() {

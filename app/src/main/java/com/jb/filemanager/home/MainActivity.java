@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -39,9 +38,7 @@ import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
-import com.jb.filemanager.util.ConvertUtil;
 import com.jb.filemanager.util.FileUtil;
-import com.jb.filemanager.util.TimeUtil;
 
 import org.greenrobot.eventbus.EventBus;
 

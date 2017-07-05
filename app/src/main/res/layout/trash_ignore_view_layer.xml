@@ -56,7 +56,7 @@
         android:textColor="#999999"
         android:textSize="12sp"/>
 
-    <com.jb.filemanager.ui.view.floatingelv.FloatingGroupExpandableListView
+    <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
         android:id="@+id/trash_ignore_flv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

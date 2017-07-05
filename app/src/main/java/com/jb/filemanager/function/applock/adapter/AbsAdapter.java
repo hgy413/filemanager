@@ -1,5 +1,7 @@
 package com.jb.filemanager.function.applock.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -16,13 +18,20 @@ import java.util.List;
  */
 public abstract class AbsAdapter<T extends BaseGroupsDataBean> extends
 		BaseExpandableListAdapter {
-
+	protected LayoutInflater mLayoutInflater;
+	protected Context mContext;
 	protected List<T> mGroups;
 
 	public AbsAdapter(List<T> groups) {
 		mGroups = groups;
 	}
 
+	public AbsAdapter(List<T> groups, Context context) {
+		mGroups = groups;
+		mContext = context;
+		mLayoutInflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
 	/**
 	 * 获取父类的组件
 	 */

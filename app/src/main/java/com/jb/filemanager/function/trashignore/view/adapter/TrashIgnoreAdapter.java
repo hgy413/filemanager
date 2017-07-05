@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.scanframe.clean.CleanManager;
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreAdBean;
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreBean;
@@ -16,7 +17,6 @@ import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreCacheAppBea
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreCachePathBean;
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreGroupBean;
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreResidueBean;
-import com.jb.filemanager.function.trash.adapter.AbsAdapter;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.imageloader.IconLoader;
 

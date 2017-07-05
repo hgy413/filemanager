@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.util.ConvertUtil;
+import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
 
@@ -33,7 +33,7 @@ public class SingleFileDetailDialog extends ScreenWidthDialog {
             name.setText(file.getName());
             location.setText(file.getAbsolutePath());
             modifyTime.setText(TimeUtil.getTime(file.lastModified()));
-            size.setText(ConvertUtil.getReadableSize(file.length()));
+            size.setText(ConvertUtils.getReadableSize(file.length()));
 
             if (file.isDirectory()) {
                 int[] counts = FileUtil.countFolderAndFile(file);

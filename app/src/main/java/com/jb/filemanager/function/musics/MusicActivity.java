@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
-import com.jb.filemanager.util.ConvertUtil;
+import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
+
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
@@ -236,7 +238,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             if (info != null) {
                 viewHolder.mTvName.setText(info.mName);
                 viewHolder.mTvInfo.setText(info.mArtist + " " +
-                        ConvertUtil.getReadableSize(info.mSize) + " " +
+                        ConvertUtils.getReadableSize(info.mSize) + " " +
                         TimeUtil.getMSTime(info.mDuration));
             }
         }
