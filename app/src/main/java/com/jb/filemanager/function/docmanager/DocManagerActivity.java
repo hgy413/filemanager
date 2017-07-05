@@ -106,20 +106,25 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mEtCommonActionBarWithSearchSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) {
-                    String keyTag = mEtCommonActionBarWithSearchSearch.getText().toString().trim();
-                    Logger.d(TAG, keyTag);
-                    if (TextUtils.isEmpty(keyTag)) {
-                        Toast.makeText(DocManagerActivity.this, "请输入搜索关键字", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-
-                    // 搜索功能主体
-                    goToSearchResult(keyTag);
-                    return true;
+                    return handleSearchInput();
                 }
                 return false;
             }
         });
+    }
+
+    //处理输入内容
+    private boolean handleSearchInput() {
+        String keyTag = mEtCommonActionBarWithSearchSearch.getText().toString().trim();
+        Logger.d(TAG, keyTag);
+        if (TextUtils.isEmpty(keyTag)) {
+            Toast.makeText(DocManagerActivity.this, "请输入搜索关键字", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // 搜索功能主体
+        goToSearchResult(keyTag);
+        return true;
     }
 
     private void goToSearchResult(String keyTag) {
@@ -457,7 +462,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         //说明现在是搜索模式  那么点击搜索要进行搜索了(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(WidgetSearchActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  (WidgetSearchActivity是当前的Activity)
 
         if (isSearchMode) {
-            goToSearchResult(mEtCommonActionBarWithSearchSearch.getEditableText().toString());
+            handleSearchInput();
             return;
         }
 
