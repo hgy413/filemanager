@@ -1,6 +1,8 @@
 package com.jb.filemanager.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.text.TextUtils;
@@ -14,17 +16,14 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-
 
 import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 
@@ -813,4 +812,58 @@ public class FileUtil {
         return true;
     }
 
+    //android获取一个用于打开PDF文件的intent
+    public static Intent getPdfFileIntent(String filePath) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromFile(new File(filePath));
+        intent.setDataAndType(uri, "application/pdf");
+        return intent;
+    }
+
+    //android获取一个用于打开文本文件的intent
+    public static Intent getTextFileIntent(String filePath, boolean paramBoolean) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (paramBoolean) {
+            Uri uri1 = Uri.parse(filePath);
+            intent.setDataAndType(uri1, "text/plain");
+        } else {
+            Uri uri2 = Uri.fromFile(new File(filePath));
+            intent.setDataAndType(uri2, "text/plain");
+        }
+        return intent;
+    }
+
+    //android获取一个用于打开Word文件的intent
+    public static Intent getWordFileIntent(String filePath) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromFile(new File(filePath));
+        intent.setDataAndType(uri, "application/msword");
+        return intent;
+    }
+
+    //android获取一个用于打开Excel文件的intent
+    public static Intent getExcelFileIntent(String filePath) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromFile(new File(filePath));
+        intent.setDataAndType(uri, "application/vnd.ms-excel");
+        return intent;
+    }
+
+    //android获取一个用于打开PPT文件的intent
+    public static Intent getPptFileIntent(String param) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromFile(new File(param));
+        intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+        return intent;
+    }
 }

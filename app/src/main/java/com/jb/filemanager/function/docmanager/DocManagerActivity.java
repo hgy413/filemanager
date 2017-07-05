@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     public static final String TAG = "DocManagerActivity";
     public static final String SEARCH_RESULT = "search_result";
     public static final int SEARCH_RESULT_REQUEST_CODE = 102;
+    private static final int TXT_PREVIEW_REQUEST_CODE = 103;
+    private static final String TXT_FILE_DATA = "txt_file_data";
     private DocManagerPresenter mPresenter;
     private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
@@ -199,6 +202,16 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition,
                                         int childPosition, long id) {
+                Intent mFileIntent;
+                DocChildBean child = mAppInfo.get(groupPosition).getChild(childPosition);
+                if (groupPosition == 0) {//只针对txt提供预览
+                    mFileIntent = FileUtil.getTextFileIntent(child.mDocPath, false);
+                } else if (groupPosition == 1) {
+                    mFileIntent = FileUtil.getWordFileIntent(child.mDocPath);
+                } else {
+                    mFileIntent = FileUtil.getPdfFileIntent(child.mDocPath);
+                }
+                startActivity(mFileIntent);
                 return false;
             }
         });
