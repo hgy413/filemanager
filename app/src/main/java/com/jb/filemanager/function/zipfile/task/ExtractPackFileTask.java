@@ -7,6 +7,7 @@ import android.util.Log;
 import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.util.CloseUtils;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
+import com.jb.filemanager.util.StorageUtil;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -59,6 +60,8 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
         boolean mkdir = saveDir.mkdir();
         if (!mkdir) return false;
 
+        long pathFreeSize = StorageUtil.getPathFreeSize(saveDir.getPath());
+
         String extension = FileUtils.getFileExtension(packFilePath);
         if ("zip".equalsIgnoreCase(extension)) {
             try {
@@ -67,6 +70,12 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                     zipFile.setPassword(password);
                 }
                 List<net.lingala.zip4j.model.FileHeader> headers = zipFile.getFileHeaders();
+                long totalSize = 0;
+                for (net.lingala.zip4j.model.FileHeader header : headers) {
+                    totalSize += header.getUncompressedSize();
+                }
+                if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
+
                 for (net.lingala.zip4j.model.FileHeader header : headers) {
                     publishProgress(header.getFileName());
                     zipFile.extractFile(header, saveDir.getPath());
@@ -81,6 +90,13 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
             try {
                 archive = new Archive(new File(packFilePath));
                 List<FileHeader> fileHeaders = archive.getFileHeaders();
+
+                long totalSize = 0;
+                for (FileHeader header : fileHeaders) {
+                    totalSize += header.getFullUnpackSize();
+                }
+                if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
+
                 for (FileHeader header : fileHeaders) {
                     if (isCancelled()) break;
                     String name = FileUtils.formatterRarFileNameCode(header);

@@ -7,6 +7,7 @@ import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.util.CloseUtils;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
+import com.jb.filemanager.util.StorageUtil;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -62,6 +63,16 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
         boolean mkdir = saveDir.mkdir();
         if (!mkdir) return false;
 
+        long pathFreeSize = StorageUtil.getPathFreeSize(saveDir.getPath());
+        long totalSize = 0;
+        for (ZipPreviewFileBean bean : data) {
+            totalSize += bean.getSize();
+        }
+        if (pathFreeSize - totalSize < 100 * 1024 * 1024) {
+            // 当解压后的空间小于100M时, 结束。
+            return false;
+        }
+
         String extension = FileUtils.getFileExtension(packFilePath);
         if ("zip".equalsIgnoreCase(extension)) {
             try {
@@ -70,6 +81,7 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
                     zipFile.setPassword(password);
                 }
                 for (ZipPreviewFileBean bean : data) {
+                    if (isCancelled()) return true;
                     String fullPath = bean.getFullPath();
                     publishProgress(fullPath);
                     zipFile.extractFile(fullPath, saveDir.getPath());
@@ -87,6 +99,7 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
                 for (FileHeader header : fileHeaders) {
                     short headCRC = header.getHeadCRC();
                     for (ZipPreviewFileBean bean : data) {
+                        if (isCancelled()) return true;
                         if (bean.getCrc() == headCRC) {
                             publishProgress(bean.getFullPath());
                             File out = new File(FileUtils.removeEdgeSeparatorIfExist(saveDir.getPath())
