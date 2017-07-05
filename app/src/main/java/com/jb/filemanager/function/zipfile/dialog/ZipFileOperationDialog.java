@@ -3,6 +3,7 @@ package com.jb.filemanager.function.zipfile.dialog;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +12,8 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.ZipFilePreviewActivity;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
+import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
+import com.jb.filemanager.function.zipfile.task.ExtractPackFileTask;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
 import com.jb.filemanager.ui.dialog.BaseDialog;
 
@@ -38,6 +41,8 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
     private Context mContext;
     private ZipFileItemBean mFile;
     private ProgressDialog mProgressDialog;
+    private ExtractPackFileTask mExtractPackFileTask;
+    private ExtractFileDialog mExtractFileDialog;
 
     public ZipFileOperationDialog(Activity act, ZipFileItemBean fileItem) {
         super(act, true);
@@ -67,7 +72,7 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
                 onPreviewBtnClick();
                 break;
             case R.id.btn_extract:
-                Toast.makeText(mContext, "extrace", Toast.LENGTH_SHORT).show();
+                onExtractFileClick();
                 break;
             case R.id.btn_cancel:
                 dismiss();
@@ -161,9 +166,129 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    /**
+     * 解压整个文件
+     */
+    private void onExtractFileClick() {
+        this.dismiss();
+        showProgressDialog();
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    boolean e = ZipUtils.isPackFileEncrypted(mFile.getFile());
+                    if (!e && mProgressDialog.isShowing() && isAlive()) {
+                        // 不关注格式, 未加密的文件直接启动解压task
+                        startExtractTask();
+                    } else if (e && mProgressDialog.isShowing() && isAlive() && ZipUtils.isZipFormatFile(mFile.getFile())) {
+                        // zip格式的加密文件, 获取密码
+                        startTaskWithPassword();
+                    } else if (e && mProgressDialog.isShowing() && isAlive() && ZipUtils.isRarFormatFile(mFile.getFile())) {
+                        showToast(ERROR_CODE_ENCRYPTED_RAR);
+                    } else {
+                        // 十有八九用户取消操作了, 不采取任何行动;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showToast(ERROR_CODE_IOEXCEPTION);
+                } catch (RarException e) {
+                    e.printStackTrace();
+                    showToast(ERROR_CODE_RAREXCEPTION);
+                } catch (ZipException e) {
+                    e.printStackTrace();
+                    showToast(ERROR_CODE_ZIPEXCEPTION);
+                }
+            }
+        }.start();
+    }
+
+    /**
+     * 开启解压大文件的task
+     */
+    private void startExtractTask() {
+        TheApplication.postRunOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismissProgressDialog();
+                doExtractPackFile(null);
+            }
+        });
+    }
+
+    /**
+     * 先获取密码再开启task
+     */
+    private void startTaskWithPassword() {
+        TheApplication.postRunOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismissProgressDialog();
+                PasswordInputDialog passwordInputDialog = new PasswordInputDialog(mActivity);
+                passwordInputDialog.setListener(new PasswordInputDialog.PasswordInputCallback() {
+                    @Override
+                    public void onInputFinish(String password) {
+                        doExtractPackFile(password);
+                    }
+                });
+                passwordInputDialog.show();
+            }
+        });
+    }
+
+    private void doExtractPackFile(String password) {
+        mExtractPackFileTask = new ExtractPackFileTask();
+        mExtractPackFileTask.setListener(new ExtractingFilesListener() {
+            @Override
+            public void onPreExtractFiles() {
+                updateExtractFileDialog("开始解压缩文件");
+            }
+
+            @Override
+            public void onExtractingFile(String filePath) {
+                updateExtractFileDialog(filePath);
+            }
+
+            @Override
+            public void onPostExtractFiles() {
+                mExtractFileDialog.dismiss();
+                Toast.makeText(mActivity, "解压缩完成", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelExtractFiles() {
+                mExtractFileDialog.dismiss();
+                Toast.makeText(mActivity, "取消解压缩", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onExtractError() {
+                mExtractFileDialog.dismiss();
+                Toast.makeText(mActivity, "解压缩失败singlePack", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mExtractPackFileTask.execute(mFile.getFile().getPath(), password);
+    }
+
+    /**
+     * 更新正在解压缩文件的弹窗
+     *
+     * @param path path
+     */
+    private void updateExtractFileDialog(String path) {
+        if (mExtractFileDialog == null) {
+            mExtractFileDialog = new ExtractFileDialog(mActivity);
+            mExtractFileDialog.setCanceledOnTouchOutside(false);
+            mExtractFileDialog.setOnCancelListener(new OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    mExtractPackFileTask.cancel(true);
+                }
+            });
+        }
+        mExtractFileDialog.updatePath(path);
+        if (!mExtractFileDialog.isShowing()) {
+            mExtractFileDialog.show();
+        }
     }
 
     private void showProgressDialog() {
@@ -179,10 +304,5 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
     }
 }
