@@ -67,7 +67,7 @@
 
     <!-- 音乐管理页 -->
     <string name="music_title">Music</string>
-     <!--视频管理页 -->
+    <!--视频管理页 -->
     <string name="video_title">Video</string>
     <!-- 下载管理页 -->
     <string name="download_title">Download</string>

@@ -1,11 +1,15 @@
 package com.jb.filemanager.function.trash;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +46,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
     private boolean mIsScanning;
-
+    private LinearLayout mLlContent;
     private Button mBtnIgnore;
     private TextView mTvScanProgress;
     private TextView mTvChosenSize;
@@ -50,6 +54,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private FloatingGroupExpandableListView mCleanTrashExpandableListView;
     private ImageView mIvCleanButton;
     private CleanListAdapter mAdapter;
+    private ObjectAnimator mAnimator;
 
 
     @Override
@@ -64,6 +69,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     private void initView() {
+        mLlContent = (LinearLayout) findViewById(R.id.ll_content);
         mBtnIgnore = (Button) findViewById(R.id.btn_ignore);
         mBtnIgnore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,9 +82,35 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mTvTrashPath = (TextView) findViewById(R.id.tv_trash_path);
         mCleanTrashExpandableListView = (FloatingGroupExpandableListView) findViewById(R.id.clean_trash_expandable_list_view);
         mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button);
-
+        mIvCleanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleDisappearAnimation();
+                /*KShareViewActivityManager.getInstance(CleanTrashActivity.this).
+                        startActivity(CleanTrashActivity.this, CleanResultActivity.class,
+                                R.layout.activity_clean_trash, R.layout.activity_clean_result, mIvCleanButton);*/
+            }
+        });
         mAdapter = new CleanListAdapter(mPresenter.getDataGroup(), this);
         mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
+    }
+
+    private void handleDisappearAnimation() {
+        mAnimator = ObjectAnimator.ofFloat(mLlContent, "Alpha", 1, 0);
+        mAnimator.setDuration(1000);
+        mAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Intent intent = new Intent(CleanTrashActivity.this, CleanResultActivity.class);
+                int[] outLocation = new int[2];
+                mIvCleanButton.getLocationOnScreen(outLocation);
+                intent.putExtra("location", outLocation);
+                startActivity(intent);
+                overridePendingTransition(R.anim.in, R.anim.out);
+            }
+        });
+        mAnimator.start();
     }
 
     private void initData() {

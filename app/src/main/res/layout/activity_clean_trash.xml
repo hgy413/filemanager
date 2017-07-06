@@ -7,6 +7,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -45,11 +46,11 @@
             android:scrollbars="none"/>
     </LinearLayout>
 
-    <ImageView
+    <com.jb.filemanager.ui.view.TranslateImageView
         android:id="@+id/iv_clean_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:tag="image_share"/>
 </RelativeLayout>

@@ -224,6 +224,12 @@
                   android:windowSoftInputMode="stateVisible"
                   android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_transparent_bg"/>
 
+        <!--清理结果页-->
+        <activity
+            android:name=".function.trash.CleanResultActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <activity
             android:name=".function.applock.activity.AppLockPreActivity"
             android:screenOrientation="portrait"

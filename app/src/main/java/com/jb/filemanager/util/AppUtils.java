@@ -1502,4 +1502,14 @@ public class AppUtils {
     public static String getString(int resId) {
         return TheApplication.getAppContext().getResources().getString(resId);
     }
+
+    /**
+     * 获取Strings资源文件
+     *
+     * @param resId
+     * @return
+     */
+    public static int getColor(int resId) {
+        return TheApplication.getAppContext().getResources().getColor(resId);
+    }
 }
