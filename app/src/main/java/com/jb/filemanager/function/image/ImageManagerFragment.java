@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
@@ -22,6 +23,7 @@ import com.jb.filemanager.function.image.app.BaseFragment;
 import com.jb.filemanager.function.image.presenter.ImageContract;
 import com.jb.filemanager.function.image.presenter.ImagePresenter;
 import com.jb.filemanager.function.image.presenter.ImageSupport;
+import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.manager.file.FileManager;
 
 import java.util.List;
@@ -41,6 +43,7 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     private RecyclerView mImageManagerFragmentListView;
     private GridLayoutManager mGridLayoutManager;
     private ImageAdapter mAdapter;
+    private ImageView mSearch;
 
     @Nullable
     @Override
@@ -58,7 +61,8 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
             back.setText(R.string.image_title);
             back.setOnClickListener(this);
         }
-
+        mSearch = (ImageView) view.findViewById(R.id.iv_common_action_bar_with_search_search);
+        mSearch.setOnClickListener(this);
         mImageManagerFragmentListView = (RecyclerView) view.findViewById(R.id.fragment_image_rv);
         mPresenter = new ImagePresenter(this, new ImageSupport());
         loadData();
@@ -130,6 +134,7 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
                 }
                 break;
             case R.id.iv_common_action_bar_with_search_search:
+                SearchActivity.showSearchResult(getActivity());
                 break;
             default:
                 break;

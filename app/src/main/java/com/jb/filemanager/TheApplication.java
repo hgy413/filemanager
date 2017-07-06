@@ -28,6 +28,7 @@ import com.jb.filemanager.function.scanframe.clean.CleanManager;
 import com.jb.filemanager.function.scanframe.clean.event.GlobalDataLoadingDoneEvent;
 import com.jb.filemanager.function.scanframe.manager.ad.AdTrashManager;
 import com.jb.filemanager.function.scanframe.manager.residue.ResidualFileManager;
+import com.jb.filemanager.function.search.SearchManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.statistics.AlarmEight;
@@ -213,6 +214,8 @@ public class TheApplication extends Application {
 //        AppLockerCenter.getInstance();
         //权限警报管理器准备工作
         PermissionAlarmManager.getInstance().toReady();
+        //搜索管家启动
+        SearchManager.getInstance().toReady();
         // 主进程启动完毕,更新上一次启动的版本号和时间 **这句永远在最后
         appLaunchFinished();
 

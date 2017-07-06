@@ -132,9 +132,15 @@ public class BaseFragment extends android.support.v4.app.Fragment {
     /**
      * 压入Fragment到新栈中
      * */
-    public void pushFragment(BaseFragment aimFragment) {
-        if (mBaseFragmentActivity != null) {
-            mBaseFragmentActivity.pushFragment(aimFragment);
+    public void addFragment(BaseFragment aimFragment) {
+        if (mBaseFragmentActivity != null && aimFragment != null) {
+            mBaseFragmentActivity.addFragment(aimFragment);
+        }
+    }
+
+    public void replaceFragment(BaseFragment aimFragment) {
+        if (mBaseFragmentActivity != null && aimFragment != null) {
+            mBaseFragmentActivity.replaceFragment(aimFragment);
         }
     }
 

@@ -14,7 +14,6 @@ import com.jb.filemanager.function.image.ImageDetailFragment;
 import com.jb.filemanager.function.image.app.BaseFragment;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
-import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         ImageDetailFragment imageDetailFragment = new ImageDetailFragment();
         imageDetailFragment.setExtras(imageModleList, currentPos);
-        mCurrentFragment.pushFragment(imageDetailFragment);
+        mCurrentFragment.addFragment(imageDetailFragment);
     }
 
     /**

@@ -134,11 +134,21 @@ public class BaseFragmentActivity extends FragmentActivity {
     /**
      * 将目标Fragment添加到指定视图中
      */
-    public void pushFragment(BaseFragment aimFragment) {
+    public void addFragment(BaseFragment aimFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(android.R.id.content, aimFragment, aimFragment.getClass().getSimpleName());
         transaction.addToBackStack(aimFragment.getClass().getName());
         transaction.commitAllowingStateLoss();
+    }
+
+    /**
+     * 替换
+     * */
+    public void replaceFragment(BaseFragment aimFragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(android.R.id.content, aimFragment);
+        transaction.commit();
     }
 }

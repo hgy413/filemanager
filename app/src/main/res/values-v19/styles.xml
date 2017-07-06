@@ -10,4 +10,9 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
     </style>
+
+    <!--带有window背景的主题 透明背景-->
+    <style name="AppTheme.NoActionBar_TranslucentBar_with_transparent_bg" parent="Pop.Activity.Theme">
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
 </resources>
