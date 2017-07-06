@@ -305,7 +305,25 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void openWith(List<DocChildBean> docList) {
-        Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + "will open", Toast.LENGTH_SHORT).show();
+        DocChildBean childBean = docList.get(0);
+        Toast.makeText(DocManagerActivity.this, childBean.mDocName + "will open", Toast.LENGTH_SHORT).show();
+        Intent fileIntent;
+        //打开文件
+        switch (childBean.mFileType) {
+            case DocChildBean.TYPE_DOC:
+                fileIntent = FileUtil.getWordFileIntent(childBean.mDocPath);
+                break;
+            case DocChildBean.TYPE_TXT:
+                fileIntent = FileUtil.getTextFileIntent(childBean.mDocPath, false);
+                break;
+            case DocChildBean.TYPE_PDF:
+                fileIntent = FileUtil.getPdfFileIntent(childBean.mDocPath);
+                break;
+            default:
+                fileIntent = FileUtil.getTextFileIntent(childBean.mDocPath, false);
+                break;
+        }
+        startActivity(fileIntent);
     }
 
     @Override
@@ -343,7 +361,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void onBackPressed() {
         if (mPresenter != null) {
-            mPresenter.onClickBackButton(false);
+            mPresenter.onClickBackButton(mIsSearchInput);
         }
     }
 

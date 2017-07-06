@@ -19,25 +19,29 @@ import java.util.List;
 
 public class DocManagerSupport implements DocManagerContract.Support {
 
+    public static final String DOC = "doc";
+    public static final String DOCX = "docx";
+    public static final String TXT = "txt";
+    public static final String PDF = "pdf";
     private static final String TAG = "DocManagerSupport";
 
     @Override
     public List<DocChildBean> getDocFileInfo() {
 //        return queryFiles("doc");
-        List<DocChildBean> doc = queryFiles("doc");
-        List<DocChildBean> docX = queryFiles("docx");
+        List<DocChildBean> doc = queryFiles(DOC);
+        List<DocChildBean> docX = queryFiles(DOCX);
         doc.addAll(docX);
         return doc;
     }
 
     @Override
     public List<DocChildBean> getTextFileInfo() {
-        return queryFiles("txt");
+        return queryFiles(TXT);
     }
 
     @Override
     public List<DocChildBean> getPdfFileInfo() {
-        return queryFiles("pdf");
+        return queryFiles(PDF);
     }
 
     private List<DocChildBean> queryFiles(String type) {
@@ -54,6 +58,15 @@ public class DocManagerSupport implements DocManagerContract.Support {
                 MediaStore.Files.FileColumns.DATA + " like ?",
                 new String[]{"%." + type},
                 null);
+
+        int fileType = 0;
+        if (DOC.equals(type) || DOCX.equals(type)) {
+            fileType = DocChildBean.TYPE_DOC;
+        } else if (TXT.equals(type)) {
+            fileType = DocChildBean.TYPE_TXT;
+        } else if (PDF.equals(type)) {
+            fileType = DocChildBean.TYPE_PDF;
+        }
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -81,6 +94,7 @@ public class DocManagerSupport implements DocManagerContract.Support {
                     childBean.mDocName = name;
                     childBean.mAddDate = dataAdded;
                     childBean.mModifyDate = dateModify;
+                    childBean.mFileType = fileType;
                     childList.add(childBean);
 
                     Logger.d(TAG, childBean.mDocPath + "   " + childBean.mDocSize + "   " + childBean.mDocName + "   " +

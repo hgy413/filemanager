@@ -12,22 +12,23 @@ import android.os.Parcelable;
 
 public class DocChildBean implements Parcelable{
 
-    enum DocType {
-        DOC_TYPE, TXT_TYPE, PDF_TYPE
-    }
+    public static final int TYPE_DOC = 0;
+    public static final int TYPE_TXT = 1;
+    public static final int TYPE_PDF = 2;
 
+    public int mFileType;
     public String mDocDate;
     public long mAddDate;
     public long mModifyDate;
     public String mDocPath;
     public String mDocName;
     public String mDocSize;
-    public DocType mDocType;
     public boolean mIsChecked;
     public DocChildBean() {
     }
 
     protected DocChildBean(Parcel in) {
+        mFileType = in.readInt();
         mDocDate = in.readString();
         mAddDate = in.readLong();
         mModifyDate = in.readLong();
@@ -56,6 +57,7 @@ public class DocChildBean implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mFileType);
         parcel.writeString(mDocDate);
         parcel.writeLong(mAddDate);
         parcel.writeLong(mModifyDate);
