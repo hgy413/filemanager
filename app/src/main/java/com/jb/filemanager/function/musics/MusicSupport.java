@@ -122,4 +122,8 @@ public class MusicSupport implements MusicContract.Support {
         }
         return musicCount;
     }
+
+    @Override
+    public void delete(ArrayList<String> fullPathList) {
+    }
 }

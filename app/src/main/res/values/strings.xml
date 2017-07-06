@@ -237,4 +237,8 @@
 
     <!-- 广告-->
     <string name="ad_install_now">Install Now</string>
+    <string name="copy">Copy</string>
+    <string name="cut">Cut</string>
+    <string name="delete">Delete</string>
+    <string name="more">More</string>
 </resources>

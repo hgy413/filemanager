@@ -132,7 +132,6 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (mPresenter != null) {
@@ -151,7 +150,6 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             mImageFetcher.setExitTasksEarly(true);
             mImageFetcher.flushCache();
         }
-
         super.onPause();
     }
 
@@ -164,7 +162,6 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         if (mImageFetcher != null) {
             mImageFetcher.closeCache();
         }
-
         super.onDestroy();
     }
 
@@ -190,7 +187,6 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             default:
                 break;
         }
-
     }
 
     @Override

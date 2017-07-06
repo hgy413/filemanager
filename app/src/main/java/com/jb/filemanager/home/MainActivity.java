@@ -39,6 +39,7 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
+import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
@@ -68,7 +69,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private ViewPager mVpPhoneStorage;
     private ViewPager.SimpleOnPageChangeListener mViewPageChangeListener;
     private TabLayout mTlViewPageTab;
-    private LinearLayout mLlBottomOperateFirstContainer;
+    private BottomOperateBar mLlBottomOperateFirstContainer;
     private LinearLayout mLlBottomOperateSecondContainer;
     ///评分引导
     private RatePresenter mRatePresenter;
@@ -238,31 +239,32 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             mTlViewPageTab.setupWithViewPager(mVpPhoneStorage);
         }
 
-        mLlBottomOperateFirstContainer = (LinearLayout) findViewById(R.id.ll_common_operate_bar_container);
-        if (mLlBottomOperateFirstContainer != null) {
-            TextView cut = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_cut);
-            if (cut != null) {
-                cut.getPaint().setAntiAlias(true);
-                cut.setOnClickListener(this);
-            }
-
-            TextView copy = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_copy);
-            if (copy != null) {
-                copy.getPaint().setAntiAlias(true);
-                copy.setOnClickListener(this);
-            }
-
-            TextView paste = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_delete);
-            if (paste != null) {
-                paste.getPaint().setAntiAlias(true);
-                paste.setOnClickListener(this);
-            }
-
-            TextView more = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_more);
-            if (more != null) {
-                more.setOnClickListener(this);
-            }
-        }
+        mLlBottomOperateFirstContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
+        mLlBottomOperateFirstContainer.setClickListener(this);
+//        if (mLlBottomOperateFirstContainer != null) {
+//            TextView cut = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_cut);
+//            if (cut != null) {
+//                cut.getPaint().setAntiAlias(true);
+//                cut.setOnClickListener(this);
+//            }
+//
+//            TextView copy = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_copy);
+//            if (copy != null) {
+//                copy.getPaint().setAntiAlias(true);
+//                copy.setOnClickListener(this);
+//            }
+//
+//            TextView paste = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_delete);
+//            if (paste != null) {
+//                paste.getPaint().setAntiAlias(true);
+//                paste.setOnClickListener(this);
+//            }
+//
+//            TextView more = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_more);
+//            if (more != null) {
+//                more.setOnClickListener(this);
+//            }
+//        }
 
         mLlBottomOperateSecondContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_second_container);
         if (mLlBottomOperateSecondContainer != null) {

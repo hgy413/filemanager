@@ -8,6 +8,10 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.jb.filemanager.home.MainActivity;
+
+import java.util.ArrayList;
+
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
@@ -19,12 +23,12 @@ public class MusicPresenter implements MusicContract.Presenter,
         LoaderManager.LoaderCallbacks<GroupList<String, MusicInfo>> {
 
     private static final int LOADER_ID = 1;
-    private final MusicContract.View mView;
+    private final MusicActivity mView;
     private final MusicContract.Support mSupport;
     private final LoaderManager mLoaderManager;
     private final MusicsLoader mMusicLoader;
     private GroupList<String, MusicInfo> mMusicMaps;
-    public MusicPresenter(@NonNull MusicContract.View view, @NonNull MusicContract.Support support,
+    public MusicPresenter(@NonNull MusicActivity view, @NonNull MusicContract.Support support,
                           @NonNull MusicsLoader loader, @NonNull LoaderManager manager){
         mView = checkNotNull(view);
         mSupport = checkNotNull(support);
@@ -73,4 +77,27 @@ public class MusicPresenter implements MusicContract.Presenter,
     public void start() {
         mLoaderManager.initLoader(LOADER_ID, null, this).forceLoad();
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public void onClickOperateCutButton() {
+        mView.startActivity(new Intent(mView, MainActivity.class));
+    }
+
+    @Override
+    public void onClickOperateCopyButton() {
+        mView.startActivity(new Intent(mView, MainActivity.class));
+    }
+
+    @Override
+    public void onClickOperateDeleteButton() {
+        mSupport.delete(new ArrayList<String>());
+    }
+
+    @Override
+    public void onClickOperateMoreButton() {
+
+    }
+>>>>>>> 条
 }

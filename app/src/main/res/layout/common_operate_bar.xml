@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="SpUsage,ContentDescription"
-    android:id="@+id/ll_common_operate_bar_container"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_gravity="bottom"
-    android:background="#77000000"
-    android:orientation="horizontal"
-    android:visibility="gone">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <TextView
         android:id="@+id/tv_common_operate_bar_cut"
@@ -19,7 +11,7 @@
         android:gravity="center"
         android:drawableTop="@drawable/ic_drawer_about"
         android:drawablePadding="3dp"
-        android:text="Cut"
+        android:text="@string/cut"
         android:textColor="#FFFFFF"
         android:textSize="16dp"/>
 
@@ -32,7 +24,7 @@
         android:gravity="center"
         android:drawableTop="@drawable/ic_drawer_setting"
         android:drawablePadding="3dp"
-        android:text="Copy"
+        android:text="@string/copy"
         android:textColor="#FFFFFF"
         android:textSize="16dp"/>
 
@@ -45,7 +37,7 @@
         android:gravity="center"
         android:drawableTop="@drawable/ic_drawer_feedback"
         android:drawablePadding="3dp"
-        android:text="Delete"
+        android:text="@string/delete"
         android:textColor="#FFFFFF"
         android:textSize="16dp"/>
 
@@ -58,8 +50,8 @@
         android:gravity="center"
         android:drawableTop="@drawable/ic_operate_bar_more"
         android:drawablePadding="3dp"
-        android:text="More"
+        android:text="@string/more"
         android:textColor="#FFFFFF"
         android:textSize="16dp"/>
 
-</LinearLayout>
+</merge>

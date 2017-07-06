@@ -27,5 +27,7 @@ public interface MusicContract {
         Map<String, ArrayList<MusicInfo>> getAllMusicInfo();
 
         int getMuscisNum();
+
+        void delete(ArrayList<String> fullPathList);
     }
 }
