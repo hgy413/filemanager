@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.os.StrictMode;
 import android.os.UserManager;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -17,7 +16,6 @@ import com.jb.filemanager.abtest.ABTest;
 import com.jb.filemanager.ad.AdManager;
 import com.jb.filemanager.alarmtask.ScheduleTaskHandler;
 import com.jb.filemanager.buyuser.BuyUserManager;
-import com.jb.filemanager.function.applock.manager.AppLockerCenter;
 import com.jb.filemanager.function.daemon.AssistantReceiver;
 import com.jb.filemanager.function.daemon.AssistantService;
 import com.jb.filemanager.function.daemon.DaemonReceiver;
@@ -29,6 +27,8 @@ import com.jb.filemanager.function.scanframe.clean.event.GlobalDataLoadingDoneEv
 import com.jb.filemanager.function.scanframe.manager.ad.AdTrashManager;
 import com.jb.filemanager.function.scanframe.manager.residue.ResidualFileManager;
 import com.jb.filemanager.function.search.SearchManager;
+import com.jb.filemanager.function.zipfile.ExtractManager;
+import com.jb.filemanager.global.TheUncaughtExceptionHandler;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.statistics.AlarmEight;
@@ -49,7 +49,6 @@ import java.lang.reflect.Method;
 
 /**
  * Created by bill wang on 2017/6/20.
- *
  */
 
 public class TheApplication extends Application {
@@ -101,7 +100,7 @@ public class TheApplication extends Application {
 
         long s = System.currentTimeMillis();
         initCrashReport();
-
+        TheUncaughtExceptionHandler.getInstance().init();
         /*
          * fix android leak fix which is caused by UserManager holding on to a activity ctx
          * 反射处理userManager的泄露
@@ -145,6 +144,7 @@ public class TheApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
+        ExtractManager.getInstance().onAppDestroy();
     }
 
     public static Context getAppContext() {
@@ -167,7 +167,7 @@ public class TheApplication extends Application {
 
     /**
      * 将主进程的主线程设置成严苛模式 包括线程耗时以及内存泄露部分
-     * */
+     */
     private void initStrictMode() {
 //        if (BuildConfig.DEBUG) {
 //            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -235,7 +235,7 @@ public class TheApplication extends Application {
 
     /**
      * 此处为统计上传初始化代码 请<i>不要</i>删除 !!!!!
-     * */
+     */
     private void initEightUploadStatistic() {
         mAlarmEight = new AlarmEight(this);
         mTaskHandler = new ScheduleTaskHandler(this);
@@ -381,7 +381,7 @@ public class TheApplication extends Application {
      * 以免占用线程影响其他的重要数据库操作。
      * </p>
      *
-     * @param r runnable
+     * @param r           runnable
      * @param delayMillis 延迟指定的毫秒数执行.
      * @see #postRunOnShortTaskThread(Runnable)
      * @see #removeFromShortTaskThread(Runnable)
@@ -414,7 +414,7 @@ public class TheApplication extends Application {
     /**
      * 提交一个Runnable到UI线程执行<br>
      *
-     * @param r runnable
+     * @param r           runnable
      * @param delayMillis 延迟指定的毫秒数执行.
      * @see #postRunOnUiThread(Runnable)
      * @see #removeFromUiThread(Runnable)

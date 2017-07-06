@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="300dp"
+              android:background="#33000000"
+              android:gravity="center_vertical"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/view_extract_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/view_extract_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/view_extract_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/common_cancel"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/view_extract_backgroud_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="后台处理"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="16dp"/>
+</LinearLayout>

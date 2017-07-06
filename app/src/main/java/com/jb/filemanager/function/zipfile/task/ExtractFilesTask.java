@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.zipfile.task;
 
 import android.os.AsyncTask;
+import android.os.Process;
 import android.text.TextUtils;
 
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
@@ -45,6 +46,7 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
     // 若不是加密文件, 则是zip或者rar格式
     @Override
     protected final Boolean doInBackground(Object... params) {
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         String packFilePath = (String) params[0];
         String password = (String) params[1];
         List<ZipPreviewFileBean> data = (List<ZipPreviewFileBean>) params[2];

@@ -3,10 +3,10 @@ package com.jb.filemanager.function.zipfile.presenter;
 import android.util.Log;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.listener.LoadZipInnerFilesListener;
-import com.jb.filemanager.function.zipfile.task.ExtractFilesTask;
 import com.jb.filemanager.function.zipfile.task.LoadZipInnerFilesTask;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     private Stack<String> mPathStack = new Stack<>();
     private Stack<String> mPathStackBack = new Stack<>(); // 供undo使用
-    private ExtractFilesTask mExtractFilesTask;
+//    private ExtractFilesTask mExtractFilesTask;
     private List<ZipPreviewFileBean> mListData = new ArrayList<>();
     private List<ZipPreviewFileBean> mSelected = new ArrayList<>();
 
@@ -146,7 +146,9 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     @Override
     public void onBackPressed() {
-        if (!mPathStack.isEmpty()) {
+        if(ExtractManager.getInstance().isProgressDialogAttached()) {
+            ExtractManager.getInstance().hideProgressDialogFromWindow();
+        } else if (!mPathStack.isEmpty()) {
             // 存根
             mPathStackBack.clear();
             mPathStackBack.addAll(mPathStack);
@@ -163,9 +165,9 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
     // 两种情况: 1. 点击弹窗里的取消按钮; 2. 点击物理返回
     @Override
     public void onExtractDialogCancel() {
-        if (mExtractFilesTask != null) {
-            mExtractFilesTask.cancel(true);
-        }
+//        if (mExtractFilesTask != null) {
+//            mExtractFilesTask.cancel(true);
+//        }
     }
 
     /**
@@ -216,9 +218,10 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
             }
         }
         if (mSelected.size() > 0) {
-            mExtractFilesTask = new ExtractFilesTask();
-            mExtractFilesTask.setListener(this);
-            mExtractFilesTask.execute(mZipFilePath, mPassword, mSelected);
+//            mExtractFilesTask = new ExtractFilesTask();
+//            mExtractFilesTask.setListener(this);
+//            mExtractFilesTask.execute(mZipFilePath, mPassword, mSelected);
+            ExtractManager.getInstance().extractFiles(mZipFilePath, mPassword, mSelected);
         }
     }
 

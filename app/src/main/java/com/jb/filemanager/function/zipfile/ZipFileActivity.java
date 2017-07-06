@@ -82,4 +82,14 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         mOperationDialog = new ZipFileOperationDialog(this, fileItem);
         mOperationDialog.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (ExtractManager.getInstance().isProgressDialogAttached()) {
+            ExtractManager.getInstance().hideProgressDialogFromWindow();
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 }

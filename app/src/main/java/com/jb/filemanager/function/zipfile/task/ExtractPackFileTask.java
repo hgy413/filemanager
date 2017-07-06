@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.zipfile.task;
 
 import android.os.AsyncTask;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -43,6 +44,7 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... params) {
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         String packFilePath = params[0];
         String password = params[1];
 
@@ -77,10 +79,12 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                 if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
 
                 for (net.lingala.zip4j.model.FileHeader header : headers) {
+                    if (isCancelled()) return true;
                     publishProgress(header.getFileName());
+//                    Log.e("task", header.getFileName());
                     zipFile.extractFile(header, saveDir.getPath());
                 }
-                return true;
+                return  true;
             } catch (ZipException e) {
                 e.printStackTrace();
                 return false;
@@ -102,7 +106,7 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                     String name = FileUtils.formatterRarFileNameCode(header);
                     File destFile = new File(saveDir.getPath() + File.separator + name);
                     publishProgress(name);
-                    Log.e("task", name);
+//                    Log.e("task", name);
                     if (header.isDirectory()) {
                         destFile.mkdirs();
                     } else {
@@ -116,8 +120,10 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                         } catch (RarException e) {
                             String nam = e.getType().name();
 //                            Log.e("rar", nam + ";" + header.getFileNameString());
+                            return false;
                         } catch (RuntimeException e) {
                             e.printStackTrace();
+                            return false;
                         } finally {
                             outputStream.close();
                         }
