@@ -24,6 +24,14 @@ public class VideoContract {
         void onClickBackButton(boolean b);
 
         void start();
+
+        void onClickOperateCutButton();
+
+        void onClickOperateCopyButton();
+
+        void onClickOperateDeleteButton();
+
+        void onClickOperateMoreButton();
     }
 
     interface Support {

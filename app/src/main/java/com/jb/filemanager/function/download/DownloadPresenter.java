@@ -1,15 +1,14 @@
 package com.jb.filemanager.function.download;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-
 import com.jb.filemanager.function.musics.GroupList;
-
+import com.jb.filemanager.home.MainActivity;
 import java.io.File;
-
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
@@ -19,11 +18,11 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 public class DownloadPresenter implements DownloadContract.Presenter,
         LoaderManager.LoaderCallbacks<GroupList<String, File>> {
     private static final short LOADER_ID = 2;
-    private DownloadContract.View mView;
+    private DownloadActivity mView;
     private DownloadContract.Support support;
     private Loader mLoader;
     private LoaderManager mLoaderManager;
-    public DownloadPresenter(@NonNull DownloadContract.View mView, @NonNull DownloadContract.Support support,
+    public DownloadPresenter(@NonNull DownloadActivity mView, @NonNull DownloadContract.Support support,
                              @NonNull Loader loader, @NonNull LoaderManager manager) {
         this.mView = checkNotNull(mView);
         this.support = checkNotNull(support);
@@ -61,5 +60,25 @@ public class DownloadPresenter implements DownloadContract.Presenter,
     @Override
     public void start() {
         mLoaderManager.initLoader(LOADER_ID, null, this).forceLoad();
+    }
+
+    @Override
+    public void onClickOperateCutButton() {
+        mView.startActivity(new Intent(mView, MainActivity.class));
+    }
+
+    @Override
+    public void onClickOperateDeleteButton() {
+
+    }
+
+    @Override
+    public void onClickOperateMoreButton() {
+
+    }
+
+    @Override
+    public void onClickOperateCopyButton() {
+        mView.startActivity(new Intent(mView, MainActivity.class));
     }
 }

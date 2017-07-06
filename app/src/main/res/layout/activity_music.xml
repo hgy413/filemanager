@@ -6,10 +6,15 @@
     android:fitsSystemWindows="true"
     android:background="#347865">
 
-    <include layout="@layout/common_action_bar_with_search" />
+    <include
+        layout="@layout/common_action_bar_with_search"
+        android:radius="4dp"
+        />
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/elv_music"

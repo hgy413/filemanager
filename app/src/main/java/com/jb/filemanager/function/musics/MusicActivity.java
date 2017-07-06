@@ -81,7 +81,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                     @Override
                     public View getGroupView(int position) {
                         //获取自定定义的组View
-                        if (position < mMusicDataArrayMap.size()) {
+                        if (position < mMusicDataArrayMap.getGroup(position).size()) {
                             View view = getLayoutInflater().inflate(R.layout.item_music_group, null, false);
                             ((TextView) view.findViewById(R.id.tv_music_group_item_title))
                                     .setText(mMusicDataArrayMap.getGroupKey(position));

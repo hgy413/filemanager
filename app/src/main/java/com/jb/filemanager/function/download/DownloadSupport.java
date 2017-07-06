@@ -84,7 +84,6 @@ public class DownloadSupport implements DownloadContract.Support {
         return new GroupList<>();
     }
 
-
     public List<File> getFile(File file) {
         List<File> list = new ArrayList<>();
         File[] fileArray = file.listFiles();

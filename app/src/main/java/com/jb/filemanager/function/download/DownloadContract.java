@@ -16,9 +16,17 @@ public class DownloadContract {
     }
 
     interface Presenter {
+        void onClickOperateCopyButton();
         void onClickBackButton(boolean b);
 
         void start();
+
+        void onClickOperateCutButton();
+
+
+        void onClickOperateDeleteButton();
+
+        void onClickOperateMoreButton();
     }
 
     interface Support {
