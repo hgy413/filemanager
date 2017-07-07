@@ -54,7 +54,7 @@ public class BottomOperateBar extends LinearLayout {
 
     public BottomOperateBar setClickListener(@NonNull View.OnClickListener listener) {
         checkNotNull(listener);
-        mTvCopy.setOnClickListener(listener);
+        mTvCut.setOnClickListener(listener);
         mTvCopy.setOnClickListener(listener);
         mTvDelete.setOnClickListener(listener);
         mTvMore.setOnClickListener(listener);

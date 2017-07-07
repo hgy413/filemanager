@@ -8,14 +8,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
+import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
@@ -183,6 +189,25 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                 break;
             case R.id.iv_common_action_bar_with_search_search:
                 // TODO
+            case R.id.tv_common_operate_bar_cut:
+                if (mPresenter != null) {
+                    mPresenter.onClickOperateCutButton(mItemSelected);
+                }
+                break;
+            case R.id.tv_common_operate_bar_copy:
+                if (mPresenter != null) {
+                    mPresenter.onClickOperateCopyButton(mItemSelected);
+                }
+                break;
+            case R.id.tv_common_operate_bar_delete:
+                if (mPresenter != null) {
+                    mPresenter.onClickOperateDeleteButton();
+                }
+                break;
+            case R.id.tv_common_operate_bar_more:
+                if (mPresenter != null) {
+                    mPresenter.onClickOperateMoreButton(mItemSelected);
+                }
                 break;
             default:
                 break;
@@ -200,6 +225,97 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         mMusicListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showDeleteConfirmDialog() {
+        View dialogView = View.inflate(this, R.layout.dialog_main_delete_confirm, null);
+        TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_delete_confirm_confirm);
+        TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_delete_confirm_cancel);
+
+        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        }); // 取消按钮点击事件
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (mPresenter != null) {
+                    mPresenter.onClickConfirmDeleteButton(mItemSelected);
+                }
+            }
+        }); // 确定按钮点击事件
+
+        dialog.show();
+    }
+
+    @Override
+    public void showBottomMoreOperatePopWindow(boolean multiSelected) {
+        int resId;
+        if (multiSelected) {
+            resId = R.layout.pop_mutli_file_operate_more;
+        } else {
+            resId = R.layout.pop_single_file_operate_more;
+        }
+
+        // 一个自定义的布局，作为显示的内容
+        View contentView = getLayoutInflater().inflate(resId, null);
+        TextView details = (TextView) contentView.findViewById(R.id.tv_main_operate_more_detail);
+        TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
+
+        final PopupWindow popupWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+        popupWindow.setTouchable(true);
+
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
+
+        // 设置好参数之后再show
+        popupWindow.showAsDropDown(mBottomOperateContainer,
+                mBottomOperateContainer.getWidth() - contentView.getWidth(), 5);
+
+        if (details != null) {
+            details.getPaint().setAntiAlias(true);
+            details.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPresenter != null) {
+                        mPresenter.onClickOperateDetailButton();
+                    }
+                    popupWindow.dismiss();
+                }
+            });
+        }
+
+        if (rename != null) {
+            rename.getPaint().setAntiAlias(true);
+            rename.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPresenter != null) {
+                        mPresenter.onClickOperateRenameButton();
+                    }
+                    popupWindow.dismiss();
+                }
+            });
+        }
+    }
 
     public class RecyclerListAdapter extends RecyclerView.Adapter {
         private Context mContext;

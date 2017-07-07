@@ -26,7 +26,7 @@ public class MainContract {
         void showDetailMultiFile(ArrayList<File> files);
         void showNewFolderDialog();
         void showSortByDialog();
-
+        void showStoragePage();
         void updateView();
 
         void openDrawer(int openType);

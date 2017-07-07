@@ -2,8 +2,10 @@ package com.jb.filemanager.home;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.FileUtil;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings("StatementWithEmptyBody")
 class MainPresenter implements MainContract.Presenter {
-
+    private static final String TAG = "MainPresenter.class";
     public static final int MAIN_STATUS_NORMAL = 0;
     public static final int MAIN_STATUS_SELECT = 1;
 
@@ -48,7 +50,24 @@ class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onResume() {
-
+        // Befor display this page, Take a measure if there is an copy/cut operate to do
+        MainActivity activity = (MainActivity)mView;
+        String buttom_bar_operate = activity.getIntent().getStringExtra(Const.BOTTOM_OPERATE);
+        ArrayList<String> buttom_bat_opetete_date = activity.getIntent().getStringArrayListExtra(Const.BOTTOM_OPERATE_DATA);
+        if(buttom_bar_operate != null && buttom_bat_opetete_date != null) {
+            mSelectedFiles.clear();
+            for (String filePath : buttom_bat_opetete_date) {
+                mSelectedFiles.add(new File(filePath));
+            }
+            mView.showStoragePage();
+            if (Const.BOTTOM_OPERATE_BAR_CUT.equals(buttom_bar_operate)) {
+                onClickOperateCutButton();
+            } else if (Const.BOTTOM_OPERATE_BAR_COPY.equals(buttom_bar_operate)) {
+                onClickOperateCopyButton();
+            } else {
+                Log.d(TAG, buttom_bar_operate);
+            }
+        }
     }
 
     @Override

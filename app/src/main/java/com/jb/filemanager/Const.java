@@ -8,7 +8,7 @@ import java.io.File;
  * Created by bill wang on 16/8/16.
  * 常量定义处
  */
-public class Const {
+public interface Const {
     public static final String APP_CHANNEL = "200";
     // 机器
     public static final String SDCARD = Environment.getExternalStorageDirectory().getPath();
@@ -61,5 +61,12 @@ public class Const {
     // 广告政策
     public static final String FACEBOOK_AD_CHOICE_URL = "https://m.facebook.com/ads/ad_choices";
     public static final String ADMOB_AD_CONTENT_URL = "http://goappdl.goforandroid.com/soft/promote/com.jb.security.html";
+
+
+    // Operation
+    String BOTTOM_OPERATE = "operate";
+    String BOTTOM_OPERATE_BAR_CUT = "cut";
+    String BOTTOM_OPERATE_BAR_COPY = "copy";
+    String BOTTOM_OPERATE_DATA = "data";
 
 }

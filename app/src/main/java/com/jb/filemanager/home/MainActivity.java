@@ -1,6 +1,7 @@
 package com.jb.filemanager.home;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
@@ -241,30 +244,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
         mLlBottomOperateFirstContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mLlBottomOperateFirstContainer.setClickListener(this);
-//        if (mLlBottomOperateFirstContainer != null) {
-//            TextView cut = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_cut);
-//            if (cut != null) {
-//                cut.getPaint().setAntiAlias(true);
-//                cut.setOnClickListener(this);
-//            }
-//
-//            TextView copy = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_copy);
-//            if (copy != null) {
-//                copy.getPaint().setAntiAlias(true);
-//                copy.setOnClickListener(this);
-//            }
-//
-//            TextView paste = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_delete);
-//            if (paste != null) {
-//                paste.getPaint().setAntiAlias(true);
-//                paste.setOnClickListener(this);
-//            }
-//
-//            TextView more = (TextView) mLlBottomOperateFirstContainer.findViewById(R.id.tv_common_operate_bar_more);
-//            if (more != null) {
-//                more.setOnClickListener(this);
-//            }
-//        }
 
         mLlBottomOperateSecondContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_second_container);
         if (mLlBottomOperateSecondContainer != null) {
@@ -670,6 +649,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         }); // 升序按钮点击事件
 
         dialog.show();
+    }
+
+    @Override
+    public void showStoragePage() {
+        mVpPhoneStorage.setCurrentItem(1);
+        mTlViewPageTab.getTabAt(1).select();
     }
 
     @Override

@@ -13,6 +13,10 @@ import java.util.Map;
 public interface MusicContract {
     interface View {
         void showMusicList(GroupList<String, MusicInfo> mMusicMaps);
+
+        void showDeleteConfirmDialog();
+
+        void showBottomMoreOperatePopWindow(boolean b);
     }
 
     interface Presenter {
@@ -21,6 +25,20 @@ public interface MusicContract {
         void onClickBackButton(boolean b);
 
         void start();
+
+        void onClickOperateCutButton(boolean[] selectedPosition);
+
+        void onClickOperateCopyButton(boolean[] selectedPosition);
+
+        void onClickOperateDeleteButton();
+
+        void onClickOperateMoreButton(boolean[] selectedPosition);
+
+        void onClickConfirmDeleteButton(boolean[] selectedPosition);
+
+        void onClickOperateDetailButton();
+
+        void onClickOperateRenameButton();
     }
 
     interface Support {

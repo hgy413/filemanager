@@ -6,10 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 
+import com.jb.filemanager.Const;
 import com.jb.filemanager.home.MainActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
@@ -27,7 +30,7 @@ public class MusicPresenter implements MusicContract.Presenter,
     private final MusicContract.Support mSupport;
     private final LoaderManager mLoaderManager;
     private final MusicsLoader mMusicLoader;
-    private GroupList<String, MusicInfo> mMusicMaps;
+    private GroupList<String, MusicInfo> mMusicGroupList;
     public MusicPresenter(@NonNull MusicActivity view, @NonNull MusicContract.Support support,
                           @NonNull MusicsLoader loader, @NonNull LoaderManager manager){
         mView = checkNotNull(view);
@@ -43,12 +46,12 @@ public class MusicPresenter implements MusicContract.Presenter,
 
     @Override
     public void onLoadFinished(Loader<GroupList<String, MusicInfo>> loader, GroupList<String, MusicInfo> data) {
-        mMusicMaps = data;
-        if (mMusicMaps == null) {
+        mMusicGroupList = data;
+        if (mMusicGroupList == null) {
             //Todo 显示没有音乐提示
         } else {
             // 显示列表
-            mView.showMusicList(mMusicMaps);
+            mView.showMusicList(mMusicGroupList);
         }
     }
 
@@ -81,23 +84,78 @@ public class MusicPresenter implements MusicContract.Presenter,
 =======
 
     @Override
-    public void onClickOperateCutButton() {
-        mView.startActivity(new Intent(mView, MainActivity.class));
+    public void onClickOperateCutButton(boolean[] selectedPosition) {
+        if (selectedPosition != null && selectedPosition.length >0 ) {
+            Intent intent = new Intent(mView, MainActivity.class);
+            intent.putExtra(Const.BOTTOM_OPERATE, Const.BOTTOM_OPERATE_BAR_CUT);
+            intent.putExtra(Const.BOTTOM_OPERATE_DATA, selectedPositon2PathList(selectedPosition));
+            mView.startActivity(intent);
+        } else {
+            Toast.makeText(mView, "No Item is selected!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
-    public void onClickOperateCopyButton() {
-        mView.startActivity(new Intent(mView, MainActivity.class));
+    public void onClickOperateCopyButton(boolean[] selectedPosition) {
+        if (selectedPosition != null && selectedPosition.length >0 ) {
+            Intent intent = new Intent(mView, MainActivity.class);
+            intent.putExtra(Const.BOTTOM_OPERATE, Const.BOTTOM_OPERATE_BAR_COPY);
+            intent.putExtra(Const.BOTTOM_OPERATE_DATA, selectedPositon2PathList(selectedPosition));
+            mView.startActivity(intent);
+        } else {
+            Toast.makeText(mView, "No Item is selected!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onClickOperateDeleteButton() {
-        mSupport.delete(new ArrayList<String>());
+        mView.showDeleteConfirmDialog();
     }
 
     @Override
-    public void onClickOperateMoreButton() {
+    public void onClickOperateMoreButton(boolean[] selectedPosition) {
+        int selectCount = 0;
+        for (boolean isSelected : selectedPosition) {
+            if (isSelected) {
+                selectCount++;
+            }
+        }
+        // 这里size 只可能是大于等于1，没有选中文件的时候应该不会出现底部操作栏
+        switch (selectCount) {
+            case 1:
+                mView.showBottomMoreOperatePopWindow(false);
+                break;
+            default:
+                mView.showBottomMoreOperatePopWindow(true);
+                break;
+        }
+    }
 
+    @Override
+    public void onClickConfirmDeleteButton(boolean[] selectedPosition) {
+        if (selectedPosition != null && selectedPosition.length >0 ) {
+            mSupport.delete(selectedPositon2PathList(selectedPosition));
+        } else {
+            Toast.makeText(mView, "No Item is selected!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onClickOperateDetailButton() {
+
+    }
+
+    @Override
+    public void onClickOperateRenameButton() {
+
+    }
+
+    protected ArrayList<String> selectedPositon2PathList(boolean[] position) {
+        ArrayList<String> selectedFile = new ArrayList<>();
+        for (int i = 0; i < position.length; i++) {
+            selectedFile.add(mMusicGroupList.getItem(i).mFullPath);
+        }
+        return  selectedFile;
     }
 >>>>>>> 条
 }
