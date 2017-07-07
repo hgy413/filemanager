@@ -1,16 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="#347865">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#347865"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
 
-    <include layout="@layout/common_action_bar_with_search" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_image_rv"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/fragment_image_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/action_bar_back_drawable_selector"/>
+
+        <ImageView
+            android:id="@+id/fragment_image_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:visibility="gone"
+            android:src="@drawable/action_bar_back_drawable_selector"/>
+
+
+        <TextView
+            android:id="@+id/fragment_image_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/fragment_image_back"
+            android:text="@string/common_action_bar_title"
+            android:textColor="@drawable/action_bar_back_text_selector"
+            android:textSize="20dp"/>
+
+        <ImageView
+            android:id="@+id/fragment_image_search"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_bar_search"/>
+
+        <com.jb.filemanager.commomview.GroupSelectBox
+            android:id="@+id/fragment_image_check_group"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:visibility="gone"
+            android:scaleType="centerInside"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <ExpandableListView
+        android:id="@+id/fragment_image_el"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:groupIndicator="@null"/>
 
 </LinearLayout>

@@ -13,11 +13,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.image.adapter.ImageAdapter;
+import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.app.BaseFragment;
 import com.jb.filemanager.function.image.presenter.ImageContract;
@@ -40,10 +42,13 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     //是否内部存储
     private boolean isInternalStorage = false;
     //图片列表
-    private RecyclerView mImageManagerFragmentListView;
-    private GridLayoutManager mGridLayoutManager;
-    private ImageAdapter mAdapter;
+    private ExpandableListView mExpandableListView;
+    private ImageExpandableAdapter mAdapter;
     private ImageView mSearch;
+    private GroupSelectBox mGroupSelectBox;
+    private TextView mTitle;
+    private ImageView mBack;
+    private ImageView mCancel;
 
     @Nullable
     @Override
@@ -55,22 +60,28 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         handleExtras();
-        TextView back = (TextView) view.findViewById(R.id.tv_common_action_bar_with_search_title);
-        if (back != null) {
-            back.getPaint().setAntiAlias(true);
-            back.setText(R.string.image_title);
-            back.setOnClickListener(this);
+        mTitle = (TextView) view.findViewById(R.id.fragment_image_title);
+        mBack = (ImageView) view.findViewById(R.id.fragment_image_back);
+        mCancel = (ImageView) view.findViewById(R.id.fragment_image_cancel);
+        if (mTitle != null) {
+            mTitle.getPaint().setAntiAlias(true);
+            mTitle.setText(R.string.image_title);
         }
-        mSearch = (ImageView) view.findViewById(R.id.iv_common_action_bar_with_search_search);
+        mSearch = (ImageView) view.findViewById(R.id.fragment_image_search);
+        mGroupSelectBox = (GroupSelectBox) view.findViewById(R.id.fragment_image_check_group);
+        mGroupSelectBox.setImageSource(R.drawable.choose_none, R.drawable.choose_all, R.drawable.choose_all);
         mSearch.setOnClickListener(this);
-        mImageManagerFragmentListView = (RecyclerView) view.findViewById(R.id.fragment_image_rv);
+        mExpandableListView = (ExpandableListView) view.findViewById(R.id.fragment_image_el);
+        mCancel.setOnClickListener(this);
+        mBack.setOnClickListener(this);
+        mGroupSelectBox.setOnClickListener(this);
         mPresenter = new ImagePresenter(this, new ImageSupport());
         loadData();
     }
 
     /**
      * 设置额外数据
-     * */
+     */
     public void setExtras(boolean isInternalStorage) {
         Bundle extras = new Bundle();
         extras.putBoolean(ARG_IS_INTERNAL_STORAGE, isInternalStorage);
@@ -79,7 +90,7 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
 
     /**
      * 处理数据
-     * */
+     */
     private void handleExtras() {
         Bundle extras = getArguments();
         if (extras != null) {
@@ -90,24 +101,53 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void bindData(List<ImageGroupModle> imageGroupModleList) {
         if (mAdapter == null) {
-            mAdapter = new ImageAdapter(imageGroupModleList, this);
-            mGridLayoutManager = new GridLayoutManager(getContext(), 4);
-            mImageManagerFragmentListView.setAdapter(mAdapter);
-            mImageManagerFragmentListView.setLayoutManager(mGridLayoutManager);
-        }
-        mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                //如果是标题 则返回4
-                //反之1
-                if (mAdapter.getItemViewType(position) == 0) {
-                    return 4;
-                }
-                return 1;
+            mAdapter = new ImageExpandableAdapter(imageGroupModleList, this, mPresenter);
+            mExpandableListView.setAdapter(mAdapter);
+            //默认全部展开
+            for (int i = 0; i < imageGroupModleList.size(); i++) {
+                mExpandableListView.expandGroup(i);
             }
-        });
+        }
         //绑定数据
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showSelected(int size) {
+        if (size > 0) {
+            //修改标题
+            mTitle.setText(size + ">> 被选");
+            mGroupSelectBox.setVisibility(View.VISIBLE);
+            mGroupSelectBox.setState(GroupSelectBox.SelectState.NONE_SELECTED);
+            mCancel.setVisibility(View.VISIBLE);
+            mSearch.setVisibility(View.GONE);
+            mBack.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showNoSelected() {
+        //修改标题
+        mTitle.setText(R.string.image_title);
+        mGroupSelectBox.setVisibility(View.GONE);
+        mCancel.setVisibility(View.GONE);
+        mSearch.setVisibility(View.VISIBLE);
+        mBack.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showAllSelected() {
+        mGroupSelectBox.setState(GroupSelectBox.SelectState.ALL_SELECTED);
+    }
+
+    @Override
+    public void notifyViewChg() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void finish() {
+        onToBack();
     }
 
     @Override
@@ -128,13 +168,25 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_common_action_bar_with_search_title:
+            case R.id.fragment_image_back:
                 if (mPresenter != null) {
                     mPresenter.handleBackClick();
                 }
                 break;
-            case R.id.iv_common_action_bar_with_search_search:
+            case R.id.fragment_image_search:
                 SearchActivity.showSearchResult(getActivity());
+                break;
+            case R.id.fragment_image_cancel:
+                //cancel
+                if (mPresenter != null) {
+                    mPresenter.handleCancel();
+                }
+                break;
+            case R.id.fragment_image_check_group:
+                //check
+                if (mPresenter != null) {
+                    mPresenter.handleCheck(mGroupSelectBox.getState() == GroupSelectBox.SelectState.ALL_SELECTED);
+                }
                 break;
             default:
                 break;
@@ -152,7 +204,7 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
                         null,
                         MediaStore.Images.Media.MIME_TYPE + "=? or "
                                 + MediaStore.Images.Media.MIME_TYPE + "=?",
-                        new String[] { "image/jpeg", "image/png" },
+                        new String[]{"image/jpeg", "image/png"},
                         MediaStore.Images.Media.DATE_ADDED);
             }
 

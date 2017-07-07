@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:text="group_image_result_tv"
-          tools:background="@color/ad_color_8acb29">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
 
-</TextView>
+    <TextView
+        android:id="@+id/group_image_result_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:text="group_image_result_tv"
+        tools:background="@color/ad_color_8acb29"/>
+
+    <com.jb.filemanager.commomview.GroupSelectBox
+        android:id="@+id/group_image_result_gsb"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right|bottom"/>
+
+</RelativeLayout>

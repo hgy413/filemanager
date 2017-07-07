@@ -41,5 +41,21 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="Pop.Activity.Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation_NoAnimation</item>
+    </style>
+
+    <!--带有window背景的主题 透明背景-->
+    <style name="AppTheme.NoActionBar_TranslucentBar_with_transparent_bg" parent="Pop.Activity.Theme">
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
 
 </resources>

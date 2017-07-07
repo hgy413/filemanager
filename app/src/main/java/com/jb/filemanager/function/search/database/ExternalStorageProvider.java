@@ -127,4 +127,19 @@ public class ExternalStorageProvider extends BaseDataProvider {
             return number != 0;
         }
     }
+
+    /**
+     * 删除指定数据
+     * */
+    public void deleteData(String path) {
+        synchronized (TAG) {
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            String DELETE_DATA = "DELETE FROM " + ExternalStorageInfoTable.TABLE_NAME + " WHERE " + ExternalStorageInfoTable.ABSOLUTE_PATH + " = " + path;
+            try {
+                db.execSQL(DELETE_DATA);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -3,16 +3,20 @@ package com.jb.filemanager.function.search;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Process;
+import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.search.database.ExternalStorageProvider;
+import com.jb.filemanager.function.search.event.FileDeleteEvent;
 import com.jb.filemanager.function.search.event.SearchFinishEvent;
 import com.jb.filemanager.function.search.modle.FileInfo;
-import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.util.Logger;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 /**
  * Created by nieyh on 17-7-5.
@@ -39,7 +43,7 @@ public class SearchManager {
     //插入数据中
     private final int STATE_UDATEDATA = 0x02;
     //获取数据中
-    private final int STATE_GETDATA = 0x03;
+    private final int STATE_OPERATEDATA = 0x03;
     //空闲
     private final int STATE_IDLE = 0x04;
 
@@ -62,12 +66,31 @@ public class SearchManager {
     private volatile int mQuestCount = 0;
     //数据库操作
     private ExternalStorageProvider mExternalStorageProvider;
+    //接受数据被删除
+    private IOnEventMainThreadSubscriber<FileDeleteEvent> mFileDeleteEventSubscriber = new IOnEventMainThreadSubscriber<FileDeleteEvent>() {
+        @Override
+        @Subscribe
+        public void onEventMainThread(final FileDeleteEvent event) {
+            //直接将任务 直接加到任务列表中 只要最终被执行就行 无所谓时间
+            mState = STATE_OPERATEDATA;
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mExternalStorageProvider.deleteData(event.mAbsolutePath);
+                    mState = STATE_IDLE;
+                }
+            });
+        }
+    };
 
     private SearchManager() {
         if (!mTaskWorker.isAlive()) {
             mTaskWorker.start();
             mHandler = new Handler(mTaskWorker.getLooper());
             Logger.w(SearchManager.TAG, "contructor");
+        }
+        if (!TheApplication.getGlobalEventBus().isRegistered(mFileDeleteEventSubscriber)) {
+            TheApplication.getGlobalEventBus().register(mFileDeleteEventSubscriber);
         }
         mExternalStorageProvider = new ExternalStorageProvider(TheApplication.getAppContext());
     }
@@ -87,8 +110,9 @@ public class SearchManager {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mState == STATE_GETDATA) {
-                        // 当用户获取数据时 则等待一段时间 再来查看状态
+                    if (mState == STATE_OPERATEDATA) {
+                        //当用户获取数据时 则等待一段时间 再来查看状态
+                        //由于深度扫描 费时间 所以让出cpu调用
                         mHandler.postDelayed(this, UNNORMAL_WAIT_TIME);
                         return;
                     }
@@ -146,7 +170,7 @@ public class SearchManager {
             }, MAX_SEARCH_WAIT_TIME);
         } else {
             //在当前线程中直接设置成获取数据状态
-            mState = STATE_GETDATA;
+            mState = STATE_OPERATEDATA;
             //直接获取数据
             if (mHandler != null) {
                 mHandler.post(new Runnable() {
@@ -171,7 +195,7 @@ public class SearchManager {
 //    public void checkSearchResult(final String parameter) {
 //        //当处于空闲的
 //        if (mState == STATE_IDLE) {
-//            mState = STATE_GETDATA;
+//            mState = STATE_OPERATEDATA;
 //            if (mHandler != null) {
 //                mHandler.post(new Runnable() {
 //                    @Override

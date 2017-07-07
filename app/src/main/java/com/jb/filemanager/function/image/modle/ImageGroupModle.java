@@ -16,15 +16,16 @@ public class ImageGroupModle {
     public Calendar mCalendar;
     //时间
     public String mTimeDate;
-    //图片数据列表
-    public List<ImageModle> mImageModleList;
+    //图片数据列表 包含三个三个的数组列表
+    public List<List<ImageModle>> mImageModleList;
     //图片分组模组数据
+    public boolean isCheck;
 
     public ImageGroupModle() {
         mImageModleList = new ArrayList<>();
     }
 
-    public ImageGroupModle(long date, List<ImageModle> imageModleList) {
+    public ImageGroupModle(long date, List<List<ImageModle>> imageModleList) {
         this.mCalendar = Calendar.getInstance();
         this.mCalendar.setTimeInMillis(date);
         this.mTimeDate = TimeUtil.getStringDate(mCalendar.getTime());
