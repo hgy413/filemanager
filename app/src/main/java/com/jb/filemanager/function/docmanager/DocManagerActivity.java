@@ -25,12 +25,18 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.ui.dialog.FileDeleteConfirmDialog;
+import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
+import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
+import com.jb.filemanager.util.StorageUtil;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.jb.filemanager.function.apkmanager.AppManagerActivity.hideInputMethod;
@@ -69,6 +75,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private Handler mHandler;
     private boolean mIsMoreOperatorShown;
     private BroadcastReceiver mScanSdReceiver;
+    private SingleFileDetailDialog mSingleFileDetailDialog;
+    private MultiFileDetailDialog mMultiFileDetailDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,6 +304,31 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void showDocDetail(List<DocChildBean> docList) {
         Toast.makeText(DocManagerActivity.this, docList.size() + "个 文件的detail", Toast.LENGTH_SHORT).show();
+        if (docList.size() == 1) {//选中的是单个文件
+            DocChildBean childBean = docList.get(0);
+            File file = new File(childBean.mDocPath);
+            mSingleFileDetailDialog = new SingleFileDetailDialog(this, file, new SingleFileDetailDialog.Listener() {
+                @Override
+                public void onConfirm(SingleFileDetailDialog dialog) {
+                    mSingleFileDetailDialog.dismiss();//确认关闭弹窗
+                    // TODO: 2017/7/6 add by --miwo 是否要取消选择?
+                }
+            });
+            mSingleFileDetailDialog.show();
+        } else {//多个文件
+            ArrayList<File> fileList = new ArrayList<>();
+            for (DocChildBean childBean : docList) {
+                fileList.add(new File(childBean.mDocPath));
+            }
+            mMultiFileDetailDialog = new MultiFileDetailDialog(this, fileList, new MultiFileDetailDialog.Listener() {
+                @Override
+                public void onConfirm(MultiFileDetailDialog dialog) {
+                    mMultiFileDetailDialog.dismiss();
+                    // TODO: 2017/7/6 add by --miwo 是否要处理取消选择?
+                }
+            });
+            mMultiFileDetailDialog.show();
+        }
     }
 
     @Override
@@ -324,6 +357,14 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 break;
         }
         startActivity(fileIntent);
+    }
+
+    @Override
+    public void updateDeleteProgress(int done, int total) {
+        if (done == total) {
+            //说明删完了
+            Toast.makeText(DocManagerActivity.this, total + "delete has done", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -462,13 +503,63 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private void handleDataCopy() {
         List<DocChildBean> checkedDoc = getCheckedDoc();
         Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will copy", Toast.LENGTH_SHORT).show();
-        // TODO: 2017/7/4 add by --miwo 此处应有复制的逻辑
+        //判断空间是否充足
+        long totalSize = 0;
+        for (DocChildBean childBean : checkedDoc) {
+            totalSize += Long.parseLong(childBean.mDocSize);
+        }
+        if (!StorageUtil.isSDCardAvailable()) {
+            Toast.makeText(DocManagerActivity.this, "sd card is not available plz try again later", Toast.LENGTH_SHORT).show();
+        }
+        long freeSize = StorageUtil.getSDCardInfo(this.getApplicationContext()).mFree;
+        if (freeSize < totalSize) {
+            Toast.makeText(DocManagerActivity.this, "there is not enough space, plz try again later", Toast.LENGTH_SHORT).show();
+        }
+        // TODO: 2017/7/4 add by --miwo 传递复制的参数
     }
 
     private void handleDataDelete() {
-        List<DocChildBean> checkedDoc = getCheckedDoc();
+        final List<DocChildBean> checkedDoc = getCheckedDoc();
+        Logger.d(TAG, "之前选中的数量" + checkedDoc.size());
         Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will delete", Toast.LENGTH_SHORT).show();
         // TODO: 2017/7/4 add by --miwo 此处应有删除的逻辑
+        ArrayList<File> fileList = new ArrayList<>();
+        for (DocChildBean childBean : checkedDoc) {
+            fileList.add(new File(childBean.mDocPath));
+        }
+        FileDeleteConfirmDialog confirmDialog = new FileDeleteConfirmDialog(this, fileList);
+        confirmDialog.setOnDialogClickListener(new FileDeleteConfirmDialog.OnClickListener() {
+            @Override
+            public void clickConfirm() {
+                //刷新页面数据
+                Iterator<DocGroupBean> groupIterator = mAppInfo.iterator();
+                while (groupIterator.hasNext()) {
+                    DocGroupBean group = groupIterator.next();
+                    /*if (group.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {//如果全选  那么就全部删除
+                        groupIterator.remove();
+                        continue;
+                    }*/
+                    Iterator<DocChildBean> childIterator = group.getChildren().iterator();
+                    while (childIterator.hasNext()) {
+                        DocChildBean child = childIterator.next();
+                        if (child.mIsChecked) {//删除选中的文件
+                            childIterator.remove();
+                        }
+                    }
+                }
+                mPresenter.handleFileDelete(checkedDoc);
+                //隐藏底部栏
+                mRlCommonOperateBarContainer.setVisibility(View.GONE);
+                mPresenter.refreshData();
+                Logger.d(TAG, "剩余选中的数量" + getCheckedDoc().size());
+            }
+
+            @Override
+            public void clickCancel() {
+
+            }
+        });
+        confirmDialog.show();
     }
 
     private void handleDataCut() {

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
 import com.jb.filemanager.function.rate.dialog.RateDialog;
@@ -29,6 +30,8 @@ import com.jb.filemanager.function.rate.dialog.RateToGpDialog;
 import com.jb.filemanager.function.rate.presenter.RateContract;
 import com.jb.filemanager.function.rate.presenter.RatePresenter;
 import com.jb.filemanager.function.rate.presenter.RateSupport;
+import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
+import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
@@ -41,6 +44,8 @@ import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,6 +80,13 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //暂时不要删除
+        try {
+            TheApplication.getGlobalEventBus().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -100,6 +112,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     protected void onDestroy() {
         if (mPresenter != null) {
             mPresenter.onDestroy();
+        }
+
+        try {//暂时不要删除
+            TheApplication.getGlobalEventBus().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (mVpPhoneStorage != null) {
@@ -871,5 +889,20 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     public boolean gotoGp() {
         return AppUtils.openGP(this);
+    }
+
+
+    /**
+     * 扫描到的文件的大小
+     *
+     * @param event e
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CleanScanFileSizeEvent event) {
+    }
+
+    @Subscribe
+    public void onEventMainThread(CleanScanDoneEvent event) {
+
     }
 }

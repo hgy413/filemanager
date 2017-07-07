@@ -232,7 +232,11 @@ public class CleanEventManager {
                                       long scanSize) {
         event.addSize(scanSize);
         if (event.isSendTime()) {
-            TheApplication.getGlobalEventBus().postSticky(event);
+            try {
+                TheApplication.getGlobalEventBus().postSticky(event);
+            } catch (StackOverflowError stackOverflowError) {
+                stackOverflowError.printStackTrace();
+            }
         }
     }
 

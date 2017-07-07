@@ -26,6 +26,7 @@ public class DocManagerContract {
         void showDocDetail(List<DocChildBean> docList);
         void showInFolder(List<DocChildBean> docList);
         void openWith(List<DocChildBean> docList);
+        void updateDeleteProgress(int done,int total);
     }
 
     interface Presenter {
@@ -40,11 +41,13 @@ public class DocManagerContract {
         void scanStart();
         void scanFinished();
         List<DocGroupBean> getDocInfo();
+        void handleFileDelete(List<DocChildBean> childBeenList);
     }
 
     interface Support {
         List<DocChildBean> getDocFileInfo();
         List<DocChildBean> getTextFileInfo();
         List<DocChildBean> getPdfFileInfo();
+        void handleFileDelete(DocChildBean childBeen);
     }
 }

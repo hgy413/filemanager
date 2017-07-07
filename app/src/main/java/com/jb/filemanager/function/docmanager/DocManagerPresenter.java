@@ -108,4 +108,15 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         groups.add(pdfGroupBean);
         return groups;
     }
+
+    @Override
+    public void handleFileDelete(List<DocChildBean> childBeenList) {
+//        mSupport.handleFileDelete(childBeenList);
+        //处理删除进度的问题
+        int size = childBeenList.size();
+        for (int i = 0; i < size; i++) {
+            mSupport.handleFileDelete(childBeenList.get(i));
+            mView.updateDeleteProgress(i + 1, size + 1);
+        }
+    }
 }

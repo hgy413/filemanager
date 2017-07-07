@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
@@ -106,5 +107,16 @@ public class DocManagerSupport implements DocManagerContract.Support {
             cursor.close();
         }
         return childList;
+    }
+
+    @Override
+    public void handleFileDelete(DocChildBean child) {
+            int delete = TheApplication.getAppContext().getContentResolver().delete(
+                    Uri.parse("content://media/external/file"),
+                    MediaStore.Files.FileColumns.DATA + " like ?",
+                    new String[]{child.mDocPath});
+            Logger.d(TAG, "delete number" + delete + "   " + child.mDocName);
+
+        FileUtil.deleteFile(child.mDocPath);
     }
 }

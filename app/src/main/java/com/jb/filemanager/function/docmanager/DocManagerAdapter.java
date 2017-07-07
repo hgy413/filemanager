@@ -125,7 +125,7 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
     public void setListData(List<DocGroupBean> groups){
         mGroups.clear();
         mGroups.addAll(groups);
-        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中
+//        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中
         notifyDataSetChanged();
     }
 
