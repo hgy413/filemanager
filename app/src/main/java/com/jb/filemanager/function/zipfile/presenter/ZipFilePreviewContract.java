@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ZipFilePreviewContract {
     interface View {
+        void addBreadcrumbRoot(String rootDir);
         void updateListData(List<ZipPreviewFileBean> data);
         void showProgressDialog();
         void hideProgressDialog();

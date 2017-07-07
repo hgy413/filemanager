@@ -63,7 +63,7 @@ public class ZipFilePreviewActivity extends BaseActivity implements
 
         mNavigation = (BreadcrumbNavigation) findViewById(R.id.navigation);
         mNavigation.setOnBreadcrumbClickListener(this);
-        mNavigation.addRootItem("");
+//        mNavigation.addRootItem("");
 
         mListView = (ListView) findViewById(R.id.zip_pre_lv);
         mListView.setOnItemClickListener(this);
@@ -74,6 +74,13 @@ public class ZipFilePreviewActivity extends BaseActivity implements
                     intent.getStringExtra(EXTRA_PASSWORD));
         } else {
             finish();
+        }
+    }
+
+    @Override
+    public void addBreadcrumbRoot(String rootDir) {
+        if (mNavigation != null) {
+            mNavigation.addRootItem(rootDir);
         }
     }
 

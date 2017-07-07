@@ -8,6 +8,7 @@ import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.listener.LoadZipInnerFilesListener;
 import com.jb.filemanager.function.zipfile.task.LoadZipInnerFilesTask;
+import com.jb.filemanager.function.zipfile.util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     private String mZipFilePath;
     private String mPassword;
-    private String mRootDir = "";
+    private String mRootDir;
     private String mRootDirBack; // 供undo使用
 
     private Stack<String> mPathStack = new Stack<>();
@@ -42,6 +43,8 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
     public void onCreate(String filePath, String password) {
         mZipFilePath = filePath;
         mPassword = password;
+        mRootDir = FileUtils.getFileName(mZipFilePath);
+        mView.addBreadcrumbRoot(mRootDir);
         loadFiles();
     }
 
@@ -51,7 +54,11 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
     private void loadFiles() {
         mTask = new LoadZipInnerFilesTask();
         mTask.setListener(this);
-        mTask.execute(mZipFilePath, mRootDir, mPassword);
+        if (mRootDir.equals(FileUtils.getFileName(mZipFilePath))) {
+            mTask.execute(mZipFilePath, "", mPassword);
+        } else {
+            mTask.execute(mZipFilePath, mRootDir, mPassword);
+        }
     }
 
     @Override

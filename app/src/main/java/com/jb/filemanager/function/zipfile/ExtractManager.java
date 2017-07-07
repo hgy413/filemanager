@@ -34,6 +34,8 @@ import java.util.List;
 public final class ExtractManager implements ExtractingFilesListener, View.OnClickListener, View.OnAttachStateChangeListener {
 
     private static final int EXTRACT_NOTIFICATION_ID = 0x12138;
+    // 正在解压的路径刷新间隔, 需要严格控制, 频率过快会引发系统崩溃, 手机自动锁屏等问题
+    private static final long FLUSH_UI_INTERVAL_TIME = 380L;
     private static ExtractManager sInstance;
     private Notification mNotification;
 
@@ -165,7 +167,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     @Override
     public void onExtractingFile(String filePath) {
         mCurrentExtractingFile = filePath; // 备用
-        if (System.currentTimeMillis() - lastUpdateUiTime > 400) {
+        if (System.currentTimeMillis() - lastUpdateUiTime > FLUSH_UI_INTERVAL_TIME) {
             lastUpdateUiTime = System.currentTimeMillis();
             updateDialogContent();
             updateNotificationContent();
