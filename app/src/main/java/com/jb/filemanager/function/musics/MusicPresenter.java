@@ -80,8 +80,6 @@ public class MusicPresenter implements MusicContract.Presenter,
     public void start() {
         mLoaderManager.initLoader(LOADER_ID, null, this).forceLoad();
     }
-<<<<<<< HEAD
-=======
 
     @Override
     public void onClickOperateCutButton(boolean[] selectedPosition) {
@@ -157,5 +155,4 @@ public class MusicPresenter implements MusicContract.Presenter,
         }
         return  selectedFile;
     }
->>>>>>> 条
 }

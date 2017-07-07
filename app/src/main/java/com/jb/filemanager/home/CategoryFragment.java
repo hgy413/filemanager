@@ -162,7 +162,7 @@ public class CategoryFragment extends Fragment {
                     //apk管理
                     startActivity(new Intent(getContext(), AppManagerActivity.class));
                         break;
-                    case 7:
+                    case 6:
                         startActivity(new Intent(getContext(), VideoActivity.class));
                         break;
                     default:

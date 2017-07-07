@@ -15,10 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
-import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.APIUtil;
@@ -26,7 +24,6 @@ import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
@@ -43,9 +40,11 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     private RecyclerView mRvMuscicList;
     private GroupList<String, MusicInfo> mMusicDataArrayMap;
     private RecyclerListAdapter mMusicListAdapter;
-    private LinearLayout mLlBottomOperateFirstContainer;
+    private BottomOperateBar mBottomOperateContainer;
+
     private boolean[] mItemSelected;
     private int mSelecedCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +59,8 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         mPresenter.onCreate(getIntent());
         initView();
     }
+
     // private start
-
-
     private void initView() {
         TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
         if (back != null) {
@@ -117,7 +115,8 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         mMusicListAdapter = new RecyclerListAdapter(this, mMusicDataArrayMap);
         mRvMuscicList.setAdapter(mMusicListAdapter);
 
-        mLlBottomOperateFirstContainer = (LinearLayout)findViewById(R.id.ll_common_operate_bar_container);
+        mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
+        mBottomOperateContainer.setClickListener(this);
     }
 
     @Override
@@ -148,7 +147,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     @Override
     protected void onPause() {
         if (mPresenter != null) {
-           // mPresenter.onPause();
+            // mPresenter.onPause();
         }
 
         if (mImageFetcher != null) {
@@ -162,7 +161,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     @Override
     protected void onDestroy() {
         if (mPresenter != null) {
-           // mPresenter.onDestroy();
+            // mPresenter.onDestroy();
         }
 
         if (mImageFetcher != null) {
@@ -175,7 +174,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mPresenter != null) {
-           // mPresenter.onActivityResult(requestCode, resultCode, data);
+            // mPresenter.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -189,6 +188,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                 break;
             case R.id.iv_common_action_bar_with_search_search:
                 // TODO
+
             case R.id.tv_common_operate_bar_cut:
                 if (mPresenter != null) {
                     mPresenter.onClickOperateCutButton(mItemSelected);
@@ -378,7 +378,6 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
             public void onClick(View v) {
                 int posion = getAdapterPosition();
                 switch (v.getId()) {
-
                     case R.id.iv_music_child_item_select:
                         if (mItemSelected[posion]) {
                             mItemSelected[posion] = false;
@@ -393,17 +392,14 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                     default:
                         int i = v.getId();
                         int j = R.id.iv_music_child_item_select;
-
-
                 }
 
                 if (MusicActivity.this.mSelecedCount > 0) {
-                    mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
+                    mBottomOperateContainer.setVisibility(View.VISIBLE);
                 } else {
-                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                    mBottomOperateContainer.setVisibility(View.GONE);
                 }
             }
-
         }
     }
 }
