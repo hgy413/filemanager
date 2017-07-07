@@ -4,15 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 
 import com.jb.filemanager.Const;
+import com.jb.filemanager.function.download.FileLoader;
 import com.jb.filemanager.home.MainActivity;
-
-import java.io.File;
 import java.util.ArrayList;
 
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
@@ -24,24 +25,23 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 public class MusicPresenter implements MusicContract.Presenter,
         LoaderManager.LoaderCallbacks<GroupList<String, MusicInfo>> {
-
-    private static final int LOADER_ID = 1;
+    private static final String TAG = "MusicPresenter.class";
     private final MusicActivity mView;
     private final MusicContract.Support mSupport;
     private final LoaderManager mLoaderManager;
-    private final MusicsLoader mMusicLoader;
+    private AsyncTaskLoader mFileLoader;
     private GroupList<String, MusicInfo> mMusicGroupList;
     public MusicPresenter(@NonNull MusicActivity view, @NonNull MusicContract.Support support,
                           @NonNull MusicsLoader loader, @NonNull LoaderManager manager){
         mView = checkNotNull(view);
         mSupport = checkNotNull(support);
         mLoaderManager = checkNotNull(manager);
-        mMusicLoader = checkNotNull(loader);
+        mFileLoader = checkNotNull(loader);
 
     }
     @Override
     public Loader<GroupList<String,MusicInfo>> onCreateLoader(int id, Bundle args) {
-        return mMusicLoader;
+        return mFileLoader;
     }
 
     @Override
@@ -77,8 +77,27 @@ public class MusicPresenter implements MusicContract.Presenter,
     }
 
     @Override
-    public void start() {
-        mLoaderManager.initLoader(LOADER_ID, null, this).forceLoad();
+    public void start(final int fileType) {
+        switch (fileType) {
+            case Const.FILE_TYPE_MUSIC:
+                mFileLoader = new MusicsLoader(mView, (MusicSupport)mSupport);
+                break;
+            case Const.FILE_TYPE_VIDEO:
+                mFileLoader = new VideosLoader(mView, (MusicSupport)mSupport);
+                break;
+            case Const.FILE_TYPE_DOWNLOAD:
+                mFileLoader = new MusicsLoader(mView, (MusicSupport)mSupport);
+                break;
+            case Const.FILE_TYPE_IMAGE:// Image file
+
+            case Const.FILE_TYPE_APPLICATION: // Application file
+
+            case Const.FILE_TYPE_DOCUMENT:
+
+            default:
+                Log.d(TAG, "No sutch filt type: " + fileType);
+        }
+        mLoaderManager.initLoader(fileType, null, this).forceLoad();
     }
 
     @Override

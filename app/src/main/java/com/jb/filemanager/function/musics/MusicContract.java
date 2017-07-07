@@ -24,7 +24,7 @@ public interface MusicContract {
 
         void onClickBackButton(boolean b);
 
-        void start();
+        void start(final int fileType);
 
         void onClickOperateCutButton(boolean[] selectedPosition);
 

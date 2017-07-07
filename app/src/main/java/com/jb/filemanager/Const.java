@@ -69,4 +69,14 @@ public interface Const {
     String BOTTOM_OPERATE_BAR_COPY = "copy";
     String BOTTOM_OPERATE_DATA = "data";
 
+    // File Type
+    int  FILE_TYPE_MUSIC = 1;
+    int  FILE_TYPE_IMAGE = 2;
+    int  FILE_TYPE_VIDEO = 3;
+    int  FILE_TYPE_APPLICATION = 4;
+    int  FILE_TYPE_DOWNLOAD = 5;
+    int  FILE_TYPE_DOCUMENT = 6;
+
+
+
 }
