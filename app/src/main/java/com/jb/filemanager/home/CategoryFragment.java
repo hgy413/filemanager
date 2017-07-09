@@ -21,14 +21,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
-import com.jb.filemanager.function.download.DownloadActivity;
 import com.jb.filemanager.function.image.ImageActivity;
-import com.jb.filemanager.function.video.VideoActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
-import com.jb.filemanager.function.musics.MusicActivity;
+import com.jb.filemanager.function.samefile.SameFileActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 
@@ -86,7 +85,7 @@ public class CategoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // The last two arguments ensure LayoutParams are inflated
         // properly.
@@ -146,24 +145,30 @@ public class CategoryFragment extends Fragment {
                         startActivity(new Intent(getContext(), ImageActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(getContext(), MusicActivity.class));
+                        Intent intent = new Intent(getContext(), SameFileActivity.class);
+                        intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_MUSIC);
+                        startActivity(intent);
                         break;
                     case 2:
                         startActivity(new Intent(getContext(), ZipFileActivity.class));
                         break;
-                    case 4:
-                        //文档管理
-                        startActivity(new Intent(getContext(), DocManagerActivity.class));
-                        break;
                     case 3:
-                    startActivity(new Intent(getContext(), DownloadActivity.class));
+                        intent = new Intent(getContext(), SameFileActivity.class);
+                        intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_DOWNLOAD);
+                        startActivity(intent);
                         break;
+                    case 4:
+                    //文档管理
+                    startActivity(new Intent(getContext(), DocManagerActivity.class));
+                    break;
                     case 5:
                     //apk管理
                     startActivity(new Intent(getContext(), AppManagerActivity.class));
                         break;
                     case 6:
-                        startActivity(new Intent(getContext(), VideoActivity.class));
+                        intent = new Intent(getContext(), SameFileActivity.class);
+                        intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_VIDEO);
+                        startActivity(intent);
                         break;
                     default:
                         break;

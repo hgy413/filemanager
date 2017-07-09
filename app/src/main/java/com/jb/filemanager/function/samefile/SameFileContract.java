@@ -1,18 +1,19 @@
-package com.jb.filemanager.function.musics;
+package com.jb.filemanager.function.samefile;
 
 import android.content.Intent;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by bool on 17-6-30.
  */
 
-public interface MusicContract {
+public interface SameFileContract {
     interface View {
-        void showMusicList(GroupList<String, MusicInfo> mMusicMaps);
+        void initView(int fileType);
+
+        void showMusicList(GroupList<String, FileInfo> mMusicMaps);
 
         void showDeleteConfirmDialog();
 
@@ -42,10 +43,14 @@ public interface MusicContract {
     }
 
     interface Support {
-        Map<String, ArrayList<MusicInfo>> getAllMusicInfo();
+        Map<String, ArrayList<FileInfo>> getAllMusicInfo();
 
         int getMuscisNum();
 
         void delete(ArrayList<String> fullPathList);
+
+        Object getAllDownloadInfo();
+
+        GroupList<String,FileInfo> getAllVideoInfo();
     }
 }

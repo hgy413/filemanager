@@ -70,6 +70,7 @@ public interface Const {
     String BOTTOM_OPERATE_DATA = "data";
 
     // File Type
+    String FILE_TYPE = "file_type";
     int  FILE_TYPE_MUSIC = 1;
     int  FILE_TYPE_IMAGE = 2;
     int  FILE_TYPE_VIDEO = 3;

@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.musics;
+package com.jb.filemanager.function.samefile;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,10 +10,10 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
  */
 
 public class MusicsLoader extends AsyncTaskLoader{
-    private MusicSupport mMusicSupport;
-    public MusicsLoader(Context context, @NonNull MusicSupport support) {
+    private SameFileSupport mSameFileSupport;
+    public MusicsLoader(Context context, @NonNull SameFileSupport support) {
         super(context);
-        mMusicSupport = checkNotNull(support);
+        mSameFileSupport = checkNotNull(support);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class MusicsLoader extends AsyncTaskLoader{
     }
 
     @Override
-    public GroupList<String, MusicInfo> loadInBackground() {
-        return (GroupList)mMusicSupport.getAllMusicInfo();
+    public GroupList<String, FileInfo> loadInBackground() {
+        return (GroupList) mSameFileSupport.getAllMusicInfo();
     }
 }

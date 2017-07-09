@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.musics;
+package com.jb.filemanager.function.samefile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-
-
 import com.jb.filemanager.Const;
-import com.jb.filemanager.function.download.FileLoader;
 import com.jb.filemanager.home.MainActivity;
 import java.util.ArrayList;
 
@@ -23,29 +20,27 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
  *
  */
 
-public class MusicPresenter implements MusicContract.Presenter,
-        LoaderManager.LoaderCallbacks<GroupList<String, MusicInfo>> {
-    private static final String TAG = "MusicPresenter.class";
-    private final MusicActivity mView;
-    private final MusicContract.Support mSupport;
+public class SameFilePresenter implements SameFileContract.Presenter,
+        LoaderManager.LoaderCallbacks<GroupList<String, FileInfo>> {
+    private static final String TAG = "SameFilePresenter.class";
+    private final SameFileActivity mView;
+    private final SameFileContract.Support mSupport;
     private final LoaderManager mLoaderManager;
     private AsyncTaskLoader mFileLoader;
-    private GroupList<String, MusicInfo> mMusicGroupList;
-    public MusicPresenter(@NonNull MusicActivity view, @NonNull MusicContract.Support support,
-                          @NonNull MusicsLoader loader, @NonNull LoaderManager manager){
+    private GroupList<String, FileInfo> mMusicGroupList;
+    public SameFilePresenter(@NonNull SameFileActivity view, @NonNull SameFileContract.Support support,
+                             @NonNull LoaderManager manager){
         mView = checkNotNull(view);
         mSupport = checkNotNull(support);
         mLoaderManager = checkNotNull(manager);
-        mFileLoader = checkNotNull(loader);
-
     }
     @Override
-    public Loader<GroupList<String,MusicInfo>> onCreateLoader(int id, Bundle args) {
+    public Loader<GroupList<String,FileInfo>> onCreateLoader(int id, Bundle args) {
         return mFileLoader;
     }
 
     @Override
-    public void onLoadFinished(Loader<GroupList<String, MusicInfo>> loader, GroupList<String, MusicInfo> data) {
+    public void onLoadFinished(Loader<GroupList<String, FileInfo>> loader, GroupList<String, FileInfo> data) {
         mMusicGroupList = data;
         if (mMusicGroupList == null) {
             //Todo 显示没有音乐提示
@@ -56,13 +51,17 @@ public class MusicPresenter implements MusicContract.Presenter,
     }
 
     @Override
-    public void onLoaderReset(Loader<GroupList<String, MusicInfo>> loader) {
+    public void onLoaderReset(Loader<GroupList<String, FileInfo>> loader) {
 
     }
 
     @Override
     public void onCreate(Intent intent) {
-
+        if (intent != null) {
+            int fileType = intent.getIntExtra(Const.FILE_TYPE, -1);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
+            mView.initView(fileType);
+            this.start(fileType);
+        }
     }
 
     @Override
@@ -80,13 +79,13 @@ public class MusicPresenter implements MusicContract.Presenter,
     public void start(final int fileType) {
         switch (fileType) {
             case Const.FILE_TYPE_MUSIC:
-                mFileLoader = new MusicsLoader(mView, (MusicSupport)mSupport);
+                mFileLoader = new MusicsLoader(mView, (SameFileSupport)mSupport);
                 break;
             case Const.FILE_TYPE_VIDEO:
-                mFileLoader = new VideosLoader(mView, (MusicSupport)mSupport);
+                mFileLoader = new VideosLoader(mView, (SameFileSupport)mSupport);
                 break;
             case Const.FILE_TYPE_DOWNLOAD:
-                mFileLoader = new MusicsLoader(mView, (MusicSupport)mSupport);
+                mFileLoader = new DownloadLoader(mView, (SameFileSupport)mSupport);
                 break;
             case Const.FILE_TYPE_IMAGE:// Image file
 
@@ -97,7 +96,9 @@ public class MusicPresenter implements MusicContract.Presenter,
             default:
                 Log.d(TAG, "No sutch filt type: " + fileType);
         }
-        mLoaderManager.initLoader(fileType, null, this).forceLoad();
+        if (Const.FILE_TYPE_MUSIC <= fileType && fileType <= Const.FILE_TYPE_DOCUMENT) {
+            mLoaderManager.initLoader(fileType, null, this).forceLoad();
+        }
     }
 
     @Override

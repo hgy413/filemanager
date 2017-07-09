@@ -1,9 +1,8 @@
-package com.jb.filemanager.function.download;
+package com.jb.filemanager.function.samefile;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
-
 import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
@@ -11,10 +10,10 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
  * 下载文件
  */
 
-public class FileLoader extends AsyncTaskLoader {
-    DownloadSupport mSupport;
+public class DownloadLoader extends AsyncTaskLoader {
+    SameFileContract.Support mSupport;
 
-    public FileLoader(Context context, @NonNull DownloadSupport mSupport) {
+    public DownloadLoader(Context context, @NonNull SameFileContract.Support mSupport) {
         super(context);
         this.mSupport = checkNotNull(mSupport);
     }

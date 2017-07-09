@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.musics;
+package com.jb.filemanager.function.samefile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +12,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
@@ -31,14 +31,14 @@ import static com.squareup.haha.guava.base.Joiner.checkNotNull;
  * 显示音乐列表
  */
 
-public class MusicActivity extends BaseActivity implements MusicContract.View,
+public class SameFileActivity extends BaseActivity implements SameFileContract.View,
         View.OnClickListener {
 
     private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
-    private MusicContract.Presenter mPresenter;
+    private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
     private RecyclerView mRvMuscicList;
-    private GroupList<String, MusicInfo> mMusicDataArrayMap;
+    private GroupList<String, FileInfo> mMusicDataArrayMap;
     private RecyclerListAdapter mMusicListAdapter;
     private BottomOperateBar mBottomOperateContainer;
 
@@ -50,24 +50,30 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
         mItemSelected = new boolean[0];
-        MusicSupport support = new MusicSupport();
-        mPresenter = new MusicPresenter(this, support, new MusicsLoader(this, support),
-                getSupportLoaderManager());
-
+        mPresenter = new SameFilePresenter(this, new SameFileSupport(), getSupportLoaderManager());
         int imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
         mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.ic_default_music);
         mPresenter.onCreate(getIntent());
-        initView();
     }
 
-    // private start
-    private void initView() {
+    @Override
+    public void initView(final int fileType) {
         TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
-        if (back != null) {
-            back.getPaint().setAntiAlias(true);
-            back.setText(R.string.music_title);
-            back.setOnClickListener(this);
+        back.getPaint().setAntiAlias(true);
+        switch (fileType) {
+            case Const.FILE_TYPE_MUSIC:
+                back.setText(R.string.music_title);
+                break;
+            case Const.FILE_TYPE_VIDEO:
+                back.setText(R.string.video_title);
+                break;
+            case Const.FILE_TYPE_DOWNLOAD:
+                back.setText(R.string.download_title);
+                break;
+            default:
+                back.setText("Transfer unknow teyp");
         }
+        back.setOnClickListener(this);
 
         mRvMuscicList = (RecyclerView) findViewById(R.id.elv_music);
         int height = 40;
@@ -122,9 +128,6 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     @Override
     protected void onResume() {
         super.onResume();
-        if (mPresenter != null) {
-            mPresenter.start();
-        }
         if (mImageFetcher != null) {
             mImageFetcher.setExitTasksEarly(false);
         }
@@ -215,7 +218,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
     }
 
     @Override
-    public void showMusicList(GroupList<String, MusicInfo> mMusicMaps) {
+    public void showMusicList(GroupList<String, FileInfo> mMusicMaps) {
         mMusicDataArrayMap = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
         for (int i = 0; i < mItemSelected.length; i++) {
@@ -319,11 +322,11 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
 
     public class RecyclerListAdapter extends RecyclerView.Adapter {
         private Context mContext;
-        //private GroupList<String, MusicInfo> mMusicDataArrayMap;
+        //private GroupList<String, FileInfo> mMusicDataArrayMap;
         private LayoutInflater mInflater;
 
-        public RecyclerListAdapter(@NonNull Context context, GroupList<String, MusicInfo> mapList) {
-            mInflater = MusicActivity.this.getLayoutInflater();
+        public RecyclerListAdapter(@NonNull Context context, GroupList<String, FileInfo> mapList) {
+            mInflater = SameFileActivity.this.getLayoutInflater();
             mContext = checkNotNull(context);
             mMusicDataArrayMap = mapList;
         }
@@ -345,7 +348,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ViewHolder viewHolder = (ViewHolder)holder;
-            MusicInfo info = mMusicDataArrayMap.getItem(position);
+            FileInfo info = mMusicDataArrayMap.getItem(position);
 
             if (info != null) {
                 viewHolder.mTvName.setText(info.mName);
@@ -382,11 +385,11 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                         if (mItemSelected[posion]) {
                             mItemSelected[posion] = false;
                             mIvSelect.setImageResource(R.drawable.ic_drawer_about);
-                            MusicActivity.this.mSelecedCount--;
+                            SameFileActivity.this.mSelecedCount--;
                         } else {
                             mItemSelected[posion] = true;
                             mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
-                            MusicActivity.this.mSelecedCount++;
+                            SameFileActivity.this.mSelecedCount++;
                         }
                         break;
                     default:
@@ -394,7 +397,7 @@ public class MusicActivity extends BaseActivity implements MusicContract.View,
                         int j = R.id.iv_music_child_item_select;
                 }
 
-                if (MusicActivity.this.mSelecedCount > 0) {
+                if (SameFileActivity.this.mSelecedCount > 0) {
                     mBottomOperateContainer.setVisibility(View.VISIBLE);
                 } else {
                     mBottomOperateContainer.setVisibility(View.GONE);

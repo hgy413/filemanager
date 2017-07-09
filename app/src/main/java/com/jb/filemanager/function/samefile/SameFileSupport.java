@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.musics;
+package com.jb.filemanager.function.samefile;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
@@ -15,9 +14,6 @@ import com.jb.filemanager.util.TimeUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.mopub.common.Preconditions.NoThrow.checkNotNull;
 
@@ -27,7 +23,7 @@ import static com.mopub.common.Preconditions.NoThrow.checkNotNull;
  * 数据查询和验证
  */
 
-public class MusicSupport implements MusicContract.Support {
+public class SameFileSupport implements SameFileContract.Support {
     private static final Uri NUSIC_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     private static final String[] MUSIC_PROPERTIES = {
             MediaStore.Audio.Media._ID,
@@ -41,24 +37,24 @@ public class MusicSupport implements MusicContract.Support {
     };
     private final Context mContext;
     private ContentResolver mResolver;
-    public MusicSupport() {
+    public SameFileSupport() {
         mContext = TheApplication.getInstance();
         mResolver = mContext.getContentResolver();
     }
 
     @Override
-    public GroupList<String, MusicInfo> getAllMusicInfo() {
+    public GroupList<String, FileInfo> getAllMusicInfo() {
         Cursor cursor = mResolver.query(NUSIC_URI,
                 MUSIC_PROPERTIES,
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
                 MUSIC_PROPERTIES[4]
                 );
-        GroupList<String, MusicInfo> list = new GroupList<>();
+        GroupList<String, FileInfo> list = new GroupList<>();
         long lastModify = 0L;
         long modify = 0l;
-        MusicInfo info = null;
-        ArrayList<MusicInfo> infoList;
+        FileInfo info = null;
+        ArrayList<FileInfo> infoList;
 
         while(cursor.moveToNext()) {
             if (null != (info = cursorToMusicInfo(cursor))) {
@@ -81,9 +77,9 @@ public class MusicSupport implements MusicContract.Support {
         return list;
     }
 
-    protected MusicInfo cursorToMusicInfo(@NonNull Cursor cursor) {
+    protected FileInfo cursorToMusicInfo(@NonNull Cursor cursor) {
         checkNotNull(cursor);
-        MusicInfo info = new MusicInfo();
+        FileInfo info = new FileInfo();
         info.mId = cursor.getString(0);
         info.mName = cursor.getString(1);
         info.mSize = cursor.getInt(2);
@@ -125,5 +121,14 @@ public class MusicSupport implements MusicContract.Support {
 
     @Override
     public void delete(ArrayList<String> fullPathList) {
+    }
+
+    @Override
+    public Object getAllDownloadInfo() {
+        return null;
+    }
+    @Override
+    public GroupList<String,FileInfo> getAllVideoInfo() {
+        return null;
     }
 }

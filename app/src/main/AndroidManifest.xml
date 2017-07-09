@@ -119,7 +119,7 @@
 
         <!-- 音乐管理页 -->
         <activity
-            android:name=".function.musics.MusicActivity"
+            android:name=".function.samefile.SameFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
         <!--视频管理页 -->

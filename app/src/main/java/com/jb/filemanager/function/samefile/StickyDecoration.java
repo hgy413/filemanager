@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.musics;
+package com.jb.filemanager.function.samefile;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -1,12 +1,10 @@
-package com.jb.filemanager.function.musics;
-
-import android.provider.MediaStore;
+package com.jb.filemanager.function.samefile;
 
 /**
  * Created by bool on 17-6-30.
  */
 
-public class MusicInfo {
+public class FileInfo {
 //    private static final String[] MUSIC_PROPERTIES = {
 //            MediaStore.Audio.Media._ID,
 //            MediaStore.Audio.Media.DISPLAY_NAME,
