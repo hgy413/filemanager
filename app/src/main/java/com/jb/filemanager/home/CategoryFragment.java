@@ -114,12 +114,12 @@ public class CategoryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main_category, container, false);
 
         CategoryBean bean1 = new CategoryBean(R.drawable.ic_main_category_photo, getString(R.string.main_category_item_photo));
-        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_video, getString(R.string.main_category_item_video));//temp for music
+        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_video, getString(R.string.main_category_item_video));//temp for video
         CategoryBean bean3 = new CategoryBean(R.drawable.ic_main_category_app, getString(R.string.main_category_item_apps));
-        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_music, getString(R.string.main_category_item_music));// temp for download
+        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_music, getString(R.string.main_category_item_music));// temp for music
         CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_doc, getString(R.string.main_category_item_doc));//temp for doc
         CategoryBean bean6 = new CategoryBean(R.drawable.ic_main_category_zip, getString(R.string.main_category_item_zip));//temp for apk
-        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_download, getString(R.string.main_category_item_download));// temp for video
+        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_download, getString(R.string.main_category_item_download));// temp for download
         CategoryBean bean8 = new CategoryBean(R.drawable.ic_main_category_recent, getString(R.string.main_category_item_recent));
         CategoryBean bean9 = new CategoryBean(R.drawable.ic_main_category_ad, getString(R.string.main_category_item_ad));
 
@@ -194,44 +194,6 @@ public class CategoryFragment extends Fragment {
             }
         }
         
-        mCategoryView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                switch (position) {
-                    case 0:
-                        // 图片管理
-                        startActivity(new Intent(getContext(), ImageActivity.class));
-                        break;
-                    case 1:
-                        Intent intent = new Intent(getContext(), SameFileActivity.class);
-                        intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_MUSIC);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        startActivity(new Intent(getContext(), ZipFileActivity.class));
-                        break;
-                    case 3:
-                        intent = new Intent(getContext(), SameFileActivity.class);
-                        intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_DOWNLOAD);
-                        startActivity(intent);
-                        break;
-                    case 4:
-                    //文档管理
-                    startActivity(new Intent(getContext(), DocManagerActivity.class));
-                    break;
-                    case 5:
-                    //apk管理
-                    startActivity(new Intent(getContext(), AppManagerActivity.class));
-                        break;
-                    case 6:
-                        intent = new Intent(getContext(), SameFileActivity.class);
-                        intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_VIDEO);
-                        startActivity(intent);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
 
         mTvStorageUsed = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_used);
         if (mTvStorageUsed != null) {
