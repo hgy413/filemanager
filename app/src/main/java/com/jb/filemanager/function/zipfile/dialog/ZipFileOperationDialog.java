@@ -14,6 +14,7 @@ import com.jb.filemanager.function.zipfile.ZipFilePreviewActivity;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
 import com.jb.filemanager.ui.dialog.BaseDialog;
+import com.jb.filemanager.util.DrawUtils;
 
 import net.lingala.zip4j.exception.ZipException;
 
@@ -52,6 +53,7 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
     private void initializeView() {
         View rootView = View.inflate(mContext, R.layout.dialog_zip_file_detail, null);
         setContentView(rootView);
+        setSize(DrawUtils.dip2px(320), DrawUtils.dip2px(218));
 
         TextView fileName = (TextView) rootView.findViewById(R.id.file_name);
         fileName.setText(mFile.getFileName());
