@@ -4,21 +4,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
+                android:fitsSystemWindows="true"
                 android:orientation="vertical">
+
+    <com.jb.filemanager.ui.view.SearchTitleView
+        android:id="@+id/search_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
 
     <com.jb.filemanager.commomview.ProgressWheel
         android:id="@+id/zip_progress"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_below="@id/search_title"
         app:matProg_barColor="#0084ff"
-        app:matProg_barWidth="4dp"
+        app:matProg_barWidth="5dp"
         app:matProg_progressIndeterminate="true"/>
-
-    <include layout="@layout/common_operate_bar_modify"/>
 
     <ExpandableListView
         android:id="@+id/zip_expand_lv"
         android:layout_width="match_parent"
-        android:layout_marginTop="25dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_title"
+        android:divider="@android:color/transparent"
+        android:groupIndicator="@null"
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
+
+    <include layout="@layout/common_operate_bar_modify"/>
 </RelativeLayout>

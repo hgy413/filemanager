@@ -15,10 +15,13 @@ public interface ZipActivityContract {
         void setListData(List<ZipFileGroupBean> data);
         void notifyDataSetChanged();
         void showOperationDialog(ZipFileItemBean fileItem);
+        void hideMoreOperator();
+        void showMoreOperator(int count);
     }
     interface Presenter{
         void onCreate();
-        void onItemClick(int groupPosition, int childPosition);
+        void onItemClick(int groupPosition, int childPosition);// 弹窗
+        void onItemStateChange();
         void extractZipFile(ZipFileItemBean fileItem);
         void onDestroy();
     }

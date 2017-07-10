@@ -25,6 +25,8 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
     private ZipActivityContract.View mView;
     private List<ZipFileGroupBean> mGroupList = new ArrayList<>();
 
+    private List<ZipFileItemBean> mSelectedBean = new ArrayList<>();
+
     public ZipFileActivityPresenter(ZipActivityContract.View view) {
         mView = view;
     }
@@ -41,6 +43,22 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
         if (mGroupList != null) {
             ZipFileItemBean child = mGroupList.get(groupPosition).getChild(childPosition);
             mView.showOperationDialog(child);
+        }
+    }
+
+    @Override
+    public void onItemStateChange() {
+        mSelectedBean.clear();
+        for (ZipFileGroupBean groupBean : mGroupList) {
+            List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
+            for (ZipFileItemBean itemBean : zipFileList) {
+                mSelectedBean.add(itemBean);
+            }
+        }
+        if (mSelectedBean.size() > 0) {
+            mView.showMoreOperator(mSelectedBean.size());
+        } else {
+            mView.hideMoreOperator();
         }
     }
 

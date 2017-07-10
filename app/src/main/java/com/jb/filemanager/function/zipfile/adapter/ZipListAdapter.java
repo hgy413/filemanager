@@ -9,7 +9,9 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
+import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.TimeUtil;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class ZipListAdapter extends BaseExpandableListAdapter {
 
     private List<ZipFileGroupBean> mGroupList;
+    private ZipListAdapterClickListener mListener;
 
     public ZipListAdapter(List<ZipFileGroupBean> data) {
         mGroupList = data;
@@ -72,9 +75,26 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.group_zip_file);
         }
-        ZipFileGroupBean group = getGroup(groupPosition);
+        final ZipFileGroupBean group = getGroup(groupPosition);
         holder.groupTime.setText(group.getGroupTimeStr());
-        holder.groupCheckBox.setImageResource(R.drawable.choose_all);
+        int selectedState = group.getSelectedState();
+        if (selectedState == 1) {
+            holder.groupCheckBox.setImageResource(R.drawable.select_none);
+        } else if (selectedState == 2) {
+            holder.groupCheckBox.setImageResource(R.drawable.select_multi);
+        } else {
+            holder.groupCheckBox.setImageResource(R.drawable.select_all);
+        }
+        holder.groupCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                group.switchGroupState();
+                notifyDataSetChanged();
+                if (mListener != null) {
+                    mListener.onSwitchClick();
+                }
+            }
+        });
         return convertView;
     }
 
@@ -88,15 +108,34 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
             holder.name = (TextView) convertView.findViewById(R.id.item_zip_name);
             holder.size = (TextView) convertView.findViewById(R.id.item_zip_size);
             holder.itemCheckBox = (ImageView) convertView.findViewById(R.id.item_zip_checkbox);
+            holder.divider = convertView.findViewById(R.id.item_zip_divider);
+            holder.wideDivider = convertView.findViewById(R.id.item_zip_wide_divider);
             convertView.setTag(R.layout.item_zip_file, holder);
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.item_zip_file);
         }
-        ZipFileItemBean child = getChild(groupPosition, childPosition);
+        final ZipFileItemBean child = getChild(groupPosition, childPosition);
         holder.icon.setImageResource(R.drawable.common_default_app_icon);
         holder.name.setText(child.getFileName());
-        holder.size.setText(ConvertUtils.formatFileSize(child.getFileSize()));
-        holder.itemCheckBox.setImageResource(R.drawable.choose_all);
+        holder.size.setText(ConvertUtils.formatFileSize(child.getFileSize()) + " " + TimeUtil.getTime(child.getLastModifiedTime()));
+        holder.itemCheckBox.setImageResource(child.isSelected() ? R.drawable.select_all : R.drawable.select_none);
+        holder.itemCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                child.setSelected(!child.isSelected());
+                notifyDataSetChanged();
+                if (mListener != null) {
+                    mListener.onSwitchClick();
+                }
+            }
+        });
+       /* if (childPosition == getChildrenCount(groupPosition) - 1) {
+            holder.divider.setVisibility(View.GONE);
+            holder.wideDivider.setVisibility(View.VISIBLE);
+        } else {
+            holder.divider.setVisibility(View.VISIBLE);
+            holder.wideDivider.setVisibility(View.GONE);
+        }*/
         return convertView;
     }
 
@@ -114,5 +153,11 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
         TextView name;
         TextView size;
         ImageView itemCheckBox;
+        View divider;
+        View wideDivider;
+    }
+
+    public void setListener(ZipListAdapterClickListener listener) {
+        mListener = listener;
     }
 }

@@ -10,14 +10,19 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.ProgressWheel;
+import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.zipfile.adapter.ZipListAdapter;
 import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
+import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.presenter.ZipActivityContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
+import com.jb.filemanager.ui.view.SearchTitleView;
 
 import java.util.List;
+
+import static com.jb.filemanager.R.id.search_title;
 
 /**
  * Created by xiaoyu on 2017/6/29 17:01.
@@ -78,6 +83,21 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         mTvBottomOpen.setOnClickListener(this);
         mTvBottomShowInFolder.setOnClickListener(this);
 
+
+        SearchTitleView searchTitle = (SearchTitleView) findViewById(search_title);
+        searchTitle.setOnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        searchTitle.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchActivity.showSearchResult(getApplicationContext());
+            }
+        });
+
         mPresenter.onCreate();
     }
 
@@ -96,6 +116,14 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     @Override
     public void setListData(List<ZipFileGroupBean> data) {
         mAdapter = new ZipListAdapter(data);
+        mAdapter.setListener(new ZipListAdapterClickListener() {
+            @Override
+            public void onSwitchClick() {
+                if (mPresenter != null) {
+                    mPresenter.onItemStateChange();
+                }
+            }
+        });
         mListView.setAdapter(mAdapter);
     }
 
@@ -168,7 +196,8 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     }
 
     //显示more的内容
-    private void showMoreOperator(int chosenCount) {
+    @Override
+    public void showMoreOperator(int chosenCount) {
         mIsMoreOperatorShown = true;
         if (chosenCount == 1) {
             mLlMoreOperateContainer.setVisibility(View.VISIBLE);
@@ -182,7 +211,8 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     }
 
     //隐藏more的内容
-    private void hideMoreOperator() {
+    @Override
+    public void hideMoreOperator() {
         mIsMoreOperatorShown = false;
         mLlMoreOperateContainer.setVisibility(View.GONE);
     }
