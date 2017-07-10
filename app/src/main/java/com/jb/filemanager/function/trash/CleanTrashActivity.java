@@ -2,7 +2,7 @@ package com.jb.filemanager.function.trash;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView {
 
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
-    private ImageView mIvCommonActionBarBack;
+    private RelativeLayout mRlRoot;
     private TextView mTvCommonActionBarTitle;
     private TextView mTvTrashSizeNumber;
     private TextView mTvTrashSizeUnit;
@@ -54,8 +55,10 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private FloatingGroupExpandableListView mCleanTrashExpandableListView;
     private ImageView mIvCleanButton;
     private NewCleanListAdapter mAdapter;
-    private ObjectAnimator mAnimator;
-
+    private ValueAnimator mAnimator;
+    private String[] mSelectedStorageSize;
+    private LinearLayout mLlTitle;
+    private RelativeLayout mRlTopContainer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,8 +72,10 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     private void initView() {
+        mRlRoot = (RelativeLayout) findViewById(R.id.rl_root);
         mLlContent = (LinearLayout) findViewById(R.id.ll_content);
-        mIvCommonActionBarBack = (ImageView) findViewById(R.id.iv_common_action_bar_back);
+        mLlTitle = (LinearLayout) findViewById(R.id.ll_title);
+        mRlTopContainer = (RelativeLayout) findViewById(R.id.rl_top_container);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);
         mTvTrashSizeUnit = (TextView) findViewById(R.id.tv_trash_size_unit);
@@ -84,10 +89,13 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         });*/
         mTvTrashPath = (TextView) findViewById(R.id.tv_trash_path);
         mCleanTrashExpandableListView = (FloatingGroupExpandableListView) findViewById(R.id.clean_trash_expandable_list_view);
-        mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button);
+        mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button_red);
         mIvCleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mPbScanProgress.setVisibility(View.GONE);
+                mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
+                mIvCleanButton.setVisibility(View.GONE);
                 handleDisappearAnimation();
                 /*KShareViewActivityManager.getInstance(CleanTrashActivity.this).
                         startActivity(CleanTrashActivity.this, CleanResultActivity.class,
@@ -99,18 +107,24 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     private void handleDisappearAnimation() {
-        mAnimator = ObjectAnimator.ofFloat(mLlContent, "Alpha", 1, 0);
-        mAnimator.setDuration(1000);
+        mAnimator = ValueAnimator.ofFloat(1, 0);
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float animatedValue = (float) valueAnimator.getAnimatedValue();
+                mCleanTrashExpandableListView.setAlpha(animatedValue);
+            }
+        });
+
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 Intent intent = new Intent(CleanTrashActivity.this, CleanResultActivity.class);
-                int[] outLocation = new int[2];
-                mIvCleanButton.getLocationOnScreen(outLocation);
-                intent.putExtra("location", outLocation);
+                intent.putExtra(CleanResultActivity.CLEAN_SIZE, mSelectedStorageSize);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in, R.anim.out);
+                finish();
             }
         });
         mAnimator.start();
@@ -125,9 +139,9 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private void setTotalCheckedSizeText() {
         long checkedSize = CleanCheckedFileSizeEvent.getJunkFileAllSize(true);
-        String[] formatterStorage = ConvertUtils.getFormatterTraffic(checkedSize);
-        mTvTrashSizeNumber.setText(formatterStorage[0]);
-        mTvTrashSizeUnit.setText(formatterStorage[1]);
+        mSelectedStorageSize = ConvertUtils.getFormatterTraffic(checkedSize);
+        mTvTrashSizeNumber.setText(mSelectedStorageSize[0]);
+        mTvTrashSizeUnit.setText(mSelectedStorageSize[1]);
     }
 
     private void keepScreenOn(boolean keep) {
@@ -170,7 +184,6 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     @Override
     public void updateProgress(float process) {
-//        mTvScanProgress.setText(process + "% has been done");
         mPbScanProgress.setProgress((int) (process * 100));
     }
 
@@ -284,6 +297,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             updateCleanBtnEnable();
             mAdapter.notifyDataSetChanged();
             setTotalCheckedSizeText();
+            mIvCleanButton.setVisibility(View.VISIBLE);
         }
 
         /**

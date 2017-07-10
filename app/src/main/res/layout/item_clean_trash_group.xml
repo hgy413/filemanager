@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textColor="@color/clean_trash_bg"
+            android:textColor="@color/clean_trash_bg_red"
             android:textSize="12dp"
             tools:text="(234MB)"/>
 

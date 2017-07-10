@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:background="@color/clean_trash_bg"
-                android:fitsSystemWindows="true"
-                android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/clean_trash_bg_red"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -17,6 +19,7 @@
         <include layout="@layout/common_action_bar_without_search"/>
 
         <RelativeLayout
+            android:id="@+id/rl_top_container"
             android:layout_width="match_parent"
             android:layout_height="120dp">
 
@@ -48,7 +51,7 @@
                 android:layout_below="@+id/tv_trash_size_unit"
                 android:layout_marginLeft="115dp"
                 android:layout_marginStart="115dp"
-                android:text="MB"
+                android:text="Suggest"
                 android:textColor="@color/white"/>
 
             <ProgressBar
@@ -74,21 +77,28 @@
             android:layout_height="wrap_content"
             android:text="  "/>
 
-        <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
-            android:id="@+id/clean_trash_expandable_list_view"
-            android:layout_width="match_parent"
+        <FrameLayout
             android:layout_height="match_parent"
-            android:divider="@null"
-            android:background="@color/white"
-            android:groupIndicator="@null"
-            android:listSelector="@android:color/transparent"
-            android:scrollbars="none"/>
+            android:layout_width="match_parent"
+            android:background="@color/white">
+
+            <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
+                android:id="@+id/clean_trash_expandable_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:groupIndicator="@null"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none"/>
+        </FrameLayout>
+
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_clean_button"
+        android:id="@+id/iv_clean_button_red"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:visibility="gone"
         android:src="@drawable/trash_clean_icon"
         android:layout_marginBottom="40dp"
         android:layout_alignParentBottom="true"
