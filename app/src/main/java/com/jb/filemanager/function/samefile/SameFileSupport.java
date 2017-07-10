@@ -109,6 +109,7 @@ public class SameFileSupport implements SameFileContract.Support {
         GroupList<String, FileInfo> list = new GroupList<>();
         long lastModify = 0L;
         long modify = 0l;
+        String date = "";
         FileInfo info = null;
         ArrayList<FileInfo> infoList;
 
@@ -118,11 +119,11 @@ public class SameFileSupport implements SameFileContract.Support {
                 boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
                 if (!isSameDay) {
                     lastModify = modify;
+                    date = TimeUtil.getYandMandD(new Date(info.mModified));
                     infoList = new ArrayList<>();
-                    String date = TimeUtil.getYandMandD(new Date(modify));
                     list.put(date, infoList);
                 } else {
-                    String date = TimeUtil.getYandMandD(new Date(modify));
+                    date = TimeUtil.getYandMandD(new Date(info.mModified));
                     infoList = list.get(date);
                 }
                 if (infoList != null) {
@@ -141,7 +142,7 @@ public class SameFileSupport implements SameFileContract.Support {
         info.mSize = cursor.getInt(2);
         info.mFullPath = cursor.getString(3);
         //此处返回数据为秒钟 所以乘以1000
-        info.mModified = cursor.getLong(4);
+        info.mModified = cursor.getLong(4) * 1000;
         info.mType = cursor.getString(5);
         info.mDuration = cursor.getLong(6);
         info.mArtist = cursor.getString(7);
@@ -201,21 +202,5 @@ public class SameFileSupport implements SameFileContract.Support {
         info.mSize = file.length();
         // info.type = FileTypeUtil.getFileType(file); // get file type
         return info;
-    }
-
-    /**
-     * 获取时间（年月日）
-     * @return
-     */
-    public String[] getTimeInfo(long time){
-        Calendar calendar = Calendar.getInstance();
-        String[] times  = new String[3];
-        Date date = new Date(time);
-        calendar.setTime(date);
-        times[0] = calendar.get(Calendar.YEAR)+"";
-        times[1]= (calendar.get(Calendar.MONTH)+1)+"";//calendar月份从0-11
-        times[2]= calendar.get(Calendar.DAY_OF_MONTH)+"";
-
-        return times;
     }
 }

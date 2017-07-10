@@ -91,7 +91,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                     @Override
                     public View getGroupView(int position) {
                         //获取自定定义的组View
-                        if (position < mMusicDataArrayMap.getGroup(position).size()) {
+                        if (position < mMusicDataArrayMap.itemSize()) {
                             View view = getLayoutInflater().inflate(R.layout.item_music_group, null, false);
                             ((TextView) view.findViewById(R.id.tv_music_group_item_title))
                                     .setText(mMusicDataArrayMap.getGroupKey(position));

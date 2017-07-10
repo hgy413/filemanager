@@ -38,7 +38,7 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
         int groupIndex = 0;
         int i = 0;
         for(i = 0; i < groupSize ; i++){
-            if (index > this.valueAt(i).size()) {
+            if (index >= this.valueAt(i).size()) {
                 index -= this.valueAt(i).size();
             } else {
                 return valueAt(i).get(index);
