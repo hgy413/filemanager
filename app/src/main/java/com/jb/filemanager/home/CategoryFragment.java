@@ -149,7 +149,9 @@ public class CategoryFragment extends Fragment {
                             break;
                         case 1:
                             // 视频管理
-                            startActivity(new Intent(getContext(), SameFileActivity.class));
+                            Intent intent = new Intent(getContext(), SameFileActivity.class);
+                            intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_VIDEO);
+                            startActivity(intent);
                             break;
                         case 2:
                             // apk管理
@@ -161,7 +163,9 @@ public class CategoryFragment extends Fragment {
                             break;
                         case 3:
                             // 音乐管理
-                            startActivity(new Intent(getContext(), SameFileActivity.class));
+                            intent = new Intent(getContext(), SameFileActivity.class);
+                            intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_MUSIC);
+                            startActivity(intent);
                             break;
                         case 5:
                             // app管理
@@ -169,7 +173,9 @@ public class CategoryFragment extends Fragment {
                             break;
                         case 6:
                             // 下载管理
-                            startActivity(new Intent(getContext(), SameFileActivity.class));
+                            intent = new Intent(getContext(), SameFileActivity.class);
+                            intent.putExtra(Const.FILE_TYPE, Const.FILE_TYPE_DOWNLOAD);
+                            startActivity(intent);
                             break;
                         default:
                             break;
