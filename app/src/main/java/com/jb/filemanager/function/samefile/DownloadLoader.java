@@ -19,7 +19,7 @@ public class DownloadLoader extends AsyncTaskLoader {
     }
 
     @Override
-    public Object loadInBackground() {
+    public GroupList<String,FileInfo> loadInBackground() {
         return mSupport.getAllDownloadInfo();
     }
 }

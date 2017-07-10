@@ -49,7 +49,7 @@ public interface SameFileContract {
 
         void delete(ArrayList<String> fullPathList);
 
-        Object getAllDownloadInfo();
+        GroupList<String,FileInfo> getAllDownloadInfo();
 
         GroupList<String,FileInfo> getAllVideoInfo();
     }

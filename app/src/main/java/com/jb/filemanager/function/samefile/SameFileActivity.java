@@ -52,7 +52,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         mItemSelected = new boolean[0];
         mPresenter = new SameFilePresenter(this, new SameFileSupport(), getSupportLoaderManager());
         int imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-        mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.ic_default_music);
+        mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.mipmap.ic_music_file);
         mPresenter.onCreate(getIntent());
     }
 
@@ -336,7 +336,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             View convertView = mInflater.inflate(R.layout.item_music_child, parent, false);
             ViewHolder holder = new ViewHolder(convertView);
             holder.mIvCover = (ImageView) convertView.findViewById(R.id.iv_music_child_item_cover);
-            holder.mIvCover.setImageResource(R.drawable.ic_default_music);
+            holder.mIvCover.setImageResource(R.mipmap.ic_music_file);
             holder.mTvName = (TextView) convertView.findViewById(R.id.tv_music_child_item_name);
             holder.mTvInfo = (TextView) convertView.findViewById(R.id.tv_music_child_item_info);
             holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_child_item_select);
