@@ -24,7 +24,7 @@ public class CopyFileTask {
     private ArrayList<File> mSource;
     private String mDest;
     private final Object mLocker = new Object();
-    private boolean mIsSkip = true;
+    private boolean mIsSkip = false;
 
     public CopyFileTask(ArrayList<File> source, String dest, Listener listener) {
 

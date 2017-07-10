@@ -25,7 +25,7 @@ public class CutFileTask {
     private ArrayList<File> mSource;
     private String mDest;
     private final Object mLocker = new Object();
-    private boolean mIsSkip = true;
+    private boolean mIsSkip = false;
 
     public CutFileTask(ArrayList<File> source, String dest, Listener listener) {
 
