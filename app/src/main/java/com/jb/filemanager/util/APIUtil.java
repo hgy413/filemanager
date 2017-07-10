@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.StatFs;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -80,6 +81,28 @@ public class APIUtil {
         } else {
             //noinspection deprecation
             result = Html.fromHtml(content).toString();
+        }
+        return result;
+    }
+
+    public static long getAvailableBytes(StatFs statFs) {
+        long result;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            result = statFs.getAvailableBytes();
+        } else {
+            //noinspection deprecation
+            result = (long)statFs.getFreeBlocks() * (long)statFs.getBlockSize();
+        }
+        return result;
+    }
+
+    public static long getTotalBytes(StatFs statFs) {
+        long result;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            result = statFs.getTotalBytes();
+        } else {
+            //noinspection deprecation
+            result = (long)statFs.getBlockSize() *(long)statFs.getBlockCount();
         }
         return result;
     }

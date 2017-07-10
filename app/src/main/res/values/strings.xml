@@ -23,7 +23,27 @@
     <string name="main_internal_storage">Internal storage</string>
     <string name="main_double_click_exit_app_tips">Press back again to exit Ace Network.</string>
     <string name="main_dialog_single_detail_contain">%1$d folder(s), %2$d file(s)</string>
-
+    <string name="main_category_item_photo">Photo</string>
+    <string name="main_category_item_video">Video</string>
+    <string name="main_category_item_apps">Apps</string>
+    <string name="main_category_item_music">Musics</string>
+    <string name="main_category_item_doc">Docs</string>
+    <string name="main_category_item_zip">Zips</string>
+    <string name="main_category_item_download">Download</string>
+    <string name="main_category_item_recent">Recent</string>
+    <string name="main_category_item_ad">AD</string>
+    <string name="main_info_phone_storage">Phone storage:</string>
+    <string name="main_info_sdcard_storage">SD card storage:</string>
+    <string name="main_info_phone_used">Used %1$s</string>
+    <string name="main_info_phone_unused">Unused %1$s</string>
+    <string name="main_info_photo">Photo</string>
+    <string name="main_info_music">Music</string>
+    <string name="main_info_video">Video</string>
+    <string name="main_info_docs">Docs</string>
+    <string name="main_info_apps">Apps</string>
+    <string name="main_info_other">Other</string>
+    <string name="main_info_switch_phone">Phone</string>
+    <string name="main_info_switch_sdcard">SD</string>
 
     <!-- 抽屉栏 -->
     <string name="drawer_about">About</string>

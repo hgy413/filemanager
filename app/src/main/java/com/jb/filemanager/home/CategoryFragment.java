@@ -5,12 +5,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,10 @@ import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.function.samefile.SameFileActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.view.UsageAnalysis;
+import com.jb.filemanager.util.APIUtil;
+import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,24 +62,36 @@ public class CategoryFragment extends Fragment {
     private static final String[] DOC_PROJECTION = new String[] {
             MediaStore.Files.FileColumns.SIZE};
 
-    private GridView mCategoryView;
-
-    private boolean mIsInternalStorage;
-
     private LoaderManager.LoaderCallbacks<Cursor> mPhotoLoaderCallback;
     private long mPhotoSize;
 
     private LoaderManager.LoaderCallbacks<Cursor> mVideoLoaderCallback;
-    private long mAudioSize;
-
-    LoaderManager.LoaderCallbacks<Cursor> mAudioLoaderCallback;
     private long mVideoSize;
 
-    LoaderManager.LoaderCallbacks<List<Long>> mAppLoaderCallback;
-    private long mAppSize;
+    private LoaderManager.LoaderCallbacks<Cursor> mAudioLoaderCallback;
+    private long mAudioSize;
 
-    LoaderManager.LoaderCallbacks<Cursor> mDocLoaderCallback;
-    private long mDocSize;
+    private LoaderManager.LoaderCallbacks<List<Long>> mAppLoaderCallback;
+    private long mAppsSize;
+
+    private LoaderManager.LoaderCallbacks<Cursor> mDocLoaderCallback;
+    private long mDocsSize;
+
+    private long mTotalSize;
+    private long mUsedSize;
+
+    private GridView mCategoryView;
+    private TextView mTvStorageTitle;
+    private TextView mTvStorageUsed;
+    private TextView mTvStorageUnused;
+    private UsageAnalysis mUaStorage;
+
+    private TextView mTvSwitchPhone;
+    private TextView mTvSwitchSdCard;
+
+    private boolean mIsInternalStorage = true;
+    private boolean mHasExternalStorage = false;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +103,7 @@ public class CategoryFragment extends Fragment {
         mAudioLoaderCallback = getAudioLoaderCallback();
         mDocLoaderCallback = getDocLoaderCallback();
 
+        mHasExternalStorage = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     @Override
@@ -91,25 +113,16 @@ public class CategoryFragment extends Fragment {
         // properly.
         View rootView = inflater.inflate(R.layout.fragment_main_category, container, false);
 
-        // TODO test data
-        CategoryBean bean1 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);//temp for music
-        CategoryBean bean3 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_image, "download", 99);// temp for download
-        CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_image, "doc", 13);//temp for doc
-        CategoryBean bean6 = new CategoryBean(R.drawable.ic_main_category_image, "apk", 15);//temp for apk
-        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_image, "video", 199);// temp for video
-        CategoryBean bean8 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
-        CategoryBean bean9 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean10 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
-        CategoryBean bean11= new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean12 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
-        CategoryBean bean13 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean14 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
-        CategoryBean bean15 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean16 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
-        CategoryBean bean17 = new CategoryBean(R.drawable.ic_main_category_image, "image", 199);
-        CategoryBean bean18 = new CategoryBean(R.drawable.ic_main_category_image, "music", 99);
+        CategoryBean bean1 = new CategoryBean(R.drawable.ic_main_category_photo, getString(R.string.main_category_item_photo));
+        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_video, getString(R.string.main_category_item_video));//temp for music
+        CategoryBean bean3 = new CategoryBean(R.drawable.ic_main_category_app, getString(R.string.main_category_item_apps));
+        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_music, getString(R.string.main_category_item_music));// temp for download
+        CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_doc, getString(R.string.main_category_item_doc));//temp for doc
+        CategoryBean bean6 = new CategoryBean(R.drawable.ic_main_category_zip, getString(R.string.main_category_item_zip));//temp for apk
+        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_download, getString(R.string.main_category_item_download));// temp for video
+        CategoryBean bean8 = new CategoryBean(R.drawable.ic_main_category_recent, getString(R.string.main_category_item_recent));
+        CategoryBean bean9 = new CategoryBean(R.drawable.ic_main_category_ad, getString(R.string.main_category_item_ad));
+
         ArrayList<CategoryBean> arrayList = new ArrayList<>();
         arrayList.add(bean1);
         arrayList.add(bean2);
@@ -120,23 +133,61 @@ public class CategoryFragment extends Fragment {
         arrayList.add(bean7);
         arrayList.add(bean8);
         arrayList.add(bean9);
-        arrayList.add(bean10);
-        arrayList.add(bean11);
-        arrayList.add(bean12);
-        arrayList.add(bean13);
-        arrayList.add(bean14);
-        arrayList.add(bean15);
-        arrayList.add(bean16);
-        arrayList.add(bean17);
-        arrayList.add(bean18);
-
 
         CategoryAdapter adapter = new CategoryAdapter();
         adapter.setData(arrayList);
 
         mCategoryView = (GridView) rootView.findViewById(R.id.gv_main_category);
-        mCategoryView.setAdapter(adapter);
+        if (mCategoryView != null) {
+            mCategoryView.setAdapter(adapter);
+            mCategoryView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    switch (position) {
+                        case 0:
+                            // 图片管理
+                            startActivity(new Intent(getContext(), ImageActivity.class));
+                            break;
+                        case 1:
+                            // 视频管理
+                            startActivity(new Intent(getContext(), VideoActivity.class));
+                            break;
+                        case 2:
+                            // apk管理
+                            startActivity(new Intent(getContext(), AppManagerActivity.class));
+                            break;
+                        case 4:
+                            // 文档管理
+                            startActivity(new Intent(getContext(), DocManagerActivity.class));
+                            break;
+                        case 3:
+                            // 音乐管理
+                            startActivity(new Intent(getContext(), MusicActivity.class));
+                            break;
+                        case 5:
+                            // app管理
+                            startActivity(new Intent(getContext(), ZipFileActivity.class));
+                            break;
+                        case 6:
+                            // 下载管理
+                            startActivity(new Intent(getContext(), DownloadActivity.class));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        }
 
+        mTvStorageTitle = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_title);
+        if (mTvStorageTitle != null) {
+            mTvStorageTitle.getPaint().setAntiAlias(true);
+            if (mIsInternalStorage) {
+                mTvStorageTitle.setText(R.string.main_info_phone_storage);
+            } else {
+                mTvStorageTitle.setText(R.string.main_info_sdcard_storage);
+            }
+        }
+        
         mCategoryView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 switch (position) {
@@ -174,7 +225,52 @@ public class CategoryFragment extends Fragment {
                         break;
                 }
             }
-        });
+        }
+
+        mTvStorageUsed = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_used);
+        if (mTvStorageUsed != null) {
+            mTvStorageUsed.getPaint().setAntiAlias(true);
+        }
+
+        mTvStorageUnused = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_unused);
+        if (mTvStorageUnused != null) {
+            mTvStorageUnused.getPaint().setAntiAlias(true);
+        }
+
+        mUaStorage = (UsageAnalysis) rootView.findViewById(R.id.ua_main_category_info_usage_analysis);
+        if (mUaStorage != null) {
+            mUaStorage.reload();
+            mUaStorage.setTotal(mTotalSize);
+            mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
+        }
+
+        mTvSwitchPhone = (TextView) rootView.findViewById(R.id.tv_main_category_info_switch_phone);
+        if (mTvSwitchPhone != null) {
+            mTvSwitchPhone.getPaint().setAntiAlias(true);
+            mTvSwitchPhone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIsInternalStorage = !mIsInternalStorage;
+                    handleSwitchPhoneSdCard();
+                }
+            });
+
+            mTvSwitchPhone.setSelected(mIsInternalStorage);
+        }
+
+        mTvSwitchSdCard = (TextView) rootView.findViewById(R.id.tv_main_category_info_switch_sdcard);
+        if (mTvSwitchSdCard != null) {
+            mTvSwitchSdCard.getPaint().setAntiAlias(true);
+            mTvSwitchSdCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIsInternalStorage = !mIsInternalStorage;
+                    handleSwitchPhoneSdCard();
+                }
+            });
+
+            mTvSwitchSdCard.setSelected(!mIsInternalStorage);
+        }
 
         return rootView;
     }
@@ -193,6 +289,36 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        StatFs stat = new StatFs(mIsInternalStorage ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
+        mTotalSize = APIUtil.getTotalBytes(stat);
+        mUsedSize = mTotalSize - APIUtil.getAvailableBytes(stat);
+        if (mUaStorage != null) {
+            mUaStorage.reload();
+            mUaStorage.setTotal(mTotalSize);
+            mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
+        }
+        if (mTvStorageUsed != null) {
+            String usedReadableString = ConvertUtils.getReadableSize(mUsedSize);
+            String usedString = getString(R.string.main_info_phone_used, usedReadableString);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(usedString);
+            ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
+                    usedString.length() - usedReadableString.length(),
+                    usedString.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTvStorageUsed.setText(ssb);
+        }
+
+        if (mTvStorageUnused != null) {
+            String unusedReadableString = ConvertUtils.getReadableSize(mTotalSize - mUsedSize);
+            String unusedString = getString(R.string.main_info_phone_used, unusedReadableString);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(unusedString);
+            ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
+                    unusedString.length() - unusedReadableString.length(),
+                    unusedString.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTvStorageUnused.setText(ssb);
+        }
 
         getLoaderManager().restartLoader(FileManager.LOADER_IMAGE, null, mPhotoLoaderCallback);
         getLoaderManager().restartLoader(FileManager.LOADER_VIDEO, null, mVideoLoaderCallback);
@@ -241,6 +367,7 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mPhotoSize = size;
+                        mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_photo_color), size);
                     } finally {
                         cursor.close();
                     }
@@ -277,6 +404,7 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mVideoSize = size;
+                        mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_video_color), size);
                     } finally {
                         cursor.close();
                     }
@@ -313,6 +441,7 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mAudioSize = size;
+                        mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_music_color), size);
                     } finally {
                         cursor.close();
                     }
@@ -340,7 +469,8 @@ public class CategoryFragment extends Fragment {
                     for (Long appSize : data) {
                         size += appSize;
                     }
-                    mAppSize = size;
+                    mAppsSize = size;
+                    mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_apps_color), size);
                 }
             }
 
@@ -385,7 +515,8 @@ public class CategoryFragment extends Fragment {
                         while (cursor.moveToNext()) {
                             size += cursor.getLong(0);
                         }
-                        mAudioSize = size;
+                        mDocsSize = size;
+                        mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_docs_color), size);
                     } finally {
                         cursor.close();
                     }
@@ -397,6 +528,30 @@ public class CategoryFragment extends Fragment {
 
             }
         };
+    }
+
+    private void handleSwitchPhoneSdCard() {
+        if (mTvSwitchPhone != null) {
+            mTvSwitchPhone.setSelected(mIsInternalStorage);
+        }
+        if (mTvSwitchSdCard != null) {
+            mTvSwitchSdCard.setSelected(!mIsInternalStorage);
+        }
+
+        StatFs stat = new StatFs(mIsInternalStorage ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
+        mTotalSize = APIUtil.getTotalBytes(stat);
+        mUsedSize = mTotalSize - APIUtil.getAvailableBytes(stat);
+        if (mUaStorage != null) {
+            mUaStorage.reload();
+            mUaStorage.setTotal(mTotalSize);
+            mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
+        }
+
+        getLoaderManager().restartLoader(FileManager.LOADER_IMAGE, null, mPhotoLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_VIDEO, null, mVideoLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
     }
 
     private static class CategoryAdapter extends BaseAdapter {
@@ -445,10 +600,6 @@ public class CategoryFragment extends Fragment {
                     holder.mTvName.getPaint().setAntiAlias(true);
                 }
 
-                holder.mTvNumber = (TextView) convertView.findViewById(R.id.tv_main_category_number);
-                if (holder.mTvNumber != null) {
-                    holder.mTvNumber.getPaint().setAntiAlias(true);
-                }
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -464,11 +615,6 @@ public class CategoryFragment extends Fragment {
                 if (holder.mTvName != null) {
                     holder.mTvName.setText(bean.getCategoryName());
                 }
-
-                if (holder.mTvNumber != null) {
-                    String number = context.getString(R.string.main_category_item_number, bean.getCategoryNumber());
-                    holder.mTvNumber.setText(number);
-                }
             }
             return convertView;
         }
@@ -476,7 +622,6 @@ public class CategoryFragment extends Fragment {
         private static class ViewHolder {
             ImageView mIvIcon;
             TextView mTvName;
-            TextView mTvNumber;
         }
     }
 }

@@ -8,20 +8,14 @@ public class CategoryBean {
 
     private int mCategoryIconResId;
     private String mCategoryName;
-    private int mCategoryNumber;
 
-    public CategoryBean(int categoryIconResId, String categoryName, int categoryNumber) {
+    public CategoryBean(int categoryIconResId, String categoryName) {
         mCategoryIconResId = categoryIconResId;
         mCategoryName = categoryName;
-        mCategoryNumber = categoryNumber;
     }
 
     public int getCategoryIconResId() {
         return mCategoryIconResId;
-    }
-
-    public int getCategoryNumber() {
-        return mCategoryNumber;
     }
 
     public String getCategoryName() {
