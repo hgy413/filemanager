@@ -8,15 +8,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF" >
 
         <com.jb.filemanager.ui.widget.HorizontalListView
             android:id="@+id/lv_dirs"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_dir_list"
             android:listSelector="@android:color/transparent"
             android:scrollbars="none" />
 
@@ -24,20 +24,24 @@
             android:id="@+id/iv_main_storage_style_switcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/main_storage_style_switch_selector" />
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <ListView
             android:id="@+id/lv_main_storage_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@drawable/main_storage_style_list_divider"
-            android:dividerHeight="1dp"
+            android:divider="@color/transparent"
+            android:dividerHeight="0dp"
             android:footerDividersEnabled="false"
             android:listSelector="@drawable/main_storage_style_list_item_selector" />
 
@@ -45,7 +49,7 @@
             android:id="@+id/gv_main_storage_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:numColumns="3"
+            android:numColumns="4"
             android:verticalSpacing="10dp"
             android:horizontalSpacing="10dp"
             android:stretchMode="columnWidth"

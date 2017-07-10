@@ -388,7 +388,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                             SameFileActivity.this.mSelecedCount--;
                         } else {
                             mItemSelected[posion] = true;
-                            mIvSelect.setImageResource(R.drawable.ic_main_storage_list_item_checked);
+                            mIvSelect.setImageResource(R.drawable.ic_common_item_selected);
                             SameFileActivity.this.mSelecedCount++;
                         }
                         break;

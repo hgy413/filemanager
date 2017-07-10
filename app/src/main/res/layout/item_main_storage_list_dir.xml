@@ -4,10 +4,10 @@
     tools:ignore="SpUsage"
     android:id="@+id/tv_dir"
     android:layout_width="wrap_content"
-    android:layout_height="46dp"
-    android:background="@drawable/bg_item_main_content_list_sytle_dir"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_item_main_content_list_style_dir"
     android:gravity="center"
-    android:textColor="#452345"
-    android:textSize="14dp">
+    android:textColor="#66000000"
+    android:textSize="12dp">
 
 </TextView>
