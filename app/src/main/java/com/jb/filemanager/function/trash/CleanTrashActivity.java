@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +23,9 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanPathEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
-import com.jb.filemanager.function.trash.adapter.CleanListAdapter;
+import com.jb.filemanager.function.trash.adapter.NewCleanListAdapter;
 import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
-import com.jb.filemanager.function.trashignore.activity.TrashIgnoreActivity;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.ConvertUtils;
@@ -45,15 +44,16 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView {
 
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
-    private boolean mIsScanning;
+    private ImageView mIvCommonActionBarBack;
+    private TextView mTvCommonActionBarTitle;
+    private TextView mTvTrashSizeNumber;
+    private TextView mTvTrashSizeUnit;
+    private ProgressBar mPbScanProgress;
     private LinearLayout mLlContent;
-    private Button mBtnIgnore;
-    private TextView mTvScanProgress;
-    private TextView mTvChosenSize;
     private TextView mTvTrashPath;
     private FloatingGroupExpandableListView mCleanTrashExpandableListView;
     private ImageView mIvCleanButton;
-    private CleanListAdapter mAdapter;
+    private NewCleanListAdapter mAdapter;
     private ObjectAnimator mAnimator;
 
 
@@ -70,15 +70,18 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private void initView() {
         mLlContent = (LinearLayout) findViewById(R.id.ll_content);
-        mBtnIgnore = (Button) findViewById(R.id.btn_ignore);
+        mIvCommonActionBarBack = (ImageView) findViewById(R.id.iv_common_action_bar_back);
+        mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
+        mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);
+        mTvTrashSizeUnit = (TextView) findViewById(R.id.tv_trash_size_unit);
+        mPbScanProgress = (ProgressBar) findViewById(R.id.pb_scan_progress);
+        /*mBtnIgnore = (Button) findViewById(R.id.btn_ignore);
         mBtnIgnore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CleanTrashActivity.this, TrashIgnoreActivity.class));
             }
-        });
-        mTvScanProgress = (TextView) findViewById(R.id.tv_scan_progress);
-        mTvChosenSize = (TextView) findViewById(R.id.tv_chosen_size);
+        });*/
         mTvTrashPath = (TextView) findViewById(R.id.tv_trash_path);
         mCleanTrashExpandableListView = (FloatingGroupExpandableListView) findViewById(R.id.clean_trash_expandable_list_view);
         mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button);
@@ -91,7 +94,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                                 R.layout.activity_clean_trash, R.layout.activity_clean_result, mIvCleanButton);*/
             }
         });
-        mAdapter = new CleanListAdapter(mPresenter.getDataGroup(), this);
+        mAdapter = new NewCleanListAdapter(mPresenter.getDataGroup(), this);
         mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
     }
 
@@ -117,14 +120,14 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         if (!TheApplication.getGlobalEventBus().isRegistered(mSubscriber)) {
             TheApplication.getGlobalEventBus().register(mSubscriber);
         }
-        mIsScanning = true;
         mPresenter.enterCleanMainFragment();
     }
 
     private void setTotalCheckedSizeText() {
         long checkedSize = CleanCheckedFileSizeEvent.getJunkFileAllSize(true);
-        String sizes = ConvertUtils.formatFileSize(checkedSize);
-        mTvChosenSize.setText(sizes);
+        String[] formatterStorage = ConvertUtils.getFormatterTraffic(checkedSize);
+        mTvTrashSizeNumber.setText(formatterStorage[0]);
+        mTvTrashSizeUnit.setText(formatterStorage[1]);
     }
 
     private void keepScreenOn(boolean keep) {
@@ -167,7 +170,8 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     @Override
     public void updateProgress(float process) {
-        mTvScanProgress.setText(process + "% has been done");
+//        mTvScanProgress.setText(process + "% has been done");
+        mPbScanProgress.setProgress((int) (process * 100));
     }
 
     @Override
@@ -244,7 +248,6 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(CleanProgressDoneEvent event) {
             if (CleanProgressDoneEvent.isAllDoneWithoutMemory()) {
-                mIsScanning = false;
                 mPresenter.onScanFinish();
                 boolean isAllEmpty = mPresenter.removeEmptyGroup();
                 //mAdapter.notifyDataSetChanged();
@@ -274,7 +277,6 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         private void showScanResult() {
 //            Logger.i(TAG, "showScanResult");
             mTvTrashPath.setText("");
-            mIsScanning = false;
             mPresenter.updateDefaultCheckedState();
             mPresenter.setAllProgressFinish();
             // 展开指定的组

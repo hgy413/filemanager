@@ -68,7 +68,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         mLlMoreOperateContainer = (LinearLayout) findViewById(R.id.ll_more_operate_container);
         mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
         mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
-        mTvBottomShowInFolder = (TextView) findViewById(R.id.tv_bottom_show_in_folder);
+        mTvBottomShowInFolder = (TextView) findViewById(R.id.tv_bottom_rename);
 
         mTvCommonOperateBarCut.setOnClickListener(this);
         mTvCommonOperateBarCopy.setOnClickListener(this);
@@ -154,7 +154,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
 //                showDocDetail(getCheckedDoc());
                 hideMoreOperator();
                 break;
-            case R.id.tv_bottom_show_in_folder:
+            case R.id.tv_bottom_rename:
 //                showInFolder(getCheckedDoc());
                 hideMoreOperator();
                 break;

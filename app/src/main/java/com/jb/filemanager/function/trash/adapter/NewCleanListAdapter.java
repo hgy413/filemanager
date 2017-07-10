@@ -1,12 +1,6 @@
 package com.jb.filemanager.function.trash.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +15,6 @@ import com.jb.filemanager.function.fileexplorer.FileBrowserActivity;
 import com.jb.filemanager.function.scanframe.bean.CleanGroupsBean;
 import com.jb.filemanager.function.scanframe.bean.adbean.AdBean;
 import com.jb.filemanager.function.scanframe.bean.cachebean.AppCacheBean;
-import com.jb.filemanager.function.scanframe.bean.cachebean.SysCacheBean;
-import com.jb.filemanager.function.scanframe.bean.cachebean.subitem.SubAppCacheBean;
-import com.jb.filemanager.function.scanframe.bean.cachebean.subitem.SubSysCacheBean;
 import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.function.scanframe.bean.common.god.BaseChildBean;
 import com.jb.filemanager.function.scanframe.bean.common.itemcommon.GroupType;
@@ -31,7 +22,6 @@ import com.jb.filemanager.function.scanframe.bean.common.itemcommon.ItemBean;
 import com.jb.filemanager.function.scanframe.bean.common.subitemcommon.SubItemBean;
 import com.jb.filemanager.function.scanframe.bean.residuebean.FolderBean;
 import com.jb.filemanager.function.scanframe.bean.residuebean.ResidueBean;
-import com.jb.filemanager.function.scanframe.clean.CleanConstants;
 import com.jb.filemanager.function.scanframe.clean.CleanEventManager;
 import com.jb.filemanager.function.scanframe.clean.CleanManager;
 import com.jb.filemanager.function.scanframe.clean.event.CleanCheckedFileSizeEvent;
@@ -46,7 +36,6 @@ import com.jb.filemanager.util.FileTypeUtil;
 import com.jb.filemanager.util.IntentUtil;
 import com.jb.filemanager.util.StorageUtil;
 import com.jb.filemanager.util.file.FileSizeFormatter;
-import com.jb.filemanager.util.file.FileUtil;
 import com.jb.filemanager.util.imageloader.IconLoader;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
@@ -56,19 +45,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.jb.filemanager.commomview.GroupSelectBox.SelectState.MULT_SELECTED;
 import static com.jb.filemanager.function.scanframe.bean.common.itemcommon.GroupType.BIG_FILE;
 import static com.jb.filemanager.util.file.FileSizeFormatter.formatFileSize;
 
-
 /**
- * 清理界面列表适配器
- *
- * @author chenbenbin
+ * Desc:
+ * Author lqf
+ * Email: liqf@m15.cn
+ * Date: 2017/7/10 15:16
  */
-@SuppressWarnings("Convert2Diamond")
-public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
-    //private Fragment mFragment;
+
+public class NewCleanListAdapter extends AbsAdapter<CleanGroupsBean> {
+
+    public NewCleanListAdapter(List<CleanGroupsBean> groups) {
+        super(groups);
+    }
+
     private CleanEventManager mEventManager;
     private TrashItemDetailDialog mItemDetailDialog;
     private TrashSubItemDetailDialog mSubItemDetailDialog;
@@ -79,21 +71,10 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
     private String mSysCachePackageNameForDetails = "";
     private boolean mCheckButtonEnabled = true;
 
-    /**
-     * 三级应用缓存数据：警告级别对应的提示语
-     */
-    private SparseIntArray mSubItemDescMap = new SparseIntArray() {
-        {
-            put(0, R.string.clean_subitem_detail_result_0);
-            put(1, R.string.clean_subitem_detail_result_1);
-            put(2, R.string.clean_subitem_detail_result_2);
-            put(10, R.string.clean_subitem_detail_result_10);
-        }
-    };
 
     private Activity mActivity;
 
-    public CleanListAdapter(List<CleanGroupsBean> groups, Activity ctx) {
+    public NewCleanListAdapter(List<CleanGroupsBean> groups, Activity ctx) {
         super(groups, ctx.getApplicationContext());
         mActivity = ctx;
         //mFragment = frg;
@@ -102,45 +83,13 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         CleanProgressDoneEvent.cleanAllDone();
     }
 
-    public void setCheckButtonEnabled(boolean checkButtonEnabled) {
-        mCheckButtonEnabled = checkButtonEnabled;
-    }
-
     /**
      * 初始化弹窗
      */
     private void initDialog(Activity act) {
         mItemDetailDialog = new TrashItemDetailDialog(act, true);
         mSubItemDetailDialog = new TrashSubItemDetailDialog(act, true);
-//
         mIgnoreDialog = new TrashIgnoreDialog(act, true);
-    }
-
-    /**
-     * ListView缓存
-     *
-     * @author chenbenbin
-     */
-    private class ViewHolder {
-        private View mRoot;
-        private ImageView mIcon;
-        private ImageView mIndicator;
-        private TextView mTitle;
-
-        /**
-         * Group的加载动画
-         */
-        private ProgressWheel mProgress;
-        /**
-         * Group的多选框
-         */
-        private GroupSelectBox mSelectBox;
-        private TextView mSize;
-
-        /**
-         * Item的选择框
-         */
-        private ItemCheckBox mCheckBox;
     }
 
     //************************************************************** 一级 ***************************************************************//
@@ -157,12 +106,12 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         }
         //Logger.e("CleanAdapter", "position = " + groupPosition + ">isExpanded = " + isExpanded);
         // 1. 初始化View对象
-        ViewHolder holder = null;
+        GroupViewHolder holder = null;
         if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag(R.layout.item_clean_trash_group);
+            holder = (GroupViewHolder) convertView.getTag(R.layout.item_clean_trash_group);
         }
         if (holder == null) {
-            holder = new ViewHolder();
+            holder = new GroupViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.item_clean_trash_group, parent, false);
 
@@ -221,7 +170,6 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                         if (!event.isDone()) {
                             event.setDone(true);
                             mEventManager.sendProgressDoneEvent(event);
-                            //Logger.w("CleanListAdapter", "发送-->" + event.name());
                         }
                     }
                 }
@@ -239,51 +187,6 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         }
         // 是否直接更新勾选框的状态(即不需要弹窗)
         updateGroupSelectBox(group);
-    }
-
-    /**
-     * 处理残留一级的全选逻辑
-     *
-     * @param group 残留的组
-     * @return 是否直接选中
-     */
-    @SuppressWarnings({"unchecked", "deprecation"})
-    private boolean handleResidueGroupCheck(final CleanGroupsBean group) {
-        if (group.isAllSelected()) {
-            return true;
-        }
-        HashSet<FileType> fileType = new HashSet<FileType>();
-        List<BaseChildBean> children = group.getChildren();
-        // 包含敏感文件的残留数据队列
-        final ArrayList<ResidueBean> senResidueList = new ArrayList<ResidueBean>();
-        for (BaseChildBean child : children) {
-            if (child.isTypeItem()) {
-                ResidueBean residueBean = (ResidueBean) child;
-                if (residueBean.isAllSelected()) {
-                    continue;
-                }
-                HashSet<FileType> typeSet = residueBean.getFileType();
-                if (!typeSet.isEmpty()) {
-                    fileType.addAll(typeSet);
-                    senResidueList.add(residueBean);
-                } else {
-                    mEventManager.sendCheckedFileSizeEvent(
-                            CleanCheckedFileSizeEvent.ResidueFileSize,
-                            residueBean.getSize());
-                    residueBean.setCheck(true);
-                }
-            }
-        }
-        if (fileType.isEmpty()) {
-            // 不包含特殊文件类型
-            return true;
-        } else if (children.size() != senResidueList.size()) {
-            // 部分残留文件不包含敏感文件，则设置一级列表为多选
-            group.setState(MULT_SELECTED);
-            CleanListAdapter.this.notifyDataSetChanged();
-        }
-        notifyCheckedStateChange();
-        return false;
     }
 
     /**
@@ -305,7 +208,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 }
             }
         }
-        CleanListAdapter.this.notifyDataSetChanged();
+        this.notifyDataSetChanged();
         notifyCheckedStateChange();
         // 通知勾选的文件大小总数发生改变
         long checkSize = group.isAllSelected() ? group.getSize() : 0;
@@ -339,60 +242,28 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         final CleanGroupsBean group = getGroup(groupPosition);
         final BaseChildBean child = (BaseChildBean) getChild(groupPosition,
                 childPosition);
-        switch (child.getChildType()) {
-            case ITEM:
-                final ItemBean item = (ItemBean) child;
-                convertView = onGetItemView(convertView, parent,
-                        group, item);
-                break;
-            case SUB_ITEM:
-                final SubItemBean subItem = (SubItemBean) child;
-                final ItemBean item2 = getItemBySubItem(group, subItem);
-                convertView = onGetSubItemView(convertView, parent,
-                        group, item2, subItem);
-                break;
-            default:
-                break;
-        }
+        final ItemBean item = (ItemBean) child;
+        convertView = onGetItemView(convertView, parent,
+                group, item);
         return convertView;
     }
 
-    /**
-     * 根据三级项来获取对应的二级项
-     */
-    @SuppressWarnings("unchecked")
-    private ItemBean getItemBySubItem(final CleanGroupsBean group,
-                                      final SubItemBean subItem) {
-        List<BaseChildBean> children = group.getChildren();
-        for (BaseChildBean item : children) {
-            if (item.getKey().equals(subItem.getKey())) {
-                if (item.isTypeItem()) {
-                    return (ItemBean) item;
-                }
-            }
-        }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
     private View onGetItemView(View convertView,
                                ViewGroup parent, final CleanGroupsBean group,
                                final ItemBean item) {
         // 1. 初始化View对象
-        ViewHolder holder = null;
+        ChildViewHolder holder = null;
         if (convertView != null) {
-            holder = (ViewHolder) convertView
+            holder = (ChildViewHolder) convertView
                     .getTag(R.layout.item_clean_trash_child);
         }
         if (holder == null) {
-            holder = new ViewHolder();
+            holder = new ChildViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.item_clean_trash_child, parent, false);
             holder.mRoot = convertView.findViewById(R.id.item_child_item);
             holder.mIcon = (ImageView) convertView
                     .findViewById(R.id.item_child_iv);
-            holder.mIndicator = (ImageView) convertView
-                    .findViewById(R.id.item_child_indivator);
             holder.mTitle = (TextView) convertView
                     .findViewById(R.id.item_child_name);
             holder.mSelectBox = (GroupSelectBox) convertView
@@ -403,15 +274,9 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                             R.drawable.choose_all);
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_child_size);
-            //holder.mAppItemForeground = convertView.findViewById(R.id.clean_main_list_item_foreground);
             convertView.setTag(R.layout.item_clean_trash_child, holder);
         }
 
-        // 2. 初始化界面
-        holder.mTitle.setText(getChildTitle(item));
-        final FileSizeFormatter.FileSize size = formatFileSize(item.getSize());
-        String result = ConvertUtils.formatFileSize(item.getSize());
-        holder.mSize.setText(result);
         holder.mSelectBox.setState(item.getState());
         holder.mSelectBox.setVisibility(group.getGroupType().equals(
                 GroupType.SYS_CACHE) ? View.GONE : View.VISIBLE);
@@ -421,11 +286,14 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 handleItemCheck(group, item);
             }
         });
-        // indicator
-        holder.mIndicator.setVisibility(View.GONE);
-        if (item instanceof SysCacheBean || item instanceof AppCacheBean) {
-            holder.mIndicator.setVisibility(item.isExpand() ? View.GONE : View.VISIBLE);
-        }
+
+
+        // 2. 初始化界面
+        holder.mTitle.setText(getChildTitle(item));
+        final FileSizeFormatter.FileSize size = formatFileSize(item.getSize());
+        String result = ConvertUtils.formatFileSize(item.getSize());
+        holder.mSize.setText(result);
+
         switch (item.getGroupType()) {
             // 根据文件类型更新图标
             case APP_CACHE:
@@ -458,28 +326,6 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 break;
             case BIG_FILE:
                 holder.mIcon.setImageResource(R.drawable.child_bf);
-                //ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
-                //IconLoader.getInstance().displayImage(item.getPath(), holder.mIcon);
-//                FileType fileType = FileTypeUtil.getFileType(item.getPath());
-//                switch (fileType) {
-//                    case IMAGE:
-//                    case VIDEO:
-//                    case MUSIC:
-//                        IconLoader.getInstance().cancelShowImage(holder.mIcon);
-//                        ImageLoader.ImageLoaderBean bean = new ImageLoader.ImageLoaderBean(
-//                                item.getPath(), holder.mIcon);
-//                        bean.setDrawableId(item.getGroupType().getChildIconId());
-//                        bean.setImageType(getImageType(fileType));
-//                        bean.setShapeType(ImageLoaderBean.SHAPE_TYPE_ROUND);
-//                        ImageLoader.getInstance(mContext).displayImage(bean);
-//                        break;
-//                    default:
-//                        IconLoader.getInstance().cancelShowImage(holder.mIcon);
-//                        ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
-//                        holder.mIcon.setImageResource(item.getGroupType()
-//                                .getChildIconId());
-//                        break;
-//                }
                 break;
             default:
                 IconLoader.getInstance().cancelShowImage(holder.mIcon);
@@ -494,24 +340,24 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             @SuppressWarnings("deprecation")
             @Override
             public void onClick(View v) {
-                if (item.getSubItemList().isEmpty()) {
+//                if (item.getSubItemList().isEmpty()) {
                     onItemClick(item, size);
-                } else {
-                    ArrayList<SubItemBean> subItemList = item
-                            .getSubItemList();
-                    int itemPosition = children.indexOf(item);
-                    if (item.isExpand()) {
-                        children.removeAll(subItemList);
-                    } else {
-                        for (int i = 0; i < subItemList.size(); i++) {
-                            children.add(itemPosition + 1 + i,
-                                    subItemList.get(i));
-                        }
-//                        StatisticsTools.uploadClickData(StatisticsConstants.JUNK_SUB_OPEN);
-                    }
-                    item.setIsExpand(!item.isExpand());
-                    notifyDataSetChanged();
-                }
+//                } else {
+//                    ArrayList<SubItemBean> subItemList = item
+//                            .getSubItemList();
+//                    int itemPosition = children.indexOf(item);
+//                    if (item.isExpand()) {
+//                        children.removeAll(subItemList);
+//                    } else {
+//                        for (int i = 0; i < subItemList.size(); i++) {
+//                            children.add(itemPosition + 1 + i,
+//                                    subItemList.get(i));
+//                        }
+////                        StatisticsTools.uploadClickData(StatisticsConstants.JUNK_SUB_OPEN);
+//                    }
+//                    item.setIsExpand(!item.isExpand());
+//                    notifyDataSetChanged();
+//                }
             }
         });
         holder.mRoot.setOnLongClickListener(new View.OnLongClickListener() {
@@ -551,7 +397,6 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                         }
                         break;
                     case RESIDUE:
-//                        StatisticsTools.uploadClickData(StatisticsConstants.CLEAN_RAB_POP);
                         mIgnoreDialog.setAppIcon(GroupType.RESIDUE.getChildIconId());
                         mIgnoreDialog.setName(item.getTitle());
 //                        mIgnoreDialog.setContentText(Html.fromHtml(mContext.getString(R.string.ignore_dialog_content, item.getTitle())));
@@ -608,7 +453,6 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                     case TEMP:
                     case APK:
                     case BIG_FILE:
-                    case MEMORY:
                         onItemClick(item, size);
                     default:
                         break;
@@ -664,160 +508,11 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         }
     }
 
-    public String getSysCachePackageNameForDetails() {
-        return mSysCachePackageNameForDetails;
-    }
-
-    public void setSysCachePackageNameForDetails(String packageName) {
-        mSysCachePackageNameForDetails = packageName;
-    }
-
-    //************************************************************** 三级 ***************************************************************//
-    private View onGetSubItemView(View convertView,
-                                  ViewGroup parent, final CleanGroupsBean group,
-                                  final ItemBean item, final SubItemBean subItem) {
-        // 1. 初始化View对象
-        ViewHolder holder = null;
-        if (convertView != null) {
-            holder = (ViewHolder) convertView
-                    .getTag(R.layout.item_clean_trash_child_child);
-        }
-        if (holder == null) {
-            holder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(
-                    R.layout.item_clean_trash_child_child, parent, false);
-            holder.mRoot = convertView.findViewById(R.id.item_child_child_root);
-            holder.mIcon = (ImageView) convertView
-                    .findViewById(R.id.item_child_child_iv);
-            holder.mTitle = (TextView) convertView
-                    .findViewById(R.id.item_child_child_name);
-            holder.mCheckBox = (ItemCheckBox) convertView
-                    .findViewById(R.id.item_child_child_select_button);
-            holder.mCheckBox.setImageRes(R.drawable.choose_none,
-                    R.drawable.choose_all);
-            holder.mSize = (TextView) convertView
-                    .findViewById(R.id.item_child_child_size);
-
-            convertView.setTag(R.layout.item_clean_trash_child_child,
-                    holder);
-        }
-        // 2. 初始化View
-        final List children = group.getChildren();
-//        holder.mRoot.setBackgroundResource(R.drawable.common_list_item_gray_white_selector);
-        holder.mCheckBox.setImageRes(R.drawable.choose_none,
-                R.drawable.choose_all);
-        holder.mCheckBox.setChecked(subItem.isChecked());
-        holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateSubItemCheckBox(group, subItem);
-            }
-        });
-
-        if (subItem.isSysCache()) {
-            holder.mCheckBox.setVisibility(View.GONE);
-            SubSysCacheBean sysBean = (SubSysCacheBean) subItem;
-            ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
-            IconLoader.getInstance().displayImage(sysBean.getPackageName(),
-                    holder.mIcon);
-        } else {
-            holder.mCheckBox.setVisibility(View.VISIBLE);
-            IconLoader.getInstance().cancelShowImage(holder.mIcon);
-            ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
-            holder.mIcon.setImageResource(R.drawable.subitem_cache);
-        }
-        holder.mTitle.setText(subItem.getTitle());
-        final FileSizeFormatter.FileSize size = formatFileSize(subItem.getSize());
-        String result = ConvertUtils.formatFileSize(subItem.getSize());
-        holder.mSize.setText(result);
-
-
-        holder.mRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (subItem instanceof SubAppCacheBean) {
-                    onAppCacheSubItemClick(item, (SubAppCacheBean) subItem);
-                } else if (subItem instanceof SubSysCacheBean) {
-                    onSysCacheSubItemClick((SubSysCacheBean) subItem);
-                }
-            }
-        });
-        holder.mRoot.setOnLongClickListener(new View.OnLongClickListener() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public boolean onLongClick(View v) {
-                if (item instanceof AppCacheBean && subItem instanceof SubAppCacheBean) {
-//                    StatisticsTools.uploadClickData(StatisticsConstants.CLEAN_RAB_POP);
-                    mIgnoreDialog.setAppIcon(item.getPath());
-                    mIgnoreDialog.setName(subItem.getTitle());
-//                    mIgnoreDialog.setContentText(Html.fromHtml(mContext.getString(R.string.ignore_dialog_content, subItem.getTitle())));
-                    mIgnoreDialog.show();
-                    mIgnoreDialog.setOnConfirmListener(new TrashIgnoreDialog.OnConfirmListener() {
-                        @Override
-                        public void onConfirm(boolean isConfirm) {
-                            if (isConfirm) {
-                                AppCacheBean appCacheBean = (AppCacheBean) item;
-                                SubAppCacheBean subAppCacheBean = (SubAppCacheBean) subItem;
-                                CleanManager.getInstance(mContext).addCachePathIgnore(appCacheBean, subAppCacheBean);
-                                if (appCacheBean.isExpand()) {
-                                    children.remove(subAppCacheBean);
-                                }
-
-                                if (appCacheBean.getSubItemList().isEmpty()) {
-                                    // 三级列表为空，移除二级节点
-                                    children.remove(appCacheBean);
-                                }
-                                if (children.isEmpty()) {
-                                    // 二级列表，移除一级节点
-                                    removeGroup(group);
-                                } else {
-                                    // 根据对象tree的叶子更新整个tree
-                                    group.updateStateBySubItem();
-                                }
-                                notifyCheckedStateChange();
-                                notifyDataSetChanged();
-                            }
-                        }
-                    });
-                }
-                return true;
-            }
-        });
-
-        return convertView;
-    }
-
-    private void updateSubItemCheckBox(final CleanGroupsBean group,
-                                       final SubItemBean subItem) {
-        if (!mCheckButtonEnabled) {
-            return;
-        }
-        subItem.setChecked(!subItem.isChecked());
-        // 根据对象tree的叶子更新整个tree
-        group.updateStateBySubItem();
-        long checkSize = subItem.isChecked() ? subItem.getSize() : -subItem
-                .getSize();
-        mEventManager.sendCheckedFileSizeEvent(
-                CleanCheckedFileSizeEvent.get(group.getGroupType()), checkSize);
-        notifyDataSetChanged();
-        notifyCheckedStateChange();
-    }
-
     @SuppressWarnings("deprecation")
     private void onItemClick(final ItemBean child, final FileSizeFormatter.FileSize size) {
         if (mEventManager.getCleanState().equals(CleanStateEvent.DELETE_ING)) {
             return;
         }
-//        if (child.getGroupType() == GroupType.MEMORY) {
-//            // 内存模块特殊处理
-//            CleanMemoryBean cleanMemoryBean = (CleanMemoryBean) child;
-//            AddtoIgnorelistDialog dialog = buildDialog(cleanMemoryBean
-//                    .getRunningAppModle());
-//            dialog.show();
-//            // 统计
-//            StatisticsTools.uploadClickData(StatisticsConstants.JUNK_MB_BOM);
-//            return;
-//        }
         // 1. 更新对话框文案
         String path = child.getPath();
         Set<String> sdPaths = StorageUtil.getAllExternalPaths(mContext);
@@ -904,126 +599,36 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                         FileBrowserActivity.browserDirs(mContext,
                                 child.getTitle(), array);
                     }
-//                    StatisticsTools.uploadClickData(StatisticsConstants.DET_VIEW_CLI);
                 }
             }
         });
     }
 
-    private void onAppCacheSubItemClick(ItemBean item,
-                                        final SubAppCacheBean subItem) {
-        mSubItemDetailDialog.setTitleText(subItem.getTitle());
+    private static class GroupViewHolder {
+        private View mRoot;
+        private TextView mTitle;
 
-        String desc = subItem.getDesc();
-        Spanned message1;
-        if (TextUtils.isEmpty(desc)) {
-            String itemTitle = item != null ? item.getTitle() : "";
-            // 若描述为空，则自己用应用名和标题进行拼接
-            desc = Html.fromHtml(
-                    String.format(mContext
-                                    .getString(R.string.clean_subitem_detail_connect),
-                            subItem.getTitle(), itemTitle)).toString();
-        }
 
-        // 获取警告级别对对应的翻译内容
-        int warnDescObject = mSubItemDescMap.get(subItem.getWarnLv());
-        int warnDesc = warnDescObject == 0 ? mSubItemDescMap.get(0)
-                : warnDescObject;
-        desc += mContext.getString(R.string.common_comma);
-        if (subItem.getWarnLv() >= 10) {
-            // 根据警告级别显示不同的提示
-            String pre = String.format(mContext
-                            .getString(R.string.clean_subitem_detail_warn_desc_pre),
-                    desc);
-            String all = String.format(mContext.getString(warnDesc), pre);
-            message1 = Html.fromHtml(all);
-        } else {
-            message1 = Html.fromHtml(String.format(
-                    mContext.getString(warnDesc), desc));
-        }
-        mSubItemDetailDialog.setMessage1(message1);
-        mSubItemDetailDialog.setMessage2(mContext.getResources().getString(
-                R.string.size)
-                + " : "
-                + formatFileSize(subItem.getSize())
-                .toFullString());
-//        Logger.e("Error", "size = " + subItem.getSize());
-        StringBuilder builder = new StringBuilder();
-        int fileCount = subItem.getFileCount();
-        int folderCount = subItem.getFolderCount();
-        builder.append(
-                mContext.getResources().getString(
-                        R.string.clean_dialog_message_contain))
-                .append(" : ")
-                .append(folderCount)
-                .append(" ")
-                .append(mContext.getResources().getString(
-                        R.string.clean_dialog_message_folder))
-                .append(" , ")
-                .append(fileCount)
-                .append(" ")
-                .append(mContext.getResources().getString(
-                        R.string.clean_dialog_message_file));
-        mSubItemDetailDialog.setMessage3(builder.toString());
-        final boolean isFile = fileCount == 1 && folderCount == 0;
-        mSubItemDetailDialog
-                .setOkText(isFile ? R.string.clean_dialog_file_yes_btn
-                        : R.string.clean_dialog_folder_yes_btn);
+        /**
+         * Group的加载动画
+         */
+        private ProgressWheel mProgress;
+        /**
+         * Group的多选框
+         */
+        private GroupSelectBox mSelectBox;
+        private TextView mSize;
 
-        mSubItemDetailDialog.setOnConfirmListener(new TrashIgnoreDialog.OnConfirmListener() {
-            @Override
-            public void onConfirm(boolean isConfirm) {
-                if (!isConfirm) {
-                    return;
-                }
-//                StatisticsTools.uploadClickData(StatisticsConstants.JUNK_FINE_VIEW);
-                if (isFile) {
-                    FileBrowserActivity.browserFile(mContext,
-                            subItem.getTitle(mContext), subItem.getPath());
-                } else {
-                    FileBrowserActivity.browserDirs(mContext,
-                            subItem.getTitle(mContext),
-                            FileUtil.removeEndSeparator(subItem.getPath()));
-                }
-            }
-        });
-        if (!mSubItemDetailDialog.isShowing()) {
-            mSubItemDetailDialog.show();
-//            StatisticsTools.uploadClickData(StatisticsConstants.JUNK_FINE_OPEN);
-        }
     }
 
-    @SuppressWarnings("deprecation")
-    private void onSysCacheSubItemClick(final SubSysCacheBean bean) {
-        mItemDetailDialog.setTitleText(bean.getTitle());
-        mItemDetailDialog.setMessage1(mContext.getResources().getString(
-                R.string.size)
-                + " : "
-                + formatFileSize(bean.getSize())
-                .toFullString());
-        mItemDetailDialog.setMessage2(null);
-        mItemDetailDialog.setMessage3(null);
-        mItemDetailDialog.setOkText(R.string.clean_dialog_app_cache_yes_btn);
-        mItemDetailDialog.setOnConfirmListener(new TrashIgnoreDialog.OnConfirmListener() {
-            @Override
-            public void onConfirm(boolean isConfirm) {
-                if (!isConfirm) {
-                    return;
-                }
-                Intent intent = new Intent(
-                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                mSysCachePackageNameForDetails = bean.getPackageName();
-                Uri uri = Uri.fromParts("package",
-                        mSysCachePackageNameForDetails, null);
-                intent.setData(uri);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mActivity.startActivityForResult(intent, CleanConstants.REQUEST_CODE_FOR_SYS_CACHE);
-//                StatisticsTools.uploadClickData(StatisticsConstants.DET_MC_CLI);
-            }
-        });
-        if (!mItemDetailDialog.isShowing()) {
-            mItemDetailDialog.show();
-        }
-//        StatisticsTools.uploadClickData(StatisticsConstants.DET_DIA_SHOW);
+    private static class ChildViewHolder {
+        private View mRoot;
+        private TextView mTitle;
+        private TextView mSize;
+        private ImageView mIcon;
+        /**
+         * Group的多选框
+         */
+        private GroupSelectBox mSelectBox;
     }
 }

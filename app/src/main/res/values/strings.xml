@@ -241,4 +241,5 @@
     <string name="cut">Cut</string>
     <string name="delete">Delete</string>
     <string name="more">More</string>
+    <string name="clean_storage">Clean Storage</string>
 </resources>
