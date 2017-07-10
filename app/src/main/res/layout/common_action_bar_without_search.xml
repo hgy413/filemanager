@@ -2,26 +2,26 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_title"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:orientation="horizontal"
+    android:layout_height="56dp"
+    android:orientation="vertical"
     tools:background="@color/colorAccent">
-
-    <ImageView
-        android:id="@+id/iv_common_action_bar_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:scaleType="center"
-        android:src="@drawable/action_bar_back_drawable_selector"/>
 
     <TextView
         android:id="@+id/tv_common_action_bar_title"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
-        android:layout_marginStart="2dp"
+        android:layout_height="50dp"
+        android:drawableLeft="@drawable/action_bar_back_drawable_selector"
+        android:drawablePadding="17dp"
+        android:paddingLeft="17dp"
         android:gravity="center"
         android:text="@string/clean_storage"
         android:textColor="@drawable/action_bar_back_text_selector"
         android:textSize="16dp"/>
+    
+    <View
+        android:background="@drawable/main_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
 </LinearLayout>

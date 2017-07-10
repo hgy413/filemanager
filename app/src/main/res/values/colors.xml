@@ -53,7 +53,8 @@
     <color name="power_saving_dialog_title">#434A54</color>
     <color name="power_saving_menu_item_normal">#FFFFFFFF</color>
     <color name="power_saving_menu_item_pressed">#FFEDEDED</color>
-    <color name="clean_trash_bg">#FFFF7D7D</color>
+    <color name="clean_trash_bg_red">#FFFF7D7D</color>
+    <color name="clean_trash_bg_blue">#FF44D6C3</color>
     <color name="list_divider_line_color">#e7e9f3</color>
     <color name="black_70">#B2000000</color>
 </resources>
