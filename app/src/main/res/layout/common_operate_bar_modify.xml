@@ -119,7 +119,7 @@
             android:layout_height="1dp"/>
         <TextView
             android:layout_alignParentRight="true"
-            android:id="@+id/tv_bottom_show_in_folder"
+            android:id="@+id/tv_bottom_rename"
             android:textColor="@color/white"
             android:text="show in folder"
             android:singleLine="true"

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.FileDeleteConfirmDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
@@ -63,7 +64,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private LinearLayout mLlMoreOperateContainer;
     private TextView mTvBottomDetail;
     private TextView mTvBottomOpen;
-    private TextView mTvBottomShowInFolder;
+    private TextView mTvBottomFileRename;
 
     private DocManagerAdapter mAdapter;
     private int mChosenCount;
@@ -109,7 +110,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mLlMoreOperateContainer = (LinearLayout) findViewById(R.id.ll_more_operate_container);
         mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
         mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
-        mTvBottomShowInFolder = (TextView) findViewById(R.id.tv_bottom_show_in_folder);
+        mTvBottomFileRename = (TextView) findViewById(R.id.tv_bottom_rename);
 
 
         //监听搜索
@@ -237,7 +238,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mTvCommonOperateBarMore.setOnClickListener(this);
         mTvBottomDetail.setOnClickListener(this);
         mTvBottomOpen.setOnClickListener(this);
-        mTvBottomShowInFolder.setOnClickListener(this);
+        mTvBottomFileRename.setOnClickListener(this);
     }
 
     @Override
@@ -332,8 +333,9 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     @Override
-    public void showInFolder(List<DocChildBean> docList) {
-        Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + " will show in folder", Toast.LENGTH_SHORT).show();
+    public void fileRename(List<DocChildBean> docList) {
+        Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + " will be rename", Toast.LENGTH_SHORT).show();
+        DocRenameDialog docRenameDialog = new DocRenameDialog(this,new File(docList.get(0).mDocPath));
     }
 
     @Override
@@ -450,8 +452,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 showDocDetail(getCheckedDoc());
                 hideMoreOperator();
                 break;
-            case R.id.tv_bottom_show_in_folder:
-                showInFolder(getCheckedDoc());
+            case R.id.tv_bottom_rename:
+                fileRename(getCheckedDoc());
                 hideMoreOperator();
                 break;
             case R.id.tv_bottom_open:
@@ -485,11 +487,11 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         if (chosenCount == 1) {
             mLlMoreOperateContainer.setVisibility(View.VISIBLE);
             mTvBottomOpen.setVisibility(View.VISIBLE);
-            mTvBottomShowInFolder.setVisibility(View.VISIBLE);
+            mTvBottomFileRename.setVisibility(View.VISIBLE);
         } else {
             mLlMoreOperateContainer.setVisibility(View.VISIBLE);
             mTvBottomOpen.setVisibility(View.GONE);
-            mTvBottomShowInFolder.setVisibility(View.GONE);
+            mTvBottomFileRename.setVisibility(View.GONE);
         }
     }
 
