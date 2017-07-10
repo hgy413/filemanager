@@ -149,7 +149,7 @@ public class CategoryFragment extends Fragment {
                             break;
                         case 1:
                             // 视频管理
-                            startActivity(new Intent(getContext(), VideoActivity.class));
+                            startActivity(new Intent(getContext(), SameFileActivity.class));
                             break;
                         case 2:
                             // apk管理
@@ -161,7 +161,7 @@ public class CategoryFragment extends Fragment {
                             break;
                         case 3:
                             // 音乐管理
-                            startActivity(new Intent(getContext(), MusicActivity.class));
+                            startActivity(new Intent(getContext(), SameFileActivity.class));
                             break;
                         case 5:
                             // app管理
@@ -169,7 +169,7 @@ public class CategoryFragment extends Fragment {
                             break;
                         case 6:
                             // 下载管理
-                            startActivity(new Intent(getContext(), DownloadActivity.class));
+                            startActivity(new Intent(getContext(), SameFileActivity.class));
                             break;
                         default:
                             break;
@@ -225,7 +225,7 @@ public class CategoryFragment extends Fragment {
                         break;
                 }
             }
-        }
+        });
 
         mTvStorageUsed = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_used);
         if (mTvStorageUsed != null) {
