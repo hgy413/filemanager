@@ -276,6 +276,12 @@
     <string name="dialog_create_new_folder_empty_input">File name could not be empty</string>
 
     <string name="dialog_sort_by_title">Sort by</string>
+    <string name="dialog_sort_by_name">Name</string>
+    <string name="dialog_sort_by_date">Date</string>
+    <string name="dialog_sort_by_type">Type</string>
+    <string name="dialog_sort_by_size">Size</string>
+    <string name="dialog_sort_by_descending">Descending</string>
+    <string name="dialog_sort_by_ascending">Ascending</string>
 
 
 </resources>

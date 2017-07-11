@@ -23,61 +23,110 @@
         android:id="@+id/rg_main_sort_by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
         android:orientation="vertical">
 
         <RadioButton
             android:id="@+id/rb_main_sort_by_name"
-            android:text="Name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:text="@string/dialog_sort_by_name"
+            android:button="@drawable/main_sort_by_radio_selector"/>
 
         <RadioButton
             android:id="@+id/rb_main_sort_by_date"
-            android:text="Date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:text="@string/dialog_sort_by_date"
+            android:button="@drawable/main_sort_by_radio_selector"/>
 
         <RadioButton
             android:id="@+id/rb_main_sort_by_type"
-            android:text="Type"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:text="@string/dialog_sort_by_type"
+            android:button="@drawable/main_sort_by_radio_selector"/>
 
         <RadioButton
             android:id="@+id/rb_main_sort_by_size"
-            android:text="Size"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:text="@string/dialog_sort_by_size"
+            android:button="@drawable/main_sort_by_radio_selector"/>
 
     </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/tv_main_sort_descending"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:minWidth="80dp"
             android:gravity="center"
-            android:textColor="#444444"
-            android:textSize="14dp"
-            android:text="Descending"/>
+            android:textColor="@color/dialog_cancel_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/dialog_sort_by_descending"/>
 
         <TextView
             android:id="@+id/tv_main_sort_ascending"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:minWidth="80dp"
             android:gravity="center"
-            android:textColor="#444444"
-            android:textSize="14dp"
-            android:text="Ascending"/>
+            android:textColor="@color/dialog_confirm_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/dialog_sort_by_ascending"/>
 
     </LinearLayout>
 
