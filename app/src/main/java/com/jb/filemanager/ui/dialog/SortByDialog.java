@@ -25,13 +25,33 @@ public class SortByDialog extends FMBaseDialog {
     public static final int SORT_BY_TYPE = 2;
     public static final int SORT_BY_SIZE = 3;
 
-    public SortByDialog(Activity act, final Listener listener) {
+    public SortByDialog(Activity act, int currentSortBy, final Listener listener) {
         super(act, true);
 
         View dialogView = View.inflate(act, R.layout.dialog_main_sort, null);
         TextView descendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_descending);
         TextView ascendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_ascending);
         final RadioGroup itemGroup = (RadioGroup) dialogView.findViewById(R.id.rg_main_sort_by);
+
+        int currentId;
+        switch (currentSortBy) {
+            case SORT_BY_NAME:
+                currentId = R.id.rb_main_sort_by_name;
+                break;
+            case SORT_BY_DATE:
+                currentId = R.id.rb_main_sort_by_date;
+                break;
+            case SORT_BY_TYPE:
+                currentId = R.id.rb_main_sort_by_type;
+                break;
+            case SORT_BY_SIZE:
+                currentId = R.id.rb_main_sort_by_size;
+                break;
+            default:
+                currentId = R.id.rb_main_sort_by_name;
+                break;
+        }
+        itemGroup.check(currentId);
 
         descendButton.setOnClickListener(new View.OnClickListener() {
             @Override

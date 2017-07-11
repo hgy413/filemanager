@@ -1,7 +1,6 @@
 package com.jb.filemanager.home;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,11 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
-import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
@@ -55,6 +52,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class MainActivity extends PrivacyGuardActivity implements MainContract.View, View.OnClickListener, RateContract.View {
 
@@ -602,7 +600,22 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showSortByDialog() {
-        SortByDialog dialog = new SortByDialog(this, new SortByDialog.Listener() {
+        int currentSort;
+        Comparator<File> sort = FileManager.getInstance().getFileSort();
+        if (sort == FileUtil.sNameDescendComparator || sort == FileUtil.sNameAscendComparator) {
+            currentSort = SortByDialog.SORT_BY_NAME;
+        } else if (sort == FileUtil.sSizeDescendComparator || sort == FileUtil.sSizeAscendComparator) {
+            currentSort = SortByDialog.SORT_BY_SIZE;
+        } else if (sort == FileUtil.sTypeDescendComparator || sort == FileUtil.sTypeAscendComparator) {
+            currentSort = SortByDialog.SORT_BY_TYPE;
+        } else if (sort == FileUtil.sDateDescendComparator || sort == FileUtil.sDateAscendComparator) {
+            currentSort = SortByDialog.SORT_BY_DATE;
+        } else {
+            currentSort = SortByDialog.SORT_BY_NAME;
+        }
+
+
+        SortByDialog dialog = new SortByDialog(this, currentSort, new SortByDialog.Listener() {
             @Override
             public void onDescend(SortByDialog dialog, int sortBy) {
                 switch (sortBy) {

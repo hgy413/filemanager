@@ -38,7 +38,6 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.view.UsageAnalysis;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
-import com.jb.filemanager.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;

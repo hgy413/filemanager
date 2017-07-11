@@ -4,7 +4,7 @@
     tools:ignore="SpUsage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@color/transparent"
     android:orientation="vertical">
 
     <TextView
