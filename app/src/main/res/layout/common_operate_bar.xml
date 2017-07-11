@@ -2,21 +2,23 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <LinearLayout
+        android:id="@+id/ll_common_operate_bar_cut"
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@drawable/botttom_item_selector"
         android:paddingTop="10dp"
+        android:clickable="true"
         >
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_bottom_cut"
+            android:background="@drawable/botttom_item_selector"
             />
         <TextView
-            android:id="@+id/tv_common_operate_bar_cut"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
@@ -24,52 +26,59 @@
             android:text="@string/cut"
             android:lines="1"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:background="@drawable/botttom_item_selector"
+            />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_common_operate_bar_copy"
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@drawable/botttom_item_selector"
         android:paddingTop="10dp"
+        android:clickable="true"
         >
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_bottom_copy"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/botttom_item_selector"
             />
         <TextView
-            android:id="@+id/tv_common_operate_bar_copy"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:background="@drawable/botttom_item_selector"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/copy"
             android:lines="1"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:background="#00000000"
+            />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_common_operate_bar_delete"
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@drawable/botttom_item_selector"
         android:paddingTop="10dp"
+        android:clickable="true"
         >
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_bottom_delete"
             android:layout_gravity="center_horizontal"
+            android:background="#00000000"
             />
         <TextView
-            android:id="@+id/tv_common_operate_bar_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -77,16 +86,20 @@
             android:text="@string/delete"
             android:lines="1"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:background="#00000000"
+            />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_common_operate_bar_more"
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@drawable/botttom_item_selector"
         android:paddingTop="10dp"
+        android:clickable="true"
         >
         <ImageView
             android:layout_width="30dp"
@@ -97,7 +110,6 @@
             />
 
         <TextView
-            android:id="@+id/tv_common_operate_bar_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -106,7 +118,7 @@
             android:lines="1"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            android:background="#"
+            android:background="#00000000"
             />
     </LinearLayout>
 
