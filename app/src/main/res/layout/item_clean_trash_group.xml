@@ -51,7 +51,7 @@
             android:layout_marginStart="5dp"
             android:padding="12dp"
             android:visibility="visible"
-            wheel:matProg_barColor="#0084ff"
+            wheel:matProg_barColor="#FF3CD776"
             wheel:matProg_barWidth="2dp"
             wheel:matProg_progressIndeterminate="true"/>
 
@@ -63,7 +63,7 @@
             android:layout_marginStart="5dp"
             android:contentDescription="@null"
             android:padding="12dp"
-            android:src="@drawable/choose_all"
+            android:src="@drawable/select_all"
             android:visibility="gone"/>
     </LinearLayout>
 

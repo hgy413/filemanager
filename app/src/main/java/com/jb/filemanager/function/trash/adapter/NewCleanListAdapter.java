@@ -124,9 +124,9 @@ public class NewCleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_group_size);
             holder.mSelectBox
-                    .setImageSource(R.drawable.choose_none,
-                            R.drawable.choose_part,
-                            R.drawable.choose_all);
+                    .setImageSource(R.drawable.select_none,
+                            R.drawable.select_multi,
+                            R.drawable.select_all);
             convertView.setTag(R.layout.item_clean_trash_group, holder);
         }
         // 2. 初始化界面
@@ -269,9 +269,9 @@ public class NewCleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mSelectBox = (GroupSelectBox) convertView
                     .findViewById(R.id.item_child_select_button);
             holder.mSelectBox
-                    .setImageSource(R.drawable.choose_none,
-                            R.drawable.choose_part,
-                            R.drawable.choose_all);
+                    .setImageSource(R.drawable.select_none,
+                            R.drawable.select_multi,
+                            R.drawable.select_all);
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_child_size);
             convertView.setTag(R.layout.item_clean_trash_child, holder);
