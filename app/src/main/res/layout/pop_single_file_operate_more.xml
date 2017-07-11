@@ -15,28 +15,22 @@
         android:id="@+id/tv_main_operate_more_detail"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:background="#00FF00"
-        android:gravity="center|start"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:text="Details"
-        android:textColor="#aab2bd"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/popup_bottom_bar_more_details"
+        android:textColor="@color/popup_window_item_text_color"
         android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_main_operate_more_rename"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:background="#00FF00"
-        android:gravity="center|start"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:text="Rename"
-        android:textColor="#aab2bd"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/popup_bottom_bar_more_rename"
+        android:textColor="@color/popup_window_item_text_color"
         android:textSize="14dp" />
 
 </LinearLayout>

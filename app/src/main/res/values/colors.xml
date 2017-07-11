@@ -65,6 +65,10 @@
     <color name="dialog_confirm_color">#39BDAC</color>
     <color name="dialog_cancel_color">#000000</color>
 
+    <!-- popup window -->
+    <color name="popup_window_item_text_color">#5A5A5A</color>
+
+
     <!-- Bottom operate bar -->
     <color name="dark_gray">#363636</color>
     <color name="middle_gray">#404040</color>

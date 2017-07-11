@@ -265,8 +265,10 @@
 
 
     <!-- pop up window -->
-    <string name="popup_more_new_folder">New Folder</string>
-    <string name="popup_more_sort_by">Sort by</string>
+    <string name="popup_action_bar_more_new_folder">New Folder</string>
+    <string name="popup_action_bar_more_sort_by">Sort by</string>
+    <string name="popup_bottom_bar_more_rename">Rename</string>
+    <string name="popup_bottom_bar_more_details">Details</string>
 
 
     <!-- dialog -->
