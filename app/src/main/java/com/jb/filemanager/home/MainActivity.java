@@ -39,6 +39,7 @@ import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.dialog.CreateNewFolderDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
@@ -557,26 +558,11 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showNewFolderDialog() {
-        View dialogView = View.inflate(this, R.layout.dialog_main_create_folder, null);
-        TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_confirm);
-        TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_cancel);
-        final EditText editText = (EditText) dialogView.findViewById(R.id.et_main_create_folder_input);
-
-        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        CreateNewFolderDialog dialog = new CreateNewFolderDialog(this, new CreateNewFolderDialog.Listener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        }); // 取消按钮点击事件
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+            public void onConfirm(CreateNewFolderDialog dialog, String folderName) {
                 if (mPresenter != null) {
-                    boolean success = mPresenter.onClickConfirmCreateFolderButton(editText.getText().toString());
+                    boolean success = mPresenter.onClickConfirmCreateFolderButton(folderName);
                     if (success) {
                         dialog.dismiss();
                     } else {
@@ -584,8 +570,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     }
                 }
             }
-        }); // 确定按钮点击事件
 
+            @Override
+            public void onCancel(CreateNewFolderDialog dialog) {
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 
