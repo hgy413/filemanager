@@ -11,6 +11,7 @@
         android:radius="4dp"
         />
     <FrameLayout
+        android:id="@+id/fl_file_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

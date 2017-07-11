@@ -48,7 +48,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music);
+        setContentView(R.layout.activity_same_file);
         mItemSelected = new boolean[0];
         mPresenter = new SameFilePresenter(this, new SameFileSupport(), getSupportLoaderManager());
         int imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
@@ -92,7 +92,8 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                     public View getGroupView(int position) {
                         //获取自定定义的组View
                         if (position < mMusicDataArrayMap.itemSize()) {
-                            View view = getLayoutInflater().inflate(R.layout.item_music_group, null, false);
+                            View view = getLayoutInflater().inflate(R.layout.item_music_group,
+                                    (ViewGroup) getGroupView(R.id.fl_file_list_container), true);
                             ((TextView) view.findViewById(R.id.tv_music_group_item_title))
                                     .setText(mMusicDataArrayMap.getGroupKey(position));
                             view.findViewById(R.id.iv_music_group_item_select);
@@ -364,7 +365,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                     case R.id.iv_music_child_item_select:
                         if (mItemSelected[posion]) {
                             mItemSelected[posion] = false;
-                            mIvSelect.setImageResource(R.drawable.ic_drawer_about);
+                            mIvSelect.setImageResource(R.drawable.choose_none);
                             SameFileActivity.this.mSelecedCount--;
                         } else {
                             mItemSelected[posion] = true;
