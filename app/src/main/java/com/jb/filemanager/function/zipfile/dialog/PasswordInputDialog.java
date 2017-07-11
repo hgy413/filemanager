@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.BaseDialog;
+import com.jb.filemanager.util.DrawUtils;
 
 /**
  * Created by xiaoyu on 2017/7/3 20:31.
@@ -21,6 +22,7 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
     private Context mContext;
     private EditText mEditText;
     private PasswordInputCallback mListener;
+    private TextView mTitle;
 
     public PasswordInputDialog(Activity act) {
         super(act, false);
@@ -32,12 +34,18 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
     private void initializeView() {
         View rootView = View.inflate(mContext, R.layout.dialog_zip_pass_input, null);
         setContentView(rootView);
+        setSize(DrawUtils.dip2px(320), DrawUtils.dip2px(244));
+
         mEditText = (EditText) rootView.findViewById(R.id.dialog_zip_pass_in_et);
 
         TextView tvOk = (TextView) rootView.findViewById(R.id.dialog_zip_pass_in_ok);
         tvOk.setOnClickListener(this);
         TextView tvCancel = (TextView) rootView.findViewById(R.id.dialog_zip_pass_in_cancel);
         tvCancel.setOnClickListener(this);
+
+        mTitle = (TextView) rootView.findViewById(R.id.dialog_pass_in_title);
+        TextView tvShowPass = (TextView) rootView.findViewById(R.id.show_password);
+        tvShowPass.setOnClickListener(this);
     }
 
 
@@ -57,6 +65,8 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
                 break;
             case R.id.dialog_zip_pass_in_cancel:
                 dismiss();
+                break;
+            case R.id.show_password:
                 break;
         }
     }
