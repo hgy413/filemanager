@@ -106,7 +106,7 @@
             android:lines="1"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            android:background="#"
+            android:background="#00000000"
             />
     </LinearLayout>
 
