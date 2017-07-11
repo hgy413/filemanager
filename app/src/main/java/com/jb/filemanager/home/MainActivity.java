@@ -43,6 +43,7 @@ import com.jb.filemanager.ui.dialog.CreateNewFolderDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
+import com.jb.filemanager.ui.dialog.SortByDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
@@ -601,28 +602,20 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showSortByDialog() {
-        View dialogView = View.inflate(this, R.layout.dialog_main_sort, null);
-        TextView descendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_descending);
-        TextView ascendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_ascending);
-        final RadioGroup itemGroup = (RadioGroup) dialogView.findViewById(R.id.rg_main_sort_by);
-
-        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
-
-        descendButton.setOnClickListener(new View.OnClickListener() {
+        SortByDialog dialog = new SortByDialog(this, new SortByDialog.Listener() {
             @Override
-            public void onClick(View v) {
-                int checkId = itemGroup.getCheckedRadioButtonId();
-                switch (checkId) {
-                    case R.id.rb_main_sort_by_name:
+            public void onDescend(SortByDialog dialog, int sortBy) {
+                switch (sortBy) {
+                    case SortByDialog.SORT_BY_NAME:
                         FileManager.getInstance().setFileSort(FileUtil.sNameDescendComparator);
                         break;
-                    case R.id.rb_main_sort_by_date:
+                    case SortByDialog.SORT_BY_DATE:
                         FileManager.getInstance().setFileSort(FileUtil.sDateDescendComparator);
                         break;
-                    case R.id.rb_main_sort_by_type:
+                    case SortByDialog.SORT_BY_TYPE:
                         FileManager.getInstance().setFileSort(FileUtil.sTypeDescendComparator);
                         break;
-                    case R.id.rb_main_sort_by_size:
+                    case SortByDialog.SORT_BY_SIZE:
                         FileManager.getInstance().setFileSort(FileUtil.sSizeDescendComparator);
                         break;
                     default:
@@ -631,23 +624,20 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 EventBus.getDefault().post(new SortByChangeEvent());
                 dialog.dismiss();
             }
-        }); // 降序按钮点击事件
 
-        ascendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                int checkId = itemGroup.getCheckedRadioButtonId();
-                switch (checkId) {
-                    case R.id.rb_main_sort_by_name:
+            public void onAscend(SortByDialog dialog, int sortBy) {
+                switch (sortBy) {
+                    case SortByDialog.SORT_BY_NAME:
                         FileManager.getInstance().setFileSort(FileUtil.sNameAscendComparator);
                         break;
-                    case R.id.rb_main_sort_by_date:
+                    case SortByDialog.SORT_BY_DATE:
                         FileManager.getInstance().setFileSort(FileUtil.sDateAscendComparator);
                         break;
-                    case R.id.rb_main_sort_by_type:
+                    case SortByDialog.SORT_BY_TYPE:
                         FileManager.getInstance().setFileSort(FileUtil.sTypeAscendComparator);
                         break;
-                    case R.id.rb_main_sort_by_size:
+                    case SortByDialog.SORT_BY_SIZE:
                         FileManager.getInstance().setFileSort(FileUtil.sSizeAscendComparator);
                         break;
                     default:
@@ -656,8 +646,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 EventBus.getDefault().post(new SortByChangeEvent());
                 dialog.dismiss();
             }
-        }); // 升序按钮点击事件
-
+        });
         dialog.show();
     }
 
