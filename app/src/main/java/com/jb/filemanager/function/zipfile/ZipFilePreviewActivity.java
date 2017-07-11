@@ -17,10 +17,11 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.zipfile.adapter.ZipInnerFilesAdapter;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
-import com.jb.filemanager.function.zipfile.dialog.ExtractFileDialog;
+import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.presenter.ZipFilePreviewContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFilePreviewPresenter;
 import com.jb.filemanager.function.zipfile.view.BreadcrumbNavigation;
+import com.jb.filemanager.ui.view.SearchTitleView;
 
 import java.util.List;
 
@@ -48,10 +49,9 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     private ListView mListView;
     private ZipInnerFilesAdapter mAdapter;
     private ProgressDialog mProgressDialog;
+    private TextView mBtnExtract;
 
     private ZipFilePreviewPresenter mPresenter = new ZipFilePreviewPresenter(this);
-    private TextView mBtnExtract;
-    private ExtractFileDialog mExtractFileDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +63,18 @@ public class ZipFilePreviewActivity extends BaseActivity implements
 
         mNavigation = (BreadcrumbNavigation) findViewById(R.id.navigation);
         mNavigation.setOnBreadcrumbClickListener(this);
-//        mNavigation.addRootItem("");
 
         mListView = (ListView) findViewById(R.id.zip_pre_lv);
         mListView.setOnItemClickListener(this);
+
+        SearchTitleView searchTitle = (SearchTitleView) findViewById(R.id.zip_pre_search_title);
+        searchTitle.setOnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        searchTitle.setSearchIconVisibility(false);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -88,6 +96,12 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     public void updateListData(List<ZipPreviewFileBean> data) {
         if (mAdapter == null) {
             mAdapter = new ZipInnerFilesAdapter(data);
+            mAdapter.setListener(new ZipListAdapterClickListener() {
+                @Override
+                public void onSwitchClick() {
+                    mPresenter.onItemStateClick();
+                }
+            });
             mListView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
@@ -138,28 +152,8 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     }
 
     @Override
-    public void updateExtractDialog(String currentPath) {
-        if (mExtractFileDialog == null) {
-            mExtractFileDialog = new ExtractFileDialog(this);
-            mExtractFileDialog.setCanceledOnTouchOutside(false);
-            mExtractFileDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    mPresenter.onExtractDialogCancel();
-                }
-            });
-        }
-        mExtractFileDialog.updatePath(currentPath);
-        if (!mExtractFileDialog.isShowing()) {
-            mExtractFileDialog.show();
-        }
-    }
-
-    @Override
-    public void onExtractFilesAccomplish() {
-        if (mExtractFileDialog != null) {
-            mExtractFileDialog.dismiss();
-        }
+    public void setExtractBtnVisibility(boolean isShow) {
+        mBtnExtract.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     @Override

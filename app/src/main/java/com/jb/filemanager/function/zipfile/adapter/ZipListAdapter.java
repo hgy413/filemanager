@@ -115,7 +115,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolder) convertView.getTag(R.layout.item_zip_file);
         }
         final ZipFileItemBean child = getChild(groupPosition, childPosition);
-        holder.icon.setImageResource(R.drawable.common_default_app_icon);
+        holder.icon.setImageResource(R.drawable.zip_icon);
         holder.name.setText(child.getFileName());
         holder.size.setText(ConvertUtils.formatFileSize(child.getFileSize()) + " " + TimeUtil.getTime(child.getLastModifiedTime()));
         holder.itemCheckBox.setImageResource(child.isSelected() ? R.drawable.select_all : R.drawable.select_none);

@@ -1,39 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@android:color/white"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/zip_pre_btn_extract"
-        android:layout_marginTop="30dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Extract Selected File(s)"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="30dp"/>
+    <com.jb.filemanager.ui.view.SearchTitleView
+        android:id="@+id/zip_pre_search_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_below="@id/zip_pre_search_title"
+        android:background="@drawable/main_shadow"/>
 
     <com.jb.filemanager.function.zipfile.view.BreadcrumbNavigation
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/shadow"
+        android:background="@android:color/white"
         android:overScrollMode="never"
         android:paddingLeft="16dp"
-        android:background="#88000000"
         android:paddingRight="16dp"
         android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"/>
     </com.jb.filemanager.function.zipfile.view.BreadcrumbNavigation>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/navigation"
+        android:background="@color/black_20"/>
+
     <ListView
         android:id="@+id/zip_pre_lv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/navigation"
+        android:layout_marginTop="1dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
+
+    <TextView
+        android:id="@+id/zip_pre_btn_extract"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bottom_button_bg"
+        android:drawableTop="@drawable/extract"
+        android:gravity="center"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:text="Extract"
+        android:textColor="@android:color/white"
+        android:textSize="10dp"
+        android:visibility="gone"/>
+</RelativeLayout>

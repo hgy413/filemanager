@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="60dp"
-              android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/item_zip_pre_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:contentDescription="@null"/>
 
     <TextView
         android:id="@+id/item_zip_pre_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginEnd="50dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="14dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textColor="#b3000000"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/item_zip_pre_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"/>
-
-    <TextView
-        android:id="@+id/item_zip_pre_date"
-        android:layout_width="wrap_content"
-        android:singleLine="true"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"/>
+        android:layout_alignLeft="@id/item_zip_pre_name"
+        android:layout_alignStart="@id/item_zip_pre_name"
+        android:layout_below="@id/item_zip_pre_name"
+        android:textColor="#66000000"
+        android:textSize="10dp"/>
 
     <ImageView
         android:id="@+id/item_zip_pre_checkbox"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="5dp"
-        android:contentDescription="@null"/>
-</LinearLayout>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:contentDescription="@null"
+        android:padding="12dp"/>
+</RelativeLayout>

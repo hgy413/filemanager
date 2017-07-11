@@ -5,7 +5,6 @@ import android.util.Log;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
-import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.listener.LoadZipInnerFilesListener;
 import com.jb.filemanager.function.zipfile.task.LoadZipInnerFilesTask;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
@@ -19,7 +18,7 @@ import java.util.Stack;
  */
 
 public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter,
-        LoadZipInnerFilesListener, ExtractingFilesListener {
+        LoadZipInnerFilesListener {
 
     private ZipFilePreviewContract.View mView;
     private LoadZipInnerFilesTask mTask;
@@ -31,7 +30,6 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     private Stack<String> mPathStack = new Stack<>();
     private Stack<String> mPathStackBack = new Stack<>(); // 供undo使用
-//    private ExtractFilesTask mExtractFilesTask;
     private List<ZipPreviewFileBean> mListData = new ArrayList<>();
     private List<ZipPreviewFileBean> mSelected = new ArrayList<>();
 
@@ -63,6 +61,8 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     @Override
     public void onPreLoad() {
+        mSelected.clear();
+        mView.setExtractBtnVisibility(false);
         Log.e("task", "开始加载");
         TheApplication.postRunOnUiThread(new Runnable() {
             @Override
@@ -92,7 +92,6 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
     @Override
     public void onCanceled() {
         Log.e("task", "任务取消");
-        // 回退操作:mRootDir, mPathStatck, Breadcrumb
     }
 
     /**
@@ -153,7 +152,7 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     @Override
     public void onBackPressed() {
-        if(ExtractManager.getInstance().isProgressDialogAttached()) {
+        if (ExtractManager.getInstance().isProgressDialogAttached()) {
             ExtractManager.getInstance().hideProgressDialogFromWindow();
         } else if (!mPathStack.isEmpty()) {
             // 存根
@@ -169,12 +168,15 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
         }
     }
 
-    // 两种情况: 1. 点击弹窗里的取消按钮; 2. 点击物理返回
     @Override
-    public void onExtractDialogCancel() {
-//        if (mExtractFilesTask != null) {
-//            mExtractFilesTask.cancel(true);
-//        }
+    public void onItemStateClick() {
+        mSelected.clear();
+        for (ZipPreviewFileBean bean : mListData) {
+            if (bean.isSelected()) {
+                mSelected.add(bean);
+            }
+        }
+        mView.setExtractBtnVisibility(mSelected.size() > 0);
     }
 
     /**
@@ -218,48 +220,8 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
 
     @Override
     public void onExtractFiles() {
-        mSelected.clear();
-        for (ZipPreviewFileBean bean : mListData) {
-            if (bean.isSelected()) {
-                mSelected.add(bean);
-            }
-        }
         if (mSelected.size() > 0) {
-//            mExtractFilesTask = new ExtractFilesTask();
-//            mExtractFilesTask.setListener(this);
-//            mExtractFilesTask.execute(mZipFilePath, mPassword, mSelected);
             ExtractManager.getInstance().extractFiles(mZipFilePath, mPassword, mSelected);
         }
-    }
-
-    // 解压一个或多个文件的回调接口
-    @Override
-    public void onPreExtractFiles() {
-        Log.e("extract", "开始解压文件");
-        mView.updateExtractDialog("开始解压缩");
-    }
-
-    @Override
-    public void onExtractingFile(String filePath) {
-        Log.e("extract", "正在解压:" + filePath);
-        mView.updateExtractDialog(filePath);
-    }
-
-    @Override
-    public void onPostExtractFiles() {
-        Log.e("extract", "解压完成");
-        mView.onExtractFilesAccomplish();
-        mView.showToast("解压缩完成");
-    }
-
-    @Override
-    public void onCancelExtractFiles() {
-        Log.e("extract", "解压取消");
-    }
-
-    @Override
-    public void onExtractError() {
-        mView.onExtractFilesAccomplish();
-        mView.showToast("解压文件失败");
     }
 }
