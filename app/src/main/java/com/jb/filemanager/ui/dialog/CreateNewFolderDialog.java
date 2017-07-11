@@ -12,7 +12,7 @@ import com.jb.filemanager.R;
  *
  */
 
-public class CreateNewFolderDialog extends ScreenWidthDialog {
+public class CreateNewFolderDialog extends FMBaseDialog {
 
     public CreateNewFolderDialog(Activity act, final Listener listener) {
         super(act, true);
@@ -21,7 +21,7 @@ public class CreateNewFolderDialog extends ScreenWidthDialog {
         TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_confirm);
         TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_cancel);
         final EditText editText = (EditText) dialogView.findViewById(R.id.et_main_create_folder_input);
-        
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
