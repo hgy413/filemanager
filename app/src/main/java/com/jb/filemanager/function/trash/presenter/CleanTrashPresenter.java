@@ -708,6 +708,9 @@ public class CleanTrashPresenter {
                 ArrayList<SubItemBean> subItemList = delBean.getSubItemList();
                 // 删除文件
                 if (subItemList.size() == 0) {
+                    if (!delBean.isAllSelected()) {
+                        continue;
+                    }
                     // 没有子项，则删除本身带的路径(二级)
                     for (String path : delBean.getPaths()) {
                         deleteCategory(path);
