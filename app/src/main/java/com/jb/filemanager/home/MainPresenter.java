@@ -257,7 +257,7 @@ class MainPresenter implements MainContract.Presenter {
     @Override
     public boolean onClickConfirmCreateFolderButton(String name) {
         // TODO 判断输入格式是否符合规定
-        return FileUtil.createFolder(name);
+        return FileUtil.createFolder(mCurrentPath + File.separator + name);
     }
 
     @Override
