@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import com.jb.filemanager.R;
 
-
 /**
  * Created by bool on 17-7-5.
  * 底部功能栏

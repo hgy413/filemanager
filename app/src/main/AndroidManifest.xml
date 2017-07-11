@@ -73,15 +73,6 @@
     <!-- 辅助功能强杀服务的权限		辅助杀，辅助禁用模块所用（格式下同，？？代表暂不知哪个模块用到） -->
     <!-- <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/> -->
     <!-- 屏蔽HOME键需要的权限 -->
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-    <!-- 杀进程	内存查杀 -->
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
-    <!-- pushService权限 -->
-    <uses-permission android:name="com.jb.filemanager.permission.SERVICE"/>
-
-    <!-- 自动重启相关，能添加最好，不添加也可以 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
     <application
         android:name=".TheApplication"
         android:allowBackup="true"
@@ -117,21 +108,12 @@
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
         <!-- 音乐管理页 -->
+        <!--视频管理页 -->
+        <!--下载管理页 -->
         <activity
             android:name=".function.samefile.SameFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-        <!--视频管理页 -->
-        <activity
-            android:name=".function.video.VideoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-        <!--下载管理页 -->
-        <activity
-            android:name=".function.download.DownloadActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-
 
         <!-- 压缩包 -->
         <activity
@@ -225,9 +207,9 @@
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
         <activity android:name=".function.search.view.SearchActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateVisible"
-                  android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_transparent_bg"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_transparent_bg"/>
 
         <!--清理结果页-->
         <activity
@@ -434,5 +416,14 @@
         <!-- "买量SDK相关声明 end" -->
 
     </application>
+    <!-- 杀进程	内存查杀 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <!-- pushService权限 -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+
+    <!-- 自动重启相关，能添加最好，不添加也可以 -->
+    <uses-permission android:name="com.jb.filemanager.permission.SERVICE"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 </manifest>
