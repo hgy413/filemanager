@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
-import com.jb.filemanager.util.AppUtils;
 
 public class CleanResultActivity extends BaseActivity implements View.OnClickListener {
     public static final String CLEAN_SIZE = "clean_size";
@@ -53,7 +52,6 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
         mTvCleanResultSizeUnit = (TextView) findViewById(R.id.tv_clean_result_size_unit);
         mTvCleanResultCleaned = (TextView) findViewById(R.id.tv_clean_result_cleaned);
 
-        mTvCommonActionBarTitle.setTextColor(AppUtils.getColor(R.color.black_70));
     }
 
     private void initData() {

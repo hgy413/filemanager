@@ -686,6 +686,7 @@ public class CleanTrashPresenter {
 
         @Override
         protected Void doInBackground(Void... params) {
+            // TODO: 2017/7/10 add by --miwo 进度回调的添加地点
             deleteItem(mAppCacheChildren, mAppCacheDelList);
             deleteItem(mResidueChildren, mResidueDelList);
             deleteItem(mAdChildren, mAdDelList);

@@ -200,6 +200,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!--垃圾清理的最优页-->
+        <activity
+            android:name=".function.trash.NoNeedCleanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <!-- 首页的apk管理 -->
         <activity
             android:name=".function.apkmanager.AppManagerActivity"

@@ -12,17 +12,16 @@
         android:id="@+id/tv_common_action_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:drawableLeft="@drawable/action_bar_back_drawable_selector"
-        android:drawableStart="@drawable/action_bar_back_drawable_selector"
+        android:drawableStart="@drawable/action_bar_back_drawable_selector_blue"
+        android:drawableLeft="@drawable/action_bar_back_drawable_selector_blue"
         android:drawablePadding="17dp"
         android:paddingLeft="17dp"
         android:gravity="center"
         android:text="@string/clean_storage"
-        android:textColor="@drawable/action_bar_back_text_selector"
+        android:textColor="@drawable/action_bar_back_text_selector_black"
         android:textSize="16dp"/>
     
     <View
-        android:id="@+id/v_title_shadow"
         android:background="@drawable/main_shadow"
         android:layout_width="match_parent"
         android:layout_height="6dp"/>

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.scanframe.clean.CleanManager;
 import com.jb.filemanager.function.scanframe.clean.event.CleanCheckedFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanNoneCheckedEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanProgressDoneEvent;
@@ -30,6 +31,7 @@ import com.jb.filemanager.function.trash.presenter.Contract;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.WindowUtil;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
@@ -44,8 +46,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView {
 
+    private static final String TAG = CleanTrashActivity.class.getSimpleName();
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
     private RelativeLayout mRlRoot;
+    private View mVTitleShadow;
     private TextView mTvCommonActionBarTitle;
     private TextView mTvTrashSizeNumber;
     private TextView mTvTrashSizeUnit;
@@ -59,6 +63,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private String[] mSelectedStorageSize;
     private LinearLayout mLlTitle;
     private RelativeLayout mRlTopContainer;
+    private CleanManager mCleanManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,12 +72,14 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         IconLoader.ensureInitSingleton(TheApplication.getAppContext());
         IconLoader.getInstance().bindServicer(this);
         com.jb.filemanager.util.imageloader.ImageLoader.getInstance(TheApplication.getAppContext());
+        mCleanManager = CleanManager.getInstance(this.getApplicationContext());
         initView();
         initData();
     }
 
     private void initView() {
         mRlRoot = (RelativeLayout) findViewById(R.id.rl_root);
+        mVTitleShadow = (View) findViewById(R.id.v_title_shadow);
         mLlContent = (LinearLayout) findViewById(R.id.ll_content);
         mLlTitle = (LinearLayout) findViewById(R.id.ll_title);
         mRlTopContainer = (RelativeLayout) findViewById(R.id.rl_top_container);
@@ -93,15 +100,17 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mIvCleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                doCleanTrash();
                 mPbScanProgress.setVisibility(View.GONE);
                 mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
                 mIvCleanButton.setVisibility(View.GONE);
-                handleDisappearAnimation();
+//                handleDisappearAnimation();
                 /*KShareViewActivityManager.getInstance(CleanTrashActivity.this).
                         startActivity(CleanTrashActivity.this, CleanResultActivity.class,
                                 R.layout.activity_clean_trash, R.layout.activity_clean_result, mIvCleanButton);*/
             }
         });
+        mVTitleShadow.setVisibility(View.INVISIBLE);
         mAdapter = new NewCleanListAdapter(mPresenter.getDataGroup(), this);
         mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
     }
@@ -279,6 +288,9 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                     overridePendingTransition(R.anim.scale_in, R.anim.nothing);
 
                     finish();*/
+
+                    startActivity(new Intent(CleanTrashActivity.this, NoNeedCleanActivity.class));
+                    finish();
                     Toast.makeText(CleanTrashActivity.this, "Had nothing to show and no where to go", Toast.LENGTH_SHORT).show();
                 } else {
                     showScanResult();
@@ -304,7 +316,8 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
          * 更新清理按钮的可用状态
          */
         private void updateCleanBtnEnable() {
-            //mCleanBtn.setEnabled(!mPresenter.isNoneGroupChecked());
+            Logger.d(TAG, "监听清理按钮显示   " + mPresenter.isNoneGroupChecked());
+            mIvCleanButton.setVisibility(mPresenter.isNoneGroupChecked() ? View.GONE : View.VISIBLE);
         }
 
         /**
@@ -312,10 +325,12 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
          */
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(CleanStateEvent event) {
+            Logger.d(TAG, "监听状态改变" + event.toString());
+
             if ((event.equals(CleanStateEvent.DELETE_FINISH) || event
                     .equals(CleanStateEvent.DELETE_SUSPEND))) {
                 // 完成删除或者停止删除都跳转到结果页
-                //startDoneActivity(CleanConstants.DONE_ACTIVITY_INTENT_EXTRA_NORMAL);
+                handleDisappearAnimation();
             }
         }
 
@@ -326,6 +341,26 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         public void onEventMainThread(CleanNoneCheckedEvent event) {
 //            Logger.e("SCROLL", "监听到文件选中状态的改变");
 //            setTotalCheckedSizeText();
+            Logger.d(TAG, "监听文件选中状态改变" + event.toString());
         }
     };
+
+    private void doCleanTrash() {
+        // TODO: 2016/12/23 清理垃圾
+        mAdapter.notifyDataSetChanged();
+        mCleanManager.startDelete();
+        mPresenter.startDelete();
+        mCleanManager.setLastTrashCleanTime(System.currentTimeMillis());
+        mAdapter.notifyDataSetChanged();
+
+       /* mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handleDisappearAnimation();
+            }
+        }, 2000);*/
+
+        Toast.makeText(CleanTrashActivity.this, "clean start", Toast.LENGTH_SHORT).show();
+    }
 }
