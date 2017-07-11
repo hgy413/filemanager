@@ -24,7 +24,6 @@ import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
  * Created by bool on 17-6-30.
@@ -106,23 +105,33 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 .build();
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRvMuscicList.setLayoutManager(manager);
-//        if (mRvMuscicList != null) {
-//            // mAdapter = new MusicAdapter(this);
-//           // mRvMuscicList.setAdapter(mAdapter);
-//
-//            mRvMuscicList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-//                @Override
-//                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//
-//                }
-//            });
-//        }
         mRvMuscicList.addItemDecoration(decoration);
         mMusicListAdapter = new RecyclerListAdapter(this, mMusicDataArrayMap);
         mRvMuscicList.setAdapter(mMusicListAdapter);
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
-        mBottomOperateContainer.setClickListener(this);
+        mBottomOperateContainer.onClickedAction(new BottomOperateBar.OnBottomClicked() {
+            @Override
+            public void onCutClicked() {
+                mPresenter.onClickOperateCutButton(mItemSelected);
+            }
+
+            @Override
+            public void onCopyClicked() {
+                mPresenter.onClickOperateCopyButton(mItemSelected);
+            }
+
+            @Override
+            public void onDeleteClicked() {
+                mPresenter.onClickOperateDeleteButton();
+
+            }
+
+            @Override
+            public void onMoreClicked() {
+                mPresenter.onClickOperateMoreButton(mItemSelected);
+            }
+        });
     }
 
     @Override
@@ -191,27 +200,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 break;
             case R.id.iv_common_action_bar_with_search_search:
                 // TODO
-
-            case R.id.tv_common_operate_bar_cut:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateCutButton(mItemSelected);
-                }
-                break;
-            case R.id.tv_common_operate_bar_copy:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateCopyButton(mItemSelected);
-                }
-                break;
-            case R.id.tv_common_operate_bar_delete:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateDeleteButton();
-                }
-                break;
-            case R.id.tv_common_operate_bar_more:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateMoreButton(mItemSelected);
-                }
-                break;
             default:
                 break;
         }
@@ -327,7 +315,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         public RecyclerListAdapter(@NonNull Context context, GroupList<String, FileInfo> mapList) {
             mInflater = SameFileActivity.this.getLayoutInflater();
-            mContext = checkNotNull(context);
+            mContext = context;
             mMusicDataArrayMap = mapList;
         }
 

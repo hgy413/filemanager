@@ -244,7 +244,27 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         }
 
         mLlBottomOperateFirstContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
-        mLlBottomOperateFirstContainer.setClickListener(this);
+        mLlBottomOperateFirstContainer.onClickedAction(new BottomOperateBar.OnBottomClicked() {
+            @Override
+            public void onCutClicked() {
+                mPresenter.onClickOperateCutButton();
+            }
+
+            @Override
+            public void onCopyClicked() {
+                mPresenter.onClickOperateCopyButton();
+            }
+
+            @Override
+            public void onDeleteClicked() {
+                mPresenter.onClickOperateDeleteButton();
+            }
+
+            @Override
+            public void onMoreClicked() {
+                mPresenter.onClickOperateMoreButton();
+            }
+        });
 
         mLlBottomOperateSecondContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_second_container);
         if (mLlBottomOperateSecondContainer != null) {
@@ -706,26 +726,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             case R.id.iv_main_action_bar_more:
                 if (mPresenter != null) {
                     mPresenter.onClickActionMoreButton();
-                }
-                break;
-            case R.id.tv_common_operate_bar_cut:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateCutButton();
-                }
-                break;
-            case R.id.tv_common_operate_bar_copy:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateCopyButton();
-                }
-                break;
-            case R.id.tv_common_operate_bar_delete:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateDeleteButton();
-                }
-                break;
-            case R.id.tv_common_operate_bar_more:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateMoreButton();
                 }
                 break;
             case R.id.tv_main_bottom_operate_second_container_cancel:

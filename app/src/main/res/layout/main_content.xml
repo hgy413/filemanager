@@ -100,11 +100,9 @@
         <com.jb.filemanager.ui.widget.BottomOperateBar
             android:id="@+id/bottom_operate_bar_container"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:background="#77000000"
-            android:orientation="horizontal"
-            android:visibility="gone"/>
+            />
 
         <LinearLayout
             android:id="@+id/ll_main_bottom_operate_second_container"

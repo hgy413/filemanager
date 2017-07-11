@@ -22,8 +22,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.mopub.common.Preconditions.NoThrow.checkNotNull;
-
 
 /**
  * Created by bool on 17-6-30.
@@ -135,7 +133,6 @@ public class SameFileSupport implements SameFileContract.Support {
     }
 
     protected FileInfo cursorToMusicInfo(@NonNull Cursor cursor) {
-        checkNotNull(cursor);
         FileInfo info = new FileInfo();
         info.mId = cursor.getString(0);
         info.mName = cursor.getString(1);

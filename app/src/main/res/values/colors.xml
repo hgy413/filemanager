@@ -60,9 +60,13 @@
     <color name="list_divider_line_color_f5f6ff">#f5f6ff</color>
     <color name="black_70">#B2000000</color>
 
-
     <!-- dialog -->
     <color name="dialog_confirm_color">#39BDAC</color>
     <color name="dialog_cancel_color">#000000</color>
+
+    <!-- Bottom operate bar -->
+    <color name="dark_gray">#363636</color>
+    <color name="middle_gray">#404040</color>
+    <color name="light_gray">#4c4c4c</color>
 
 </resources>

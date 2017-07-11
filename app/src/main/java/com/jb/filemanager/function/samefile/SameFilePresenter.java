@@ -13,7 +13,6 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.home.MainActivity;
 import java.util.ArrayList;
 
-import static com.squareup.haha.guava.base.Joiner.checkNotNull;
 
 /**
  * Created by bool on 17-6-30.
@@ -30,9 +29,9 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     private GroupList<String, FileInfo> mMusicGroupList;
     public SameFilePresenter(@NonNull SameFileActivity view, @NonNull SameFileContract.Support support,
                              @NonNull LoaderManager manager){
-        mView = checkNotNull(view);
-        mSupport = checkNotNull(support);
-        mLoaderManager = checkNotNull(manager);
+        mView = view;
+        mSupport = support;
+        mLoaderManager = manager;
     }
     @Override
     public Loader<GroupList<String,FileInfo>> onCreateLoader(int id, Bundle args) {
