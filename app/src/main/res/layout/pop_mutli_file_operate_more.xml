@@ -7,7 +7,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:layout_height="120dp"
-    android:background="@drawable/bg_card3"
+    android:background="@drawable/bg_popup_window"
     android:gravity="center_vertical"
     android:orientation="vertical">
 

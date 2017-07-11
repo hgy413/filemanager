@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    android:layout_height="120dp"
-    android:background="@drawable/bg_card3"
+    android:layout_height="80dp"
+    android:background="@drawable/bg_popup_window"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -14,28 +14,22 @@
         android:id="@+id/tv_main_action_more_new_folder"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:background="#00FF00"
-        android:gravity="center|start"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:text="New Folder"
-        android:textColor="#aab2bd"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/popup_more_new_folder"
+        android:textColor="#5A5A5A"
         android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_main_action_more_sort_by"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:background="#00FF00"
-        android:gravity="center|start"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:text="Sort By"
-        android:textColor="#aab2bd"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/popup_more_sort_by"
+        android:textColor="#5A5A5A"
         android:textSize="14dp" />
 
 </LinearLayout>
