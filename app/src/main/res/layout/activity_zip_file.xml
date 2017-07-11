@@ -12,11 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
+    <View
+        android:id="@+id/shadow"
+        android:layout_below="@id/search_title"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/main_shadow"/>
+
     <com.jb.filemanager.commomview.ProgressWheel
         android:id="@+id/zip_progress"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_below="@id/search_title"
+        android:layout_below="@id/shadow"
         app:matProg_barColor="#0084ff"
         app:matProg_barWidth="5dp"
         app:matProg_progressIndeterminate="true"/>
@@ -25,7 +32,7 @@
         android:id="@+id/zip_expand_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_title"
+        android:layout_below="@id/shadow"
         android:divider="@android:color/transparent"
         android:groupIndicator="@null"
         android:overScrollMode="never"

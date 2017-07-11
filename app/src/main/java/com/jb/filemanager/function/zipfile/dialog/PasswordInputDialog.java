@@ -48,7 +48,6 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
         tvShowPass.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
