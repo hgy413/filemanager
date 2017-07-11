@@ -8,54 +8,89 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="#fc6f5b"
-        android:textSize="18dp"
-        android:text="Create Folder"/>
-
-    <View
+        android:id="@+id/tv_create_folder_title"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#cccccc"/>
+        android:layout_height="24dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="@string/dialog_create_new_folder_title"/>
+
+    <TextView
+        android:id="@+id/tv_create_folder_error_tips"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:background="#FF8181"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp"
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/et_main_create_folder_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:gravity="center_vertical"
-        android:hint="Type a new name"
+        android:hint="@string/dialog_create_new_folder_hint"
         android:textColor="#000000"
-        android:textSize="18dp"
+        android:textSize="14dp"
         android:inputType="text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/tv_main_create_folder_cancel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:minWidth="80dp"
             android:gravity="center"
-            android:textColor="#444444"
-            android:textSize="14dp"
-            android:text="cancel"/>
+            android:textColor="@color/dialog_cancel_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/common_cancel"/>
 
         <TextView
             android:id="@+id/tv_main_create_folder_confirm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:minWidth="80dp"
             android:gravity="center"
-            android:textColor="#444444"
-            android:textSize="14dp"
-            android:text="ok"/>
+            android:textColor="@color/dialog_confirm_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/common_ok"/>
 
     </LinearLayout>
 

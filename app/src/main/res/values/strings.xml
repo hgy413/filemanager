@@ -262,4 +262,10 @@
     <string name="delete">Delete</string>
     <string name="more">More</string>
     <string name="clean_storage">Clean Storage</string>
+
+    <!-- dialog -->
+    <string name="dialog_create_new_folder_title">Create a folder</string>
+    <string name="dialog_create_new_folder_hint">Type a new name</string>
+
+
 </resources>
