@@ -4,117 +4,148 @@
     tools:ignore="SpUsage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@color/transparent"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_main_single_file_detail_title"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:layout_marginTop="21dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="#fc6f5b"
-        android:textSize="18dp"
-        android:text="Detail"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#cccccc"/>
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:text="@string/dialog_single_file_detail_title_folder"/>
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_name_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="Name"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="start"
+        android:text="@string/dialog_single_file_detail_name"
         android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_name_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="start"
+        android:textColor="#66000000"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_location_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="Location"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="14dp"
+        android:gravity="start"
+        android:text="@string/dialog_single_file_detail_location"
         android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_location_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="start"
+        android:textColor="#66000000"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_modify_time_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="Modify time"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="14dp"
+        android:gravity="start"
+        android:text="@string/dialog_single_file_detail_last_modify"
         android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_modify_time_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="start"
+        android:textColor="#66000000"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_size_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="14dp"
         android:gravity="start"
-        android:text="Size"
+        android:text="@string/dialog_single_file_detail_size"
         android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_size_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:gravity="start"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textColor="#66000000"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_contain_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="14dp"
         android:gravity="start"
-        android:text="Contains"
+        android:text="@string/dialog_single_file_detail_contains"
         android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_contain_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:gravity="start"
-        android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textColor="#66000000"
+        android:textSize="14dp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#80EEEEEE"
+        android:layout_marginTop="14dp" />
 
     <TextView
         android:id="@+id/tv_main_single_file_detail_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="9dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="#444444"
-        android:textSize="14dp"
-        android:text="ok"/>
+        android:textColor="@color/dialog_confirm_color"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:text="@string/common_ok"/>
 
 </LinearLayout>

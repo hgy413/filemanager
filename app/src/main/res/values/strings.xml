@@ -285,5 +285,13 @@
     <string name="dialog_sort_by_descending">Descending</string>
     <string name="dialog_sort_by_ascending">Ascending</string>
 
+    <string name="dialog_single_file_detail_title_folder">Folder Details</string>
+    <string name="dialog_single_file_detail_title_file">File Details</string>
+    <string name="dialog_single_file_detail_name">Name</string>
+    <string name="dialog_single_file_detail_location">Location</string>
+    <string name="dialog_single_file_detail_last_modify">Modification Time</string>
+    <string name="dialog_single_file_detail_size">Size</string>
+    <string name="dialog_single_file_detail_contains">Contains</string>
+
 
 </resources>
