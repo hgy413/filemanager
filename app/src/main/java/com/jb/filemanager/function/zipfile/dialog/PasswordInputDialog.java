@@ -2,11 +2,12 @@ package com.jb.filemanager.function.zipfile.dialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.BaseDialog;
@@ -23,6 +24,9 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
     private EditText mEditText;
     private PasswordInputCallback mListener;
     private TextView mTitle;
+    private TextView mTvWrongTip;
+    private boolean isShowPass = false;
+    private ImageView mTvShowPass;
 
     public PasswordInputDialog(Activity act) {
         super(act, false);
@@ -44,8 +48,9 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
         tvCancel.setOnClickListener(this);
 
         mTitle = (TextView) rootView.findViewById(R.id.dialog_pass_in_title);
-        TextView tvShowPass = (TextView) rootView.findViewById(R.id.show_password);
-        tvShowPass.setOnClickListener(this);
+        mTvWrongTip = (TextView) rootView.findViewById(R.id.dialog_pass_in_wrong_tip);
+        mTvShowPass = (ImageView) rootView.findViewById(R.id.show_pass_btn);
+        mTvShowPass.setOnClickListener(this);
     }
 
     @Override
@@ -54,8 +59,11 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
             case R.id.dialog_zip_pass_in_ok:
                 String s = mEditText.getText().toString();
                 if (TextUtils.isEmpty(s)) {
-                    Toast.makeText(mActivity, "输入格式有误", Toast.LENGTH_SHORT).show();
+                    mTvWrongTip.setVisibility(View.VISIBLE);
+                    mTitle.setVisibility(View.GONE);
                 } else {
+                    mTvWrongTip.setVisibility(View.GONE);
+                    mTitle.setVisibility(View.VISIBLE);
                     if (mListener != null) {
                         mListener.onInputFinish(s);
                     }
@@ -65,7 +73,15 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
             case R.id.dialog_zip_pass_in_cancel:
                 dismiss();
                 break;
-            case R.id.show_password:
+            case R.id.show_pass_btn:
+                isShowPass = !isShowPass;
+                if (isShowPass) {
+                    mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_DATETIME_VARIATION_NORMAL);
+                    mTvShowPass.setImageResource(R.drawable.select_all);
+                } else {
+                    mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    mTvShowPass.setImageResource(R.drawable.select_none);
+                }
                 break;
         }
     }
