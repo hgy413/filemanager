@@ -91,13 +91,6 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);
         mTvTrashSizeUnit = (TextView) findViewById(R.id.tv_trash_size_unit);
         mPbScanProgress = (ProgressBar) findViewById(R.id.pb_scan_progress);
-        /*mBtnIgnore = (Button) findViewById(R.id.btn_ignore);
-        mBtnIgnore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(CleanTrashActivity.this, TrashIgnoreActivity.class));
-            }
-        });*/
         mTvTrashPath = (TextView) findViewById(R.id.tv_trash_path);
         mCleanTrashExpandableListView = (FloatingGroupExpandableListView) findViewById(R.id.clean_trash_expandable_list_view);
         mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button_red);
@@ -108,10 +101,6 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 mPbScanProgress.setVisibility(View.GONE);
                 mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
                 mIvCleanButton.setVisibility(View.GONE);
-//                handleDisappearAnimation();
-                /*KShareViewActivityManager.getInstance(CleanTrashActivity.this).
-                        startActivity(CleanTrashActivity.this, CleanResultActivity.class,
-                                R.layout.activity_clean_trash, R.layout.activity_clean_result, mIvCleanButton);*/
             }
         });
         mVTitleShadow.setVisibility(View.INVISIBLE);
@@ -303,6 +292,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         private void showScanResult() {
             Logger.d(TAG, "扫描完成   ");
 //            Logger.i(TAG, "showScanResult");
+            mPbScanProgress.setProgress(0);
             mTvTrashPath.setText("");
             mPresenter.updateDefaultCheckedState();
             mPresenter.setAllProgressFinish();

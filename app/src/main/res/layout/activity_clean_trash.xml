@@ -21,17 +21,27 @@
         <RelativeLayout
             android:id="@+id/rl_top_container"
             android:layout_width="match_parent"
-            android:layout_height="120dp">
+            android:layout_height="135dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:alpha="0.1"
+                android:src="@drawable/white_broom_bg"/>
 
             <TextView
                 android:id="@+id/tv_trash_size_number"
+                android:layout_marginTop="32dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/white"
                 android:textSize="48dp"
+                android:text="0"
                 tools:text="328"/>
 
             <TextView
@@ -56,26 +66,27 @@
 
             <ProgressBar
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
                 android:id="@+id/pb_scan_progress"
                 style="@style/StyleProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:progress="0"/>
 
-        </RelativeLayout>
-        <Button
-            android:layout_width="match_parent"
-            android:id="@+id/btn_ignore"
-            android:layout_height="wrap_content"
-            android:text="跳转白名单"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_trash_path"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="  "
+                android:textColor="@color/white_70"
+                android:textSize="8dp"
+                android:visibility="visible"
+                tools:text="scan path"/>
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/tv_trash_path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="  "/>
+        </RelativeLayout>
 
         <FrameLayout
             android:layout_height="match_parent"

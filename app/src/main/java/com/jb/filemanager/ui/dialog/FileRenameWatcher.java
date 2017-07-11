@@ -32,7 +32,7 @@ public class FileRenameWatcher implements TextWatcher {
     public void afterTextChanged(Editable editable) {
         String inputContent = editable.toString();
 //        String regEx = "^[\u4E00-\u9FA5a-zA-Z()_0-9]([\u4E00-\u9FA5a-zA-Z()_0-9 ]|[_]){0,19}[.][a-zA-Z]{1,10}$";//不能适应多语言
-        String regEx = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,19}[.][a-zA-Z]{1,10}$";
+        String regEx = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,19}[.][a-zA-Z0-9]{1,10}$";
         if (inputContent.length() == 0) {
             if (mNewState != InputState.TEXT_NULL) {
                 mNewState = InputState.TEXT_NULL;
