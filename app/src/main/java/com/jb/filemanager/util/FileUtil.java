@@ -36,6 +36,8 @@ import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileUtil {
 
+    public static final String FILE_PATH_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
+
     public static final int PASTE_CHECK_SUCCESS = 0;
     public static final int PASTE_CHECK_ERROR_UNKNOWN = -1;
     public static final int PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE = -2;

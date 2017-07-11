@@ -272,6 +272,10 @@
     <!-- dialog -->
     <string name="dialog_create_new_folder_title">Create a folder</string>
     <string name="dialog_create_new_folder_hint">Type a new name</string>
+    <string name="dialog_create_new_folder_error_input">The file name could not contain the char</string>
+    <string name="dialog_create_new_folder_empty_input">File name could not be empty</string>
+
+    <string name="dialog_sort_by_title">Sort by</string>
 
 
 </resources>

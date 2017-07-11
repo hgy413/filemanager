@@ -10,14 +10,9 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_line_color_e7e9f3"/>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="40dp"
         android:orientation="horizontal">
 
         <TextView
@@ -56,7 +51,7 @@
             android:layout_marginStart="5dp"
             android:padding="12dp"
             android:visibility="visible"
-            wheel:matProg_barColor="#0084ff"
+            wheel:matProg_barColor="#FF3CD776"
             wheel:matProg_barWidth="2dp"
             wheel:matProg_progressIndeterminate="true"/>
 
@@ -68,7 +63,12 @@
             android:layout_marginStart="5dp"
             android:contentDescription="@null"
             android:padding="12dp"
-            android:src="@drawable/choose_all"
+            android:src="@drawable/select_all"
             android:visibility="gone"/>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/list_divider_line_color_e7e9f3"/>
 </LinearLayout>

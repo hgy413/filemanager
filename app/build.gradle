@@ -182,8 +182,7 @@ dependencies {
     compile(name: 'BuyChannelSdk-trunk-v1.4.2-r33143-AF-4.6', ext: 'aar')
     compile(name: 'ProcessDaemonSdk-trunk-v1.2.6-r17114', ext: 'aar')
     // network lib
-    compile('com.mopub:mopub-sdk-banner:4.11.0@aar') { transitive = true }
-    compile('com.mopub:mopub-sdk-native-static:4.11.0@aar') { transitive = true }
+    compile('com.mopub:mopub-sdk:4.11.0@aar') { transitive = true }
     compile files('libs/zip4j_1.3.2.jar')
     compile files('libs/java-unrar-0.5.jar')
     compile 'com.android.support:design:25.3.1'

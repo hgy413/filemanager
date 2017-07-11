@@ -61,7 +61,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_blue_rect"
-        android:layout_height="120dp"
+        android:layout_height="135dp"
         android:layout_below="@+id/ll_title"
         android:layout_width="match_parent"
         android:background="@color/clean_trash_bg_blue">
