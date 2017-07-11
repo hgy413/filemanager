@@ -13,7 +13,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/list_divider_line_color"/>
+        android:background="@color/list_divider_line_color_e7e9f3"/>
 
     <LinearLayout
         android:layout_width="match_parent"

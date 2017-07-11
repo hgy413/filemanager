@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_title"
+    android:id="@+id/rl_title"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:orientation="vertical"
@@ -20,10 +20,20 @@
         android:text="@string/clean_storage"
         android:textColor="@drawable/action_bar_back_text_selector"
         android:textSize="16dp"/>
-    
+
+    <ImageView
+        android:id="@+id/iv_common_action_bar_more"
+        android:visibility="visible"
+        android:src="@drawable/trash_ignore_icon"
+        android:layout_width="50dp"
+        android:scaleType="center"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"/>
+
     <View
         android:id="@+id/v_title_shadow"
         android:background="@drawable/main_shadow"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="6dp"/>
-</LinearLayout>
+</RelativeLayout>

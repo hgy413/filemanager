@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
               android:background="#f2f2f2"
+              tools:background="@color/colorAccent"
               android:orientation="vertical">
     <!-- Title -->
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/trash_ignore_title_group"
         android:layout_width="match_parent"
         android:layout_height="@dimen/trash_ignore_title_height"
@@ -29,10 +31,13 @@
             android:text="@string/junk_file_ignore_list"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
-    </LinearLayout>
+    </LinearLayout>-->
+    <include layout="@layout/common_action_bar_without_search_blue_back"/>
     <!-- no data tip -->
     <TextView
         android:id="@+id/trash_ignore_no_data_tip"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -41,8 +46,8 @@
         android:drawableTop="@drawable/trash_ignore_no_item_tip"
         android:gravity="center"
         android:text="@string/long_press_items_in_junk_files_to_add"
-        android:textColor="#cccccc"
-        android:textSize="16sp"
+        android:textColor="@color/black_20"
+        android:textSize="16dp"
         android:visibility="gone"/>
     <!-- data section -->
     <TextView
@@ -64,5 +69,6 @@
         android:overScrollMode="never"
         android:groupIndicator="@null"
         android:childIndicator="@null"
+        android:divider="@null"
         android:scrollbars="none"/>
 </LinearLayout>

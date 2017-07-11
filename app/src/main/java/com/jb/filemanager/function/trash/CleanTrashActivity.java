@@ -28,6 +28,7 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.adapter.NewCleanListAdapter;
 import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
+import com.jb.filemanager.function.trashignore.activity.TrashIgnoreActivity;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.ConvertUtils;
@@ -44,7 +45,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * {$date}
  */
 
-public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView {
+public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView, View.OnClickListener {
 
     private static final String TAG = CleanTrashActivity.class.getSimpleName();
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
@@ -61,7 +62,8 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private NewCleanListAdapter mAdapter;
     private ValueAnimator mAnimator;
     private String[] mSelectedStorageSize;
-    private LinearLayout mLlTitle;
+    private RelativeLayout mRlTitle;
+    private ImageView mIvCommonActionBarMore;
     private RelativeLayout mRlTopContainer;
     private CleanManager mCleanManager;
 
@@ -75,14 +77,16 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mCleanManager = CleanManager.getInstance(this.getApplicationContext());
         initView();
         initData();
+        initClick();
     }
 
     private void initView() {
         mRlRoot = (RelativeLayout) findViewById(R.id.rl_root);
         mVTitleShadow = (View) findViewById(R.id.v_title_shadow);
         mLlContent = (LinearLayout) findViewById(R.id.ll_content);
-        mLlTitle = (LinearLayout) findViewById(R.id.ll_title);
+        mRlTitle = (RelativeLayout) findViewById(R.id.rl_title);
         mRlTopContainer = (RelativeLayout) findViewById(R.id.rl_top_container);
+        mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_more);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);
         mTvTrashSizeUnit = (TextView) findViewById(R.id.tv_trash_size_unit);
@@ -113,6 +117,16 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mVTitleShadow.setVisibility(View.INVISIBLE);
         mAdapter = new NewCleanListAdapter(mPresenter.getDataGroup(), this);
         mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
+
+        mIvCommonActionBarMore.setVisibility(View.VISIBLE);
+        mIvCommonActionBarMore.setImageResource(R.drawable.trash_ignore_icon);
+        mIvCommonActionBarMore.setEnabled(false);
+    }
+
+    private void initClick() {
+        mTvCommonActionBarTitle.setOnClickListener(this);
+        mIvCommonActionBarMore.setOnClickListener(this);
+        mIvCleanButton.setOnClickListener(this);
     }
 
     private void handleDisappearAnimation() {
@@ -276,19 +290,6 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 if (isAllEmpty) {
                     // 没有可以删除的文件，直接跳转到结果页
                     mIvCleanButton.setVisibility(View.GONE);
-
-                    // TODO: 2017/6/27 add by --miwo 处理跳转
-                    /*Intent intent = new Intent(CleanTrashActivity.this, CommonFinishActivity.class);
-                    intent.putExtra(CommonFinishActivity.COMMON_FINISH_ENTRANCE_KEY, CommonFinishActivity.COMMON_FINISH_ENTRANCE_TRASH);
-                    intent.putExtra(CommonFinishActivity.COMMON_FINISH_IS_BEST, true);
-                    intent.putExtra(CommonFinishActivity.COMMON_FINISH_BEST_HAS_SCAN, true);
-                    intent.putExtra(CommonFinishActivity.COMMON_FINISH_ICON_RESOURCE_KEY, R.drawable.ic_finish_icon_trash);
-                    intent.putExtra(CommonFinishActivity.COMMON_FINISH_RESULT_DESC_LINE_1_KEY, getString(R.string.junk_cleaned));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.scale_in, R.anim.nothing);
-
-                    finish();*/
-
                     startActivity(new Intent(CleanTrashActivity.this, NoNeedCleanActivity.class));
                     finish();
                     Toast.makeText(CleanTrashActivity.this, "Had nothing to show and no where to go", Toast.LENGTH_SHORT).show();
@@ -300,6 +301,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         }
 
         private void showScanResult() {
+            Logger.d(TAG, "扫描完成   ");
 //            Logger.i(TAG, "showScanResult");
             mTvTrashPath.setText("");
             mPresenter.updateDefaultCheckedState();
@@ -310,6 +312,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             mAdapter.notifyDataSetChanged();
             setTotalCheckedSizeText();
             mIvCleanButton.setVisibility(View.VISIBLE);
+            mIvCommonActionBarMore.setEnabled(true);
         }
 
         /**
@@ -362,5 +365,28 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         }, 2000);*/
 
         Toast.makeText(CleanTrashActivity.this, "clean start", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (mQuickClickGuard.isQuickClick(view.getId())) {
+            return;
+        }
+        switch (view.getId()) {
+            case R.id.tv_common_action_bar_title:
+                finish();
+                break;
+            case R.id.iv_common_action_bar_more:
+                startActivity(new Intent(this, TrashIgnoreActivity.class));
+                break;
+            case R.id.iv_clean_button_red:
+                doCleanTrash();
+                mPbScanProgress.setVisibility(View.GONE);
+                mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
+                mIvCleanButton.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
     }
 }

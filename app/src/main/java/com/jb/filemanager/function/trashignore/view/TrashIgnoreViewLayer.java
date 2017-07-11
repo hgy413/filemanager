@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -25,6 +27,8 @@ public class TrashIgnoreViewLayer implements Contract.View {
 
     private Context mContext;
     private Activity mActivity;
+    private LinearLayout mLlTitle;
+    private TextView mTvCommonActionBarTitle;
     private View mNoDataTip;
     private View mHasDataTip;
     private FloatingGroupExpandableListView mListView;
@@ -39,15 +43,12 @@ public class TrashIgnoreViewLayer implements Contract.View {
 
     private void initializeView() {
         mView = View.inflate(mContext, R.layout.trash_ignore_view_layer, null);
-        View titleGroup = mView.findViewById(R.id.trash_ignore_title_group);
-        setGradientBg(titleGroup);
-        View ivBack = mView.findViewById(R.id.trash_ignore_iv_back);
-        View tvBack = mView.findViewById(R.id.trash_ignore_tv_back);
-        setFinishListener(ivBack);
-        setFinishListener(tvBack);
+        mLlTitle = (LinearLayout) mView.findViewById(R.id.ll_title);
+        mTvCommonActionBarTitle = (TextView) mView.findViewById(R.id.tv_common_action_bar_title);
         mNoDataTip = mView.findViewById(R.id.trash_ignore_no_data_tip);
         mHasDataTip = mView.findViewById(R.id.trash_ignore_has_data_tip);
         mListView = (FloatingGroupExpandableListView) mView.findViewById(R.id.trash_ignore_flv);
+        setFinishListener(mTvCommonActionBarTitle);
     }
 
     @Override

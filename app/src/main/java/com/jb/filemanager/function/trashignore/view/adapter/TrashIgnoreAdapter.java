@@ -37,9 +37,7 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
      */
     private class ViewHolder {
         private ImageView mIcon;
-        private ImageView mIconSmall;
         private TextView mTitle;
-        private TextView mSubTitle;
         private ImageView mRemove;
     }
 
@@ -62,14 +60,13 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.activity_clean_ignore_list_group, parent, false);
             holder.mIcon = (ImageView) convertView
-                    .findViewById(R.id.clean_ignore_list_group_icon);
+                    .findViewById(R.id.iv_ignore_group_indicator);
             holder.mTitle = (TextView) convertView
                     .findViewById(R.id.clean_ignore_list_group_title);
             convertView.setTag(R.layout.activity_clean_ignore_list_group, holder);
         }
         // 2. 初始化界面
         CleanIgnoreGroupBean groupBean = getGroup(groupPosition);
-        holder.mIcon.setImageResource(groupBean.getGroupType().getGroupIconId());
         holder.mTitle.setText(groupBean.getGroupType().getNameId());
         return convertView;
     }
@@ -88,11 +85,8 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
                     R.layout.activity_clean_ignore_list_item, parent, false);
             holder.mIcon = (ImageView) convertView
                     .findViewById(R.id.clean_ignore_list_item_icon);
-            holder.mIconSmall = (ImageView) convertView.findViewById(R.id.clean_ignore_list_item_icon_small);
             holder.mTitle = (TextView) convertView
                     .findViewById(R.id.clean_ignore_list_item_title);
-            holder.mSubTitle = (TextView) convertView
-                    .findViewById(R.id.clean_ignore_list_item_subtitle);
             holder.mRemove = (ImageView) convertView.findViewById(R.id.clean_ignore_list_item_remove);
             convertView.setTag(R.layout.activity_clean_ignore_list_item, holder);
         }
@@ -110,31 +104,18 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
             } else {
                 holder.mTitle.setText(ignoreBean.getTitle());
             }
-            holder.mIconSmall.setVisibility(View.GONE);
-            holder.mSubTitle.setVisibility(View.GONE);
+
         } else if (ignoreBean instanceof CleanIgnoreCachePathBean) {
             CleanIgnoreCachePathBean cachePathBean = (CleanIgnoreCachePathBean) ignoreBean;
             holder.mIcon.setImageResource(R.drawable.subitem_cache);
-            IconLoader.getInstance().displayImage(cachePathBean.getPackageName(), holder.mIconSmall);
             holder.mTitle.setText(cachePathBean.getTitle());
-            String appName = AppUtils.getAppName(mContext, cachePathBean.getPackageName());
-            if (!TextUtils.isEmpty(appName) && !appName.equals(cachePathBean.getPackageName())) {
-                holder.mSubTitle.setText(appName);
-            } else {
-                holder.mSubTitle.setText(cachePathBean.getSubTitle());
-            }
-            holder.mIconSmall.setVisibility(View.VISIBLE);
-            holder.mSubTitle.setVisibility(View.VISIBLE);
+//            String appName = AppUtils.getAppName(mContext, cachePathBean.getPackageName());
         } else if (ignoreBean instanceof CleanIgnoreResidueBean) {
-            holder.mSubTitle.setVisibility(View.GONE);
             holder.mIcon.setImageResource(groupBean.getGroupType().getChildIconId());
             holder.mTitle.setText(ignoreBean.getTitle());
-            holder.mIconSmall.setVisibility(View.GONE);
         } else if (ignoreBean instanceof CleanIgnoreAdBean) {
-            holder.mSubTitle.setVisibility(View.GONE);
             holder.mIcon.setImageResource(groupBean.getGroupType().getChildIconId());
             holder.mTitle.setText(ignoreBean.getTitle());
-            holder.mIconSmall.setVisibility(View.GONE);
         }
         holder.mRemove.setOnClickListener(new View.OnClickListener() {
             @Override
