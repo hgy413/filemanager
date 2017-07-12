@@ -26,7 +26,7 @@ import de.innosystec.unrar.rarfile.FileHeader;
  * Created by xiaoyu on 2017/7/4 17:40.
  */
 
-public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
+public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
 
     private ExtractingFilesListener mListener;
 
@@ -75,6 +75,7 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
             return false;
         }
 
+        float totalCount = data.size();
         String extension = FileUtils.getFileExtension(packFilePath);
         if ("zip".equalsIgnoreCase(extension)) {
             try {
@@ -82,10 +83,11 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
                 if (!TextUtils.isEmpty(password)) {
                     zipFile.setPassword(password);
                 }
-                for (ZipPreviewFileBean bean : data) {
+                for (int i = 0; i < data.size(); i++) {
+                    ZipPreviewFileBean bean = data.get(i);
                     if (isCancelled()) return true;
                     String fullPath = bean.getFullPath();
-                    publishProgress(fullPath);
+                    publishProgress(i / totalCount);
                     zipFile.extractFile(fullPath, saveDir.getPath());
                 }
                 return true;
@@ -98,12 +100,13 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
             try {
                 archive = new Archive(new File(packFilePath));
                 List<FileHeader> fileHeaders = archive.getFileHeaders();
-                for (FileHeader header : fileHeaders) {
+                for (int i = 0; i < fileHeaders.size(); i++) {
+                    FileHeader header = fileHeaders.get(i);
                     short headCRC = header.getHeadCRC();
                     for (ZipPreviewFileBean bean : data) {
                         if (isCancelled()) return true;
                         if (bean.getCrc() == headCRC) {
-                            publishProgress(bean.getFullPath());
+                            publishProgress(i / totalCount);
                             File out = new File(FileUtils.removeEdgeSeparatorIfExist(saveDir.getPath())
                                     + File.separator + bean.getFileName());
                             archive.extractFile(header, new FileOutputStream(out));
@@ -126,7 +129,7 @@ public class ExtractFilesTask extends AsyncTask<Object, String, Boolean> {
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
+    protected void onProgressUpdate(Float... values) {
         super.onProgressUpdate(values);
         if (mListener != null) {
             mListener.onExtractingFile(values[0]);

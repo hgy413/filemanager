@@ -5,8 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +21,8 @@ import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.receiver.NotificationClickReceiver;
 import com.jb.filemanager.function.zipfile.task.ExtractFilesTask;
 import com.jb.filemanager.function.zipfile.task.ExtractPackFileTask;
+import com.jb.filemanager.function.zipfile.util.FileUtils;
+import com.jb.filemanager.util.APIUtil;
 
 import java.util.List;
 
@@ -56,9 +58,10 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     private boolean mIsExtracting = false;
     private boolean mIsProgressDialogAttached = false;
-    private String mCurrentExtractingFile = "";
+    //    private String mCurrentExtractingFile = "";
+    private float mPercent;
     private View mProgressDialogView = null;
-    private TextView mProgressViewPath;
+    //    private TextView mProgressViewPath;
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mParams;
     private ExtractFilesTask mExtractFilesTask = null;
@@ -66,6 +69,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     private RemoteViews mRemoteViews;
     private long lastUpdateUiTime;
+    private String mFileName;
 
     public void extractFiles(String zipFilePath, String password, List<ZipPreviewFileBean> data) {
         if (mIsExtracting && !mIsProgressDialogAttached) {
@@ -74,6 +78,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
         } else {
             mExtractFilesTask = new ExtractFilesTask();
             mExtractFilesTask.setListener(this);
+            mFileName = FileUtils.getFileName(zipFilePath);
             mExtractFilesTask.execute(zipFilePath, password, data);
         }
     }
@@ -85,6 +90,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
         } else {
             mExtractPackFileTask = new ExtractPackFileTask();
             mExtractPackFileTask.setListener(this);
+            mFileName = FileUtils.getFileName(zipFilePath);
             mExtractPackFileTask.execute(zipFilePath, password);
         }
     }
@@ -94,7 +100,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
      */
     private void updateDialogContent() {
         if (!mIsProgressDialogAttached) return;// 未显示时不更新Dialog的TextView
-        mProgressViewPath.setText(mCurrentExtractingFile);
+//        mProgressViewPath.setText(mCurrentExtractingFile);
     }
 
     /**
@@ -119,7 +125,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 mProgressDialogView.addOnAttachStateChangeListener(this);
                 TextView progressViewTitle = (TextView) mProgressDialogView.findViewById(R.id.view_extract_title);
                 progressViewTitle.setText("解压中....");
-                mProgressViewPath = (TextView) mProgressDialogView.findViewById(R.id.view_extract_path);
+//                mProgressViewPath = (TextView) mProgressDialogView.findViewById(R.id.view_extract_path);
                 View progressCancel = mProgressDialogView.findViewById(R.id.view_extract_cancel);
                 progressCancel.setOnClickListener(this);
                 View progressBackground = mProgressDialogView.findViewById(R.id.view_extract_backgroud_handle);
@@ -159,14 +165,16 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
         showMessage("开始解压");
         mIsExtracting = true;
         addProgressDialogToWindow();
-        mCurrentExtractingFile = "loading...";
+//        mCurrentExtractingFile = "loading...";
+        mPercent = 0;
         updateNotificationContent();
         updateDialogContent();
     }
 
     @Override
-    public void onExtractingFile(String filePath) {
-        mCurrentExtractingFile = filePath; // 备用
+    public void onExtractingFile(float percent) {
+//        mCurrentExtractingFile = filePath; // 备用
+        mPercent = percent;
         if (System.currentTimeMillis() - lastUpdateUiTime > FLUSH_UI_INTERVAL_TIME) {
             lastUpdateUiTime = System.currentTimeMillis();
             updateDialogContent();
@@ -284,21 +292,44 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private Context mContext;
+
     private void updateNotificationContent() {
-        if (mNotification == null) {
-            mRemoteViews = new RemoteViews(TheApplication.getAppContext().getPackageName(), R.layout.notification_extract);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(TheApplication.getAppContext());
-            builder.setOngoing(true).setContent(mRemoteViews).setSmallIcon(R.mipmap.ic_launcher);
-            mNotification = builder.build();
-        }
-        mNotification.contentIntent = PendingIntent.getBroadcast(
-                TheApplication.getAppContext(),
-                0,
-                new Intent(TheApplication.getAppContext(), NotificationClickReceiver.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews.setTextViewText(R.id.extract_noti_path, mCurrentExtractingFile);
-        NotificationManager notificationManager = (NotificationManager) TheApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(EXTRACT_NOTIFICATION_ID, mNotification);
+        TheApplication.postRunOnShortTaskThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (mContext == null) {
+                    mContext = TheApplication.getAppContext();
+                }
+
+                if (mRemoteViews == null) {
+                    mRemoteViews = new RemoteViews(TheApplication.getAppContext().getPackageName(), R.layout.notification_extract);
+
+                }
+
+                if (mNotification == null) {
+                    Notification.Builder builder = new Notification.Builder(mContext);
+                    builder.setAutoCancel(false);
+                    builder.setSmallIcon(R.drawable.zip_icon);
+                    builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.zip_icon));
+                    mNotification = APIUtil.build(builder);
+                    mNotification.when = System.currentTimeMillis();
+                    mNotification.flags = Notification.FLAG_NO_CLEAR;
+                    mNotification.icon = R.drawable.zip_icon;
+                    mNotification.contentView = mRemoteViews;
+                }
+
+                mRemoteViews.setTextViewText(R.id.extract_noti_title, mFileName);
+                mRemoteViews.setInt(R.id.extract_noti_progress_tv, "setProgress", (int) (mPercent * 100));
+                mNotification.contentIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(mContext, NotificationClickReceiver.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationManager notificationManager = (NotificationManager) TheApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(EXTRACT_NOTIFICATION_ID, mNotification);
+            }
+        });
+
     }
 
     private void cancelExtractNotification() {

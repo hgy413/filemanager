@@ -2,16 +2,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="horizontal"
+              android:paddingEnd="9dp"
+              android:paddingLeft="24dp"
+              android:paddingRight="9dp"
+              android:paddingStart="24dp"
+              android:weightSum="15">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="11"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="14dp">
+
+            <TextView
+                android:id="@+id/extract_noti_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="marquee"
+                android:text="正在解压"
+                android:textColor="@color/black"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:text="Extracting..."
+                android:textColor="@color/black_40"
+                android:textSize="12dp"/>
+        </RelativeLayout>
+        <!-- 进度条 -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="13dp"
+            android:paddingTop="8dp">
+
+            <ProgressBar
+                android:id="@+id/extract_noti_progress_tv"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="false"
+                android:max="100"
+                android:progressDrawable="@drawable/extract_noti_progress_bg"
+                android:indeterminateDrawable="@drawable/extract_noti_progress_bg"/>
+        </FrameLayout>
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/extract_noti_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="正在解压"/>
+        android:id="@+id/extract_noti_see"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:gravity="center"
+        android:text="@string/see"
+        android:textColor="#39bdac"
+        android:textSize="16dp"/>
 
-    <TextView
-        android:id="@+id/extract_noti_path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

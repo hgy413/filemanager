@@ -26,7 +26,7 @@ import de.innosystec.unrar.rarfile.FileHeader;
  * Created by xiaoyu on 2017/7/4 21:08.
  */
 
-public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
+public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
 
     private ExtractingFilesListener mListener;
 
@@ -78,10 +78,12 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                 }
                 if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
 
-                for (net.lingala.zip4j.model.FileHeader header : headers) {
+                float totalCount = headers.size();
+                for (int i = 0; i < headers.size(); i++) {
                     if (isCancelled()) return true;
-                    publishProgress(header.getFileName());
-//                    Log.e("task", header.getFileName());
+                    net.lingala.zip4j.model.FileHeader header = headers.get(i);
+                    publishProgress(i / totalCount);
+                    Log.e("extract", "percent = " + (i / totalCount));
                     zipFile.extractFile(header, saveDir.getPath());
                 }
                 return  true;
@@ -101,12 +103,14 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                 }
                 if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
 
-                for (FileHeader header : fileHeaders) {
+                float totalCount = fileHeaders.size();
+                for (int i = 0; i < fileHeaders.size(); i++) {
                     if (isCancelled()) break;
+                    FileHeader header = fileHeaders.get(i);
                     String name = FileUtils.formatterRarFileNameCode(header);
                     File destFile = new File(saveDir.getPath() + File.separator + name);
-                    publishProgress(name);
-//                    Log.e("task", name);
+                    publishProgress(i / totalCount);
+                    Log.e("extract", "percent = " + (i / totalCount));
                     if (header.isDirectory()) {
                         destFile.mkdirs();
                     } else {
@@ -119,7 +123,6 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
                             archive.extractFile(header, outputStream);
                         } catch (RarException e) {
                             String nam = e.getType().name();
-//                            Log.e("rar", nam + ";" + header.getFileNameString());
                             return false;
                         } catch (RuntimeException e) {
                             e.printStackTrace();
@@ -148,7 +151,7 @@ public class ExtractPackFileTask extends AsyncTask<String, String, Boolean> {
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
+    protected void onProgressUpdate(Float... values) {
         super.onProgressUpdate(values);
         if (mListener != null) {
             mListener.onExtractingFile(values[0]);
