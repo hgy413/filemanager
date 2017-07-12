@@ -42,6 +42,7 @@ public class TrashGroupAdapter extends RecyclerView.Adapter<TrashGroupAdapter.Gr
     @Override
     public void onBindViewHolder(GroupHolder holder, int position) {
         CleanGroupsBean cleanGroupsBean = mDataGroup.get(position);
+        holder.mItemGroupIvSelect.setVisibility(View.VISIBLE);
         holder.mItemGroupIvSelect.setState(cleanGroupsBean.getState());
         holder.mItemGroupName.setText(cleanGroupsBean.getTitle());
         String result = ConvertUtils.formatFileSize(cleanGroupsBean.getSize());
@@ -83,7 +84,7 @@ public class TrashGroupAdapter extends RecyclerView.Adapter<TrashGroupAdapter.Gr
             }
         };
 
-        timer.schedule(timerTask, 0, 500);
+        timer.schedule(timerTask, 0, 300);
     }
 
     public void setOnItemRemoveListener(OnItemRemoveListener listener) {

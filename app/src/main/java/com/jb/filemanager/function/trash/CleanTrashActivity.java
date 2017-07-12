@@ -70,6 +70,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private ImageView mIvCommonActionBarMore;
     private RelativeLayout mRlTopContainer;
     private CleanManager mCleanManager;
+    private boolean mIsDeleting;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,28 +124,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mIvCleanButton.setOnClickListener(this);
     }
 
-    private void handleDisappearAnimation() {
-        /*mAnimator = ValueAnimator.ofFloat(1, 0);
-        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float animatedValue = (float) valueAnimator.getAnimatedValue();
-                mCleanTrashExpandableListView.setAlpha(animatedValue);
-            }
-        });
-
-        mAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                Intent intent = new Intent(CleanTrashActivity.this, CleanResultActivity.class);
-                intent.putExtra(CleanResultActivity.CLEAN_SIZE, mSelectedStorageSize);
-                startActivity(intent);
-                overridePendingTransition(R.anim.in, R.anim.out);
-                finish();
-            }
-        });
-        mAnimator.start();*/
+    private void gotoResultPage() {
         Intent intent = new Intent(CleanTrashActivity.this, CleanResultActivity.class);
         intent.putExtra(CleanResultActivity.CLEAN_SIZE, mSelectedStorageSize);
         startActivity(intent);
@@ -161,7 +141,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private void setTotalCheckedSizeText() {
         long checkedSize = CleanCheckedFileSizeEvent.getJunkFileAllSize(true);
-        mSelectedStorageSize = ConvertUtils.getFormatterTraffic(checkedSize);
+        mSelectedStorageSize = ConvertUtils.getFormatterTrafficForShorter(checkedSize);
         mTvTrashSizeNumber.setText(mSelectedStorageSize[0]);
         mTvTrashSizeUnit.setText(mSelectedStorageSize[1]);
     }
@@ -171,11 +151,25 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     @Override
+    public void onBackPressed() {
+        if (!mIsDeleting) {//删除的时候禁止退出页面
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         IconLoader.getInstance().unbindServicer(this);
         if (TheApplication.getGlobalEventBus().isRegistered(mSubscriber)) {
             TheApplication.getGlobalEventBus().unregister(mSubscriber);
+        }
+    }
+
+    @Override
+    public void finish() {
+        if (!mIsDeleting) {//删除过程中禁止退出
+            super.finish();
         }
     }
 
@@ -200,6 +194,11 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     @Override
+    public void collapsedGroup(int index) {
+        mCleanTrashExpandableListView.collapseGroup(index);
+    }
+
+    @Override
     public void onDeleteStart() {
         mCleanTrashExpandableListView.setEnabled(false);
     }
@@ -212,6 +211,27 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     @Override
     public void onDeleteFinish() {
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void startDeleteAnimation() {
+        SlideInLeftAnimator animator = new SlideInLeftAnimator();
+        animator.setRemoveDuration(300);
+        animator.setAddDuration(300);
+        mRvTrashGroupList.setLayoutManager(new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRvTrashGroupList.setItemAnimator(animator);
+        TrashGroupAdapter adapter = new TrashGroupAdapter(mPresenter.getDataGroup());
+        mRvTrashGroupList.setAdapter(adapter);
+        mRvTrashGroupList.setVisibility(View.VISIBLE);
+        mCleanTrashExpandableListView.setVisibility(View.GONE);
+        adapter.removeAllItem();
+        adapter.setOnItemRemoveListener(new TrashGroupAdapter.OnItemRemoveListener() {
+            @Override
+            public void onLastItemRemoved() {
+                mIsDeleting = false;
+                gotoResultPage();
+            }
+        });
     }
 
     private Object mSubscriber = new Object() {
@@ -333,7 +353,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             if ((event.equals(CleanStateEvent.DELETE_FINISH) || event
                     .equals(CleanStateEvent.DELETE_SUSPEND))) {
                 // 完成删除或者停止删除都跳转到结果页
-//                handleDisappearAnimation();
+//                gotoResultPage();
             }
         }
 
@@ -351,26 +371,10 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private void doCleanTrash() {
         // TODO: 2016/12/23 清理垃圾
         mAdapter.notifyDataSetChanged();
-        for (int i = 0; i < mAdapter.getGroupCount(); i++) {
-            mCleanTrashExpandableListView.collapseGroup(i);
-        }
-        SlideInLeftAnimator animator = new SlideInLeftAnimator();
-        animator.setRemoveDuration(500);
-        animator.setAddDuration(500);
-        mRvTrashGroupList.setLayoutManager(new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRvTrashGroupList.setItemAnimator(animator);
-        TrashGroupAdapter adapter = new TrashGroupAdapter(mPresenter.getDataGroup());
-        mRvTrashGroupList.setAdapter(adapter);
-        mRvTrashGroupList.setVisibility(View.VISIBLE);
-        mCleanTrashExpandableListView.setVisibility(View.GONE);
-        adapter.setOnItemRemoveListener(new TrashGroupAdapter.OnItemRemoveListener() {
-            @Override
-            public void onLastItemRemoved() {
-                handleDisappearAnimation();
-            }
-        });
-        adapter.removeAllItem();
+        mPresenter.collapsedAllGroup();
 
+        mCleanTrashExpandableListView.setClickable(false);
+        mIsDeleting = true;
         mCleanManager.startDelete();
         mPresenter.startDelete();
         mCleanManager.setLastTrashCleanTime(System.currentTimeMillis());

@@ -78,6 +78,60 @@ public class ConvertUtils {
         return result;
     }
 
+    /**
+     * 格式转换  产生一个不大于999的数字   防止出现文字过长的问题
+     * @param traffic
+     * @return
+     */
+    public static String[] getFormatterTrafficForShorter(double traffic) {
+        if (traffic == 0) {
+            return new String[]{"0", "B"};
+        }
+        boolean isNegative = false;
+        int fraction = 0;
+        String unit = "B";
+        if (traffic < 0) {
+            isNegative = true;
+            traffic = Math.abs(traffic);
+        }
+        if (traffic > 999) {
+            traffic /= 999;
+            unit = "KB";
+            fraction = 1;
+            if (traffic > 100) {
+                fraction = 0;
+            }
+        }
+        if (traffic > 999) {
+            traffic /= 999;
+            unit = "MB";
+            fraction = 1;
+            if (traffic > 100) {
+                fraction = 0;
+            }
+        }
+        if (traffic > 999) {
+            traffic /= 999;
+            unit = "GB";
+            fraction = 2;
+            if (traffic > 10) {
+                fraction = 1;
+            }
+            if (traffic > 100) {
+                fraction = 0;
+            }
+        }
+        DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        format.setMaximumFractionDigits(fraction);
+        format.setMinimumFractionDigits(fraction);
+        String trafficStr = format.format(traffic);
+        String[] result = new String[]{trafficStr, unit};
+        if (isNegative) {
+            result[0] = "-" + result[0];
+        }
+        return result;
+    }
+
     public static String formatFileSize(long size) {
         String[] result = getFormatterTraffic(size);
         return result[0] + result[1];

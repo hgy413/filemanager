@@ -30,6 +30,13 @@ public interface Contract {
         void expandGroup(int index);
 
         /**
+         * 关闭指定的组
+         *
+         * @param index 组的下标
+         */
+        void collapsedGroup(int index);
+
+        /**
          * 开始删除任务
          */
         void onDeleteStart();
@@ -43,6 +50,8 @@ public interface Contract {
          * 删除任务完成
          */
         void onDeleteFinish();
+
+        void startDeleteAnimation();
     }
 
     interface Presenter {

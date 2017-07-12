@@ -531,6 +531,29 @@ public class CleanTrashPresenter {
         }.start();
     }
 
+    public void collapsedAllGroup() {
+        // 关闭所有的组
+        new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < mDataGroup.size(); i++) {
+                    final int index = i;
+                    SystemClock.sleep(200);
+                    TheApplication.postRunOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.collapsedGroup(index);
+                            if (index == (mDataGroup.size() - 1)) {
+                                //说明关闭的是最后一个
+                                mView.startDeleteAnimation();
+                            }
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
     //**************************************** 停止扫描 ********************************************//
 
     /**
