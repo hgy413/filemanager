@@ -39,6 +39,7 @@ import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SortByDialog;
+import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
@@ -638,6 +639,23 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                         break;
                 }
                 EventBus.getDefault().post(new SortByChangeEvent());
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    @Override
+    public void showPasteNeedMoreSpaceDialog(long needMoreSpace) {
+        SpaceNotEnoughDialog dialog = new SpaceNotEnoughDialog(this, needMoreSpace, new SpaceNotEnoughDialog.Listener() {
+            @Override
+            public void onConfirm(SpaceNotEnoughDialog dialog) {
+                // TODO @wangzq
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancel(SpaceNotEnoughDialog dialog) {
                 dialog.dismiss();
             }
         });

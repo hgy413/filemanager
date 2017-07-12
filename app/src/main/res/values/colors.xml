@@ -64,6 +64,7 @@
     <!-- dialog -->
     <color name="dialog_confirm_color">#39BDAC</color>
     <color name="dialog_cancel_color">#000000</color>
+    <color name="dialog_space_not_enough_need_more_text_color">#FF8181</color>
 
     <!-- popup window -->
     <color name="popup_window_item_text_color">#5A5A5A</color>

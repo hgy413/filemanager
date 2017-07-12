@@ -18,10 +18,6 @@ public class CopyFileTask {
 
     private static final String LOG_TAG = "CopyFileTask";
 
-    public static final int COPY_SUCCESS_START = 0;
-    public static final int COPY_ERROR_UNKNOWN = -1;
-    public static final int COPY_ERROR_NOT_ENOUGH_SPACE = -2;
-
     private Thread mWorkerThread;
     private Listener mListener;
 
@@ -125,27 +121,10 @@ public class CopyFileTask {
         });
     }
 
-    public int start() {
-        int resultCode = COPY_SUCCESS_START;
+    public void start() {
         if (mWorkerThread != null) {
-            int checkResult = FileUtil.checkCanPaste(mSource, mDest);
-
-            switch (checkResult) {
-                case FileUtil.PASTE_CHECK_SUCCESS:
-                    mWorkerThread.start();
-                    break;
-                case FileUtil.PASTE_CHECK_ERROR_UNKNOWN:
-                    resultCode = COPY_ERROR_UNKNOWN;
-                    break;
-                case FileUtil.PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE:
-                    resultCode = COPY_ERROR_NOT_ENOUGH_SPACE;
-                    break;
-                default:
-                    break;
-            }
-
+            mWorkerThread.start();
         }
-        return resultCode;
     }
 
     public void continueCopy(boolean isSkip, Boolean isApplyToAll) {

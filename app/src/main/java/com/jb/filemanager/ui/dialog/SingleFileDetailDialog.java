@@ -54,7 +54,7 @@ public class SingleFileDetailDialog extends FMBaseDialog {
             TextView size = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_size_value);
             if (size != null) {
                 size.getPaint().setAntiAlias(true);
-                size.setText(ConvertUtils.getReadableSize(file.length()));
+                size.setText(ConvertUtils.getReadableSize(FileUtil.getSize(file)));
             }
 
             TextView containTitle = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_contain_title);

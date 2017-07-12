@@ -323,6 +323,11 @@
     <string name="dialog_sub_folder_paste_title">Subfolder Paste</string>
     <string name="dialog_sub_folder_paste_desc">Destination folder is a subfolder of the source folder</string>
 
+    <string name="dialog_space_not_enough_title">Space insufficient</string>
+    <string name="dialog_space_not_enough_desc">SD / Phone space is not enough, copying these files requires another %1$s</string>
+
+
+
     <!-- Toast -->
     <string name="toast_create_folder_failed">Create folder failed</string>
     <string name="toast_rename_failed">Rename failed</string>

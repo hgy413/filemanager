@@ -26,6 +26,7 @@ public class MainContract {
         void showDetailMultiFile(ArrayList<File> files);
         void showNewFolderDialog();
         void showSortByDialog();
+        void showPasteNeedMoreSpaceDialog(long needMoreSpace);
         void showStoragePage();
         void updateView();
 

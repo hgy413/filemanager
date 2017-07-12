@@ -4,7 +4,6 @@ package com.jb.filemanager.manager.file.task;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import java.io.File;
@@ -18,10 +17,6 @@ import java.util.ArrayList;
 public class CutFileTask {
 
     private static final String LOG_TAG = "CutFileTask";
-
-    public static final int CUT_SUCCESS_START = 0;
-    public static final int CUT_ERROR_UNKNOWN = -1;
-    public static final int CUT_ERROR_NOT_ENOUGH_SPACE = -2;
 
     private Thread mWorkerThread;
     private Listener mListener;
@@ -126,27 +121,10 @@ public class CutFileTask {
         });
     }
 
-    public int start() {
-        int resultCode = CUT_SUCCESS_START;
+    public void start() {
         if (mWorkerThread != null) {
-            int checkResult = FileUtil.checkCanPaste(mSource, mDest);
-
-            switch (checkResult) {
-                case FileUtil.PASTE_CHECK_SUCCESS:
-                    mWorkerThread.start();
-                    break;
-                case FileUtil.PASTE_CHECK_ERROR_UNKNOWN:
-                    resultCode = CUT_ERROR_UNKNOWN;
-                    break;
-                case FileUtil.PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE:
-                    resultCode = CUT_ERROR_NOT_ENOUGH_SPACE;
-                    break;
-                default:
-                    break;
-            }
-
+            mWorkerThread.start();
         }
-        return resultCode;
     }
 
     public void continueCut(boolean isSkip, Boolean isApplyToAll) {

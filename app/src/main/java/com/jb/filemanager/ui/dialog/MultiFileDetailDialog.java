@@ -26,7 +26,7 @@ public class MultiFileDetailDialog extends FMBaseDialog {
             Integer fileTotalCount = 0;
             for (File file : files) {
                 int[] count = FileUtil.countFolderAndFile(file);
-                filesSize += file.length();
+                filesSize += FileUtil.getSize(file);
                 folderTotalCount += count[0];
                 fileTotalCount += count[1];
 

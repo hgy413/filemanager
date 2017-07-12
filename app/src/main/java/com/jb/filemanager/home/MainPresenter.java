@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
@@ -237,6 +238,14 @@ class MainPresenter implements MainContract.Presenter {
     public void onClickOperatePasteButton() {
         if (mView != null) {
             FileManager.getInstance().doPaste(mCurrentPath, new FileManager.Listener() {
+
+                @Override
+                public void onPasteNeedMoreSpace(long needMoreSpace) {
+                    if (mView != null) {
+                        mView.showPasteNeedMoreSpaceDialog(needMoreSpace);
+                    }
+                }
+
                 @Override
                 public void onPasteProgressUpdate(File file) {
                     Logger.e("wangzq", "on paste: " + file.getAbsolutePath());

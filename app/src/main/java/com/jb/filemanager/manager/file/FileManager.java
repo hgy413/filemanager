@@ -8,6 +8,7 @@ import com.jb.filemanager.function.paste.DuplicateFilePasteActivity;
 import com.jb.filemanager.function.paste.SubFolderPasteActivity;
 import com.jb.filemanager.manager.file.task.CopyFileTask;
 import com.jb.filemanager.manager.file.task.CutFileTask;
+import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -123,51 +124,57 @@ public class FileManager {
 
     public void doPaste(String destDir, final Listener listener) {
         if (mCopyFiles != null && mCopyFiles.size() > 0) {
-            new CopyFileTask(mCopyFiles, destDir, new CopyFileTask.Listener() {
+            long moreThenNeed = FileUtil.checkSpacePaste(mCopyFiles, destDir);
 
-                @Override
-                public void onSubFolderCopy(CopyFileTask task, File file, String dest) {
-                    if (mPasteLockers == null) {
-                        mPasteLockers = new HashMap<>();
+            if (moreThenNeed > 0) {
+                new CopyFileTask(mCopyFiles, destDir, new CopyFileTask.Listener() {
+
+                    @Override
+                    public void onSubFolderCopy(CopyFileTask task, File file, String dest) {
+                        if (mPasteLockers == null) {
+                            mPasteLockers = new HashMap<>();
+                        }
+                        mPasteLockers.put(file.getAbsolutePath(), task);
+
+                        Intent intent = new Intent(TheApplication.getInstance(), SubFolderPasteActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(SubFolderPasteActivity.SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
+                        TheApplication.getInstance().startActivity(intent);
                     }
-                    mPasteLockers.put(file.getAbsolutePath(), task);
 
-                    Intent intent = new Intent(TheApplication.getInstance(), SubFolderPasteActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(SubFolderPasteActivity.SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
-                    TheApplication.getInstance().startActivity(intent);
-                }
+                    @Override
+                    public void onDuplicate(CopyFileTask task, File file, ArrayList<File> copySource) {
+                        if (mPasteLockers == null) {
+                            mPasteLockers = new HashMap<>();
+                        }
+                        mPasteLockers.put(file.getAbsolutePath(), task);
 
-                @Override
-                public void onDuplicate(CopyFileTask task, File file, ArrayList<File> copySource) {
-                    if (mPasteLockers == null) {
-                        mPasteLockers = new HashMap<>();
+                        Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilePasteActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                        intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
+                        TheApplication.getInstance().startActivity(intent);
                     }
-                    mPasteLockers.put(file.getAbsolutePath(), task);
 
-                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilePasteActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
-                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
-                    TheApplication.getInstance().startActivity(intent);
-                }
-
-                @Override
-                public void onProgressUpdate(File file) {
-                    // TODO 是否有其他操作还不清楚
-                    if (listener != null) {
-                        listener.onPasteProgressUpdate(file);
+                    @Override
+                    public void onProgressUpdate(File file) {
+                        // TODO 是否有其他操作还不清楚
+                        if (listener != null) {
+                            listener.onPasteProgressUpdate(file);
+                        }
                     }
-                }
 
-                @Override
-                public void onPostExecute(Boolean aBoolean) {
-                    // TODO 是否有其他操作还不清楚
-                    if (listener != null) {
-                        listener.onPastePostExecute(aBoolean);
+                    @Override
+                    public void onPostExecute(Boolean aBoolean) {
+                        // TODO 是否有其他操作还不清楚
+                        if (listener != null) {
+                            listener.onPastePostExecute(aBoolean);
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            } else {
+                listener.onPasteNeedMoreSpace(Math.abs(moreThenNeed));
+            }
         } else if (mCutFiles != null && mCutFiles.size() > 0) {
             new CutFileTask(mCutFiles, destDir, new CutFileTask.Listener() {
 
@@ -242,6 +249,7 @@ public class FileManager {
     }
 
     public interface Listener {
+        void onPasteNeedMoreSpace(long needMoreSpace);
         void onPasteProgressUpdate(File file);
         void onPastePostExecute(Boolean aBoolean);
     }

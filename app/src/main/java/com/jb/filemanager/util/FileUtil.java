@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,10 +38,6 @@ import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 public class FileUtil {
 
     public static final String FILE_PATH_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
-
-    public static final int PASTE_CHECK_SUCCESS = 0;
-    public static final int PASTE_CHECK_ERROR_UNKNOWN = -1;
-    public static final int PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE = -2;
 
 
     public static final String HIDDEN_PREFIX = ".";
@@ -447,13 +444,19 @@ public class FileUtil {
         return result;
     }
 
-    public static int checkCanPaste(ArrayList<File> fileArrayList, String destDir) {
-        int result = PASTE_CHECK_ERROR_UNKNOWN;
+    public static long checkSpacePaste(ArrayList<File> fileArrayList, String destDir) {
+        long result = 0L;
         if (fileArrayList != null && fileArrayList.size() > 0 && !TextUtils.isEmpty(destDir)) {
-            result = PASTE_CHECK_SUCCESS;
-
             // TODO @wangzq 检查空间
+            long needSpace = 0L;
+            for (File file : fileArrayList) {
+                needSpace += FileUtil.getSize(file);
+            }
 
+            StatFs stat = new StatFs(destDir);
+            long totalSize = APIUtil.getAvailableBytes(stat);
+
+            result = totalSize - needSpace;
         }
         return result;
     }
