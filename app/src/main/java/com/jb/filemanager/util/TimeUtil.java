@@ -15,6 +15,8 @@ public class TimeUtil {
     public static final SimpleDateFormat DATE_FORMATTER_SHORT = new SimpleDateFormat("HH:mm", Locale.US);
     public static final SimpleDateFormat DATA_SHORT_FORMATTER_DATE = new SimpleDateFormat("yyyyMMdd", Locale.US);
     public static final SimpleDateFormat DATE_FORMATTER_MM_SS = new SimpleDateFormat("mm:ss", Locale.US);
+    public static final SimpleDateFormat DATE_FORMATTER_FILE_LAST_MODIFY = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US);
+
 
     public static final long MILLIS_MINUTE = 60 * 1000L;
     public static final long MILLIS_HOUR = 60 * MILLIS_MINUTE;

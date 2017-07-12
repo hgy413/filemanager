@@ -28,7 +28,9 @@ import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.HorizontalListView;
+import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 
@@ -38,6 +40,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -513,11 +516,13 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
             // 描述
             if (holder.mTvFileDesc != null) {
-                if (file.isDirectory()) {
-                    holder.mTvFileDesc.setText("我是文件夹");
-                } else {
-                    holder.mTvFileDesc.setText("我是文件");
-                }
+                long fileSize = FileUtil.getSize(file);
+                String fileSizeString = ConvertUtils.getReadableSizeNoSpace(fileSize);
+
+                long lastModify = file.lastModified();
+                String lastModifyString = TimeUtil.getTime(lastModify, TimeUtil.DATE_FORMATTER_FILE_LAST_MODIFY);
+
+                holder.mTvFileDesc.setText(fileSizeString + " " + lastModifyString);
             }
 
             // icon

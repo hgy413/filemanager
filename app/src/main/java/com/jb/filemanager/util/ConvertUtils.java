@@ -227,6 +227,12 @@ public class ConvertUtils {
         return String.format(Locale.ENGLISH, "%.1f", sizeBytes / Math.pow(1024, digitGroups)) + " " + FILE_SIZE_UNITS_BYTES[digitGroups];
     }
 
+    public static String getReadableSizeNoSpace(long sizeBytes) {
+        if (sizeBytes <= 0) return "0B";
+        int digitGroups = (int) (Math.log10(sizeBytes) / Math.log10(1024));
+        return String.format(Locale.ENGLISH, "%.1f", sizeBytes / Math.pow(1024, digitGroups)) + FILE_SIZE_UNITS_BYTES[digitGroups];
+    }
+
     public static String getReadableSizeBit(long sizeByte) {
         if (sizeByte <= 0) return "0 b";
         long sizeBit = sizeByte * 8;
