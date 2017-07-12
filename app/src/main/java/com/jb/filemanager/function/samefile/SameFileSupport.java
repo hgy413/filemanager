@@ -10,15 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.util.TimeUtil;
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +31,7 @@ public class SameFileSupport implements SameFileContract.Support {
             MediaStore.Audio.Media.DISPLAY_NAME,
             MediaStore.Audio.Media.SIZE,
             MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.DATE_ADDED,
+            MediaStore.Audio.Media.DATE_MODIFIED,
             MediaStore.Audio.Media.MIME_TYPE,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.ARTIST
@@ -68,6 +63,11 @@ public class SameFileSupport implements SameFileContract.Support {
     }
 
     @Override
+    public GroupList<String,FileInfo> getAllVideoInfo() {
+        return getMediaInfo(VIDEO_URI, VIDEO_PROPERTIES);
+    }
+
+    @Override
     public GroupList<String, FileInfo> getAllDownloadInfo() {
         File download = new File(mDownPath);
         GroupList<String, FileInfo> fileGroupList = new GroupList<>();
@@ -92,17 +92,12 @@ public class SameFileSupport implements SameFileContract.Support {
         return infoGroupList;
     }
 
-    @Override
-    public GroupList<String,FileInfo> getAllVideoInfo() {
-        return getMediaInfo(VIDEO_URI, VIDEO_PROPERTIES);
-    }
-
     protected GroupList<String, FileInfo> getMediaInfo(final Uri uri, final String[] mediaProperties) {
         Cursor cursor = mResolver.query(uri,
                 mediaProperties,
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
-                MUSIC_PROPERTIES[4]
+                mediaProperties[4]
         );
         GroupList<String, FileInfo> list = new GroupList<>();
         long lastModify = 0L;
@@ -112,7 +107,7 @@ public class SameFileSupport implements SameFileContract.Support {
         ArrayList<FileInfo> infoList;
 
         while(cursor.moveToNext()) {
-            if (null != (info = cursorToMusicInfo(cursor))) {
+            if (null != (info = cursorToFileInfo(cursor))) {
                 modify = info.mModified;
                 boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
                 if (!isSameDay) {
@@ -132,7 +127,7 @@ public class SameFileSupport implements SameFileContract.Support {
         return list;
     }
 
-    protected FileInfo cursorToMusicInfo(@NonNull Cursor cursor) {
+    protected FileInfo cursorToFileInfo(@NonNull Cursor cursor) {
         FileInfo info = new FileInfo();
         info.mId = cursor.getString(0);
         info.mName = cursor.getString(1);

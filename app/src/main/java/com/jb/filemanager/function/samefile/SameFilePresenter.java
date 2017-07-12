@@ -26,7 +26,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     private final SameFileContract.Support mSupport;
     private final LoaderManager mLoaderManager;
     private AsyncTaskLoader mFileLoader;
-    private GroupList<String, FileInfo> mMusicGroupList;
+    private GroupList<String, FileInfo> mFileGroupList;
     public SameFilePresenter(@NonNull SameFileActivity view, @NonNull SameFileContract.Support support,
                              @NonNull LoaderManager manager){
         mView = view;
@@ -40,12 +40,12 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void onLoadFinished(Loader<GroupList<String, FileInfo>> loader, GroupList<String, FileInfo> data) {
-        mMusicGroupList = data;
-        if (mMusicGroupList == null) {
+        mFileGroupList = data;
+        if (mFileGroupList == null) {
             //Todo 显示没有音乐提示
         } else {
             // 显示列表
-            mView.showMusicList(mMusicGroupList);
+            mView.showMusicList(mFileGroupList);
         }
     }
 
@@ -170,7 +170,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     protected ArrayList<String> selectedPositon2PathList(boolean[] position) {
         ArrayList<String> selectedFile = new ArrayList<>();
         for (int i = 0; i < position.length; i++) {
-            selectedFile.add(mMusicGroupList.getItem(i).mFullPath);
+            selectedFile.add(mFileGroupList.getItem(i).mFullPath);
         }
         return  selectedFile;
     }
