@@ -16,51 +16,40 @@ import java.util.List;
 
 public class AppLockSupport implements AppLockContract.Support {
 
-    private TaskSupportImpl mSubSupport;
-
-    public AppLockSupport() {
-        this.mSubSupport = new TaskSupportImpl();
-    }
-
     @Override
     public List<LockerItem> getAppLockAppDatas() {
         return AppLockerDataManager.getInstance().getAppLockAppsData().getLockerItems();
     }
 
     @Override
+    public List<LockerItem> getRecommedAppDatas() {
+        return AppLockerDataManager.getInstance().getRecommendLockAppDatas();
+    }
+
+    @Override
     public void toAsynWork(Runnable work) {
-        mSubSupport.toAsynWork(work);
+        if (work != null) {
+            TheApplication.postRunOnShortTaskThread(work);
+        }
     }
 
     @Override
     public void toUiWork(Runnable work, long delay) {
-        mSubSupport.toUiWork(work, delay);
+        if (work != null) {
+            TheApplication.postRunOnUiThread(work, delay);
+        }
     }
 
     @Override
     public void removeUiWork(Runnable work) {
-        if (mSubSupport != null) {
-            mSubSupport.removeUiWork(work);
+        if (work != null) {
+            TheApplication.removeFromUiThread(work);
         }
     }
 
     @Override
-    public void release() {
-        if (mSubSupport != null) {
-            mSubSupport.release();
-        }
-    }
-
-    @Override
-    public String getAppLockGroupName() {
-        return TheApplication.getAppContext().getString(R.string.app_lock_group_apps_name);
-    }
-
-    @Override
-    public boolean getIntruderSwitcherState() {
-        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
-//        return sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_REVEAL_ENABLE, false);
-        return true;
+    public String[] getFloatListGroupTitle() {
+        return TheApplication.getAppContext().getResources().getStringArray(R.array.applock_listview_group_title);
     }
 
     @Override
@@ -68,17 +57,6 @@ public class AppLockSupport implements AppLockContract.Support {
         // 上锁勾选的应用
         AppLockerDataManager.getInstance().lockItem(lockerItemList.toArray(new LockerItem[lockerItemList.size()]));
         AppLockerDataManager.getInstance().unlockItem(unLockerItemList.toArray(new LockerItem[unLockerItemList.size()]));
-    }
-
-    @Override
-    public void updateIntruderPhoto() {
-//        AntiPeepDataManager.getInstance(TheApplication.getAppContext()).updateAllPhoto();
-    }
-
-    @Override
-    public int getIntruderPhotoSize() {
-//        return AntiPeepDataManager.getInstance(TheApplication.getAppContext()).getAllPhotoAfterUpdate().size();
-        return 1;
     }
 
     @Override

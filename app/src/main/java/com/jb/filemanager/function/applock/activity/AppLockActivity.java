@@ -3,8 +3,6 @@ package com.jb.filemanager.function.applock.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -13,7 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.applock.adapter.AppLockAdapter;
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.applock.adapter.ApplockFloatAdapter;
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.presenter.AppLockContract;
 import com.jb.filemanager.function.applock.presenter.AppLockPresenter;
@@ -21,7 +20,7 @@ import com.jb.filemanager.function.applock.presenter.AppLockSupport;
 import com.jb.filemanager.function.applock.view.SearchBarLayout;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
-import com.jb.filemanager.util.APIUtil;
+import com.jb.filemanager.util.imageloader.IconLoader;
 
 import java.util.List;
 
@@ -30,35 +29,26 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     private View mBack;
 
-    private View mTitle;
-
-    private View mIntruderEntanceLayout;
-
-    private TextView mIntruderNumTxt;
-
-    private TextView mCheckTxt;
+    private TextView mTitle;
 
     private FloatingGroupExpandableListView mLockerList;
-
-//    private HalfCircleButton mOperate;
-
-    private View mRootGradientBg;
-
-    private ImageView mEntranceArrow;
 
     //搜索框
     private SearchBarLayout mSearchBarLayout;
 
     private View mSetting;
     //适配器
-    private AppLockAdapter mAppLockAdapter;
+    private ApplockFloatAdapter mApplockFloatAdapter;
 
     private AppLockContract.Presenter mPresenter;
+    private ImageView mSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_applock);
+        setContentView(R.layout.activity_applock_temp);
+        IconLoader.ensureInitSingleton(TheApplication.getAppContext());
+        IconLoader.getInstance().bindServicer(this);
         initView();
         initListener();
     }
@@ -67,13 +57,16 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
      * 初始化颜色值
      */
     private void initView() {
-        mBack = findViewById(R.id.activity_applock_title_icon);
-        mTitle = findViewById(R.id.activity_applock_title_word);
-        mRootGradientBg = findViewById(R.id.activity_applock_root_bg);
-        mIntruderEntanceLayout = findViewById(R.id.activity_applock_header);
-        mSetting = findViewById(R.id.activity_applock_title_setting);
-        mLockerList = (FloatingGroupExpandableListView) findViewById(R.id.activity_applock_list);
-        mSearchBarLayout = (SearchBarLayout) findViewById(R.id.activity_applock_searchbar);
+        findViewById(android.R.id.content).setBackgroundColor(0xFF44D6C3);
+        mBack = findViewById(R.id.common_applock_bar_layout_back);
+        mTitle = (TextView)findViewById(R.id.common_applock_bar_layout_title);
+        mSetting = findViewById(R.id.common_applock_bar_layout_setting);
+        mSearch = (ImageView) findViewById(R.id.common_applock_bar_layout_search);
+        mLockerList = (FloatingGroupExpandableListView) findViewById(R.id.activity_applock_float_view);
+        mSearchBarLayout = (SearchBarLayout) findViewById(R.id.activity_applock_search_bar);
+        mTitle.setText(R.string.activity_applock_title);
+        mSearch.setVisibility(View.VISIBLE);
+        mSetting.setVisibility(View.VISIBLE);
         mPresenter = new AppLockPresenter(this, new AppLockSupport());
         mPresenter.loadData();
     }
@@ -94,44 +87,22 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
                 dealback(false);
             }
         });
-        mIntruderEntanceLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //跳转到 图片页面
-                if (mPresenter != null) {
-                    mPresenter.dealiIntruderEntranceOnclick();
-                }
-            }
-        });
-
-        mLockerList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent,
-                                        View v, int groupPosition, long id) {
-                if (mAppLockAdapter != null) {
-                    mAppLockAdapter.performGroupClick(groupPosition);
-                    mAppLockAdapter.notifyDataSetChanged();
-                }
-                if (mPresenter != null) {
-                    mPresenter.refreshOperateButState();
-                }
-                dealLockerInfoChg();
-                return true;
-            }
-        });
 
         mLockerList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                if (mAppLockAdapter != null) {
-                    mAppLockAdapter.performItemClick(groupPosition, childPosition);
-                    mAppLockAdapter.notifyDataSetChanged();
-                }
-                if (mPresenter != null) {
-                    mPresenter.refreshOperateButState();
+                if (mApplockFloatAdapter != null) {
+                    mApplockFloatAdapter.performItemClick(groupPosition, childPosition);
                 }
                 dealLockerInfoChg();
                 return true;
+            }
+        });
+
+        mSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchBarLayout.safeToSlideOpen();
             }
         });
 
@@ -145,12 +116,18 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
             @Override
             public void dismiss() {
-
+                mTitle.setVisibility(View.VISIBLE);
+                mSetting.setVisibility(View.VISIBLE);
+                mBack.setVisibility(View.VISIBLE);
+                mSearch.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onShow() {
-
+                mTitle.setVisibility(View.INVISIBLE);
+                mSetting.setVisibility(View.INVISIBLE);
+                mBack.setVisibility(View.INVISIBLE);
+                mSearch.setVisibility(View.INVISIBLE);
             }
         });
         mSetting.setOnClickListener(new View.OnClickListener() {
@@ -182,11 +159,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
      */
     private void dealback(boolean isSystemBack) {
         if (mSearchBarLayout != null && !mSearchBarLayout.safeToSlideClose()) {
-            if (isSystemBack) {
-//                StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_BACK2);
-            } else {
-//                StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_BACK1);
-            }
             finish();
             if (mSearchBarLayout != null) {
                 mSearchBarLayout.release(this);
@@ -209,6 +181,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
         if (mPresenter != null) {
             mPresenter.release();
         }
+        IconLoader.getInstance().unbindServicer(this);
         super.onDestroy();
     }
 
@@ -225,35 +198,33 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     public void showAppLockGroupData(List<AppLockGroupData> appLockGroupDataList) {
-        if (appLockGroupDataList != null && appLockGroupDataList.get(0).getChildren() != null) {
-            if (mAppLockAdapter == null) {
-                mAppLockAdapter = new AppLockAdapter(appLockGroupDataList);
+        if (appLockGroupDataList != null) {
+            if (mApplockFloatAdapter == null) {
+                mApplockFloatAdapter = new ApplockFloatAdapter(appLockGroupDataList);
                 final WrapperExpandableListAdapter wrapperAdapter = new WrapperExpandableListAdapter(
-                        mAppLockAdapter);
-                mLockerList.setGroupIndicator(null);
-                mLockerList.setFloatingGroupEnabled(true);
+                        mApplockFloatAdapter);
                 mLockerList.setAdapter(wrapperAdapter);
             } else {
-                mAppLockAdapter.bindData(appLockGroupDataList);
+                mApplockFloatAdapter.bindData(appLockGroupDataList);
+            }
+            //更新就扩展列表
+            for (int i = 0; i < appLockGroupDataList.size(); i++) {
+                mLockerList.expandGroup(i);
             }
         }
     }
 
+    @Override
+    public void showLockAppsNum(int nums) {
+        // TODO: 17-7-12 已经锁定的应用数目
+    }
 
     @Override
     protected void onHomePressed() {
-        //点击home键
-//        StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_HOME);
     }
 
     @Override
     public void showDataLoading() {
-//        if (mIntruderEntanceLayout != null) {
-//            mIntruderEntanceLayout.setVisibility(View.GONE);
-//        }
-//        if (mLockerList != null) {
-//            mLockerList.setVisibility(View.GONE);
-//        }
         if (!isSpining()) {
             startSpin();
         }
@@ -261,51 +232,12 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     public void showDataLoaded() {
-        if (mIntruderEntanceLayout != null) {
-            mIntruderEntanceLayout.setVisibility(View.VISIBLE);
-        }
         if (mLockerList != null) {
             mLockerList.setVisibility(View.VISIBLE);
         }
         if (isSpining()) {
             stopSpin();
         }
-        //统计列表页展示
-//        StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_SHOW);
-    }
-
-    @Override
-    public void showIntruderTipDialog() {
-        //点击检测按钮统计
-//        StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_CLI_CHECK);
-    }
-
-    @Override
-    public void showIntruderTipOpened() {
-        mCheckTxt.setVisibility(View.GONE);
-        mEntranceArrow.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showIntruderTipClosed() {
-        mCheckTxt.setVisibility(View.VISIBLE);
-        mEntranceArrow.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showIntruderPhotoCounts(int counts) {
-        if (mIntruderNumTxt != null) {
-            if (counts > 0) {
-                mIntruderNumTxt.setVisibility(View.VISIBLE);
-                mIntruderNumTxt.setText(String.valueOf(counts));
-            } else {
-                mIntruderNumTxt.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    @Override
-    public void gotoIntruderVertGallery() {
     }
 
 }

@@ -159,7 +159,6 @@
     <string name="applock_pre_operate_txt">Lock</string>
     <string name="set_graphic_password_message_save">Save</string>
     <string name="set_graphic_password_message_draw">Setting the unlock pattern of app(s)</string>
-    <string name="set_number_password_message_draw">Setting the unlock pincode of app(s)</string>
     <string name="set_graphic_password_message_too_short">Connect at least 4 dots.</string>
     <string name="set_graphic_password_message_redraw">Drawing the pattern again to confirm it</string>
     <string name="set_number_password_message_redraw">Inputing the pincode again to confirm it</string>
@@ -168,11 +167,6 @@
     <string name="set_graphic_password_message_edit_hint">Enter the answer</string>
     <string name="set_graphic_password_answer_edit_short_tip">Please enter the answer</string>
     <string name="app_lock_setting_reveal_intruder_tip">Take a photo of someone entering wrong code</string>
-    <string name="app_lock_group_apps_name">APP</string>
-    <string name="intruder_shot_info_title">Shot intruders</string>
-    <string name="intruder_shot_info_desc">Input wrong code over %1$d times would be taken pic as a intruder.</string>
-    <string name="intruder_shot_info_open_fail_tip">Failed to open, please open the camera access</string>
-    <string name="intruder_main_no_content">Input wrong code over allows would be take pic as a intruder.</string>
     <string-array name="pupup_window_reset_psd_questions">
         <item>My Favorite Sport?</item>
         <item>My Birthday?</item>

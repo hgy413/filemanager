@@ -147,6 +147,15 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
                 mSearchBarLayout.safeToSlideOpen();
             }
         });
+
+        mSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击设置统计
+                Intent intent = new Intent(AppLockPreActivity.this, AppLockSettingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

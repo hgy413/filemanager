@@ -38,8 +38,7 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="17dp"
-            android:src="@drawable/choose_all"/>
+            android:padding="16dp"/>
 
     </RelativeLayout>
 

@@ -67,6 +67,9 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
                             mOtherLockItems.add(lockerItem);
                         }
                     }
+                    mAllLockItems.clear();
+                    mAllLockItems.addAll(mRecommedLockItems);
+                    mAllLockItems.addAll(mOtherLockItems);
                     mAppLockGroupDataList = new ArrayList<>();
                     String[] groupTitleArray = null;
                     if (mSupport != null) {

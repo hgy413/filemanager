@@ -6,13 +6,16 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
+import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,14 +26,18 @@ import java.util.Locale;
 public class AppLockPresenter implements AppLockContract.Presenter {
 
     private AppLockContract.View mView;
-
     private AppLockContract.Support mSupport;
-    /**
-     * 所有应用的列表
-     */
+    //推荐需要加锁的应用列表
+    private List<LockerItem> mRecommedLockItems;
+    //所有应用的列表
     private List<LockerItem> mAllLockItems;
+    //除去推荐的其他列表
+    private List<LockerItem> mOtherLockItems;
+    //分组数据
+    private List<AppLockGroupData> mAppLockGroupDataList;
+    //搜索结果分组
+    private List<AppLockGroupData> mSearchResultGroupDataList;
     private final String TAG = "AppLockPresenter";
-    private int mPhotoSize = 0;
 
     public AppLockPresenter(AppLockContract.View mView, AppLockContract.Support mSupport) {
         this.mView = mView;
@@ -42,46 +49,46 @@ public class AppLockPresenter implements AppLockContract.Presenter {
     public void loadData() {
         mView.showDataLoading();
         if (mSupport != null) {
-            //获取图片数目
-            mSupport.updateIntruderPhoto();
-            final String appGroupName = mSupport.getAppLockGroupName();
-            //获取锁信息
-            mSupport.toAsynWork(new Runnable() {
+            mAllLockItems = mSupport.getAppLockAppDatas();
+            mRecommedLockItems = mSupport.getRecommedAppDatas();
+            mOtherLockItems = new ArrayList<>();
+            int size = 0;
+            if (mRecommedLockItems != null) {
+                for (int j = 0; j < mRecommedLockItems.size(); j++) {
+                    LockerItem lockerItem = mRecommedLockItems.get(j);
+                    lockerItem.isChecked = true;
+                    size++;
+                }
+            }
+            Iterator<LockerItem> itemIterator = mAllLockItems.iterator();
+            while (itemIterator.hasNext()) {
+                LockerItem lockerItem = itemIterator.next();
+                if (!mRecommedLockItems.contains(lockerItem)) {
+                    mOtherLockItems.add(lockerItem);
+                }
+            }
+            mAllLockItems.clear();
+            mAllLockItems.addAll(mRecommedLockItems);
+            mAllLockItems.addAll(mOtherLockItems);
+            mAppLockGroupDataList = new ArrayList<>();
+            String[] groupTitleArray = null;
+            if (mSupport != null) {
+                groupTitleArray = mSupport.getFloatListGroupTitle();
+            }
+            if (groupTitleArray != null && groupTitleArray.length >= 2) {
+                mAppLockGroupDataList.add(new AppLockGroupData(mRecommedLockItems, groupTitleArray[0]));
+                mAppLockGroupDataList.add(new AppLockGroupData(mOtherLockItems, groupTitleArray[1]));
+            }
+            final int defaultRecommedSize = size;
+            mSupport.toUiWork(new Runnable() {
                 @Override
                 public void run() {
-                    mAllLockItems = mSupport.getAppLockAppDatas();
-                    sortForCheckState(mAllLockItems);
-                    AppLockGroupData appLockGroupData = new AppLockGroupData(mAllLockItems, appGroupName);
-                    boolean isAllLocked = true;
-                    boolean isSelected = false;
-                    for (int i = 0; i < mAllLockItems.size(); i++) {
-                        if (!mAllLockItems.get(i).isChecked) {
-                            isAllLocked = false;
-                            break;
-                        } else {
-                            isSelected = true;
-                        }
-                    }
-                    appLockGroupData.setAllChecked(isAllLocked);
-                    final List<AppLockGroupData> lockGroupDatas = new ArrayList<>(1);
-                    final boolean isEnable = isSelected;
-                    lockGroupDatas.add(appLockGroupData);
-                    mSupport.toUiWork(new Runnable() {
-                        @Override
-                        public void run() {
-                            boolean isOpen = mSupport.getIntruderSwitcherState();
-                            if (isOpen) {
-                                mView.showIntruderTipOpened();
-                            } else {
-                                mView.showIntruderTipClosed();
-                            }
-                            // 筛选默认选择的应用
-                            mView.showAppLockGroupData(lockGroupDatas);
-                            mView.showDataLoaded();
-                        }
-                    }, 0);
+                    // 筛选默认选择的应用
+                    mView.showLockAppsNum(defaultRecommedSize);
+                    mView.showAppLockGroupData(mAppLockGroupDataList);
+                    mView.showDataLoaded();
                 }
-            });
+            }, 0);
         }
     }
 
@@ -89,10 +96,7 @@ public class AppLockPresenter implements AppLockContract.Presenter {
     public void search(String keyWord) {
         if (mView != null) {
             if (TextUtils.isEmpty(keyWord)) {
-                AppLockGroupData appLockGroupData = new AppLockGroupData(mAllLockItems, mSupport.getAppLockGroupName());
-                List<AppLockGroupData> lockGroupDatas = new ArrayList<>(1);
-                lockGroupDatas.add(appLockGroupData);
-                mView.showAppLockGroupData(lockGroupDatas);
+                mView.showAppLockGroupData(mAppLockGroupDataList);
             } else {
                 /**
                  * 搜索描述：<br/>
@@ -110,18 +114,34 @@ public class AppLockPresenter implements AppLockContract.Presenter {
                             if (searchStartPos == -1) {
                                 break;
                             } else {
-                                searchStartPos ++;
+                                searchStartPos++;
                             }
                         }
                         if (searchStartPos != -1) {
+                            Logger.w(TAG, title);
                             tempSearchList.add(lockerItem);
                         }
                     }
                 }
-                AppLockGroupData appLockGroupData = new AppLockGroupData(tempSearchList, mSupport.getAppLockGroupName());
-                List<AppLockGroupData> lockGroupDatas = new ArrayList<>(1);
-                lockGroupDatas.add(appLockGroupData);
-                mView.showAppLockGroupData(lockGroupDatas);
+                if (mSearchResultGroupDataList == null) {
+                    mSearchResultGroupDataList = new ArrayList<>();
+                } else {
+                    mSearchResultGroupDataList.clear();
+                }
+                String[] groupTitleArray = null;
+                if (mSupport != null) {
+                    groupTitleArray = mSupport.getFloatListGroupTitle();
+                }
+                if (tempSearchList.size() > 0) {
+                    if (groupTitleArray != null && groupTitleArray.length >= 3) {
+                        mSearchResultGroupDataList.add(new AppLockGroupData(tempSearchList, groupTitleArray[2]));
+                    }
+                } else {
+                    if (groupTitleArray != null && groupTitleArray.length >= 4) {
+                        mSearchResultGroupDataList.add(new AppLockGroupData(tempSearchList, groupTitleArray[3]));
+                    }
+                }
+                mView.showAppLockGroupData(mSearchResultGroupDataList);
             }
         }
     }
@@ -129,60 +149,10 @@ public class AppLockPresenter implements AppLockContract.Presenter {
     @Override
     public void release() {
         if (mSupport != null) {
-            mSupport.release();
+            mSupport = null;
         }
         if (mView != null) {
             mView = null;
-        }
-    }
-
-    /**
-     * 排序，选中的放前面，其他按照原本排序
-     */
-    private void sortForCheckState(List<LockerItem> lockerItems) {
-        Collections.sort(lockerItems, new Comparator<LockerItem>() {
-            @Override
-            public int compare(LockerItem lhs, LockerItem rhs) {
-                if (lhs.isChecked) {
-                    if (rhs.isChecked) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    if (rhs.isChecked) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    public void refreshOperateButState() {
-        if (mView != null) {
-            if (mAllLockItems != null && mAllLockItems.size() != 0) {
-                boolean isEnable = true;
-                for (LockerItem lockerItem : mAllLockItems) {
-                    isEnable = lockerItem.isChecked;
-                    if (isEnable) {
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void dealiIntruderEntranceOnclick() {
-        if (mSupport != null) {
-            if (mView != null && !mSupport.getIntruderSwitcherState()) {
-                mView.showIntruderTipDialog();
-            } else {
-                mView.gotoIntruderVertGallery();
-            }
         }
     }
 

@@ -87,7 +87,7 @@ public class SearchManager {
         if (!mTaskWorker.isAlive()) {
             mTaskWorker.start();
             mHandler = new Handler(mTaskWorker.getLooper());
-            Logger.w(SearchManager.TAG, "contructor");
+//            Logger.w(SearchManager.TAG, "contructor");
         }
         if (!TheApplication.getGlobalEventBus().isRegistered(mFileDeleteEventSubscriber)) {
             TheApplication.getGlobalEventBus().register(mFileDeleteEventSubscriber);

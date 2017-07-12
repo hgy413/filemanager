@@ -73,7 +73,7 @@ public class Traverser {
                 return;
             }
             FileInfo fileInfo = new FileInfo(file);
-            Logger.w(SearchManager.TAG, fileInfo.mFileAbsolutePath);
+//            Logger.w(SearchManager.TAG, fileInfo.mFileAbsolutePath);
             //将扫描到的数据添加到集合中
             mFileInfoList.add(fileInfo);
             if (file.isDirectory() && isNeedTraverse(file)) {

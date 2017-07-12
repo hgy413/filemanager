@@ -14,8 +14,6 @@ public interface AppLockContract {
         void loadData();
         void search(String keyWord);
         void release();
-        void refreshOperateButState();
-        void dealiIntruderEntranceOnclick();
         void dealUpdateLockerInfo();
     }
 
@@ -23,20 +21,17 @@ public interface AppLockContract {
         void showAppLockGroupData(List<AppLockGroupData> appLockGroupDataList);
         void showDataLoading();
         void showDataLoaded();
-        void showIntruderTipDialog();
-        void showIntruderTipOpened();
-        void showIntruderTipClosed();
-        void showIntruderPhotoCounts(int counts);
-        void gotoIntruderVertGallery();
+        void showLockAppsNum(int nums);
     }
 
-    interface Support extends ITaskSupport {
-        String getAppLockGroupName();
-        boolean getIntruderSwitcherState();
+    interface Support {
+        String[] getFloatListGroupTitle();
+        void toAsynWork(Runnable work);
+        void toUiWork(Runnable work, long delay);
+        void removeUiWork(Runnable work);
         List<LockerItem> getAppLockAppDatas();
+        List<LockerItem> getRecommedAppDatas();
         void saveLockerInfo(List<LockerItem> lockerItemList, List<LockerItem> unLockerItemList);
-        void updateIntruderPhoto();
-        int getIntruderPhotoSize();
         void startAppLockerMonitor();
         void stopAppLockerMonitor();
     }
