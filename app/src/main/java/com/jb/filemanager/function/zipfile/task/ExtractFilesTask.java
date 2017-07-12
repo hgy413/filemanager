@@ -26,7 +26,7 @@ import de.innosystec.unrar.rarfile.FileHeader;
  * Created by xiaoyu on 2017/7/4 17:40.
  */
 
-public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
+public class ExtractFilesTask extends AsyncTask<Object, Float, String> {
 
     private ExtractingFilesListener mListener;
 
@@ -45,7 +45,7 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
     // 若为加密文件, 则是zip格式
     // 若不是加密文件, 则是zip或者rar格式
     @Override
-    protected final Boolean doInBackground(Object... params) {
+    protected final String doInBackground(Object... params) {
         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         String packFilePath = (String) params[0];
         String password = (String) params[1];
@@ -63,7 +63,7 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
             }
         }
         boolean mkdir = saveDir.mkdir();
-        if (!mkdir) return false;
+        if (!mkdir) return null;
 
         long pathFreeSize = StorageUtil.getPathFreeSize(saveDir.getPath());
         long totalSize = 0;
@@ -72,7 +72,7 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
         }
         if (pathFreeSize - totalSize < 100 * 1024 * 1024) {
             // 当解压后的空间小于100M时, 结束。
-            return false;
+            return null;
         }
 
         float totalCount = data.size();
@@ -85,15 +85,15 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
                 }
                 for (int i = 0; i < data.size(); i++) {
                     ZipPreviewFileBean bean = data.get(i);
-                    if (isCancelled()) return true;
+                    if (isCancelled()) return saveDir.getPath();
                     String fullPath = bean.getFullPath();
                     publishProgress(i / totalCount);
                     zipFile.extractFile(fullPath, saveDir.getPath());
                 }
-                return true;
+                return saveDir.getPath();
             } catch (ZipException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             }
         } else if ("rar".equalsIgnoreCase(extension)) {
             Archive archive = null;
@@ -104,7 +104,7 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
                     FileHeader header = fileHeaders.get(i);
                     short headCRC = header.getHeadCRC();
                     for (ZipPreviewFileBean bean : data) {
-                        if (isCancelled()) return true;
+                        if (isCancelled()) return saveDir.getPath();
                         if (bean.getCrc() == headCRC) {
                             publishProgress(i / totalCount);
                             File out = new File(FileUtils.removeEdgeSeparatorIfExist(saveDir.getPath())
@@ -113,18 +113,18 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
                         }
                     }
                 }
-                return true;
+                return saveDir.getPath();
             } catch (RarException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             } finally {
                 CloseUtils.closeIO(archive);
             }
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -137,11 +137,11 @@ public class ExtractFilesTask extends AsyncTask<Object, Float, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean isSuccess) {
+    protected void onPostExecute(String isSuccess) {
         super.onPostExecute(isSuccess);
         if (mListener != null) {
-            if (isSuccess) {
-                mListener.onPostExtractFiles();
+            if (!TextUtils.isEmpty(isSuccess)) {
+                mListener.onPostExtractFiles(isSuccess);
             } else {
                 mListener.onExtractError();
             }

@@ -26,7 +26,7 @@ import de.innosystec.unrar.rarfile.FileHeader;
  * Created by xiaoyu on 2017/7/4 21:08.
  */
 
-public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
+public class ExtractPackFileTask extends AsyncTask<String, Float, String> {
 
     private ExtractingFilesListener mListener;
 
@@ -43,7 +43,7 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         String packFilePath = params[0];
         String password = params[1];
@@ -60,7 +60,7 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
             }
         }
         boolean mkdir = saveDir.mkdir();
-        if (!mkdir) return false;
+        if (!mkdir) return null;
 
         long pathFreeSize = StorageUtil.getPathFreeSize(saveDir.getPath());
 
@@ -76,20 +76,20 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
                 for (net.lingala.zip4j.model.FileHeader header : headers) {
                     totalSize += header.getUncompressedSize();
                 }
-                if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
+                if (pathFreeSize - totalSize < 100 * 1024 * 1024) return null;
 
                 float totalCount = headers.size();
                 for (int i = 0; i < headers.size(); i++) {
-                    if (isCancelled()) return true;
+                    if (isCancelled()) return saveDir.getPath();
                     net.lingala.zip4j.model.FileHeader header = headers.get(i);
                     publishProgress(i / totalCount);
                     Log.e("extract", "percent = " + (i / totalCount));
                     zipFile.extractFile(header, saveDir.getPath());
                 }
-                return  true;
+                return  saveDir.getPath();
             } catch (ZipException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             }
         } else if ("rar".equalsIgnoreCase(extension)) {
             Archive archive = null;
@@ -101,7 +101,7 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
                 for (FileHeader header : fileHeaders) {
                     totalSize += header.getFullUnpackSize();
                 }
-                if (pathFreeSize - totalSize < 100 * 1024 * 1024) return false;
+                if (pathFreeSize - totalSize < 100 * 1024 * 1024) return null;
 
                 float totalCount = fileHeaders.size();
                 for (int i = 0; i < fileHeaders.size(); i++) {
@@ -122,31 +122,31 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
                         try {
                             archive.extractFile(header, outputStream);
                         } catch (RarException e) {
-                            String nam = e.getType().name();
-                            return false;
+//                            String nam = e.getType().name();
+                            return null;
                         } catch (RuntimeException e) {
                             e.printStackTrace();
-                            return false;
+                            return null;
                         } finally {
                             outputStream.close();
                         }
                     }
                 }
-                return true;
+                return saveDir.getPath();
             } catch (RarException e) {
                 e.printStackTrace();
                 Log.e("task", "rar exception");
-                return false;
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("task", "io exception");
-                return false;
+                return null;
             } finally {
                 CloseUtils.closeIO(archive);
             }
         } else {
             Log.e("task", "else");
-            return false;
+            return null;
         }
     }
 
@@ -159,11 +159,11 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean isSuccess) {
+    protected void onPostExecute(String isSuccess) {
         super.onPostExecute(isSuccess);
         if (mListener != null) {
-            if (isSuccess) {
-                mListener.onPostExtractFiles();
+            if (!TextUtils.isEmpty(isSuccess)) {
+                mListener.onPostExtractFiles(isSuccess);
             } else {
                 mListener.onExtractError();
             }

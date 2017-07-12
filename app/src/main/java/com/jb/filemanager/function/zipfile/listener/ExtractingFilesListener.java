@@ -7,7 +7,7 @@ package com.jb.filemanager.function.zipfile.listener;
 public interface ExtractingFilesListener {
     void onPreExtractFiles();
     void onExtractingFile(float percent);
-    void onPostExtractFiles();
+    void onPostExtractFiles(String destDir);
     void onCancelExtractFiles();
     void onExtractError();
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
@@ -22,6 +23,7 @@ import com.jb.filemanager.function.zipfile.receiver.NotificationClickReceiver;
 import com.jb.filemanager.function.zipfile.task.ExtractFilesTask;
 import com.jb.filemanager.function.zipfile.task.ExtractPackFileTask;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
+import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.util.APIUtil;
 
 import java.util.List;
@@ -36,6 +38,7 @@ import java.util.List;
 public final class ExtractManager implements ExtractingFilesListener, View.OnClickListener, View.OnAttachStateChangeListener {
 
     private static final int EXTRACT_NOTIFICATION_ID = 0x12138;
+    private static final int EXTRACT_COMPLETE_NOTIFICATION_ID = 0x12158;
     // 正在解压的路径刷新间隔, 需要严格控制, 频率过快会引发系统崩溃, 手机自动锁屏等问题
     private static final long FLUSH_UI_INTERVAL_TIME = 380L;
     private static ExtractManager sInstance;
@@ -178,8 +181,10 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     }
 
     @Override
-    public void onPostExtractFiles() {
+    public void onPostExtractFiles(String savePath) {
         showMessage("解压完成");
+        sendExtractAccomplishNotification(savePath);
+        Toast.makeText(mContext, "Extract to: " + savePath, Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
@@ -320,11 +325,47 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 mNotification.contentIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(mContext, NotificationClickReceiver.class),
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                NotificationManager notificationManager = (NotificationManager) TheApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(EXTRACT_NOTIFICATION_ID, mNotification);
             }
         });
 
+    }
+
+    /**
+     * 发送解压完成的通知
+     * @param savePath 路径
+     */
+    private void sendExtractAccomplishNotification(final String savePath) {
+        TheApplication.postRunOnShortTaskThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (mContext == null) {
+                    mContext = TheApplication.getAppContext();
+                }
+
+                RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_extract_finish);
+                remoteViews.setTextViewText(R.id.extract_noti_finish_dest_path, "Extract to: " + savePath);
+
+                Notification.Builder builder = new Notification.Builder(mContext);
+                builder.setSmallIcon(R.drawable.zip_icon);
+                builder.setAutoCancel(true);
+                builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.zip_icon));
+                Notification notification = APIUtil.build(builder);
+                notification.when = System.currentTimeMillis();
+                notification.icon = R.drawable.zip_icon;
+                notification.contentView = remoteViews;
+
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                notification.contentIntent = PendingIntent.getActivity(mContext, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(EXTRACT_COMPLETE_NOTIFICATION_ID, notification);
+            }
+        });
     }
 
     private void cancelExtractNotification() {
