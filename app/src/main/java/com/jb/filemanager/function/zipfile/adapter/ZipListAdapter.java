@@ -129,13 +129,14 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
-       /* if (childPosition == getChildrenCount(groupPosition) - 1) {
+        // 最后一个子项
+        if (childPosition == getChildrenCount(groupPosition) - 1 && groupPosition != getGroupCount() - 1) {
             holder.divider.setVisibility(View.GONE);
             holder.wideDivider.setVisibility(View.VISIBLE);
         } else {
             holder.divider.setVisibility(View.VISIBLE);
             holder.wideDivider.setVisibility(View.GONE);
-        }*/
+        }
         return convertView;
     }
 
