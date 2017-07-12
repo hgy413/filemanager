@@ -18,6 +18,7 @@ import com.jb.filemanager.abtest.ABTest;
 import com.jb.filemanager.ad.AdManager;
 import com.jb.filemanager.alarmtask.ScheduleTaskHandler;
 import com.jb.filemanager.buyuser.BuyUserManager;
+import com.jb.filemanager.function.applock.manager.AppLockerCenter;
 import com.jb.filemanager.function.daemon.AssistantReceiver;
 import com.jb.filemanager.function.daemon.AssistantService;
 import com.jb.filemanager.function.daemon.DaemonReceiver;
@@ -219,7 +220,7 @@ public class TheApplication extends Application {
         AdTrashManager.getInstance(getAppContext());
         CleanManager.getInstance(getApplicationContext()).startJunkFileScanTask();
         //应用锁
-//        AppLockerCenter.getInstance();
+        AppLockerCenter.getInstance();
         //权限警报管理器准备工作
         PermissionAlarmManager.getInstance().toReady();
         //搜索管家启动

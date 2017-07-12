@@ -18,6 +18,8 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.about.AboutActivity;
+import com.jb.filemanager.function.applock.activity.AppLockPreActivity;
+import com.jb.filemanager.function.applock.manager.LockerFloatLayerManager;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.setting.SettingActivity;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
@@ -42,6 +44,7 @@ public class MainDrawer implements View.OnClickListener {
     public static final String FEED_BACK = "feed_back";
     private static final String ABOUT = "about";
     private static final String CLEAN_TRASH = "clean_trash";
+    private static final String APPLOCK = "app_lock";
     private ActionBarDrawerToggle mDrawerToggle;
     private QuickClickGuard mQuickClickGuard;
     private DrawerLayout mDrawerLayout;
@@ -132,6 +135,7 @@ public class MainDrawer implements View.OnClickListener {
     }
 
     private void initDrawerItems() {
+//<<<<<<< 771485e706d23dcbeab215255df64ac065e2f862
         TextView appLockerItem = (TextView) mActivity.findViewById(R.id.tv_drawer_app_locker);
         if (appLockerItem != null) {
             appLockerItem.getPaint().setAntiAlias(true);
@@ -266,7 +270,7 @@ public class MainDrawer implements View.OnClickListener {
         }
         switch (v.getId()){
             case R.id.tv_drawer_app_locker:
-                // TODO @wangzq
+                jumpToApplock();
                 break;
             case R.id.tv_drawer_smart_locker:
                 // TODO @wangzq
@@ -337,6 +341,17 @@ public class MainDrawer implements View.OnClickListener {
     private void jumpToSetting() {
         closeDrawerWithDelay(0);
         delayStartActivity(new Intent(mActivity, SettingActivity.class));
+    }
+
+    private void jumpToApplock() {
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
+        boolean isEnable = sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_ENABLE, false);
+        if (!isEnable) {
+            Intent i = new Intent(mActivity, AppLockPreActivity.class);
+            mActivity.startActivity(i);
+        } else {
+            LockerFloatLayerManager.getInstance().showFloatViewInSide();
+        }
     }
 
     /**

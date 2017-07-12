@@ -69,10 +69,9 @@ public class AppLockSettingActivity extends BaseActivity {
         mTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!mQuickClickGuard.isQuickClick(v.getId())) {
-//                    onBackPressed();
-//                }
-                LockerFloatLayerManager.getInstance().showFloatViewInSide();
+                if (!mQuickClickGuard.isQuickClick(v.getId())) {
+                    onBackPressed();
+                }
             }
         });
 

@@ -11,8 +11,8 @@ public class PsdInitSupport implements PsdInitContract.Support {
 
     @Override
     public void updatePasscode(String passcode, boolean isPattern) {
-//        AppLockerDataManager.getInstance().modifyLockerPassword(passcode, isPattern);
-//        AppLockerDataManager.getInstance().updatePassWord();
+        AppLockerDataManager.getInstance().modifyLockerPassword(passcode, true);
+        AppLockerDataManager.getInstance().updatePassWord();
     }
 
     @Override

@@ -45,7 +45,6 @@ public class PsdInitPresenter implements PsdInitContract.Presenter {
                 mView.showStepTopPatternTip(1);
             } else {
                 mView.showStepTopPatternTip(3);
-//                mView.dismissStepView();
                 mView.showProblemViewDismissPsd();
             }
         }

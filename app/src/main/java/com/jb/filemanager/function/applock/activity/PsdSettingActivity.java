@@ -296,6 +296,7 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
 
     @Override
     public void invisiableStep3() {
+        mStepFl[2].setVisibility(View.GONE);
         setQuestionLayerVisiable(false);
     }
 
@@ -367,8 +368,6 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
 
     @Override
     public void onBackPressed() {
-        if (mPresenter != null) {
-        }
         if (mPresenter != null) {
             mPresenter.dealBackPress();
         }

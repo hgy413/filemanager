@@ -200,6 +200,9 @@ public class FloatOuterAppLockerView extends FrameLayout {
             mPatternView.clearPattern();
             mPatternView.setDisplayMode(PatternView.DisplayMode.Correct);
         }
+        if (mFloatDialog != null) {
+            mFloatDialog.setVisibility(GONE);
+        }
     }
 
     /**
@@ -303,6 +306,19 @@ public class FloatOuterAppLockerView extends FrameLayout {
         if (mHandler != null) {
             mHandler.removeCallbacks(mDelayClearErrorWork);
         }
+    }
+
+    /**
+     * @return 返回是否需要自己处理 <b>true</b>代表需要自己处理 反之直接外部处理
+     * */
+    public boolean isHandleBackPressed() {
+        if (mFloatDialog != null) {
+            if (mFloatDialog.getVisibility() == VISIBLE) {
+                mFloatDialog.setVisibility(GONE);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

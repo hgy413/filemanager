@@ -13,7 +13,6 @@ import com.jb.filemanager.database.table.IgnoreListTable;
 import com.jb.filemanager.database.upgrade.DatabaseUpgrade;
 
 
-import com.jb.filemanager.database.table.AntiPeepTable;
 import com.jb.filemanager.database.table.LockerSceneItemTable;
 import com.jb.filemanager.database.table.LockerSceneTable;
 import com.jb.filemanager.database.table.LockerTable;
@@ -71,7 +70,6 @@ public class DatabaseHelper extends BaseDatabaseHelper {
             db.execSQL(LockerTable.CREATE_TABLE);
             db.execSQL(LockerSceneTable.CREATE_TABLE);
             db.execSQL(LockerSceneItemTable.CREATE_TABLE);
-            db.execSQL(AntiPeepTable.CREATE_TABLE);
 
             // 权限检测
             db.execSQL(AppPermissionsTable.CREATE_TABLE);

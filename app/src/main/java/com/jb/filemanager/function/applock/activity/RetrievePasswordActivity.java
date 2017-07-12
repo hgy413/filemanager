@@ -46,28 +46,15 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
      * 初始化View
      * */
     private void initView() {
-        mTitle = (TextView)findViewById(R.id.activity_title_word);
+        findViewById(android.R.id.content).setBackgroundColor(0xFF44D6C3);
+        mTitle = (TextView)findViewById(R.id.common_applock_bar_layout_title);
         mTitle.setText(R.string.applock_forget_psd_title);
-        mBack = findViewById(R.id.activity_title_icon);
-        mQuestion = (TextView) findViewById(R.id.activity_findback_psd_show);
+        mBack = findViewById(R.id.common_applock_bar_layout_back);
+        mQuestion = (TextView) findViewById(R.id.activity_findback_psd_question_show);
         mAnswer = (EditText) findViewById(R.id.activity_findback_psd_question_input);
-        mSure = (TextView) findViewById(R.id.activity_findback_psd_question_save);
-        initGradient();
+        mSure = (TextView) findViewById(R.id.activity_findback_psd_bottom_save);
         mPresenter = new RetrievePasswordPresenter(this, new RetrievePasswordSupport());
         mPresenter.start();
-    }
-
-    /**
-     * 初始化渐变色
-     * */
-    private void initGradient() {
-        View rootGradientBg = findViewById(R.id.activity_findback_psd_root_bg);
-        int startColor = 0xff0084ff;
-        int endColor = 0x3bd6f2;
-        GradientDrawable gradientDrawableLR = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{startColor, endColor});
-        gradientDrawableLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        gradientDrawableLR.setShape(GradientDrawable.RECTANGLE);
-        APIUtil.setBackground(rootGradientBg, gradientDrawableLR);
     }
 
     private void initListener() {
@@ -105,7 +92,6 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
     public void gotoResetPsd() {
         Intent i = new Intent(RetrievePasswordActivity.this, PsdSettingActivity.class);
         i.putExtra(PsdSettingActivity.PSD_SETTING_MODE, PsdSettingActivity.PSD_REST);
-//        i.putExtra(PsdSettingActivity.PSD_DEFAULT_TYPE_IS_PATTERN, AppLockerDataManager.getInstance().isPatternPsd());
         startActivity(i);
         finish();
     }

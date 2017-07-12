@@ -70,6 +70,7 @@ public class ListDialog implements View.OnClickListener {
             float itemHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, context.getResources().getDisplayMetrics());
             float itemWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 230, context.getResources().getDisplayMetrics());
             mContentView = new LinearLayout(context);
+            mContentView.setBackgroundResource(R.drawable.bg_popup_window);
             mContentView.setOrientation(LinearLayout.VERTICAL);
             if (mArrayRes != null) {
                 for (int i = 0; i < mArrayRes.length; i++) {

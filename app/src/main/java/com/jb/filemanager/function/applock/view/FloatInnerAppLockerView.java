@@ -3,34 +3,19 @@ package com.jb.filemanager.function.applock.view;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.IntDef;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.receiver.HomeWatcherReceiver;
-import com.jb.filemanager.util.AppUtils;
-import com.jb.filemanager.util.DrawUtils;
-import com.jb.filemanager.util.Logger;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -49,7 +34,7 @@ public class FloatInnerAppLockerView extends RelativeLayout {
     //设置按钮
     private ImageView mSetting;
     //对话框
-    private View mDialog;
+    private View mFloatDialog;
     //图案锁
     private PatternView mPatternView;
     private IFloatAppLockerViewEvtListener mIFloatAppLockerViewEvtListener;
@@ -72,7 +57,7 @@ public class FloatInnerAppLockerView extends RelativeLayout {
         mSetting.setImageResource(R.drawable.ic_applock_setting2);
         mPatternView = (PatternView) mContentRoot.findViewById(R.id.view_applock_inner_float_layout_patternview);
         mForget = (TextView) mContentRoot.findViewById(R.id.view_applock_inner_float_layout_forget_psd);
-        mDialog = mContentRoot.findViewById(R.id.view_applock_inner_float_layout_dialog);
+        mFloatDialog = mContentRoot.findViewById(R.id.view_applock_inner_float_layout_dialog);
         setBackgroundColor(0xFF44D6C3);
         initListener();
         mHomeKeyEventReceiver = new HomeWatcherReceiver();
@@ -109,13 +94,13 @@ public class FloatInnerAppLockerView extends RelativeLayout {
         mSetting.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDialog.setVisibility(VISIBLE);
+                mFloatDialog.setVisibility(VISIBLE);
             }
         });
-        mDialog.setOnClickListener(new OnClickListener() {
+        mFloatDialog.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDialog.setVisibility(GONE);
+                mFloatDialog.setVisibility(GONE);
             }
         });
 
@@ -196,6 +181,9 @@ public class FloatInnerAppLockerView extends RelativeLayout {
             mPatternView.clearPattern();
             mPatternView.setDisplayMode(PatternView.DisplayMode.Correct);
         }
+        if (mFloatDialog != null) {
+            mFloatDialog.setVisibility(GONE);
+        }
     }
 
     private final long DELAY_CLEAR_ERROR_TIME_LONG = 1000;
@@ -225,6 +213,19 @@ public class FloatInnerAppLockerView extends RelativeLayout {
         if (mHandler != null) {
             mHandler.removeCallbacks(mDelayClearErrorWork);
         }
+    }
+
+    /**
+     * @return 返回是否需要自己处理 <b>true</b>代表需要自己处理 反之直接外部处理
+     * */
+    public boolean isHandleBackPressed() {
+        if (mFloatDialog != null) {
+            if (mFloatDialog.getVisibility() == VISIBLE) {
+                mFloatDialog.setVisibility(GONE);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

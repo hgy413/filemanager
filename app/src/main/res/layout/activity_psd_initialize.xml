@@ -167,6 +167,8 @@
         android:gravity="left|center_vertical"
         android:hint="@string/applock_psd_answer_question_edit_hint"
         android:paddingLeft="10dp"
+        android:lines="1"
+        android:singleLine="true"
         android:textColor="#B2000000"
         android:textColorHint="#3F000000"
         android:visibility="gone"

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.applock.activity.AppLockActivity;
 import com.jb.filemanager.function.applock.activity.RetrievePasswordActivity;
 import com.jb.filemanager.function.applock.event.AppLockerKillAppEvent;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
@@ -126,9 +127,13 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
     public void onBackPress() {
         if (mFloatOuterAppLockerView != null && mFloatOuterAppLockerView.getParent() != null) {
             TheApplication.getGlobalEventBus().post(new AppLockerKillAppEvent(mCurrentPkgName));
-            mCustomWindowManager.removeView(mFloatOuterAppLockerView);
+            if (!mFloatOuterAppLockerView.isHandleBackPressed()) {
+                mCustomWindowManager.removeView(mFloatOuterAppLockerView);
+            }
         } else if (mFloatInnerAppLockerView != null && mFloatInnerAppLockerView.getParent() != null) {
-            mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+            if (!mFloatInnerAppLockerView.isHandleBackPressed()) {
+                mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+            }
         }
     }
 
@@ -160,6 +165,7 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
             if (!judgePasscode(cellList, numbers)) {
                 mFloatInnerAppLockerView.delayClearErrorPattern();
             } else {
+                AppLockActivity.gotoAppLock(TheApplication.getAppContext());
                 //当密码输入正确的时候 并且已经错过很多次
                 mCustomWindowManager.removeView(mFloatInnerAppLockerView);
                 mFloatInnerAppLockerView.resetPatternView();
@@ -171,9 +177,13 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
     public void onHomeClick() {
         if (mFloatOuterAppLockerView != null && mFloatOuterAppLockerView.getParent() != null) {
             TheApplication.getGlobalEventBus().post(new AppLockerKillAppEvent(mCurrentPkgName));
-            mCustomWindowManager.removeView(mFloatOuterAppLockerView);
+            if (!mFloatOuterAppLockerView.isHandleBackPressed()) {
+                mCustomWindowManager.removeView(mFloatOuterAppLockerView);
+            }
         } else if (mFloatInnerAppLockerView != null && mFloatInnerAppLockerView.getParent() != null) {
-            mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+            if (!mFloatInnerAppLockerView.isHandleBackPressed()) {
+                mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+            }
         }
     }
 
