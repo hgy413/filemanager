@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -536,7 +537,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     if (success) {
                         dialog.dismiss();
                     } else {
-                        // TODO 处理失败
+                        AppUtils.showToast(MainActivity.this, R.string.toast_rename_failed);
                     }
                 }
             }
@@ -582,7 +583,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     if (success) {
                         dialog.dismiss();
                     } else {
-                        // TODO 处理失败
+                        AppUtils.showToast(MainActivity.this, R.string.toast_create_folder_failed);
                     }
                 }
             }

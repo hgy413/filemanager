@@ -314,4 +314,8 @@
     <string name="dialog_delete_confirm_danger_tips">This behavior may cause a system or application crash!</string>
     <string name="dialog_delete_confirm_desc">Are you sure to delete the selected item(s)?</string>
 
+    <!-- Toast -->
+    <string name="toast_create_folder_failed">Create folder failed</string>
+    <string name="toast_rename_failed">Rename failed</string>
+
 </resources>
