@@ -1,66 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="#ffffff"
-    android:orientation="vertical"
-    tools:background="@color/colorAccent">
+    android:background="@color/transparent"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_dialog_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="File Rename"
-        android:textSize="18dp"/>
-
-    <TextView
-        android:id="@+id/tv_dialog_error_msg"
+        android:id="@+id/tv_rename_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:background="#ff0000"
-        android:gravity="center"
-        android:text="Duplicate file name has bean found"
-        android:visibility="visible"/>
+        android:layout_height="24dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="@string/dialog_rename_title"/>
+
+    <TextView
+        android:id="@+id/tv_rename_error_tips"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:background="#FF8181"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp"
+        android:visibility="gone"/>
 
     <EditText
-        android:id="@+id/et_dialog_content"
+        android:id="@+id/et_rename_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="Enter the file name"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_vertical"
+        android:hint="@string/dialog_rename_hint"
+        android:textColor="#000000"
+        android:textSize="14dp"
+        android:inputType="text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal">
 
-        <Space
+        <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/tv_dialog_cancel"
+            android:id="@+id/tv_rename_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Cancel"/>
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:minWidth="80dp"
+            android:gravity="center"
+            android:textColor="@color/dialog_cancel_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/common_cancel"/>
 
         <TextView
-            android:id="@+id/tv_dialog_ok"
+            android:id="@+id/tv_rename_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="ok"/>
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:minWidth="80dp"
+            android:gravity="center"
+            android:textColor="@color/dialog_confirm_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/common_ok"/>
+
     </LinearLayout>
 
 </LinearLayout>

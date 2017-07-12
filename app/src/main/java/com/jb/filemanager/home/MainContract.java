@@ -21,7 +21,7 @@ public class MainContract {
         void showBottomMoreOperatePopWindow(boolean multiSelected);
 
         void showDeleteConfirmDialog();
-        void showRenameDialog();
+        void showRenameDialog(File file);
         void showDetailSingleFile(File file);
         void showDetailMultiFile(ArrayList<File> files);
         void showNewFolderDialog();

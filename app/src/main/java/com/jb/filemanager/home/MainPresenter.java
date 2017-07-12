@@ -219,7 +219,7 @@ class MainPresenter implements MainContract.Presenter {
     public void onClickOperateRenameButton() {
         if (mView != null) {
             if (mSelectedFiles != null && mSelectedFiles.size() == 1) {
-                mView.showRenameDialog();
+                mView.showRenameDialog(mSelectedFiles.get(0));
             }
         }
     }

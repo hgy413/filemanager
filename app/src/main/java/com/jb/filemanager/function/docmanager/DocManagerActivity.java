@@ -335,7 +335,25 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void fileRename(List<DocChildBean> docList) {
         Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + " will be rename", Toast.LENGTH_SHORT).show();
-        DocRenameDialog docRenameDialog = new DocRenameDialog(this,new File(docList.get(0).mDocPath));
+        final File file = new File(docList.get(0).mDocPath);
+        if (file.exists()) {
+            DocRenameDialog docRenameDialog = new DocRenameDialog(this, file.isDirectory(), new DocRenameDialog.Listener() {
+                @SuppressWarnings("ResultOfMethodCallIgnored")
+                @Override
+                public void onConfirm(DocRenameDialog dialog, String newName) {
+                    if (file.exists()) {
+                        file.renameTo(new File(file.getParentFile().getAbsolutePath() + File.separator + newName));
+                    }
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onCancel(DocRenameDialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            docRenameDialog.show();
+        }
     }
 
     @Override

@@ -330,6 +330,13 @@
     <string name="dialog_paste_failed_desc">Unable to copy "%1$s"</string>
     <string name="dialog_paste_failed_desc2">Please Retry or Cancel</string>
 
+    <string name="dialog_rename_title">Rename</string>
+    <string name="dialog_rename_hint">Type a new name</string>
+    <string name="dialog_rename_file_error_input">The file name could not contain the char</string>
+    <string name="dialog_rename_folder_error_input">The folder name could not contain the char</string>
+    <string name="dialog_rename_file_empty_input">The file name could not be empty</string>
+    <string name="dialog_rename_folder_empty_input">The folder name could not be empty</string>
+
 
 
     <!-- Toast -->

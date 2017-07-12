@@ -35,6 +35,7 @@ import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.CreateNewFolderDialog;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
+import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
@@ -498,36 +499,25 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
-    public void showRenameDialog() {
-        View dialogView = View.inflate(this, R.layout.dialog_main_rename, null);
-        TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_rename_confirm);
-        TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_rename_cancel);
-        final EditText editText = (EditText) dialogView.findViewById(R.id.et_main_rename_input);
-
-        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        }); // 取消按钮点击事件
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPresenter != null) {
-                    boolean success = mPresenter.onClickConfirmRenameButton(editText.getText().toString());
-                    if (success) {
-                        dialog.dismiss();
-                    } else {
-                        AppUtils.showToast(MainActivity.this, R.string.toast_rename_failed);
+    public void showRenameDialog(final File file) {
+        if (file != null && file.exists()) {
+            DocRenameDialog docRenameDialog = new DocRenameDialog(this, file.isDirectory(), new DocRenameDialog.Listener() {
+                @SuppressWarnings("ResultOfMethodCallIgnored")
+                @Override
+                public void onConfirm(DocRenameDialog dialog, String newName) {
+                    if (file.exists()) {
+                        file.renameTo(new File(file.getParentFile().getAbsolutePath() + File.separator + newName));
                     }
+                    dialog.dismiss();
                 }
-            }
-        }); // 确定按钮点击事件
 
-        dialog.show();
+                @Override
+                public void onCancel(DocRenameDialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            docRenameDialog.show();
+        }
     }
 
     @Override

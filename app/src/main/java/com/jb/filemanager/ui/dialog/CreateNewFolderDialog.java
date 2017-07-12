@@ -52,7 +52,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
                                 mTvErrorTips.setText(R.string.dialog_create_folder_empty_input);
                             }
-                        } else if (!input.matches(FileUtil.FILE_PATH_REG)) {
+                        } else if (!input.matches(FileUtil.FOLDER_NAME_REG)) {
                             if (mTvTitle != null) {
                                 mTvTitle.setVisibility(View.GONE);
                             }
