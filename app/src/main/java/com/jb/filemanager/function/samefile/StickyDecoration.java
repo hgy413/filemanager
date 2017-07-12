@@ -5,13 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.graphics.Color;
-import android.view.ViewGroup;
+
 
 /**
  * Created by gavin
@@ -26,11 +25,10 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 
     private GroupListener mGroupListener;
 
-    //private int mGroupHeight = 80;  //悬浮栏高度
-    private boolean isAlignLeft = true; //是否靠左边
+    private int mGroupHeight = 80;  //悬浮栏高度
+    private int mGroupDevideHeight = 10;
     private Paint mGroutPaint;
-
-    private StickyDecoration(@NonNull GroupListener groupListener) {
+    private StickyDecoration(GroupListener groupListener) {
         this.mGroupListener = groupListener;
         //设置悬浮栏的画笔---mGroutPaint
         mGroutPaint = new Paint();
@@ -45,9 +43,18 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
         String groupId = getGroupName(pos);
         if (groupId == null) return;
         //只有是同一组的第一个才显示悬浮栏
-        if (pos == 0 || isFirstInGroup(pos)) {
+        if (pos == 0) {
             outRect.top = mGroupHeight;
+        } else if (isFirstInGroup(pos)) {
+            outRect.top = mGroupHeight;
+            outRect.top = mGroupHeight + mGroupDevideHeight;
         }
+    }
+
+    @Override
+    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        super.onDraw(c, parent, state);
+
     }
 
     @Override
@@ -77,24 +84,19 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
                     top = viewBottom;
                 }
             }
-            c.drawRect(left, top - mGroupHeight, right, top, mGroutPaint);
             //根据position获取View
             View groupView = getGroupView(position);
-            mGroupHeight = groupView.getHeight();
             if (groupView == null) return;
-            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(right, mGroupHeight);
-            groupView.setLayoutParams(layoutParams);
             groupView.setDrawingCacheEnabled(true);
             groupView.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-            //指定高度、宽度的groupView
+                    View.MeasureSpec.makeMeasureSpec(right, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(mGroupHeight, View.MeasureSpec.UNSPECIFIED));
             groupView.layout(0, 0, right, mGroupHeight);
+            //指定高度、宽度的groupView
             groupView.buildDrawingCache();
             l("groupView.getWidth() after: " + groupView.getWidth());
             Bitmap bitmap = groupView.getDrawingCache();
-            int marginLeft = isAlignLeft ? 0 : right - groupView.getMeasuredWidth();
-            c.drawBitmap(bitmap, left + marginLeft, top - mGroupHeight, null);
+            c.drawBitmap(bitmap, left, top - mGroupHeight, null);
         }
     }
 
@@ -142,14 +144,15 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 
     public static class Builder {
         StickyDecoration mDecoration;
-
+        static GroupListener mGroupListener;
         private Builder(GroupListener listener) {
             mDecoration = new StickyDecoration(listener);
         }
 
-//        public static Builder init(GroupListener listener) {
-//            return new Builder(listener);
-//        }
+        public static Builder init(GroupListener listener) {
+            return new Builder(listener);
+
+        }
 
         /**
          * 设置Group高度
@@ -161,26 +164,8 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
             return this;
         }
 
-
-        /**
-         * 设置Group背景
-         *
-         * @param background 背景色
-         */
-        public Builder setGroupBackground(@ColorInt int background) {
-            mDecoration.mGroupBackground = background;
-            mDecoration.mGroutPaint.setColor(mDecoration.mGroupBackground);
-            return this;
-        }
-
-        /**
-         * 是否靠左边
-         * true 靠左边（默认）、false 靠右边
-         * @param b b
-         * @return  this
-         */
-        public Builder isAlignLeft(boolean b){
-            mDecoration.isAlignLeft = b;
+        public Builder setGroupDevideHeight(int devideHeight) {
+            mDecoration.mGroupDevideHeight = devideHeight;
             return this;
         }
 
@@ -200,9 +185,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
      */
 
     public interface GroupListener {
-
         String getGroupName(int position);
-
         View getGroupView(int position);
     }
 }
