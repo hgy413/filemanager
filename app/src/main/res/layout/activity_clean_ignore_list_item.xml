@@ -18,6 +18,14 @@
         android:layout_marginLeft="16dp"
         tools:src="@color/colorPrimary"
         android:contentDescription="@null"/>
+    <ImageView
+        android:id="@+id/clean_ignore_list_item_icon_small"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        tools:src ="@color/colorPrimaryDark"
+        android:layout_alignBottom="@id/clean_ignore_list_item_icon"
+        android:layout_alignRight="@id/clean_ignore_list_item_icon"
+        android:contentDescription="@null"/>
 
     <TextView
         android:id="@+id/clean_ignore_list_item_title"

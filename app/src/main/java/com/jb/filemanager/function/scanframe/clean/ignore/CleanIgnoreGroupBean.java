@@ -14,6 +14,7 @@ import java.util.List;
 public class CleanIgnoreGroupBean extends BaseGroupsDataBean {
     /** 类别 */
     private GroupType mGroupType;
+    public boolean mIsGroupExpanded;//组是否展开
 
     public CleanIgnoreGroupBean(List<? extends CleanIgnoreBean> children, GroupType type) {
         super(children);

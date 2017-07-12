@@ -18,6 +18,7 @@ import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreCachePathBe
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreGroupBean;
 import com.jb.filemanager.function.scanframe.clean.ignore.CleanIgnoreResidueBean;
 import com.jb.filemanager.util.AppUtils;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 
 public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
+    private static final String TAG = TrashIgnoreAdapter.class.getSimpleName();
     private CleanManager mCleanManager;
     private Context mContext;
 
@@ -37,6 +39,7 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
      */
     private class ViewHolder {
         private ImageView mIcon;
+        private ImageView mIconSmall;
         private TextView mTitle;
         private ImageView mRemove;
     }
@@ -68,6 +71,7 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
         // 2. 初始化界面
         CleanIgnoreGroupBean groupBean = getGroup(groupPosition);
         holder.mTitle.setText(groupBean.getGroupType().getNameId());
+        holder.mIcon.setRotation(groupBean.mIsGroupExpanded ? 180 : 0);
         return convertView;
     }
 
@@ -87,6 +91,7 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
                     .findViewById(R.id.clean_ignore_list_item_icon);
             holder.mTitle = (TextView) convertView
                     .findViewById(R.id.clean_ignore_list_item_title);
+            holder.mIconSmall = (ImageView) convertView.findViewById(R.id.clean_ignore_list_item_icon_small);
             holder.mRemove = (ImageView) convertView.findViewById(R.id.clean_ignore_list_item_remove);
             convertView.setTag(R.layout.activity_clean_ignore_list_item, holder);
         }
@@ -104,18 +109,22 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
             } else {
                 holder.mTitle.setText(ignoreBean.getTitle());
             }
-
+            holder.mIconSmall.setVisibility(View.GONE);
         } else if (ignoreBean instanceof CleanIgnoreCachePathBean) {
             CleanIgnoreCachePathBean cachePathBean = (CleanIgnoreCachePathBean) ignoreBean;
+            IconLoader.getInstance().displayImage(cachePathBean.getPackageName(), holder.mIconSmall);
             holder.mIcon.setImageResource(R.drawable.subitem_cache);
             holder.mTitle.setText(cachePathBean.getTitle());
+            holder.mIconSmall.setVisibility(View.VISIBLE);
 //            String appName = AppUtils.getAppName(mContext, cachePathBean.getPackageName());
         } else if (ignoreBean instanceof CleanIgnoreResidueBean) {
             holder.mIcon.setImageResource(groupBean.getGroupType().getChildIconId());
             holder.mTitle.setText(ignoreBean.getTitle());
+            holder.mIconSmall.setVisibility(View.GONE);
         } else if (ignoreBean instanceof CleanIgnoreAdBean) {
             holder.mIcon.setImageResource(groupBean.getGroupType().getChildIconId());
             holder.mTitle.setText(ignoreBean.getTitle());
+            holder.mIconSmall.setVisibility(View.GONE);
         }
         holder.mRemove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +149,24 @@ public class TrashIgnoreAdapter extends AbsAdapter<CleanIgnoreGroupBean> {
             }
         });
         return convertView;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+        Logger.d(TAG, "列表展开");
+        CleanIgnoreGroupBean cleanIgnoreGroupBean = mGroups.get(groupPosition);
+        cleanIgnoreGroupBean.mIsGroupExpanded = true;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        Logger.d(TAG, "列表收起");
+        CleanIgnoreGroupBean cleanIgnoreGroupBean = mGroups.get(groupPosition);
+        cleanIgnoreGroupBean.mIsGroupExpanded = false;
+        notifyDataSetChanged();
     }
 
     private RemoveListener mListener;

@@ -49,7 +49,7 @@ import static com.jb.filemanager.function.scanframe.bean.common.itemcommon.Group
 import static com.jb.filemanager.util.file.FileSizeFormatter.formatFileSize;
 
 /**
- * Desc:
+ * Desc: 不包含第三级列表的adapter
  * Author lqf
  * Email: liqf@m15.cn
  * Date: 2017/7/10 15:16
