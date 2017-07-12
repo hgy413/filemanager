@@ -1,174 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_applock_setting_root_bg"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#44D6C3"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
 
-    <include layout="@layout/layout_common_title" />
+    <include layout="@layout/common_applock_bar_layout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f2f2f2"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="16dp"
-            android:gravity="center|left"
-            android:text="@string/app_lock_setting_intruder"
-            android:textColor="#999999"
-            android:textSize="14dp" />
+            android:id="@+id/fragment_app_lock_lock_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:gravity="center_horizontal"
+            android:text="@string/applock_psd_set_lock_options"
+            android:textColor="#44D6C3"
+            android:textSize="@dimen/h3_16"/>
 
         <LinearLayout
-            android:id="@+id/activity_applock_setting_intruder_switcher"
+            android:id="@+id/fragment_app_lock_lock_options_layout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="#ffffff"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/fragment_app_lock_lock_options_show"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="@string/app_lock_setting_reveal_intruder"
-                android:textColor="#333333"
-                android:textSize="14dp" />
+                android:textColor="#B2000000"
+                android:textSize="@dimen/h4_14"
+                tools:text="applock"/>
 
             <ImageView
-                android:id="@+id/activity_applock_setting_intruder_switcher_btu"
-                android:layout_width="40dp"
+                android:id="@+id/fragment_app_lock_lock_options_arrow"
+                android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_about_logo" />
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrow_up"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/activity_applock_setting_intruder_wrongtimes"
+        <View
+            android:id="@+id/fragment_app_lock_set_psd_bottom_line3"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#ffffff"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="@string/app_lock_setting_intruder_wrong_times"
-                android:textColor="#333333"
-                android:textSize="14dp" />
-
-            <TextView
-                android:id="@+id/activity_applock_setting_intruder_wrongtimes_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="20dp"
-                android:text="2"
-                android:textSize="14dp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/activity_applock_setting_passcode_title"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="16dp"
-            android:gravity="center|left"
-            android:text="@string/app_lock_setting_passcode"
-            android:textColor="#999999"
-            android:textSize="14dp" />
-
-        <LinearLayout
-            android:id="@+id/activity_applock_setting_passcode_change_psd"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="#ffffff"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="@string/app_lock_setting_passcode_change_passcode"
-                    android:textColor="#333333"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/activity_applock_setting_passcode_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_marginTop="4dp"
-                    tools:text="fdafafda"
-                    android:textColor="#666666"
-                    android:textSize="12dp" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/activity_applock_setting_passcode_change_psd_arrow"
-                android:layout_width="8dp"
-                android:layout_height="14dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="16dp"
-                android:rotation="180"
-                android:src="@drawable/ic_about_logo"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/activity_applock_setting_passcode_change_issues"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#ffffff"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="@string/app_lock_setting_passcode_change_security_question"
-                android:textColor="#333333"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/activity_applock_setting_passcode_change_issues_arrow"
-                android:layout_width="8dp"
-                android:layout_height="14dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="16dp"
-                android:rotation="180"
-                android:src="@drawable/ic_about_logo"
-                tools:ignore="ContentDescription" />
-        </LinearLayout>
-
+            android:layout_height="1dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="#E7E9F3"/>
     </LinearLayout>
-
 </LinearLayout>

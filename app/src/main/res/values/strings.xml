@@ -139,9 +139,10 @@
     <string name="trash">trash</string>
     <!--应用锁-->
     <string name="activity_applock_title">App lock</string>
-    <string name="applock_psd_set_step_1">Place set up a psssword</string>
-    <string name="applock_psd_set_step_2">Place re-enter your psssword</string>
-    <string name="applock_psd_set_step_3">Psssword protection</string>
+    <string name="applock_psd_set_step_1">Please set up a password</string>
+    <string name="applock_psd_input_password">Please input password</string>
+    <string name="applock_psd_set_step_2">Please re-enter your password</string>
+    <string name="applock_psd_set_step_3">Password protection</string>
     <string name="applock_psd_answer_question_edit_hint">Less than 15 words</string>
     <string name="applock_psd_set_lock_options">Lock options</string>
     <string-array name="pupup_window_lock_options">
@@ -163,12 +164,10 @@
     <string name="set_graphic_password_message_draw">Setting the unlock pattern of app(s)</string>
     <string name="set_graphic_password_message_too_short">Connect at least 4 dots.</string>
     <string name="set_graphic_password_message_redraw">Drawing the pattern again to confirm it</string>
-    <string name="set_number_password_message_redraw">Inputing the pincode again to confirm it</string>
     <string name="set_graphic_password_message_wrong">Error, try again!</string>
     <string name="set_graphic_password_message_set_question">if you forget the password you can be reset it by answering insecure question</string>
     <string name="set_graphic_password_message_edit_hint">Enter the answer</string>
     <string name="set_graphic_password_answer_edit_short_tip">Please enter the answer</string>
-    <string name="app_lock_setting_reveal_intruder_tip">Take a photo of someone entering wrong code</string>
     <string-array name="pupup_window_reset_psd_questions">
         <item>My Favorite Sport?</item>
         <item>My Birthday?</item>
@@ -176,32 +175,18 @@
     <!-- 应用锁设置页 -->
     <string name="app_lock_setting_title">AppLock Setting</string>
     <string name="app_lock_setting_passcode">Passcode</string>
-    <string name="app_lock_setting_intruder">Intruders</string>
-    <string name="app_lock_setting_reveal_intruder">Reveal intruders</string>
-    <string name="app_lock_setting_intruder_wrong_times">Wrong password allows</string>
     <string name="app_lock_setting_passcode_change_passcode">Change Passcode</string>
     <string name="app_lock_setting_passcode_change_security_question">Change security issues</string>
-    <string name="app_lock_setting_passcode_type_number">Pincode</string>
-    <string name="app_lock_setting_passcode_type_pattern">Pattern passcode</string>
     <string name="app_lock_app_lock_tip">Locked %1$s</string>
     <string name="app_lock_app_unlock_tip">Unlocked %1$s</string>
-    <string name="app_lock_app_all_lock_tip">Locked all apps</string>
-    <string name="app_lock_app_all_unlock_tip">All locks have been released</string>
     <string name="applock_pre_header_last_step_text1">On Android 5.0+,AppLock feature is not available by default</string>
     <string name="applock_pre_header_last_step_text2">You need to read and agree to the permission to enable this feature</string>
-    <string name="app_lock_anti_peep_img_app_info">&lt;font color="#FFFFFF">Catch you! Unlock my &lt;/font>&lt;font color="#ff0000">%1$s&lt;/font></string>
     <string name="applock_intruder_guide_btu_tip">Check</string>
-    <string name="applock_float_view_forget_psd">Forget?</string>
+    <string name="applock_float_view_forget_psd">Forget Password</string>
+    <string name="applock_float_view_dont_lock_this_app">Don\'t Lock This App</string>
     <string name="applock_forget_psd_title">Retrieve password</string>
     <string name="applock_common_finish">Finish</string>
     <string name="applock_retrieve_psd_error_tip">The answer is wrong. Please re-enter.</string>
-    <string name="applock_back_tip_dialog_tip_1">Hold on a second</string>
-    <string name="applock_back_tip_dialog_tip_2">With features activated.Any snoopers who look for your apps can be captured.</string>
-    <string name="applock_back_tip_dialog_tip_3">Go Activate!</string>
-    <string name="applock_back_tip_dialog_tip_4">Exit</string>
-    <string name="dialog_completely_delete">completely delete</string>
-    <string name="dialog_delete_photo">Are you sure you delete the photo(s) ?</string>
-    <string name="applock_wrong_times_txt">%1$d times</string>
 
 
     <string name="pcs">pcs</string>

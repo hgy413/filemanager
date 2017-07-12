@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:background="@color/colorAccent">
+
+    <include
+        android:id="@+id/view_applock_inner_float_layout_title"
+        layout="@layout/common_applock_bar_layout"/>
+
+    <ImageView
+        android:id="@+id/view_applock_inner_float_layout_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:layout_below="@id/view_applock_inner_float_layout_title"
+        android:src="@drawable/app_lock_lock_on"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/view_applock_inner_float_layout_title"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/view_applock_inner_float_layout_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:text="@string/applock_psd_input_password"
+            android:textColor="#44D6C3"
+            android:textSize="@dimen/h3_16"/>
+
+        <com.jb.filemanager.function.applock.view.PatternView
+            android:id="@+id/view_applock_inner_float_layout_patternview"
+            android:layout_width="282dp"
+            android:layout_height="282dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            app:pl_aspect="square"
+            app:pl_dot_line_width="3dp"
+            app:pl_dot_size="12dp"
+            app:pl_dot_size_activated="20dp"
+            app:pl_errorColor="#FF7D7D"
+            app:pl_regularColor="#D8D8D8"
+            app:pl_successColor="#52D9C8"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/view_applock_inner_float_layout_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_20"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bg_popup_window"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/view_applock_inner_float_layout_forget_psd"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/common_item_selector"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="16dp"
+                android:text="@string/applock_float_view_forget_psd"
+                android:textColor="@color/black_70"
+                android:textSize="@dimen/h4_14"/>
+        </LinearLayout>
+    </FrameLayout>
+</merge>

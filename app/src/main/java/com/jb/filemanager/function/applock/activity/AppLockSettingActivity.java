@@ -1,24 +1,18 @@
 package com.jb.filemanager.function.applock.activity;
 
-import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
-import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.applock.dialog.ListDialog;
-import com.jb.filemanager.function.applock.dialog.WrongTimesSettingDialog;
+import com.jb.filemanager.function.applock.manager.LockerFloatLayerManager;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
-import com.jb.filemanager.manager.spm.IPreferencesIds;
-import com.jb.filemanager.manager.spm.SharedPreferencesManager;
-import com.jb.filemanager.util.APIUtil;
 
 /**
  * Created by nieyh on 2017/1/4. <br/>
@@ -40,7 +34,7 @@ public class AppLockSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_applock_setting_tmp);
+        setContentView(R.layout.activity_applock_setting);
         initView();
         initListener();
     }
@@ -75,9 +69,10 @@ public class AppLockSettingActivity extends BaseActivity {
         mTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mQuickClickGuard.isQuickClick(v.getId())) {
-                    onBackPressed();
-                }
+//                if (!mQuickClickGuard.isQuickClick(v.getId())) {
+//                    onBackPressed();
+//                }
+                LockerFloatLayerManager.getInstance().showFloatViewInSide();
             }
         });
 
