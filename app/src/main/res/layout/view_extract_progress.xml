@@ -1,41 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="300dp"
-              android:background="#33000000"
-              android:gravity="center_vertical"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#33000000">
 
-    <TextView
-        android:id="@+id/view_extract_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/holo_blue_bright"
-        android:textSize="16dp"/>
+    <RelativeLayout
+        android:layout_width="320dp"
+        android:layout_height="142dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/white_2_dp_corner_bg">
 
-    <TextView
-        android:id="@+id/view_extract_path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="@android:color/holo_blue_bright"
-        android:textSize="16dp"/>
+        <TextView
+            android:id="@+id/view_extract_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="21dp"
+            android:text="Extracting..."
+            android:textColor="@android:color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/view_extract_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/common_cancel"
-        android:textColor="@android:color/holo_blue_bright"
-        android:textSize="16dp"/>
+        <ProgressBar
+            android:id="@+id/extract_dialog_progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="69dp"
+            android:indeterminate="false"
+            android:indeterminateDrawable="@drawable/extract_noti_progress_bg"
+            android:max="100"
+            android:progressDrawable="@drawable/extract_noti_progress_bg"/>
 
-    <TextView
-        android:id="@+id/view_extract_backgroud_handle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="后台处理"
-        android:textColor="@android:color/holo_blue_bright"
-        android:textSize="16dp"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/view_extract_background_handle"
+            android:layout_width="192dp"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Extract in background"
+            android:textColor="#39bdac"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/view_extract_cancel"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="200dp"
+            android:gravity="center"
+            android:text="@string/common_cancel"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+</RelativeLayout>

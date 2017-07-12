@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
@@ -40,6 +40,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     private static final long FLUSH_UI_INTERVAL_TIME = 380L;
     private static ExtractManager sInstance;
     private Notification mNotification;
+    private ProgressBar mDialogProgressBar;
 
     private ExtractManager() {
         mWindowManager = (WindowManager) TheApplication.getAppContext().getSystemService(Context.WINDOW_SERVICE);
@@ -58,10 +59,8 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     private boolean mIsExtracting = false;
     private boolean mIsProgressDialogAttached = false;
-    //    private String mCurrentExtractingFile = "";
     private float mPercent;
     private View mProgressDialogView = null;
-    //    private TextView mProgressViewPath;
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mParams;
     private ExtractFilesTask mExtractFilesTask = null;
@@ -100,7 +99,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
      */
     private void updateDialogContent() {
         if (!mIsProgressDialogAttached) return;// 未显示时不更新Dialog的TextView
-//        mProgressViewPath.setText(mCurrentExtractingFile);
+        mDialogProgressBar.setProgress((int) (mPercent * 100));
     }
 
     /**
@@ -111,7 +110,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
             if (mParams == null) {
                 mParams = new WindowManager.LayoutParams();
                 mParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                mParams.height = WindowManager.LayoutParams.MATCH_PARENT;
                 mParams.format = PixelFormat.RGBA_8888;
 
                 mParams.flags = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -123,12 +122,10 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
             if (mProgressDialogView == null) {
                 mProgressDialogView = View.inflate(TheApplication.getAppContext(), R.layout.view_extract_progress, null);
                 mProgressDialogView.addOnAttachStateChangeListener(this);
-                TextView progressViewTitle = (TextView) mProgressDialogView.findViewById(R.id.view_extract_title);
-                progressViewTitle.setText("解压中....");
-//                mProgressViewPath = (TextView) mProgressDialogView.findViewById(R.id.view_extract_path);
+                mDialogProgressBar = (ProgressBar) mProgressDialogView.findViewById(R.id.extract_dialog_progress);
                 View progressCancel = mProgressDialogView.findViewById(R.id.view_extract_cancel);
                 progressCancel.setOnClickListener(this);
-                View progressBackground = mProgressDialogView.findViewById(R.id.view_extract_backgroud_handle);
+                View progressBackground = mProgressDialogView.findViewById(R.id.view_extract_background_handle);
                 progressBackground.setOnClickListener(this);
             }
             try {
@@ -165,7 +162,6 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
         showMessage("开始解压");
         mIsExtracting = true;
         addProgressDialogToWindow();
-//        mCurrentExtractingFile = "loading...";
         mPercent = 0;
         updateNotificationContent();
         updateDialogContent();
@@ -173,7 +169,6 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     @Override
     public void onExtractingFile(float percent) {
-//        mCurrentExtractingFile = filePath; // 备用
         mPercent = percent;
         if (System.currentTimeMillis() - lastUpdateUiTime > FLUSH_UI_INTERVAL_TIME) {
             lastUpdateUiTime = System.currentTimeMillis();
@@ -240,7 +235,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 removeProgressDialogFromWindow();
                 cancelExtractNotification();
                 break;
-            case R.id.view_extract_backgroud_handle:
+            case R.id.view_extract_background_handle:
                 hideProgressDialogFromWindow();
                 break;
         }
