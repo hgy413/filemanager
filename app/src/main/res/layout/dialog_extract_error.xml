@@ -11,7 +11,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="21dp"
-        android:text="Extract Failed"
+        android:text="@string/extract_failed"
         android:textColor="#ff8181"
         android:textSize="20dp"
         android:textStyle="bold"/>
@@ -25,7 +25,6 @@
         android:layout_marginRight="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="69dp"
-        android:text="Unable to extract xxx"
         android:textColor="@color/black_70"
         android:textSize="16dp"/>
 
@@ -37,7 +36,7 @@
         android:layout_marginRight="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="96dp"
-        android:text="Please Retry or Cancel"
+        android:text="@string/please_retry_or_cancel"
         android:textColor="@color/black_70"
         android:textSize="16dp"/>
 
@@ -53,7 +52,7 @@
         android:layout_marginRight="8dp"
         android:gravity="center"
         android:text="@string/common_ok"
-        android:textColor="@color/black_70"
+        android:textColor="@color/tv_back_black_text_selector"
         android:textSize="16dp"
         android:textStyle="bold"/>
 </RelativeLayout>

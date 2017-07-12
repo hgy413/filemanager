@@ -345,4 +345,17 @@
 
     <string name="see"><u><![CDATA[See>>]]></u></string>
     <string name="zip">Zip</string>
+    <string name="please_retry_or_cancel">Please Retry or Cancel</string>
+    <string name="extract_failed">Extract Failed</string>
+    <string name="unable_to_extract">Unable to extract \"%1$s\"</string>
+    <string name="password_required">Password Required</string>
+    <string name="invalid_password">Invalid Password</string>
+    <string name="enter_password_to_access">This archive is encrypted.Enter password to access its content.</string>
+    <string name="enter_password">Enter password</string>
+    <string name="show_password">Show password</string>
+    <string name="get_file_encrypted_state">Loading File Encrypt State</string>
+    <string name="extract">Extract</string>
+    <string name="view">View</string>
+    <string name="extracting">Extracting...</string>
+    <string name="extract_in_background">Extract in background</string>
 </resources>

@@ -33,7 +33,7 @@ public class ExtractErrorDialog extends BaseDialog implements View.OnClickListen
         setSize(DrawUtils.dip2px(320), DrawUtils.dip2px(182));
 
         TextView tvFileName = (TextView) rootView.findViewById(R.id.dialog_extract_error_file_path);
-        tvFileName.setText("Unable to extract " + mFileName);
+        tvFileName.setText(mContext.getString(R.string.unable_to_extract, mFileName));
         View okBtn = rootView.findViewById(R.id.dialog_extract_error_ok_btn);
         okBtn.setOnClickListener(this);
     }

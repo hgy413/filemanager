@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_cancel">取消</string>
+    <string name="common_ok">好</string>
+
     <string name="clean_storage">Clean Storage</string>
-    <string name="see"><![CDATA[See>>]]></string>
-    <string name="zip">Zip</string>
+    <string name="see"><![CDATA[查看>>]]></string>
+    <string name="zip">压缩包</string>
+    <string name="please_retry_or_cancel">请重试或取消</string>
+    <string name="extract_failed">解压失败</string>
+    <string name="unable_to_extract">不能解压 \"%1$s\"</string>
+    <string name="password_required">需要密码</string>
+    <string name="invalid_password">不合法密码</string>
+    <string name="enter_password_to_access">这个文件已加密,请输入密码来查看内容</string>
+    <string name="enter_password">输入密码</string>
+    <string name="show_password">显示密码</string>
+    <string name="get_file_encrypted_state">获取文件加密状态</string>
+    <string name="extract">解压</string>
+    <string name="view">查看</string>
+    <string name="extracting">解压中...</string>
+    <string name="extract_in_background">后台运行</string>
 </resources>

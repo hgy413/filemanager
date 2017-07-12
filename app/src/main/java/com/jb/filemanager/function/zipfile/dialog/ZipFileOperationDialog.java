@@ -40,8 +40,6 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
     private Context mContext;
     private ZipFileItemBean mFile;
     private ProgressDialog mProgressDialog;
-//    private ExtractPackFileTask mExtractPackFileTask;
-    private ExtractFileDialog mExtractFileDialog;
 
     public ZipFileOperationDialog(Activity act, ZipFileItemBean fileItem) {
         super(act, true);
@@ -127,7 +125,7 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
             public void run() {
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     dismissProgressDialog();
-                    Toast.makeText(mContext, "文件错误 error_code=" + errorCode, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "File Error. error_code=" + errorCode, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -237,65 +235,12 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
 
     private void doExtractPackFile(String password) {
         ExtractManager.getInstance().extractPackFile(mFile.getFile().getPath(), password);
-//        mExtractPackFileTask = new ExtractPackFileTask();
-//        mExtractPackFileTask.setListener(new ExtractingFilesListener() {
-//            @Override
-//            public void onPreExtractFiles() {
-//                updateExtractFileDialog("开始解压缩文件");
-//            }
-//
-//            @Override
-//            public void onExtractingFile(String filePath) {
-//                updateExtractFileDialog(filePath);
-//            }
-//
-//            @Override
-//            public void onPostExtractFiles() {
-//                mExtractFileDialog.dismiss();
-//                Toast.makeText(mActivity, "解压缩完成", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelExtractFiles() {
-//                mExtractFileDialog.dismiss();
-//                Toast.makeText(mActivity, "取消解压缩", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onExtractError() {
-//                mExtractFileDialog.dismiss();
-//                Toast.makeText(mActivity, "解压缩失败singlePack", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        mExtractPackFileTask.execute(mFile.getFile().getPath(), password);
     }
-
-//    /**
-//     * 更新正在解压缩文件的弹窗
-//     *
-//     * @param path path
-//     */
-//    private void updateExtractFileDialog(String path) {
-//        if (mExtractFileDialog == null) {
-//            mExtractFileDialog = new ExtractFileDialog(mActivity);
-//            mExtractFileDialog.setCanceledOnTouchOutside(false);
-//            mExtractFileDialog.setOnCancelListener(new OnCancelListener() {
-//                @Override
-//                public void onCancel(DialogInterface dialog) {
-//                    mExtractPackFileTask.cancel(true);
-//                }
-//            });
-//        }
-//        mExtractFileDialog.updatePath(path);
-//        if (!mExtractFileDialog.isShowing()) {
-//            mExtractFileDialog.show();
-//        }
-//    }
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(mActivity);
-            mProgressDialog.setTitle("获取文件加密状态");
+            mProgressDialog.setTitle(mContext.getString(R.string.get_file_encrypted_state));
             mProgressDialog.setCanceledOnTouchOutside(false);
         }
         mProgressDialog.show();
