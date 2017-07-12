@@ -141,6 +141,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
          * Item的选择框
          */
         private ItemCheckBox mCheckBox;
+        private View mTopShader;
     }
 
     //************************************************************** 一级 ***************************************************************//
@@ -178,6 +179,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                     .setImageSource(R.drawable.select_none,
                             R.drawable.select_multi,
                             R.drawable.select_all);
+            holder.mTopShader = convertView.findViewById(R.id.v_group_divider_line);
             convertView.setTag(R.layout.item_clean_trash_group, holder);
         }
         // 2. 初始化界面
@@ -227,6 +229,14 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 }
             }
         });
+
+        // top shader
+        int aboveIndex = groupPosition;
+        if (aboveIndex >= 0 && aboveIndex < groupExpand.size()) {
+            holder.mTopShader.setVisibility(groupExpand.get(aboveIndex) ? View.VISIBLE : View.INVISIBLE);
+        } else {
+            holder.mTopShader.setVisibility(View.INVISIBLE);
+        }
         return convertView;
     }
 
