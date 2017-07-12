@@ -22,6 +22,7 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.DensityUtil;
@@ -44,6 +45,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
     private RecyclerView mRvMuscicList;
+    private FloatingGroupExpandableListView mElvFilelist;
     private GroupList<String, FileInfo> mMusicDataArrayMap;
     private RecyclerListAdapter mMusicListAdapter;
     private BottomOperateBar mBottomOperateContainer;
@@ -80,6 +82,8 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 back.setText("Transfer unknow type");
         }
         back.setOnClickListener(this);
+
+        mElvFilelist = (FloatingGroupExpandableListView) findViewById(R.id.elv_same_file_list);
 
         mRvMuscicList = (RecyclerView) findViewById(R.id.elv_music);
         int height = 40;

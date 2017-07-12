@@ -25,6 +25,17 @@
             >
 
         </android.support.v7.widget.RecyclerView>
+        <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
+            android:id="@+id/elv_same_file_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:divider="@null"
+            android:groupIndicator="@null"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none">
+
+        </com.jb.filemanager.ui.widget.FloatingGroupExpandableListView>
 
         <com.jb.filemanager.ui.widget.BottomOperateBar
             android:id="@+id/bottom_operate_bar_container"
