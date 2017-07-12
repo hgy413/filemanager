@@ -22,18 +22,18 @@ public class DuplicateFileDialog extends FMBaseDialog {
     public DuplicateFileDialog(Activity act, String duplicateFilePath, boolean isSingle, final Listener listener) {
         super(act, true);
 
-        View dialogView = View.inflate(act, R.layout.dialog_duplicate_file, null);
-        TextView title = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_title);
+        View dialogView = View.inflate(act, R.layout.dialog_duplicate_file_paste, null);
+        TextView title = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_paste_title);
         if (title != null) {
             title.getPaint().setAntiAlias(true);
         }
 
-        TextView desc = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_desc);
+        TextView desc = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_paste_desc);
         if (desc != null) {
             desc.getPaint().setAntiAlias(true);
         }
 
-        TextView filePath = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_src);
+        TextView filePath = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_paste_src);
         if (filePath != null) {
             filePath.getPaint().setAntiAlias(true);
             if (!TextUtils.isEmpty(duplicateFilePath)) {
@@ -50,7 +50,7 @@ public class DuplicateFileDialog extends FMBaseDialog {
             }
         }
 
-        mTvApplyToAll = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_apply_to_all);
+        mTvApplyToAll = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_paste_apply_to_all);
         if (mTvApplyToAll != null) {
             mTvApplyToAll.getPaint().setAntiAlias(true);
             if (isSingle) {
@@ -67,7 +67,7 @@ public class DuplicateFileDialog extends FMBaseDialog {
             });
         }
 
-        TextView ok = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_confirm);
+        TextView ok = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_paste_confirm);
         if (ok != null) {
             ok.getPaint().setAntiAlias(true);
             ok.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class DuplicateFileDialog extends FMBaseDialog {
             }); // 确定按钮点击事件
         }
 
-        TextView cancel = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_cancel);
+        TextView cancel = (TextView) dialogView.findViewById(R.id.tv_duplicate_file_paste_cancel);
         if (cancel != null) {
             cancel.getPaint().setAntiAlias(true);
             cancel.setOnClickListener(new View.OnClickListener() {

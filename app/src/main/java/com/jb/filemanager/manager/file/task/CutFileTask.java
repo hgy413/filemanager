@@ -74,6 +74,11 @@ public class CutFileTask {
                             }
                         }
 
+                        if (mIsStop) {
+                            Logger.i(LOG_TAG, "停止");
+                            break;
+                        }
+
                         File test = new File(mDest + File.separator + file.getName());
                         if (test.exists() && ((test.isDirectory() && file.isDirectory()) || ((test.isFile() && file.isFile())))) {
                             Logger.i(LOG_TAG, "发现重名文件:" + file.getAbsolutePath());
@@ -97,11 +102,6 @@ public class CutFileTask {
                             } else {
                                 Logger.i(LOG_TAG, "应用之前的选择:" + file.getAbsolutePath());
                             }
-                        }
-
-                        if (mIsStop) {
-                            Logger.i(LOG_TAG, "停止");
-                            break;
                         }
 
                         if (!mIsSkip) {

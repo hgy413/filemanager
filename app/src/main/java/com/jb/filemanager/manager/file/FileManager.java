@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.duplicate.DuplicateFilesActivity;
+import com.jb.filemanager.function.paste.DuplicateFilePasteActivity;
+import com.jb.filemanager.function.paste.SubFolderPasteActivity;
 import com.jb.filemanager.manager.file.task.CopyFileTask;
 import com.jb.filemanager.manager.file.task.CutFileTask;
 
@@ -126,7 +127,15 @@ public class FileManager {
 
                 @Override
                 public void onSubFolderCopy(CopyFileTask task, File file, String dest) {
-                    // TODO @wangzq
+                    if (mPasteLockers == null) {
+                        mPasteLockers = new HashMap<>();
+                    }
+                    mPasteLockers.put(file.getAbsolutePath(), task);
+
+                    Intent intent = new Intent(TheApplication.getInstance(), SubFolderPasteActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(SubFolderPasteActivity.SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
+                    TheApplication.getInstance().startActivity(intent);
                 }
 
                 @Override
@@ -136,10 +145,10 @@ public class FileManager {
                     }
                     mPasteLockers.put(file.getAbsolutePath(), task);
 
-                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilesActivity.class);
+                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilePasteActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
-                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
+                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
                     TheApplication.getInstance().startActivity(intent);
                 }
 
@@ -164,7 +173,15 @@ public class FileManager {
 
                 @Override
                 public void onSubFolderCopy(CutFileTask task, File file, String dest) {
-                    // TODO @wangzq
+                    if (mPasteLockers == null) {
+                        mPasteLockers = new HashMap<>();
+                    }
+                    mPasteLockers.put(file.getAbsolutePath(), task);
+
+                    Intent intent = new Intent(TheApplication.getInstance(), SubFolderPasteActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(SubFolderPasteActivity.SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
+                    TheApplication.getInstance().startActivity(intent);
                 }
 
                 @Override
@@ -174,10 +191,10 @@ public class FileManager {
                     }
                     mPasteLockers.put(file.getAbsolutePath(), task);
 
-                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilesActivity.class);
+                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilePasteActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
-                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_IS_SINGLE, cutSource.size() == 1);
+                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_IS_SINGLE, cutSource.size() == 1);
                     TheApplication.getInstance().startActivity(intent);
                 }
 
@@ -202,13 +219,24 @@ public class FileManager {
         }
     }
 
-    public void continuePaste(String path, boolean skip, boolean applyToAll) {
+    public void continuePaste(String path, boolean skip, Boolean applyToAll) {
         if (!TextUtils.isEmpty(path) && mPasteLockers != null && mPasteLockers.containsKey(path)) {
             Object task = mPasteLockers.remove(path);
             if (task instanceof CopyFileTask) {
                 ((CopyFileTask) task).continueCopy(skip, applyToAll);
             } else if (task instanceof CutFileTask) {
                 ((CutFileTask) task).continueCut(skip, applyToAll);
+            }
+        }
+    }
+
+    public void stopPast(String path) {
+        if (!TextUtils.isEmpty(path) && mPasteLockers != null && mPasteLockers.containsKey(path)) {
+            Object task = mPasteLockers.remove(path);
+            if (task instanceof CopyFileTask) {
+                ((CopyFileTask) task).stopCopy();
+            } else if (task instanceof CutFileTask) {
+                ((CutFileTask) task).stopCut();
             }
         }
     }

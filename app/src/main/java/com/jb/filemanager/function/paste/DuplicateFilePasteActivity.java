@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.duplicate;
+package com.jb.filemanager.function.paste;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import com.jb.filemanager.ui.dialog.DuplicateFileDialog;
  *
  */
 
-public class DuplicateFilesActivity extends Activity {
+public class DuplicateFilePasteActivity extends Activity {
 
     public static final String DUPLICATE_FILE_PATH = "duplicate_file_path";
     public static final String DUPLICATE_FILE_IS_SINGLE = "duplicate_file_is_single";
