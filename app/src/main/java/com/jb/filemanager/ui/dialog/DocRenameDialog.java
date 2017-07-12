@@ -54,7 +54,7 @@ public class DocRenameDialog extends FMBaseDialog {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
                                 mTvErrorTips.setText(isFolder ? R.string.dialog_rename_folder_empty_input : R.string.dialog_rename_file_empty_input);
                             }
-                        } else if (!input.matches(FileUtil.FOLDER_NAME_REG)) {
+                        } else if (!input.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
                             if (mTvTitle != null) {
                                 mTvTitle.setVisibility(View.GONE);
                             }
