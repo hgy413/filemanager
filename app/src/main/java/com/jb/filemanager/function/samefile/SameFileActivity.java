@@ -81,7 +81,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         float scale = this.getResources().getDisplayMetrics().density;
         height =  (int) (height * scale + 0.5f);
         StickyDecoration decoration = StickyDecoration.Builder
-                .init(new GroupListener() {
+                .init(new StickyDecoration.GroupListener() {
                     @Override
                     public String getGroupName(int position) {
                         //获取组名，用于判断是否是同一组
@@ -92,7 +92,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                     public View getGroupView(int position) {
                         //获取自定定义的组View
                         if (position < mMusicDataArrayMap.itemSize()) {
-                            View view = getLayoutInflater().inflate(R.layout.item_music_group,
+                            View view = getLayoutInflater().inflate(R.layout.item_samefile_group,
                                     (ViewGroup) getGroupView(R.id.fl_file_list_container), true);
                             ((TextView) view.findViewById(R.id.tv_music_group_item_title))
                                     .setText(mMusicDataArrayMap.getGroupKey(position));
@@ -314,7 +314,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View convertView = mInflater.inflate(R.layout.item_music_child, parent, false);
+            View convertView = mInflater.inflate(R.layout.item_samefile_child, parent, false);
             ViewHolder holder = new ViewHolder(convertView);
             holder.mIvCover = (ImageView) convertView.findViewById(R.id.iv_music_child_item_cover);
             holder.mIvCover.setImageResource(R.mipmap.ic_music_file);

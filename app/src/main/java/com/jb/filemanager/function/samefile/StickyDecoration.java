@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,11 +26,11 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 
     private GroupListener mGroupListener;
 
-    private int mGroupHeight = 80;  //悬浮栏高度
+    //private int mGroupHeight = 80;  //悬浮栏高度
     private boolean isAlignLeft = true; //是否靠左边
     private Paint mGroutPaint;
 
-    private StickyDecoration(GroupListener groupListener) {
+    private StickyDecoration(@NonNull GroupListener groupListener) {
         this.mGroupListener = groupListener;
         //设置悬浮栏的画笔---mGroutPaint
         mGroutPaint = new Paint();
@@ -79,6 +80,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
             c.drawRect(left, top - mGroupHeight, right, top, mGroutPaint);
             //根据position获取View
             View groupView = getGroupView(position);
+            mGroupHeight = groupView.getHeight();
             if (groupView == null) return;
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(right, mGroupHeight);
             groupView.setLayoutParams(layoutParams);
@@ -145,9 +147,9 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
             mDecoration = new StickyDecoration(listener);
         }
 
-        public static Builder init(GroupListener listener) {
-            return new Builder(listener);
-        }
+//        public static Builder init(GroupListener listener) {
+//            return new Builder(listener);
+//        }
 
         /**
          * 设置Group高度
@@ -189,5 +191,18 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
 
     private void l(String message) {
         Log.i("TAG", message);
+    }
+
+    /**
+     * Created by gavin
+     * Created date 17/5/25
+     * 显示自定义View的Group监听
+     */
+
+    public interface GroupListener {
+
+        String getGroupName(int position);
+
+        View getGroupView(int position);
     }
 }

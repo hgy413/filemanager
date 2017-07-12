@@ -5,18 +5,21 @@
     android:id="@+id/ll_music_item_container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="60dp">
 
     <ImageView
         android:id="@+id/iv_music_child_item_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center_vertical"/>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tv_music_child_item_name"
@@ -25,8 +28,8 @@
             android:gravity="center_vertical"
             android:lines="1"
             android:ellipsize="marquee"
-            android:textColor="#000000"
-            android:textSize="16dp" />
+            android:textColor="#4f4b4c"
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tv_music_child_item_info"
@@ -34,20 +37,19 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:lines="1"
-            android:textColor="#000000"
-            android:textSize="16dp" />
+            android:textColor="#979797"
+            android:textSize="10dp" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_music_child_item_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center"
         android:gravity="center_vertical"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_drawer_about" />
+        android:padding="16dp"
+        android:src="@drawable/choose_none" />
 
 
 </LinearLayout>
