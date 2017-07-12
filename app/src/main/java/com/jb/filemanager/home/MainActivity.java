@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.CreateNewFolderDialog;
+import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
@@ -489,29 +489,20 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showDeleteConfirmDialog() {
-        View dialogView = View.inflate(this, R.layout.dialog_main_delete_confirm, null);
-        TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_delete_confirm_confirm);
-        TextView cancelButton = (TextView) dialogView.findViewById(R.id.tv_main_delete_confirm_cancel);
-
-        final ScreenWidthDialog dialog = new ScreenWidthDialog(this, dialogView, true);
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        DeleteFileDialog dialog = new DeleteFileDialog(this, new DeleteFileDialog.Listener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        }); // 取消按钮点击事件
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onConfirm(DeleteFileDialog dialog) {
                 dialog.dismiss();
                 if (mPresenter != null) {
                     mPresenter.onClickConfirmDeleteButton();
                 }
             }
-        }); // 确定按钮点击事件
 
+            @Override
+            public void onCancel(DeleteFileDialog dialog) {
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 

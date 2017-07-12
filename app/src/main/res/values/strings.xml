@@ -285,10 +285,10 @@
 
 
     <!-- dialog -->
-    <string name="dialog_create_new_folder_title">Create a folder</string>
-    <string name="dialog_create_new_folder_hint">Type a new name</string>
-    <string name="dialog_create_new_folder_error_input">The file name could not contain the char</string>
-    <string name="dialog_create_new_folder_empty_input">File name could not be empty</string>
+    <string name="dialog_create_folder_title">Create a folder</string>
+    <string name="dialog_create_folder_hint">Type a new name</string>
+    <string name="dialog_create_folder_error_input">The file name could not contain the char</string>
+    <string name="dialog_create_folder_empty_input">File name could not be empty</string>
 
     <string name="dialog_sort_by_title">Sort by</string>
     <string name="dialog_sort_by_name">Name</string>
@@ -309,5 +309,9 @@
     <string name="dialog_multi_file_detail_title">Multiple Selection</string>
     <string name="dialog_multi_file_detail_size">Size</string>
     <string name="dialog_multi_file_detail_contains">Contains</string>
+
+    <string name="dialog_delete_confirm_title">Confirm Deletion</string>
+    <string name="dialog_delete_confirm_danger_tips">This behavior may cause a system or application crash!</string>
+    <string name="dialog_delete_confirm_desc">Are you sure to delete the selected item(s)?</string>
 
 </resources>

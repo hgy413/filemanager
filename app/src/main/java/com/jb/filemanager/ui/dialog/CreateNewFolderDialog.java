@@ -23,7 +23,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
     public CreateNewFolderDialog(Activity act, final Listener listener) {
         super(act, true);
 
-        View dialogView = View.inflate(act, R.layout.dialog_main_create_folder, null);
+        View dialogView = View.inflate(act, R.layout.dialog_create_folder, null);
         mTvTitle = (TextView) dialogView.findViewById(R.id.tv_create_folder_title);
         if (mTvTitle != null) {
             mTvTitle.getPaint().setAntiAlias(true);
@@ -34,9 +34,9 @@ public class CreateNewFolderDialog extends FMBaseDialog {
             mTvErrorTips.getPaint().setAntiAlias(true);
         }
 
-        mEtInput = (EditText) dialogView.findViewById(R.id.et_main_create_folder_input);
+        mEtInput = (EditText) dialogView.findViewById(R.id.et_create_folder_input);
 
-        TextView ok = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_confirm);
+        TextView ok = (TextView) dialogView.findViewById(R.id.tv_create_folder_confirm);
         if (ok != null) {
             ok.getPaint().setAntiAlias(true);
             ok.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                             }
                             if (mTvErrorTips != null) {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(R.string.dialog_create_new_folder_empty_input);
+                                mTvErrorTips.setText(R.string.dialog_create_folder_empty_input);
                             }
                         } else if (!input.matches(FileUtil.FILE_PATH_REG)) {
                             if (mTvTitle != null) {
@@ -58,7 +58,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                             }
                             if (mTvErrorTips != null) {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(R.string.dialog_create_new_folder_error_input);
+                                mTvErrorTips.setText(R.string.dialog_create_folder_error_input);
                             }
                         } else {
                             listener.onConfirm(CreateNewFolderDialog.this, mEtInput.getText().toString());
@@ -68,7 +68,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
             }); // 确定按钮点击事件
         }
 
-        TextView cancel = (TextView) dialogView.findViewById(R.id.tv_main_create_folder_cancel);
+        TextView cancel = (TextView) dialogView.findViewById(R.id.tv_create_folder_cancel);
         if (cancel != null) {
             cancel.getPaint().setAntiAlias(true);
             cancel.setOnClickListener(new View.OnClickListener() {

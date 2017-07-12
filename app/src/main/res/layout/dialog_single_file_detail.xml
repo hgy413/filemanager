@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_title"
+        android:id="@+id/tv_single_file_detail_title"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="21dp"
@@ -19,7 +19,7 @@
         android:text="@string/dialog_single_file_detail_title_folder"/>
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_name_title"
+        android:id="@+id/tv_single_file_detail_name_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -30,7 +30,7 @@
         android:textSize="16dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_name_value"
+        android:id="@+id/tv_single_file_detail_name_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -40,7 +40,7 @@
         android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_location_title"
+        android:id="@+id/tv_single_file_detail_location_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -52,7 +52,7 @@
         android:textSize="16dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_location_value"
+        android:id="@+id/tv_single_file_detail_location_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -62,7 +62,7 @@
         android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_modify_time_title"
+        android:id="@+id/tv_single_file_detail_modify_time_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -74,7 +74,7 @@
         android:textSize="16dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_modify_time_value"
+        android:id="@+id/tv_single_file_detail_modify_time_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -84,7 +84,7 @@
         android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_size_title"
+        android:id="@+id/tv_single_file_detail_size_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -96,7 +96,7 @@
         android:textSize="16dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_size_value"
+        android:id="@+id/tv_single_file_detail_size_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -106,7 +106,7 @@
         android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_contain_title"
+        android:id="@+id/tv_single_file_detail_contain_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -118,7 +118,7 @@
         android:textSize="16dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_contain_value"
+        android:id="@+id/tv_single_file_detail_contain_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -134,7 +134,7 @@
         android:layout_marginTop="14dp" />
 
     <TextView
-        android:id="@+id/tv_main_single_file_detail_confirm"
+        android:id="@+id/tv_single_file_detail_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
