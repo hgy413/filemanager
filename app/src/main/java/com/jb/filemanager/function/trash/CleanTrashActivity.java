@@ -25,7 +25,7 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanPathEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
-import com.jb.filemanager.function.trash.adapter.NewCleanListAdapter;
+import com.jb.filemanager.function.trash.adapter.CleanListAdapter;
 import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
 import com.jb.filemanager.function.trashignore.activity.TrashIgnoreActivity;
@@ -59,7 +59,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private TextView mTvTrashPath;
     private FloatingGroupExpandableListView mCleanTrashExpandableListView;
     private ImageView mIvCleanButton;
-    private NewCleanListAdapter mAdapter;
+    private CleanListAdapter mAdapter;
     private ValueAnimator mAnimator;
     private String[] mSelectedStorageSize;
     private RelativeLayout mRlTitle;
@@ -104,7 +104,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             }
         });
         mVTitleShadow.setVisibility(View.INVISIBLE);
-        mAdapter = new NewCleanListAdapter(mPresenter.getDataGroup(), this);
+        mAdapter = new CleanListAdapter(mPresenter.getDataGroup(), this);
         mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
 
         mIvCommonActionBarMore.setVisibility(View.VISIBLE);

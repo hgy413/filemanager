@@ -175,9 +175,9 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_group_size);
             holder.mSelectBox
-                    .setImageSource(R.drawable.choose_none,
-                            R.drawable.choose_part,
-                            R.drawable.choose_all);
+                    .setImageSource(R.drawable.select_none,
+                            R.drawable.select_multi,
+                            R.drawable.select_all);
             convertView.setTag(R.layout.item_clean_trash_group, holder);
         }
         // 2. 初始化界面
@@ -398,9 +398,9 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mSelectBox = (GroupSelectBox) convertView
                     .findViewById(R.id.item_child_select_button);
             holder.mSelectBox
-                    .setImageSource(R.drawable.choose_none,
-                            R.drawable.choose_part,
-                            R.drawable.choose_all);
+                    .setImageSource(R.drawable.select_none,
+                            R.drawable.select_multi,
+                            R.drawable.select_all);
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_child_size);
             //holder.mAppItemForeground = convertView.findViewById(R.id.clean_main_list_item_foreground);
@@ -458,28 +458,6 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 break;
             case BIG_FILE:
                 holder.mIcon.setImageResource(R.drawable.child_bf);
-                //ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
-                //IconLoader.getInstance().displayImage(item.getPath(), holder.mIcon);
-//                FileType fileType = FileTypeUtil.getFileType(item.getPath());
-//                switch (fileType) {
-//                    case IMAGE:
-//                    case VIDEO:
-//                    case MUSIC:
-//                        IconLoader.getInstance().cancelShowImage(holder.mIcon);
-//                        ImageLoader.ImageLoaderBean bean = new ImageLoader.ImageLoaderBean(
-//                                item.getPath(), holder.mIcon);
-//                        bean.setDrawableId(item.getGroupType().getChildIconId());
-//                        bean.setImageType(getImageType(fileType));
-//                        bean.setShapeType(ImageLoaderBean.SHAPE_TYPE_ROUND);
-//                        ImageLoader.getInstance(mContext).displayImage(bean);
-//                        break;
-//                    default:
-//                        IconLoader.getInstance().cancelShowImage(holder.mIcon);
-//                        ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
-//                        holder.mIcon.setImageResource(item.getGroupType()
-//                                .getChildIconId());
-//                        break;
-//                }
                 break;
             default:
                 IconLoader.getInstance().cancelShowImage(holder.mIcon);
@@ -693,8 +671,8 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                     .findViewById(R.id.item_child_child_name);
             holder.mCheckBox = (ItemCheckBox) convertView
                     .findViewById(R.id.item_child_child_select_button);
-            holder.mCheckBox.setImageRes(R.drawable.choose_none,
-                    R.drawable.choose_all);
+            holder.mCheckBox.setImageRes(R.drawable.select_none,
+                    R.drawable.select_all);
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_child_child_size);
 
@@ -704,8 +682,8 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         // 2. 初始化View
         final List children = group.getChildren();
 //        holder.mRoot.setBackgroundResource(R.drawable.common_list_item_gray_white_selector);
-        holder.mCheckBox.setImageRes(R.drawable.choose_none,
-                R.drawable.choose_all);
+        holder.mCheckBox.setImageRes(R.drawable.select_none,
+                R.drawable.select_all);
         holder.mCheckBox.setChecked(subItem.isChecked());
         holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
