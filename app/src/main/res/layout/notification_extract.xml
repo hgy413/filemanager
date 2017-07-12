@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:ellipsize="marquee"
-                android:text="正在解压"
                 android:textColor="@color/black"
                 android:textSize="16dp"/>
 
@@ -37,7 +36,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:text="Extracting..."
+                android:text="@string/extracting"
                 android:textColor="@color/black_40"
                 android:textSize="12dp"/>
         </RelativeLayout>

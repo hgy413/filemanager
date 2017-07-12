@@ -47,7 +47,8 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     private ProgressBar mDialogProgressBar;
 
     private ExtractManager() {
-        mWindowManager = (WindowManager) TheApplication.getAppContext().getSystemService(Context.WINDOW_SERVICE);
+        mContext = TheApplication.getAppContext();
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
     }
 
     public static ExtractManager getInstance() {
@@ -124,7 +125,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
             }
 
             if (mProgressDialogView == null) {
-                mProgressDialogView = View.inflate(TheApplication.getAppContext(), R.layout.view_extract_progress, null);
+                mProgressDialogView = View.inflate(mContext, R.layout.view_extract_progress, null);
                 mProgressDialogView.addOnAttachStateChangeListener(this);
                 mDialogProgressBar = (ProgressBar) mProgressDialogView.findViewById(R.id.extract_dialog_progress);
                 View progressCancel = mProgressDialogView.findViewById(R.id.view_extract_cancel);
@@ -185,14 +186,14 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     public void onPostExtractFiles(String savePath) {
         showMessage("解压完成");
         sendExtractAccomplishNotification(savePath);
-        Toast.makeText(mContext, "Extract to: " + savePath, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, mContext.getString(R.string.extract_to, savePath), Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
     @Override
     public void onCancelExtractFiles() {
         showMessage("解压取消");
-        Toast.makeText(mContext, "Extract Canceled.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, mContext.getString(R.string.extract_cancel), Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
@@ -200,7 +201,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     public void onExtractError() {
         showMessage("解压错误");
         showExtractErrorDialog();
-        Toast.makeText(mContext, "Extract Error.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, mContext.getString(R.string.extract_error), Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
@@ -223,7 +224,6 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     private void showMessage(String message) {
         Log.e("extract", message);
-//        Toast.makeText(TheApplication.getAppContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -317,7 +317,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 }
 
                 if (mRemoteViews == null) {
-                    mRemoteViews = new RemoteViews(TheApplication.getAppContext().getPackageName(), R.layout.notification_extract);
+                    mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_extract);
 
                 }
 
@@ -360,7 +360,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 }
 
                 RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_extract_finish);
-                remoteViews.setTextViewText(R.id.extract_noti_finish_dest_path, "Extract to: " + savePath);
+                remoteViews.setTextViewText(R.id.extract_noti_finish_dest_path, mContext.getString(R.string.extract_to, savePath));
 
                 Notification.Builder builder = new Notification.Builder(mContext);
                 builder.setSmallIcon(R.drawable.zip_icon);
@@ -383,7 +383,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     }
 
     private void cancelExtractNotification() {
-        NotificationManager notificationManager = (NotificationManager) TheApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(EXTRACT_NOTIFICATION_ID);
     }
 }

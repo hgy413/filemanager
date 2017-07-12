@@ -370,4 +370,8 @@
     <string name="view">View</string>
     <string name="extracting">Extracting...</string>
     <string name="extract_in_background">Extract in background</string>
+    <string name="file_decompression_complete">File decompression complete.</string>
+    <string name="extract_to">Extract to: %1$s</string>
+    <string name="extract_error">Extract Error.</string>
+    <string name="extract_cancel">Extract Canceled.</string>
 </resources>

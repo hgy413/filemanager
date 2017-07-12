@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:ellipsize="marquee"
-                android:text="File decompression complete."
+                android:text="@string/file_decompression_complete"
                 android:textColor="@android:color/white"
                 android:textSize="16dp"/>
 
@@ -44,6 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:singleLine="true"
+                android:ellipsize="middle"
                 android:textColor="#b3ffffff"
                 android:textSize="12dp"/>
         </FrameLayout>

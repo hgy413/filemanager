@@ -19,4 +19,8 @@
     <string name="view">查看</string>
     <string name="extracting">解压中...</string>
     <string name="extract_in_background">后台运行</string>
+    <string name="file_decompression_complete">文件解压完成</string>
+    <string name="extract_to">解压至: %1$s</string>
+    <string name="extract_error">解压错误.</string>
+    <string name="extract_cancel">Extract Canceled.</string>
 </resources>
