@@ -10,11 +10,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.applock.dialog.ListDialog;
 import com.jb.filemanager.function.applock.presenter.PsdInitContract;
 import com.jb.filemanager.function.applock.presenter.PsdInitPresenter;
 import com.jb.filemanager.function.applock.presenter.PsdInitSupport;
 import com.jb.filemanager.function.applock.view.PatternView;
-import com.jb.filemanager.function.applock1.dialog.ListDialog;
 import com.jb.filemanager.util.Logger;
 
 import java.util.List;

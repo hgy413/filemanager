@@ -26,6 +26,7 @@ public class ListDialog implements View.OnClickListener {
     private String[] mArrayRes;
     private TextView mResponseTxt;
     private PopupWindow mPopupWindow;
+    private int mCurrentPos;
     private PopupWindow.OnDismissListener mOnDismissListener;
 
     public ListDialog(TextView responseTxtView, @ArrayRes int arrayResId) {
@@ -37,6 +38,7 @@ public class ListDialog implements View.OnClickListener {
         mResponseTxt = responseTxtView;
         mArrayRes = responseTxtView.getContext().getResources().getStringArray(arrayResId);
         mListTxts = new TextView[mArrayRes.length];
+        mCurrentPos = 0;
     }
 
     public void showUnderView(View attachView) {
@@ -90,6 +92,7 @@ public class ListDialog implements View.OnClickListener {
     public void onClick(View v) {
         if (mResponseTxt != null && v instanceof TextView) {
             mResponseTxt.setText(((TextView) v).getText());
+            mCurrentPos = (int) v.getTag();
             mPopupWindow.dismiss();
         }
     }
@@ -99,5 +102,9 @@ public class ListDialog implements View.OnClickListener {
      */
     public void setOnDismissListener(PopupWindow.OnDismissListener onDismissListener) {
         mOnDismissListener = onDismissListener;
+    }
+
+    public int getCurrentPos() {
+        return mCurrentPos;
     }
 }

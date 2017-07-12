@@ -71,12 +71,9 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
         mTitle = findViewById(R.id.activity_applock_title_word);
         mRootGradientBg = findViewById(R.id.activity_applock_root_bg);
         mIntruderEntanceLayout = findViewById(R.id.activity_applock_header);
-        mIntruderNumTxt = (TextView) findViewById(R.id.activity_applock_header_count_view);
         mSetting = findViewById(R.id.activity_applock_title_setting);
         mLockerList = (FloatingGroupExpandableListView) findViewById(R.id.activity_applock_list);
         mSearchBarLayout = (SearchBarLayout) findViewById(R.id.activity_applock_searchbar);
-        mCheckTxt = (TextView) findViewById(R.id.activity_applock_header_check);
-        initGradient();
         mPresenter = new AppLockPresenter(this, new AppLockSupport());
         mPresenter.loadData();
     }
@@ -213,23 +210,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
             mPresenter.release();
         }
         super.onDestroy();
-    }
-
-    /**
-     * 初始化所有渐变色
-     */
-    private void initGradient() {
-        int startColor = 0xff0084ff;
-        int endColor = 0xff3bd6f2;
-        GradientDrawable gradientDrawableLR = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{startColor, endColor});
-        gradientDrawableLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        gradientDrawableLR.setShape(GradientDrawable.RECTANGLE);
-        APIUtil.setBackground(mRootGradientBg, gradientDrawableLR);
-
-        ImageView entranceIcon = (ImageView) findViewById(R.id.activity_applock_header_icon);
-        mEntranceArrow = (ImageView) findViewById(R.id.activity_applock_header_arrow);
-        entranceIcon.setColorFilter(0xffff8314, PorterDuff.Mode.SRC_ATOP);
-        mEntranceArrow.setColorFilter(0xffff8314, PorterDuff.Mode.SRC_ATOP);
     }
 
     public static final void gotoAppLock(Context context) {
