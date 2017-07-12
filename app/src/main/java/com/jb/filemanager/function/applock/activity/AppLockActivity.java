@@ -30,6 +30,8 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
     private View mBack;
 
     private TextView mTitle;
+    //应用锁提示
+    private TextView mApplockTip2;
 
     private FloatingGroupExpandableListView mLockerList;
 
@@ -46,7 +48,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_applock_temp);
+        setContentView(R.layout.activity_applock);
         IconLoader.ensureInitSingleton(TheApplication.getAppContext());
         IconLoader.getInstance().bindServicer(this);
         initView();
@@ -62,6 +64,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
         mTitle = (TextView)findViewById(R.id.common_applock_bar_layout_title);
         mSetting = findViewById(R.id.common_applock_bar_layout_setting);
         mSearch = (ImageView) findViewById(R.id.common_applock_bar_layout_search);
+        mApplockTip2 = (TextView) findViewById(R.id.activity_applock_tip2);
         mLockerList = (FloatingGroupExpandableListView) findViewById(R.id.activity_applock_float_view);
         mSearchBarLayout = (SearchBarLayout) findViewById(R.id.activity_applock_search_bar);
         mTitle.setText(R.string.activity_applock_title);
@@ -216,7 +219,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     public void showLockAppsNum(int nums) {
-        // TODO: 17-7-12 已经锁定的应用数目
+        mApplockTip2.setText(getString(R.string.applock_header_text2_new, nums));
     }
 
     @Override

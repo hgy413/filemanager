@@ -38,6 +38,7 @@ public class ListDialog implements View.OnClickListener {
         mResponseTxt = responseTxtView;
         mArrayRes = responseTxtView.getContext().getResources().getStringArray(arrayResId);
         mListTxts = new TextView[mArrayRes.length];
+        mResponseTxt.setText(mArrayRes[0]);
         mCurrentPos = 0;
     }
 

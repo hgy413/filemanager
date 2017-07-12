@@ -155,7 +155,9 @@
         <item>No match found</item>
     </string-array>
     <string name="applock_pre_header_text1_new">Top %1$d app(s) recommended to locked up</string>
-    <string name="applock_pre_header_text2_new">Ensure the private data of these app(s)</string>
+    <string name="applock_header_text1_new">App Lock is active</string>
+    <string name="applock_header_text2_new">%1$d App(s) are being protected</string>
+    <string name="applock_pre_header_text2_new">Activate Applock to stay protected</string>
     <string name="applock_pre_operate_txt">Lock</string>
     <string name="set_graphic_password_message_save">Save</string>
     <string name="set_graphic_password_message_draw">Setting the unlock pattern of app(s)</string>

@@ -35,7 +35,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
         android:layout_below="@id/activity_applock_pre_tip1"
-        android:text="Activate Applock to stay protected"
+        android:text="@string/applock_pre_header_text2_new"
         android:textColor="#66ffffff"
         android:textSize="@dimen/h4_14"/>
 

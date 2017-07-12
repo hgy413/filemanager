@@ -172,6 +172,9 @@ public class AppLockPresenter implements AppLockContract.Presenter {
                 }
             }
             mSupport.saveLockerInfo(lockerSelectBeans, unLockerSelectBeans);
+            if (mView != null) {
+                mView.showLockAppsNum(lockerSelectBeans.size());
+            }
             if (lockerSelectBeans.size() > 0) {
                 //打开
                 mSupport.startAppLockerMonitor();

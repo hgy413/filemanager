@@ -1,88 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_applock_root_bg"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/colorAccent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:background="#000000">
 
-    <!--标题部分-->
-    <LinearLayout
+    <include
+        android:id="@+id/activity_applock_header"
+        layout="@layout/common_applock_bar_layout"/>
+
+    <com.jb.filemanager.function.applock.view.SearchBarLayout
+        android:id="@+id/activity_applock_search_bar"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/activity_applock_tip1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:layout_below="@id/activity_applock_header"
+        android:text="@string/applock_header_text1_new"
+        android:textColor="@color/white"
+        android:textSize="@dimen/h3_16"/>
 
-        <ImageView
-            android:id="@+id/activity_applock_title_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@null"
-            android:padding="16dp"
-            android:src="@drawable/ic_about_logo" />
+    <TextView
+        android:id="@+id/activity_applock_tip2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"
+        android:layout_below="@id/activity_applock_tip1"
+        android:text="@string/applock_header_text2_new"
+        android:textColor="#66ffffff"
+        android:textSize="@dimen/h4_14"/>
 
-        <!-- Title -->
-        <RelativeLayout
-            android:id="@+id/activity_applock_title_group"
-            android:layout_width="match_parent"
-            android:layout_marginRight="16dp"
-            android:layout_height="48dp">
-
-            <TextView
-                android:id="@+id/activity_applock_title_word"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/activity_applock_title"
-                android:textColor="@android:color/white"
-                android:textSize="16dp" />
-
-            <ImageView
-                android:id="@+id/activity_applock_title_setting"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_about_logo"
-                tools:ignore="ContentDescription" />
-
-            <com.jb.filemanager.function.applock.view.SearchBarLayout
-                android:id="@+id/activity_applock_searchbar"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginRight="12dp"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/activity_applock_title_setting" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <!--内容部分-->
-    <LinearLayout
-        android:id="@+id/activity_applock_main_container"
+    <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
+        android:id="@+id/activity_applock_float_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:orientation="vertical">
-
-        <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
-            android:id="@+id/activity_applock_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#dddddd"
-            android:dividerHeight="1px"
-            android:background="#f2f2f2"
-            android:groupIndicator="@null"
-            android:listSelector="@android:color/transparent"
-            android:scrollbars="none"
-            android:layout_marginTop="10dp"
-            android:drawSelectorOnTop="false"
-            android:overScrollFooter="@null"
-            android:overScrollMode="never"/>
-
-    </LinearLayout>
-</FrameLayout>
+        android:layout_below="@id/activity_applock_tip2"
+        android:layout_marginTop="20dp"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:background="#f5f6ff"
+        android:groupIndicator="@null"/>
+</RelativeLayout>

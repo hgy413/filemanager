@@ -85,7 +85,7 @@
             android:value="${COM_JB_FILEMANAGER_CHANNEL_VALUE}"/>
 
         <activity
-            android:name=".home.MainActivity"
+            android:name=".function.applock.activity.AppLockSettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg">
             <intent-filter>
@@ -226,10 +226,10 @@
             android:name=".function.applock.activity.AppLockActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-        <activity
-            android:name=".function.applock.activity.AppLockSettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+        <!--<activity-->
+            <!--android:name=".function.applock.activity.AppLockSettingActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>-->
         <activity
             android:name=".function.applock.activity.PsdSettingActivity"
             android:screenOrientation="portrait"
