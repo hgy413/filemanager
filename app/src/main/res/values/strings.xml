@@ -326,6 +326,10 @@
     <string name="dialog_space_not_enough_title">Space insufficient</string>
     <string name="dialog_space_not_enough_desc">SD / Phone space is not enough, copying these files requires another %1$s</string>
 
+    <string name="dialog_paste_failed_title">Paste Failed</string>
+    <string name="dialog_paste_failed_desc">Unable to copy "%1$s"</string>
+    <string name="dialog_paste_failed_desc2">Please Retry or Cancel</string>
+
 
 
     <!-- Toast -->

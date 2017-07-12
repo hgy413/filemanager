@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.paste.DuplicateFilePasteActivity;
-import com.jb.filemanager.function.paste.SubFolderPasteActivity;
+import com.jb.filemanager.function.paste.GlobalDialogActivity;
 import com.jb.filemanager.manager.file.task.CopyFileTask;
 import com.jb.filemanager.manager.file.task.CutFileTask;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -122,7 +122,9 @@ public class FileManager {
         return mFileSort;
     }
 
-    public void doPaste(String destDir, final Listener listener) {
+    public boolean doPaste(String destDir, Listener listener) {
+        boolean result = false;
+        final WeakReference<Listener> listenerRef = new WeakReference<>(listener);
         if (mCopyFiles != null && mCopyFiles.size() > 0) {
             long moreThenNeed = FileUtil.checkSpacePaste(mCopyFiles, destDir);
 
@@ -136,9 +138,10 @@ public class FileManager {
                         }
                         mPasteLockers.put(file.getAbsolutePath(), task);
 
-                        Intent intent = new Intent(TheApplication.getInstance(), SubFolderPasteActivity.class);
+                        Intent intent = new Intent(TheApplication.getInstance(), GlobalDialogActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(SubFolderPasteActivity.SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
+                        intent.putExtra(GlobalDialogActivity.DIALOG_TYPE, GlobalDialogActivity.TYPE_PASTE_SUB_FOLDER);
+                        intent.putExtra(GlobalDialogActivity.PASTE_SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
                         TheApplication.getInstance().startActivity(intent);
                     }
 
@@ -149,31 +152,45 @@ public class FileManager {
                         }
                         mPasteLockers.put(file.getAbsolutePath(), task);
 
-                        Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilePasteActivity.class);
+                        Intent intent = new Intent(TheApplication.getInstance(), GlobalDialogActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
-                        intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
+                        intent.putExtra(GlobalDialogActivity.DIALOG_TYPE, GlobalDialogActivity.TYPE_PASTE_DUPLICATE_FILE);
+                        intent.putExtra(GlobalDialogActivity.PASTE_DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                        intent.putExtra(GlobalDialogActivity.PASTE_DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
                         TheApplication.getInstance().startActivity(intent);
                     }
 
                     @Override
                     public void onProgressUpdate(File file) {
                         // TODO 是否有其他操作还不清楚
-                        if (listener != null) {
-                            listener.onPasteProgressUpdate(file);
+                        if (listenerRef.get() != null) {
+                            listenerRef.get().onPasteProgressUpdate(file);
                         }
                     }
 
                     @Override
-                    public void onPostExecute(Boolean aBoolean) {
-                        // TODO 是否有其他操作还不清楚
-                        if (listener != null) {
-                            listener.onPastePostExecute(aBoolean);
+                    public void onPostExecute(CopyFileTask task, Boolean isSuccess, ArrayList<File> failedArray) {
+                        if (!isSuccess && failedArray != null && failedArray.size() > 0) {
+                            ArrayList<String> failedFilePath = new ArrayList<>();
+                            for (File file : failedArray) {
+                                failedFilePath.add(file.getAbsolutePath());
+                            }
+
+                            Intent intent = new Intent(TheApplication.getInstance(), GlobalDialogActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(GlobalDialogActivity.DIALOG_TYPE, GlobalDialogActivity.TYPE_PASTE_FAILED);
+                            intent.putExtra(GlobalDialogActivity.PASTE_FAILED_SOURCE_PATH, failedFilePath);
+                            intent.putExtra(GlobalDialogActivity.PASTE_FAILED_IS_COPY, true);
+                            intent.putExtra(GlobalDialogActivity.PASTE_FAILED_DEST_PATH, task.getDest());
+                            TheApplication.getInstance().startActivity(intent);
                         }
                     }
                 }).start();
+                result = true;
             } else {
-                listener.onPasteNeedMoreSpace(Math.abs(moreThenNeed));
+                if (listenerRef.get() != null) {
+                    listener.onPasteNeedMoreSpace(Math.abs(moreThenNeed));
+                }
             }
         } else if (mCutFiles != null && mCutFiles.size() > 0) {
             new CutFileTask(mCutFiles, destDir, new CutFileTask.Listener() {
@@ -185,9 +202,10 @@ public class FileManager {
                     }
                     mPasteLockers.put(file.getAbsolutePath(), task);
 
-                    Intent intent = new Intent(TheApplication.getInstance(), SubFolderPasteActivity.class);
+                    Intent intent = new Intent(TheApplication.getInstance(), GlobalDialogActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(SubFolderPasteActivity.SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
+                    intent.putExtra(GlobalDialogActivity.DIALOG_TYPE, GlobalDialogActivity.TYPE_PASTE_SUB_FOLDER);
+                    intent.putExtra(GlobalDialogActivity.PASTE_SUB_FOLDER_PASTE_SOURCE_PATH, file.getAbsolutePath());
                     TheApplication.getInstance().startActivity(intent);
                 }
 
@@ -198,32 +216,43 @@ public class FileManager {
                     }
                     mPasteLockers.put(file.getAbsolutePath(), task);
 
-                    Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilePasteActivity.class);
+                    Intent intent = new Intent(TheApplication.getInstance(), GlobalDialogActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
-                    intent.putExtra(DuplicateFilePasteActivity.DUPLICATE_FILE_IS_SINGLE, cutSource.size() == 1);
+                    intent.putExtra(GlobalDialogActivity.DIALOG_TYPE, GlobalDialogActivity.TYPE_PASTE_DUPLICATE_FILE);
+                    intent.putExtra(GlobalDialogActivity.PASTE_DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    intent.putExtra(GlobalDialogActivity.PASTE_DUPLICATE_FILE_IS_SINGLE, cutSource.size() == 1);
                     TheApplication.getInstance().startActivity(intent);
                 }
 
                 @Override
                 public void onProgressUpdate(File file) {
                     // TODO 是否有其他操作还不清楚
-                    if (listener != null) {
-                        listener.onPasteProgressUpdate(file);
+                    if (listenerRef.get() != null) {
+                        listenerRef.get().onPasteProgressUpdate(file);
                     }
                 }
 
                 @Override
-                public void onPostExecute(Boolean aBoolean) {
-                    // TODO 是否有其他操作还不清楚
-                    if (listener != null) {
-                        listener.onPastePostExecute(aBoolean);
+                public void onPostExecute(CutFileTask task, Boolean isSuccess, ArrayList<File> failedArray) {
+                    if (!isSuccess && failedArray != null && failedArray.size() > 0) {
+                        ArrayList<String> failedFilePath = new ArrayList<>();
+                        for (File file : failedArray) {
+                            failedFilePath.add(file.getAbsolutePath());
+                        }
+
+                        Intent intent = new Intent(TheApplication.getInstance(), GlobalDialogActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(GlobalDialogActivity.DIALOG_TYPE, GlobalDialogActivity.TYPE_PASTE_FAILED);
+                        intent.putExtra(GlobalDialogActivity.PASTE_FAILED_SOURCE_PATH, failedFilePath);
+                        intent.putExtra(GlobalDialogActivity.PASTE_FAILED_IS_COPY, false);
+                        intent.putExtra(GlobalDialogActivity.PASTE_FAILED_DEST_PATH, task.getDest());
+                        TheApplication.getInstance().startActivity(intent);
                     }
                 }
             }).start();
-        } else {
-            listener.onPastePostExecute(false);
+            result = true;
         }
+        return result;
     }
 
     public void continuePaste(String path, boolean skip, Boolean applyToAll) {
@@ -251,6 +280,5 @@ public class FileManager {
     public interface Listener {
         void onPasteNeedMoreSpace(long needMoreSpace);
         void onPasteProgressUpdate(File file);
-        void onPastePostExecute(Boolean aBoolean);
     }
 }

@@ -4,6 +4,7 @@ package com.jb.filemanager.manager.file.task;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import java.io.File;
@@ -22,6 +23,7 @@ public class CutFileTask {
     private Listener mListener;
 
     private ArrayList<File> mSource;
+    private ArrayList<File> mFailed;
     private String mDest;
     private final Object mLocker = new Object();
     private boolean mIsSkip = false;
@@ -32,6 +34,7 @@ public class CutFileTask {
 
         mListener = listener;
         mSource = new ArrayList<> (source);
+        mFailed = new ArrayList<>();
         mDest = dest;
         mWorkerThread = new Thread(new Runnable() {
             @Override
@@ -101,7 +104,11 @@ public class CutFileTask {
 
                         if (!mIsSkip) {
                             Logger.i(LOG_TAG, "覆盖:" + file.getAbsolutePath());
-                            result = result && file.renameTo(new File(mDest + File.separator + file.getName()));
+                            boolean success = file.renameTo(new File(mDest + File.separator + file.getName()));
+                            if (!success) {
+                                mFailed.add(file);
+                            }
+                            result = result && success;
                         } else {
                             Logger.i(LOG_TAG, "跳过:" + file.getAbsolutePath());
                         }
@@ -113,7 +120,7 @@ public class CutFileTask {
                     @Override
                     public void run() {
                         if (mListener != null) {
-                            mListener.onPostExecute(finalResult);
+                            mListener.onPostExecute(CutFileTask.this, finalResult, mFailed);
                         }
                     }
                 });
@@ -144,10 +151,14 @@ public class CutFileTask {
         mLocker.notify();
     }
 
+    public String getDest() {
+        return mDest;
+    }
+
     public interface Listener {
         void onSubFolderCopy(CutFileTask task, File file, String dest);
         void onDuplicate(CutFileTask task, File file, ArrayList<File> cutSource);
         void onProgressUpdate(File file);
-        void onPostExecute(Boolean aBoolean);
+        void onPostExecute(CutFileTask task, Boolean isSuccess, ArrayList<File> failedArray);
     }
 }

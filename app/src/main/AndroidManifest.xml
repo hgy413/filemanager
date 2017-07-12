@@ -97,14 +97,10 @@
 
         <!-- 重复文件粘贴对话框页 -->
         <activity
-            android:name=".function.paste.DuplicateFilePasteActivity"
+            android:name=".function.paste.GlobalDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg_no_anim"/>
         <!-- 子文件夹粘贴对话框页 -->
-        <activity
-            android:name=".function.paste.SubFolderPasteActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg_no_anim"/>
 
         <!-- 图片管理页 -->
         <activity

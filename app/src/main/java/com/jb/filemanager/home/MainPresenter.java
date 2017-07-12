@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.file.FileManager;
-import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
@@ -249,11 +248,6 @@ class MainPresenter implements MainContract.Presenter {
                 @Override
                 public void onPasteProgressUpdate(File file) {
                     Logger.e("wangzq", "on paste: " + file.getAbsolutePath());
-                }
-
-                @Override
-                public void onPastePostExecute(Boolean aBoolean) {
-                    Logger.e("wangzq", "on paste result: " + aBoolean.toString());
                 }
             });
 

@@ -22,6 +22,7 @@ public class CopyFileTask {
     private Listener mListener;
 
     private ArrayList<File> mSource;
+    private ArrayList<File> mFailed;
     private String mDest;
     private final Object mLocker = new Object();
     private boolean mIsSkip = false;
@@ -32,6 +33,7 @@ public class CopyFileTask {
 
         mListener = listener;
         mSource = new ArrayList<> (source);
+        mFailed = new ArrayList<>();
         mDest = dest;
         mWorkerThread = new Thread(new Runnable() {
             @Override
@@ -101,7 +103,11 @@ public class CopyFileTask {
 
                         if (!mIsSkip) {
                             Logger.i(LOG_TAG, "覆盖:" + file.getAbsolutePath());
-                            result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
+                            boolean success = FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
+                            if (!success) {
+                                mFailed.add(file);
+                            }
+                            result = result && success;
                         } else {
                             Logger.i(LOG_TAG, "跳过:" + file.getAbsolutePath());
                         }
@@ -113,7 +119,7 @@ public class CopyFileTask {
                     @Override
                     public void run() {
                         if (mListener != null) {
-                            mListener.onPostExecute(finalResult);
+                            mListener.onPostExecute(CopyFileTask.this, finalResult, mFailed);
                         }
                     }
                 });
@@ -144,10 +150,14 @@ public class CopyFileTask {
         }
     }
 
+    public String getDest() {
+        return mDest;
+    }
+
     public interface Listener {
         void onSubFolderCopy(CopyFileTask task, File file, String dest);
         void onDuplicate(CopyFileTask task, File file, ArrayList<File> copySource);
         void onProgressUpdate(File file);
-        void onPostExecute(Boolean aBoolean);
+        void onPostExecute(CopyFileTask task, Boolean isSuccess, ArrayList<File> failedArray);
     }
 }
