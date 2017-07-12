@@ -28,16 +28,23 @@ import android.widget.TextView;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
-import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.function.samefile.SameFileActivity;
+import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
+import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
+import com.jb.filemanager.function.trash.CleanTrashActivity;
+import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.view.UsageAnalysis;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +97,8 @@ public class CategoryFragment extends Fragment {
 
     private boolean mIsInternalStorage = true;
     private boolean mHasExternalStorage = false;
+    private TextView mTvCleanTrash;
+    private boolean mHasShowedNotice = false;
 
 
     @Override
@@ -239,6 +248,24 @@ public class CategoryFragment extends Fragment {
             mTvSwitchSdCard.setSelected(!mIsInternalStorage);
         }
 
+        mTvCleanTrash = (TextView) rootView.findViewById(R.id.tv_main_category_clear_trash);
+        mTvCleanTrash.getPaint().setAntiAlias(false);
+        mTvCleanTrash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mHasShowedNotice = true;
+                startActivity(new Intent(getContext(), CleanTrashActivity.class));
+            }
+        });
+
+
+        try {
+            TheApplication.getGlobalEventBus().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return rootView;
     }
 
@@ -309,6 +336,38 @@ public class CategoryFragment extends Fragment {
         mVideoLoaderCallback = null;
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            TheApplication.getGlobalEventBus().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 扫描到的文件的大小
+     *
+     * @param event e
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CleanScanFileSizeEvent event) {
+    }
+
+    @Subscribe
+    public void onEventMainThread(CleanScanDoneEvent event) {
+        boolean allDone = CleanScanDoneEvent.isAllDone();
+//        Logger.e("Main", isNeedShowAnim() + "接收到CleanScanDoneEvent事件: " + allDone + event.name());
+        if (allDone && CleanScanFileSizeEvent.getJunkFileAllSize() > 100 * 1024 * 1024 && !mHasShowedNotice) {
+            mHasShowedNotice = true;
+            String data = ConvertUtils.formatFileSize(CleanScanFileSizeEvent.getJunkFileAllSize());
+            if (mTvCleanTrash != null) {
+                mTvCleanTrash.setText(getString(R.string.home_trash_notice, data));
+            }
+        }
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> getImageLoaderCallback() {
