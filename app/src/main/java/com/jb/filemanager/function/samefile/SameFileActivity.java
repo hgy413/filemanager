@@ -14,14 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
-import com.jb.filemanager.ui.dialog.ScreenWidthDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.DensityUtil;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
@@ -52,7 +54,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         mItemSelected = new boolean[0];
         mPresenter = new SameFilePresenter(this, new SameFileSupport(), getSupportLoaderManager());
         int imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-        mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.mipmap.ic_music_file);
+        mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.img_music);
         mPresenter.onCreate(getIntent());
     }
 
@@ -71,7 +73,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 back.setText(R.string.download_title);
                 break;
             default:
-                back.setText("Transfer unknow teyp");
+                back.setText("Transfer unknow type");
         }
         back.setOnClickListener(this);
 
@@ -93,17 +95,19 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                         //获取自定定义的组View
                         if (position < mMusicDataArrayMap.itemSize()) {
                             View view = getLayoutInflater().inflate(R.layout.item_samefile_group,
-                                    (ViewGroup) getGroupView(R.id.fl_file_list_container), true);
+                                    null, false);
                             ((TextView) view.findViewById(R.id.tv_music_group_item_title))
                                     .setText(mMusicDataArrayMap.getGroupKey(position));
-                            view.findViewById(R.id.iv_music_group_item_select);
+                            ((ImageView)view.findViewById(R.id.iv_music_group_item_select))
+                                    .setOnClickListener(SameFileActivity.this);
                             return view;
                         } else {
                             return null;
                         }
                     }
                 })
-                .setGroupHeight(height)   //设置高度
+                .setGroupHeight(DensityUtil.dip2px(SameFileActivity.this, 40))   //设置高度40dp
+                .setGroupDevideHeight(DensityUtil.dip2px(SameFileActivity.this, 10))// Group devide line
                 .build();
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRvMuscicList.setLayoutManager(manager);
@@ -202,6 +206,9 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 break;
             case R.id.iv_common_action_bar_with_search_search:
                 // TODO
+                break;
+            case R.id.iv_music_group_item_select:
+                Toast.makeText(this, "Clicked", Toast.LENGTH_LONG);
             default:
                 break;
         }
@@ -317,7 +324,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             View convertView = mInflater.inflate(R.layout.item_samefile_child, parent, false);
             ViewHolder holder = new ViewHolder(convertView);
             holder.mIvCover = (ImageView) convertView.findViewById(R.id.iv_music_child_item_cover);
-            holder.mIvCover.setImageResource(R.mipmap.ic_music_file);
+            holder.mIvCover.setImageResource(R.drawable.img_music);
             holder.mTvName = (TextView) convertView.findViewById(R.id.tv_music_child_item_name);
             holder.mTvInfo = (TextView) convertView.findViewById(R.id.tv_music_child_item_info);
             holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_child_item_select);
@@ -330,11 +337,15 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ViewHolder viewHolder = (ViewHolder)holder;
             FileInfo info = mMusicDataArrayMap.getItem(position);
-
+            if (mItemSelected[position]) {
+                viewHolder.mIvSelect.setImageResource(R.drawable.choose_all);
+            } else {
+                viewHolder.mIvSelect.setImageResource(R.drawable.choose_none);
+            }
             if (info != null) {
                 viewHolder.mTvName.setText(info.mName);
-                viewHolder.mTvInfo.setText(info.mArtist + " " +
-                        ConvertUtils.getReadableSize(info.mSize) + " " +
+                viewHolder.mTvInfo.setText(info.mArtist + "  " +
+                        ConvertUtils.getReadableSize(info.mSize) + "  " +
                         TimeUtil.getMSTime(info.mDuration));
             }
         }
@@ -374,8 +385,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                         }
                         break;
                     default:
-                        int i = v.getId();
-                        int j = R.id.iv_music_child_item_select;
+                        break;
                 }
 
                 if (SameFileActivity.this.mSelecedCount > 0) {
