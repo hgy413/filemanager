@@ -371,8 +371,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         TextView newFolder = (TextView) contentView.findViewById(R.id.tv_main_action_more_new_folder);
         TextView sortBy = (TextView) contentView.findViewById(R.id.tv_main_action_more_sort_by);
 
+        int width = (int)getResources().getDimension(R.dimen.popup_window_width);
         final PopupWindow popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
         popupWindow.setTouchable(true);
 
@@ -390,10 +391,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         // 我觉得这里是API的一个bug
         popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
 
+        int marginRight = (int)getResources().getDimension(R.dimen.popup_window_margin_right);
+        int marginTarget = (int)getResources().getDimension(R.dimen.popup_window_margin_target);
         // 设置好参数之后再show
         popupWindow.showAsDropDown(mIvActionBarMore,
-                mIvActionBarMore.getWidth(),
-                0);
+                mIvActionBarMore.getWidth() - width - marginRight,
+                marginTarget);
 
         if (newFolder != null) {
             newFolder.getPaint().setAntiAlias(true);
@@ -436,8 +439,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         TextView details = (TextView) contentView.findViewById(R.id.tv_main_operate_more_detail);
         TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
 
+        int width = (int)getResources().getDimension(R.dimen.popup_window_width);
         final PopupWindow popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
         popupWindow.setTouchable(true);
 
@@ -455,10 +459,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         // 我觉得这里是API的一个bug
         popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
 
+        int marginRight = (int)getResources().getDimension(R.dimen.popup_window_margin_right);
+        int marginTarget = (int)getResources().getDimension(R.dimen.popup_window_margin_target);
         // 设置好参数之后再show
         popupWindow.showAsDropDown(mLlBottomOperateFirstContainer,
-                mLlBottomOperateFirstContainer.getWidth() - contentView.getWidth(),
-                5);
+                mLlBottomOperateFirstContainer.getWidth() - width - marginRight,
+                marginTarget);
 
         if (details != null) {
             details.getPaint().setAntiAlias(true);

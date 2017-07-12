@@ -17,6 +17,11 @@
     <dimen name="trash_ignore_status_bar_height">0dp</dimen>
     <dimen name="trash_ignore_title_height">48dp</dimen>
 
+    <!-- popup window 通用尺寸 -->
+    <dimen name="popup_window_width">130dp</dimen>
+    <dimen name="popup_window_margin_right">8dp</dimen>
+    <dimen name="popup_window_margin_target">8dp</dimen>
+
     <!--字体-->
     <dimen name="h1_20">20dp</dimen>
     <dimen name="h2_18">18dp</dimen>
