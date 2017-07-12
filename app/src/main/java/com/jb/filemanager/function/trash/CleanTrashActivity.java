@@ -1,11 +1,11 @@
 package com.jb.filemanager.function.trash;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +26,9 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanPathEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.adapter.CleanListAdapter;
+import com.jb.filemanager.function.trash.adapter.TrashGroupAdapter;
+import com.jb.filemanager.function.trash.adapter.view.SlideInLeftAnimator;
+import com.jb.filemanager.function.trash.adapter.view.WrapContentLinearLayoutManager;
 import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
 import com.jb.filemanager.function.trashignore.activity.TrashIgnoreActivity;
@@ -58,6 +61,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private LinearLayout mLlContent;
     private TextView mTvTrashPath;
     private FloatingGroupExpandableListView mCleanTrashExpandableListView;
+    private RecyclerView mRvTrashGroupList;
     private ImageView mIvCleanButton;
     private CleanListAdapter mAdapter;
     private ValueAnimator mAnimator;
@@ -93,6 +97,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mPbScanProgress = (ProgressBar) findViewById(R.id.pb_scan_progress);
         mTvTrashPath = (TextView) findViewById(R.id.tv_trash_path);
         mCleanTrashExpandableListView = (FloatingGroupExpandableListView) findViewById(R.id.clean_trash_expandable_list_view);
+        mRvTrashGroupList = (RecyclerView) findViewById(R.id.rv_trash_group_list);
         mIvCleanButton = (ImageView) findViewById(R.id.iv_clean_button_red);
         mIvCleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +124,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     private void handleDisappearAnimation() {
-        mAnimator = ValueAnimator.ofFloat(1, 0);
+        /*mAnimator = ValueAnimator.ofFloat(1, 0);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -139,7 +144,12 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 finish();
             }
         });
-        mAnimator.start();
+        mAnimator.start();*/
+        Intent intent = new Intent(CleanTrashActivity.this, CleanResultActivity.class);
+        intent.putExtra(CleanResultActivity.CLEAN_SIZE, mSelectedStorageSize);
+        startActivity(intent);
+        overridePendingTransition(R.anim.in, R.anim.out);
+        finish();
     }
 
     private void initData() {
@@ -323,7 +333,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             if ((event.equals(CleanStateEvent.DELETE_FINISH) || event
                     .equals(CleanStateEvent.DELETE_SUSPEND))) {
                 // 完成删除或者停止删除都跳转到结果页
-                handleDisappearAnimation();
+//                handleDisappearAnimation();
             }
         }
 
@@ -341,18 +351,29 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private void doCleanTrash() {
         // TODO: 2016/12/23 清理垃圾
         mAdapter.notifyDataSetChanged();
+        for (int i = 0; i < mAdapter.getGroupCount(); i++) {
+            mCleanTrashExpandableListView.collapseGroup(i);
+        }
+        SlideInLeftAnimator animator = new SlideInLeftAnimator();
+        animator.setRemoveDuration(500);
+        animator.setAddDuration(500);
+        mRvTrashGroupList.setLayoutManager(new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRvTrashGroupList.setItemAnimator(animator);
+        TrashGroupAdapter adapter = new TrashGroupAdapter(mPresenter.getDataGroup());
+        mRvTrashGroupList.setAdapter(adapter);
+        mRvTrashGroupList.setVisibility(View.VISIBLE);
+        mCleanTrashExpandableListView.setVisibility(View.GONE);
+        adapter.setOnItemRemoveListener(new TrashGroupAdapter.OnItemRemoveListener() {
+            @Override
+            public void onLastItemRemoved() {
+                handleDisappearAnimation();
+            }
+        });
+        adapter.removeAllItem();
+
         mCleanManager.startDelete();
         mPresenter.startDelete();
         mCleanManager.setLastTrashCleanTime(System.currentTimeMillis());
-        mAdapter.notifyDataSetChanged();
-
-       /* mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handleDisappearAnimation();
-            }
-        }, 2000);*/
 
         Toast.makeText(CleanTrashActivity.this, "clean start", Toast.LENGTH_SHORT).show();
     }

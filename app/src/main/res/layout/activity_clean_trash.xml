@@ -93,6 +93,13 @@
             android:layout_width="match_parent"
             android:background="@color/white">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_trash_group_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:visibility="gone"/>
+
             <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
                 android:id="@+id/clean_trash_expandable_list_view"
                 android:layout_width="match_parent"
