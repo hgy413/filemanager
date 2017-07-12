@@ -5,13 +5,13 @@ import android.content.Context;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.BaseDialog;
-import com.jb.filemanager.util.DrawUtils;
 
 /**
  * Created by xiaoyu on 2017/7/3 20:31.
@@ -37,8 +37,8 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
 
     private void initializeView() {
         View rootView = View.inflate(mContext, R.layout.dialog_zip_pass_input, null);
-        setContentView(rootView);
-        setSize(DrawUtils.dip2px(320), DrawUtils.dip2px(244));
+        setContentView(rootView, new ViewGroup.LayoutParams(
+                mContext.getResources().getDisplayMetrics().widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         mEditText = (EditText) rootView.findViewById(R.id.dialog_zip_pass_in_et);
 

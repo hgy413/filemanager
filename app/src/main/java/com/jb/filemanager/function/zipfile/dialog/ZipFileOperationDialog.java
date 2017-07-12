@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +15,6 @@ import com.jb.filemanager.function.zipfile.ZipFilePreviewActivity;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
 import com.jb.filemanager.ui.dialog.BaseDialog;
-import com.jb.filemanager.util.DrawUtils;
 
 import net.lingala.zip4j.exception.ZipException;
 
@@ -50,8 +50,8 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
 
     private void initializeView() {
         View rootView = View.inflate(mContext, R.layout.dialog_zip_file_detail, null);
-        setContentView(rootView);
-        setSize(DrawUtils.dip2px(320), DrawUtils.dip2px(218));
+        setContentView(rootView, new ViewGroup.LayoutParams(
+                mContext.getResources().getDisplayMetrics().widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         TextView fileName = (TextView) rootView.findViewById(R.id.file_name);
         fileName.setText(mFile.getFileName());
