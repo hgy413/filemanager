@@ -365,6 +365,12 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 //            Logger.e("SCROLL", "监听到文件选中状态的改变");
 //            setTotalCheckedSizeText();
             Logger.d(TAG, "监听文件选中状态改变" + event.toString());
+            if (event.equals(CleanNoneCheckedEvent.NONE)) {
+                //一个都没有选中
+                mIvCleanButton.setVisibility(View.GONE);
+            } else {
+                mIvCleanButton.setVisibility(View.VISIBLE);
+            }
         }
     };
 
