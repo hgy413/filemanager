@@ -306,5 +306,8 @@
     <string name="dialog_single_file_detail_size">Size</string>
     <string name="dialog_single_file_detail_contains">Contains</string>
 
+    <string name="dialog_multi_file_detail_title">Multiple Selection</string>
+    <string name="dialog_multi_file_detail_size">Size</string>
+    <string name="dialog_multi_file_detail_contains">Contains</string>
 
 </resources>

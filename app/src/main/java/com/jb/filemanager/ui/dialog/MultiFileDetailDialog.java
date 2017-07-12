@@ -16,16 +16,11 @@ import java.util.ArrayList;
  *
  */
 
-public class MultiFileDetailDialog extends ScreenWidthDialog {
+public class MultiFileDetailDialog extends FMBaseDialog {
 
     public MultiFileDetailDialog(Activity act, ArrayList<File> files, final Listener listener) {
         super(act, true);
         if (files != null && files.size() > 0) {
-            View dialogView = View.inflate(act, R.layout.dialog_main_multi_files_detail, null);
-            TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_confirm);
-            TextView size = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_size_value);
-            TextView containValue = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_contain_value);
-
             long filesSize = 0L;
             Integer folderTotalCount = 0;
             Integer fileTotalCount = 0;
@@ -41,15 +36,47 @@ public class MultiFileDetailDialog extends ScreenWidthDialog {
                     fileTotalCount++;
                 }
             }
-            size.setText(ConvertUtils.getReadableSize(filesSize));
-            containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, folderTotalCount, fileTotalCount));
 
-            okButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onConfirm(MultiFileDetailDialog.this);
-                }
-            }); // 确定按钮点击事件
+            View dialogView = View.inflate(act, R.layout.dialog_main_multi_files_detail, null);
+
+            TextView dialogTitle = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_title);
+            if (dialogTitle != null) {
+                dialogTitle.getPaint().setAntiAlias(true);
+            }
+
+
+            TextView sizeTitle = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_size_title);
+            if (sizeTitle != null) {
+                sizeTitle.getPaint().setAntiAlias(true);
+            }
+
+            TextView sizeValue = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_size_value);
+            if (sizeValue != null) {
+                sizeValue.getPaint().setAntiAlias(true);
+                sizeValue.setText(ConvertUtils.getReadableSize(filesSize));
+            }
+
+            TextView containTitle = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_contain_title);
+            if (containTitle != null) {
+                containTitle.getPaint().setAntiAlias(true);
+            }
+
+            TextView containValue = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_contain_value);
+            if (containValue != null) {
+                containValue.getPaint().setAntiAlias(true);
+                containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, folderTotalCount, fileTotalCount));
+            }
+
+            TextView okButton = (TextView) dialogView.findViewById(R.id.tv_main_multi_files_detail_confirm);
+            if (okButton != null) {
+                okButton.getPaint().setAntiAlias(true);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onConfirm(MultiFileDetailDialog.this);
+                    }
+                }); // 确定按钮点击事件
+            }
 
             setContentView(dialogView);
         }
