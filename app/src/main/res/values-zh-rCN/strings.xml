@@ -2,4 +2,5 @@
 <resources>
     <string name="clean_storage">Clean Storage</string>
     <string name="see"><![CDATA[See>>]]></string>
+    <string name="zip">Zip</string>
 </resources>

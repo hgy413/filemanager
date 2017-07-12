@@ -11,11 +11,11 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:drawableLeft="@drawable/iv_back_blue"
+        android:drawableLeft="@drawable/iv_back_blue_selector"
         android:drawablePadding="16dp"
-        android:drawableStart="@drawable/iv_back_blue"
-        android:text="Zip"
-        android:textColor="#b3000000"
+        android:drawableStart="@drawable/iv_back_blue_selector"
+        android:text="@string/zip"
+        android:textColor="@color/tv_back_black_text_selector"
         android:textSize="16dp"
         />
 
@@ -29,6 +29,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:contentDescription="@null"
-        android:src="@drawable/search_icon"
+        android:src="@drawable/black_search_icon_selector"
         />
 </merge>

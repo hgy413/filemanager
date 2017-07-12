@@ -344,4 +344,5 @@
     <string name="toast_rename_failed">Rename failed</string>
 
     <string name="see"><u><![CDATA[See>>]]></u></string>
+    <string name="zip">Zip</string>
 </resources>
