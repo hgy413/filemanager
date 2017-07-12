@@ -48,6 +48,18 @@
     <string name="main_info_switch_sdcard">SD</string>
 
     <!-- 抽屉栏 -->
+    <string name="drawer_tools">TOOLS</string>
+    <string name="drawer_app_locker">App Locker</string>
+    <string name="drawer_smart_locker">Smart Locker</string>
+    <string name="drawer_smart_charge">Smart Charge</string>
+    <string name="drawer_setting">SETTING</string>
+    <string name="drawer_usb_plugin_message">USB Plug-in message</string>
+    <string name="drawer_low_space_warning">Low Space Warning</string>
+    <string name="drawer_logger_notification">Logger Notification</string>
+    <string name="drawer_other">OTHER</string>
+    <string name="drawer_rating">Rating This App</string>
+    <string name="drawer_update">Update Setting</string>
+    <string name="drawer_help">Help</string>
     <string name="drawer_about">About</string>
     <string name="drawer_feedback">Feedback</string>
 

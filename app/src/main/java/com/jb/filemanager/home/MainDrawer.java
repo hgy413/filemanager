@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -46,9 +47,6 @@ public class MainDrawer implements View.OnClickListener {
     private static final int FLING_OPEN = 2;
     private int mOpenType = FLING_OPEN;
 
-    private RelativeLayout mRlDrawerBottom;
-    private MainDrawerAdapter mMainDrawerAdapter;
-    private RecyclerView mRvForDrawerItem;
 
     public MainDrawer(BaseActivity activity) {
         mActivity = activity;
@@ -131,33 +129,11 @@ public class MainDrawer implements View.OnClickListener {
     }
 
     private void initDrawerItems() {
-        mRvForDrawerItem = (RecyclerView) mActivity.findViewById(R.id.rv_for_drawer_item);
-        mRlDrawerBottom = (RelativeLayout) mActivity.findViewById(R.id.rl_drawer_bottom);
-        ImageView ivDrawerSetting = (ImageView) mActivity.findViewById(R.id.iv_drawer_setting);
-        ivDrawerSetting.setOnClickListener(this);
-
-        mRvForDrawerItem.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
-        List<DrawerItemBean> drawerList = getDrawerList();
-        mMainDrawerAdapter = new MainDrawerAdapter(drawerList, mActivity);
-        mRvForDrawerItem.setAdapter(mMainDrawerAdapter);
-        mMainDrawerAdapter.setOnItemClickListener(new MainDrawerAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(String tag, int position) {
-                switch (tag) {
-                    case FEED_BACK:
-                        jumpToFeedBack();
-                        break;
-                    case ABOUT:
-                        jumpToAbout();
-                        break;
-                    case CLEAN_TRASH:
-                        jumpToCleanCrash();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        TextView aboutItem = (TextView) mActivity.findViewById(R.id.tv_drawer_about);
+        if (aboutItem != null) {
+            aboutItem.getPaint().setAntiAlias(true);
+            aboutItem.setOnClickListener(this);
+        }
     }
 
     private List<DrawerItemBean> getDrawerList() {
@@ -181,7 +157,6 @@ public class MainDrawer implements View.OnClickListener {
             @Override
             public void run() {
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                mRvForDrawerItem.smoothScrollToPosition(0);
             }
         }, delayMills);
     }
@@ -194,7 +169,6 @@ public class MainDrawer implements View.OnClickListener {
             @Override
             public void run() {
                 mDrawerLayout.closeDrawers();
-                mRvForDrawerItem.smoothScrollToPosition(0);
             }
         }, delayMills);
     }
@@ -247,9 +221,10 @@ public class MainDrawer implements View.OnClickListener {
             return;
         }
         switch (v.getId()){
-            case R.id.iv_drawer_setting:
-                jumpToSetting();
+            case R.id.tv_drawer_about:
+                jumpToAbout();
                 break;
+
             default:
                 break;
         }
