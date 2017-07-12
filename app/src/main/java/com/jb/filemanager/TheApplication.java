@@ -1,8 +1,10 @@
 package com.jb.filemanager;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -45,6 +47,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 
 /**
@@ -59,6 +62,8 @@ public class TheApplication extends Application {
 
     private ScheduleTaskHandler mTaskHandler;
     private AlarmEight mAlarmEight;
+
+    public static Activity sCurrentActivity;
 
     private final static EventBus GLOBAL_EVENT_BUS = EventBus.getDefault();
     /**
@@ -76,6 +81,7 @@ public class TheApplication extends Application {
 
     private final static Handler SHORT_TASK_HANDLER = new Handler(
             SHORT_TASK_WORKER_THREAD.getLooper());
+    private ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
     public static TheApplication getInstance() {
         return sInstance;
@@ -122,6 +128,7 @@ public class TheApplication extends Application {
             Toast.makeText(this, "onCreate:" + AppUtils.getCurrentProcessName(this), Toast.LENGTH_SHORT).show();
         }
 
+        registerActivityLifecycleListener();
         if (isRunningOnMainProcess()) {
             onCreateForMainProcess();
         } else if (isRunningOnIntelligentPreloadServiceProcess()) {
@@ -145,6 +152,7 @@ public class TheApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         ExtractManager.getInstance().onAppDestroy();
+        unregisterActivityLifecycleListener();
     }
 
     public static Context getAppContext() {
@@ -494,4 +502,53 @@ public class TheApplication extends Application {
         GLOBAL_EVENT_BUS.postSticky(event);
     }
 
+    private void registerActivityLifecycleListener() {
+        if (mActivityLifecycleCallbacks != null) return;
+        mActivityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                WeakReference<Activity> reference = new WeakReference<Activity>(activity);
+                if (reference != null) {
+                    sCurrentActivity = reference.get();
+                }
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        };
+        registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+    }
+
+    private void unregisterActivityLifecycleListener() {
+        if (mActivityLifecycleCallbacks != null) {
+            unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+        }
+    }
 }

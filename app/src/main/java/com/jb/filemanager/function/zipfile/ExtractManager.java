@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
+import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
 import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.receiver.NotificationClickReceiver;
 import com.jb.filemanager.function.zipfile.task.ExtractFilesTask;
@@ -191,12 +192,15 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     @Override
     public void onCancelExtractFiles() {
         showMessage("解压取消");
+        Toast.makeText(mContext, "Extract Canceled.", Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
     @Override
     public void onExtractError() {
         showMessage("解压错误");
+        showExtractErrorDialog();
+        Toast.makeText(mContext, "Extract Error.", Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
@@ -248,6 +252,15 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     public boolean isProgressDialogAttached() {
         return mIsProgressDialogAttached;
+    }
+
+    /**
+     * 显示解压失败的弹窗
+     */
+    private void showExtractErrorDialog() {
+        if (TheApplication.sCurrentActivity == null) return;
+        ExtractErrorDialog extractErrorDialog = new ExtractErrorDialog(TheApplication.sCurrentActivity, mFileName);
+        extractErrorDialog.show();
     }
 
     /////////////////////////////////
@@ -334,6 +347,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
 
     /**
      * 发送解压完成的通知
+     *
      * @param savePath 路径
      */
     private void sendExtractAccomplishNotification(final String savePath) {
@@ -360,7 +374,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                notification.contentIntent = PendingIntent.getActivity(mContext, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                notification.contentIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(EXTRACT_COMPLETE_NOTIFICATION_ID, notification);
