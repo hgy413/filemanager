@@ -1,7 +1,10 @@
 package com.jb.filemanager.manager.file.task;
 
+import android.text.TextUtils;
+
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,10 +16,11 @@ import java.util.ArrayList;
 
 public class CopyFileTask {
 
+    private static final String LOG_TAG = "CopyFileTask";
+
     public static final int COPY_SUCCESS_START = 0;
     public static final int COPY_ERROR_UNKNOWN = -1;
     public static final int COPY_ERROR_NOT_ENOUGH_SPACE = -2;
-    public static final int COPY_ERROR_DEST_IN_SOURCE = -3;
 
     private Thread mWorkerThread;
     private Listener mListener;
@@ -25,8 +29,10 @@ public class CopyFileTask {
     private String mDest;
     private final Object mLocker = new Object();
     private boolean mIsSkip = false;
+    private boolean mIsStop = false;
+    private boolean mIsApplyToAll = false;
 
-    public CopyFileTask(ArrayList<File> source, String dest, Listener listener) {
+    public CopyFileTask(final ArrayList<File> source, String dest, Listener listener) {
 
         mListener = listener;
         mSource = new ArrayList<> (source);
@@ -35,7 +41,7 @@ public class CopyFileTask {
             @Override
             public void run() {
                 boolean result = false;
-                if (mSource != null && mSource.size() > 0) {
+                if (mSource != null && mSource.size() > 0 && !TextUtils.isEmpty(mDest)) {
                     result = true;
                     for (final File file : mSource) {
                         TheApplication.postRunOnUiThread(new Runnable() {
@@ -47,15 +53,16 @@ public class CopyFileTask {
                             }
                         });
 
-                        File test = new File(mDest + File.separator + file.getName());
-                        if (test.exists() && ((test.isDirectory() && file.isDirectory()) || ((test.isFile() && file.isFile())))) {
+                        if (mDest.startsWith(file.getAbsolutePath())) {
+                            Logger.i(LOG_TAG, "发现子路径:" + file.getAbsolutePath() + "  " + mDest);
                             try {
+                                Logger.i(LOG_TAG, "暂停询问处理方式:" + file.getAbsolutePath());
                                 synchronized (mLocker) {
                                     TheApplication.postRunOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (mListener != null) {
-                                                mListener.onDuplicate(CopyFileTask.this, file);
+                                                mListener.onSubFolderCopy(CopyFileTask.this, file, mDest);
                                             }
                                         }
                                     });
@@ -66,8 +73,41 @@ public class CopyFileTask {
                             }
                         }
 
+                        File test = new File(mDest + File.separator + file.getName());
+                        if (test.exists() && ((test.isDirectory() && file.isDirectory()) || ((test.isFile() && file.isFile())))) {
+                            Logger.i(LOG_TAG, "发现重名文件:" + file.getAbsolutePath());
+                            if (!mIsApplyToAll) {
+                                try {
+                                    Logger.i(LOG_TAG, "暂停询问处理方式:" + file.getAbsolutePath());
+                                    synchronized (mLocker) {
+                                        TheApplication.postRunOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (mListener != null) {
+                                                    mListener.onDuplicate(CopyFileTask.this, file, mSource);
+                                                }
+                                            }
+                                        });
+                                        mLocker.wait();
+                                    }
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Logger.i(LOG_TAG, "应用之前的选择:" + file.getAbsolutePath());
+                            }
+                        }
+
+                        if (mIsStop) {
+                            Logger.i(LOG_TAG, "停止");
+                            break;
+                        }
+
                         if (!mIsSkip) {
+                            Logger.i(LOG_TAG, "覆盖:" + file.getAbsolutePath());
                             result = result && FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
+                        } else {
+                            Logger.i(LOG_TAG, "跳过:" + file.getAbsolutePath());
                         }
                     }
                 }
@@ -97,9 +137,6 @@ public class CopyFileTask {
                 case FileUtil.PASTE_CHECK_ERROR_UNKNOWN:
                     resultCode = COPY_ERROR_UNKNOWN;
                     break;
-                case FileUtil.PASTE_CHECK_ERROR_DEST_IN_SOURCE:
-                    resultCode = COPY_ERROR_DEST_IN_SOURCE;
-                    break;
                 case FileUtil.PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE:
                     resultCode = COPY_ERROR_NOT_ENOUGH_SPACE;
                     break;
@@ -111,15 +148,24 @@ public class CopyFileTask {
         return resultCode;
     }
 
-    public void continueCopy(boolean isSkip) {
+    public void continueCopy(boolean isSkip, Boolean isApplyToAll) {
         synchronized (mLocker) {
             mIsSkip = isSkip;
+            if (isApplyToAll != null) {
+                mIsApplyToAll = isApplyToAll;
+            }
             mLocker.notify();
         }
     }
 
+    public void stopCut() {
+        mIsStop = true;
+        mLocker.notify();
+    }
+
     public interface Listener {
-        void onDuplicate(CopyFileTask task, File file);
+        void onSubFolderCopy(CopyFileTask task, File file, String dest);
+        void onDuplicate(CopyFileTask task, File file, ArrayList<File> copySource);
         void onProgressUpdate(File file);
         void onPostExecute(Boolean aBoolean);
     }

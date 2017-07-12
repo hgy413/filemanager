@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_duplicate_file_title"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="@string/dialog_duplicate_file_title"/>
+
+    <TextView
+        android:id="@+id/tv_duplicate_file_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:text="@string/dialog_duplicate_file_desc"/>
+
+    <TextView
+        android:id="@+id/tv_duplicate_file_src"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:drawablePadding="16dp"
+        android:textColor="#000000"
+        android:textSize="14dp"/>
+
+    <TextView
+        android:id="@+id/tv_duplicate_file_apply_to_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/ic_duplicate_file_apply_to_all"
+        android:drawableStart="@drawable/ic_duplicate_file_apply_to_all"
+        android:textColor="#000000"
+        android:textSize="12dp"
+        android:text="@string/dialog_duplicate_file_apply_to_all"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_duplicate_file_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:minWidth="80dp"
+            android:gravity="center"
+            android:textColor="@color/dialog_cancel_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/common_cancel"/>
+
+        <TextView
+            android:id="@+id/tv_duplicate_file_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:minWidth="80dp"
+            android:gravity="center"
+            android:textColor="@color/dialog_confirm_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:text="@string/common_ok"/>
+
+    </LinearLayout>
+
+</LinearLayout>

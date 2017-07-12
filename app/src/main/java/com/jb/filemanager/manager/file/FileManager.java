@@ -125,7 +125,12 @@ public class FileManager {
             new CopyFileTask(mCopyFiles, destDir, new CopyFileTask.Listener() {
 
                 @Override
-                public void onDuplicate(CopyFileTask task, File file) {
+                public void onSubFolderCopy(CopyFileTask task, File file, String dest) {
+                    // TODO @wangzq
+                }
+
+                @Override
+                public void onDuplicate(CopyFileTask task, File file, ArrayList<File> copySource) {
                     if (mPasteLockers == null) {
                         mPasteLockers = new HashMap<>();
                     }
@@ -134,6 +139,7 @@ public class FileManager {
                     Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilesActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_IS_SINGLE, copySource.size() == 1);
                     TheApplication.getInstance().startActivity(intent);
                 }
 
@@ -157,7 +163,12 @@ public class FileManager {
             new CutFileTask(mCutFiles, destDir, new CutFileTask.Listener() {
 
                 @Override
-                public void onDuplicate(CutFileTask task, File file) {
+                public void onSubFolderCopy(CutFileTask task, File file, String dest) {
+                    // TODO @wangzq
+                }
+
+                @Override
+                public void onDuplicate(CutFileTask task, File file, ArrayList<File> cutSource) {
                     if (mPasteLockers == null) {
                         mPasteLockers = new HashMap<>();
                     }
@@ -166,6 +177,7 @@ public class FileManager {
                     Intent intent = new Intent(TheApplication.getInstance(), DuplicateFilesActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_PATH, file.getAbsolutePath());
+                    intent.putExtra(DuplicateFilesActivity.DUPLICATE_FILE_IS_SINGLE, cutSource.size() == 1);
                     TheApplication.getInstance().startActivity(intent);
                 }
 
@@ -190,13 +202,13 @@ public class FileManager {
         }
     }
 
-    public void continuePaste(String path, boolean skip) {
+    public void continuePaste(String path, boolean skip, boolean applyToAll) {
         if (!TextUtils.isEmpty(path) && mPasteLockers != null && mPasteLockers.containsKey(path)) {
             Object task = mPasteLockers.remove(path);
             if (task instanceof CopyFileTask) {
-                ((CopyFileTask) task).continueCopy(skip);
+                ((CopyFileTask) task).continueCopy(skip, applyToAll);
             } else if (task instanceof CutFileTask) {
-                ((CutFileTask) task).continueCut(skip);
+                ((CutFileTask) task).continueCut(skip, applyToAll);
             }
         }
     }

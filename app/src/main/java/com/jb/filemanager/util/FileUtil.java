@@ -41,7 +41,6 @@ public class FileUtil {
     public static final int PASTE_CHECK_SUCCESS = 0;
     public static final int PASTE_CHECK_ERROR_UNKNOWN = -1;
     public static final int PASTE_CHECK_ERROR_NOT_ENOUGH_SPACE = -2;
-    public static final int PASTE_CHECK_ERROR_DEST_IN_SOURCE = -3;
 
 
     public static final String HIDDEN_PREFIX = ".";
@@ -455,12 +454,6 @@ public class FileUtil {
 
             // TODO @wangzq 检查空间
 
-            for (File file : fileArrayList) {
-                if (destDir.startsWith(file.getAbsolutePath())) {
-                    result = PASTE_CHECK_ERROR_DEST_IN_SOURCE;
-                    break;
-                }
-            }
         }
         return result;
     }

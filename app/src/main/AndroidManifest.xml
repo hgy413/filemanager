@@ -99,7 +99,7 @@
         <activity
             android:name=".function.duplicate.DuplicateFilesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg_no_anim"/>
 
         <!-- 图片管理页 -->
         <activity

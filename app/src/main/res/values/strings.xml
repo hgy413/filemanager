@@ -315,6 +315,11 @@
     <string name="dialog_delete_confirm_desc">Are you sure to delete the selected item(s)?</string>
     <string name="home_trash_notice">%1$s可清理</string>
 
+    <string name="dialog_duplicate_file_title">File Duplicated</string>
+    <string name="dialog_duplicate_file_desc">The same filename already exists, Do you want to overwrite?</string>
+    <string name="dialog_duplicate_file_apply_to_all">Apply to all</string>
+
+
     <!-- Toast -->
     <string name="toast_create_folder_failed">Create folder failed</string>
     <string name="toast_rename_failed">Rename failed</string>
