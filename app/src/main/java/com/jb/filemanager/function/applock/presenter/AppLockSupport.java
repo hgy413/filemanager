@@ -2,7 +2,6 @@ package com.jb.filemanager.function.applock.presenter;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.applock.manager.AntiPeepDataManager;
 import com.jb.filemanager.function.applock.manager.LockerMonitorManager;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
@@ -60,7 +59,8 @@ public class AppLockSupport implements AppLockContract.Support {
     @Override
     public boolean getIntruderSwitcherState() {
         SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
-        return sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_REVEAL_ENABLE, false);
+//        return sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_REVEAL_ENABLE, false);
+        return true;
     }
 
     @Override
@@ -72,12 +72,13 @@ public class AppLockSupport implements AppLockContract.Support {
 
     @Override
     public void updateIntruderPhoto() {
-        AntiPeepDataManager.getInstance(TheApplication.getAppContext()).updateAllPhoto();
+//        AntiPeepDataManager.getInstance(TheApplication.getAppContext()).updateAllPhoto();
     }
 
     @Override
     public int getIntruderPhotoSize() {
-        return AntiPeepDataManager.getInstance(TheApplication.getAppContext()).getAllPhotoAfterUpdate().size();
+//        return AntiPeepDataManager.getInstance(TheApplication.getAppContext()).getAllPhotoAfterUpdate().size();
+        return 1;
     }
 
     @Override

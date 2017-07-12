@@ -74,4 +74,9 @@
     <color name="middle_gray">#404040</color>
     <color name="light_gray">#4c4c4c</color>
 
+
+    <!--文字样式-->
+    <color name="title_dark_gray">#70000000</color>
+    <color name="title_light_gray">#40000000</color>
+    <color name="tip_gray">#40000000</color>
 </resources>

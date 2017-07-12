@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                tools:background="@color/ad_color_8acb29">
+
+    <ImageView
+        android:id="@+id/common_applock_bar_layout_back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/common_white_back"/>
+
+    <TextView
+        android:id="@+id/common_applock_bar_layout_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/common_applock_bar_layout_back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/h3_16"
+        tools:text="title"/>
+
+    <ImageView
+        android:id="@+id/common_applock_bar_layout_setting"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_applock_setting"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/common_applock_bar_layout_search"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_toLeftOf="@id/common_applock_bar_layout_setting"
+        android:src="@drawable/ic_action_bar_search"/>
+
+</RelativeLayout>

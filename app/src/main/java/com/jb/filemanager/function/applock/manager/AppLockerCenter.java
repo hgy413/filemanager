@@ -26,9 +26,9 @@ public class AppLockerCenter {
 		mLockerReceiverManager = LockerReceiverManager.getInstance();
 		mLockerServiceManager = LockerServiceManager.getInstance();
 		//当没有使用这个功能 则将对应文件夹的所有图片删除掉
-		if (!SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_APP_LOCK_ENABLE, false)) {
-			AntiPeepFileUtil.deleteAllFile();
-		}
+//		if (!SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_APP_LOCK_ENABLE, false)) {
+//			AntiPeepFileUtil.deleteAllFile();
+//		}
 	}
 	
 	public static AppLockerCenter getInstance() {

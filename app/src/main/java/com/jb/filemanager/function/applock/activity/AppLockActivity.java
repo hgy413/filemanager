@@ -13,10 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.applock.adapter.AppLockAdapter;
-import com.jb.filemanager.function.applock.event.IntruderSwitcherStateEvent;
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.presenter.AppLockContract;
 import com.jb.filemanager.function.applock.presenter.AppLockPresenter;
@@ -25,9 +22,6 @@ import com.jb.filemanager.function.applock.view.SearchBarLayout;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.APIUtil;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -84,9 +78,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
         mCheckTxt = (TextView) findViewById(R.id.activity_applock_header_check);
         initGradient();
         mPresenter = new AppLockPresenter(this, new AppLockSupport());
-        if (!TheApplication.getGlobalEventBus().isRegistered(mIOnEventMainThreadSubscriber)) {
-            TheApplication.getGlobalEventBus().register(mIOnEventMainThreadSubscriber);
-        }
         mPresenter.loadData();
     }
 
@@ -147,7 +138,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
             }
         });
 
-        mSearchBarLayout.setOnSearchTxtChgLisenter(new SearchBarLayout.OnSearchEvtLisenter() {
+        mSearchBarLayout.setOnSearchActionLisenter(new SearchBarLayout.OnSearchEvtLisenter() {
             @Override
             public void searchTxtChange(Editable editable) {
                 if (mPresenter != null) {
@@ -156,7 +147,13 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
             }
 
             @Override
-            public void searchOnclick() {
+            public void dismiss() {
+
+            }
+
+            @Override
+            public void onShow() {
+
             }
         });
         mSetting.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +185,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
      */
     private void dealback(boolean isSystemBack) {
         if (mSearchBarLayout != null && !mSearchBarLayout.safeToSlideClose()) {
-            if (TheApplication.getGlobalEventBus().isRegistered(mIOnEventMainThreadSubscriber)) {
-                TheApplication.getGlobalEventBus().unregister(mIOnEventMainThreadSubscriber);
-            }
             if (isSystemBack) {
 //                StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_BACK2);
             } else {
@@ -212,9 +206,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     protected void onDestroy() {
-        if (TheApplication.getGlobalEventBus().isRegistered(mIOnEventMainThreadSubscriber)) {
-            TheApplication.getGlobalEventBus().unregister(mIOnEventMainThreadSubscriber);
-        }
         if (mSearchBarLayout != null) {
             mSearchBarLayout.release(this);
         }
@@ -305,7 +296,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     public void showIntruderTipDialog() {
-        IntruderOpenGuideActivity.pop();
         //点击检测按钮统计
 //        StatisticsTools.logBothEvent(StatisticsConst.APP_LOCK_LIST_ACT_CLI_CHECK);
     }
@@ -322,20 +312,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
         mEntranceArrow.setVisibility(View.GONE);
     }
 
-    private IOnEventMainThreadSubscriber<IntruderSwitcherStateEvent> mIOnEventMainThreadSubscriber = new IOnEventMainThreadSubscriber<IntruderSwitcherStateEvent>() {
-        @Override
-        @Subscribe (threadMode = ThreadMode.MAIN)
-        public void onEventMainThread(IntruderSwitcherStateEvent event) {
-            if (event.isOpen) {
-                mCheckTxt.setVisibility(View.GONE);
-                mEntranceArrow.setVisibility(View.VISIBLE);
-            } else {
-                mCheckTxt.setVisibility(View.VISIBLE);
-                mEntranceArrow.setVisibility(View.GONE);
-            }
-        }
-    };
-
     @Override
     public void showIntruderPhotoCounts(int counts) {
         if (mIntruderNumTxt != null) {
@@ -350,7 +326,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     public void gotoIntruderVertGallery() {
-        IntruderVertGalleryActivity.gotoIntruderVertGallery(this);
     }
 
 }

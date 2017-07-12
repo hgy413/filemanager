@@ -8,9 +8,7 @@
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
-    <include
-        android:id="@+id/fragment_app_lock_head"
-        layout="@layout/common_applock_bar_layout"/>
+    <include layout="@layout/common_applock_bar_layout"/>
 
     <LinearLayout
         android:id="@+id/fragment_app_lock_step"
@@ -98,7 +96,7 @@
         android:textSize="@dimen/h3_16"
         tools:text="Please set up a password"/>
 
-    <com.jb.filemanager.function.applock.view.PatternView
+    <com.jb.filemanager.function.applock1.view.PatternView
         android:id="@+id/fragment_app_lock_set_psd_patternview"
         android:layout_width="240dp"
         android:layout_height="240dp"
@@ -162,8 +160,6 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@null"
-        android:maxLength="15"
-        android:maxLines="1"
         android:gravity="left|center_vertical"
         android:hint="@string/applock_psd_answer_question_edit_hint"
         android:paddingLeft="10dp"
@@ -235,18 +231,4 @@
         android:layout_marginRight="30dp"
         android:background="#E7E9F3"/>
 
-    <TextView
-        android:id="@+id/fragment_app_lock_set_psd_bottom_save"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:layout_marginTop="100dp"
-        android:textSize="@dimen/h3_16"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:text="@string/common_ok"
-        android:visibility="gone"
-        android:background="@drawable/shape_btu_bg"/>
-    
 </LinearLayout>

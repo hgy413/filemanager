@@ -1,30 +1,20 @@
 package com.jb.filemanager.function.applock.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.applock.dialog.QuestionListDialog;
 import com.jb.filemanager.function.applock.presenter.PsdInitContract;
 import com.jb.filemanager.function.applock.presenter.PsdInitPresenter;
 import com.jb.filemanager.function.applock.presenter.PsdInitSupport;
-import com.jb.filemanager.function.applock.view.NumberLockerView;
 import com.jb.filemanager.function.applock.view.PatternView;
-import com.jb.filemanager.util.APIUtil;
+import com.jb.filemanager.function.applock1.dialog.ListDialog;
 import com.jb.filemanager.util.Logger;
 
 import java.util.List;
@@ -55,59 +45,39 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
 
     public static final String PSD_ANSWER_WORD = "psd_answer_word";
 
-    public static final String PSD_DEFAULT_TYPE_IS_PATTERN = "psd_default_type_is_pattern";
+    public static final String PSD_LOCK_OPTIONS = "psd_lock_options";
 
     private final String TAG = "PsdSettingActivity";
-
+    //步数层布局
+    private View[] mStepFl;
+    //步数图片视图
+    private ImageView[] mStepIv;
+    //提示
+    private TextView mApplockTip;
+    //图案密码
     private PatternView mPatternView;
-
-    private ImageView mLockTypeImg;
-
-    private NumberLockerView mNumberLockerView;
-
-    private View mLockTypeSwitch;
-
-    private View mRootGradientBg;
-
-    private TextView mStepTxt1;
-
-    private TextView mStepTxt2;
-
-    private View mStepLine2;
-
-    private TextView mStepTxt3;
-
-    private View mStepLayout;
+    //保存
+    private View mSave;
+    //返回按钮
+    private ImageView mBack;
+    //标题
+    private TextView mTitle;
+    //问题部分布局
+    private View mQuestionView;
+    private TextView mQuestionTextView;
+    private View mQuestionBottomLine1;
+    private EditText mQuestionInput;
+    private View mQuestionBottomLine2;
+    private TextView mLockOptionsTip;
+    private View mLockOptionsView;
+    private TextView mLockOptionsTextView;
+    private View mQuestionBottomLine3;
+    //问题列表对话框
+    private ListDialog mQuestionListDialog;
+    //选项列表对话框
+    private ListDialog mOptionsListDialog;
 
     private PsdInitContract.Presenter mPresenter;
-
-    private View mBack;
-
-    private View mTitle;
-
-    private TextView mTopTip;
-
-    private View mSetProblemLayout;
-
-    private View mQuestionBotLine;
-
-    private TextView mQuestionTip;
-
-    private EditText mAnswer;
-
-    private View mQuestionLayout;
-
-    private QuestionListDialog mQuestionListDialog;
-
-    private View mSave;
-
-    private ImageView mArrow;
-
-    private float mDefaultMargin;
-    private float mDefaultSSize;
-    private float mDefaultLSize;
-
-    private ValueAnimator mRotateAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,52 +92,43 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
      */
     private void initView() {
         mPresenter = new PsdInitPresenter(this, new PsdInitSupport());
-        mPatternView = (PatternView) findViewById(R.id.activity_psd_initialize_patternview);
-        mLockTypeSwitch = findViewById(R.id.activity_psd_initialize_lock_type_layout);
-        mLockTypeImg = (ImageView) findViewById(R.id.activity_psd_initialize_lock_type);
-        mNumberLockerView = (NumberLockerView) findViewById(R.id.activity_psd_initialize_numbserlockerview);
-        mNumberLockerView.setColorStyle(NumberLockerView.DARK_STYLE);
-        mRootGradientBg = findViewById(R.id.activity_psd_initialize_root_bg);
-        mStepTxt1 = (TextView) findViewById(R.id.activity_psd_initialize_step_1);
-        mStepTxt2 = (TextView) findViewById(R.id.activity_psd_initialize_step_2);
-        mStepTxt3 = (TextView) findViewById(R.id.activity_psd_initialize_step_3);
-        mStepLayout = findViewById(R.id.activity_psd_initialize_step_layout);
-        mStepLine2 = findViewById(R.id.activity_psd_initialize_step_2_3_line);
-        mTopTip = (TextView) findViewById(R.id.activity_psd_initialize_top_tip);
-        mSetProblemLayout = findViewById(R.id.activity_psd_initialize_set_problem);
-        mQuestionTip = (TextView) findViewById(R.id.activity_psd_initialize_show);
-        mQuestionBotLine = findViewById(R.id.activity_psd_initialize_bottom_line);
-        mQuestionLayout = findViewById(R.id.activity_psd_initialize_question_layout);
-        mSave = findViewById(R.id.activity_psd_initialize_question_save);
-        mAnswer = (EditText) findViewById(R.id.activity_psd_initialize_question_input);
-        mDefaultMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-        mDefaultSSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 21, getResources().getDisplayMetrics());
-        mDefaultLSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 26, getResources().getDisplayMetrics());
-        mQuestionTip.setText(getResources().getStringArray(R.array.pupup_window_reset_psd_questions)[QuestionListDialog.WEN_BIRTHDAY]);
-        ((TextView) findViewById(R.id.activity_title_word)).setText(R.string.activity_applock_title);
-        mBack = findViewById(R.id.activity_title_icon);
-        mTitle = findViewById(R.id.activity_title_word);
-        initGradient();
+        //步数
+        mStepFl = new View[3];
+        mStepIv = new ImageView[3];
+        //步数布局
+        mStepFl[0] = findViewById(R.id.fragment_app_lock_step_1_fl);
+        mStepFl[1] = findViewById(R.id.fragment_app_lock_step_2_fl);
+        mStepFl[2] = findViewById(R.id.fragment_app_lock_step_3_fl);
+        //步数图片视图
+        mStepIv[0] = (ImageView) findViewById(R.id.fragment_app_lock_step_1_iv);
+        mStepIv[1] = (ImageView) findViewById(R.id.fragment_app_lock_step_2_iv);
+        mStepIv[2] = (ImageView) findViewById(R.id.fragment_app_lock_step_3_iv);
+        //提示
+        mApplockTip = (TextView) findViewById(R.id.fragment_app_lock_step_tip);
+        //图案密码
+        mPatternView = (PatternView) findViewById(R.id.fragment_app_lock_set_psd_patternview);
+        mQuestionView = findViewById(R.id.fragment_app_lock_set_psd_question_layout);
+        mQuestionTextView = (TextView) findViewById(R.id.fragment_app_lock_set_psd_show);
+        mQuestionBottomLine1 = findViewById(R.id.fragment_app_lock_set_psd_bottom_line);
+        mQuestionInput = (EditText) findViewById(R.id.fragment_app_lock_set_psd_question_input);
+        mQuestionBottomLine2 = findViewById(R.id.fragment_app_lock_set_psd_bottom_line2);
+        mLockOptionsView = findViewById(R.id.fragment_app_lock_lock_options_layout);
+        mLockOptionsTip = (TextView) findViewById(R.id.fragment_app_lock_lock_options);
+        mLockOptionsTextView = (TextView) findViewById(R.id.fragment_app_lock_lock_options_show);
+        mQuestionBottomLine3 = findViewById(R.id.fragment_app_lock_set_psd_bottom_line3);
+        mSave = findViewById(R.id.fragment_app_lock_set_psd_bottom_save);
+        findViewById(R.id.fragment_app_lock_head).setBackgroundColor(0xFF39BDAC);
+        //标题
+        mBack = (ImageView) findViewById(R.id.common_applock_bar_layout_back);
+        mTitle = (TextView) findViewById(R.id.common_applock_bar_layout_title);
+        mTitle.setText(R.string.activity_applock_title);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             int mode = bundle.getInt(PSD_SETTING_MODE);
             mPresenter.setMode(mode);
-            boolean isPatternPsd = bundle.getBoolean(PSD_DEFAULT_TYPE_IS_PATTERN, true);
-            mPresenter.setPsdType(isPatternPsd);
         }
         mPresenter.start();
-    }
-
-    private void initGradient() {
-        int startColor = 0xff0084ff;
-        int endColor = 0xff3bd6f2;
-        GradientDrawable gradientDrawableLR = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{startColor, endColor});
-        gradientDrawableLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        gradientDrawableLR.setShape(GradientDrawable.RECTANGLE);
-        APIUtil.setBackground(mRootGradientBg, gradientDrawableLR);
-        mArrow = (ImageView) findViewById(R.id.activity_psd_initialize_arrow);
-        //执行变色
-        mArrow.setColorFilter(0xffcccccc, PorterDuff.Mode.SRC_ATOP);
+        initListener();
     }
 
     /**
@@ -193,12 +154,29 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
             }
         });
 
+        mQuestionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mQuickClickGuard.isQuickClick(v.getId())) {
+                    mQuestionListDialog.showUnderView(mQuestionBottomLine1);
+                }
+            }
+        });
+
+        mLockOptionsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mQuickClickGuard.isQuickClick(v.getId())) {
+                    mOptionsListDialog.showUnderView(mQuestionBottomLine3);
+                }
+            }
+        });
+
         mPatternView.setOnPatternListener(new PatternView.OnPatternListener() {
             @Override
             public void onPatternStart() {
                 if (mPresenter != null) {
                     mPresenter.dealPatternStart();
-                    mPresenter.dealPasscodeInput();
                 }
             }
 
@@ -220,61 +198,6 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
             }
         });
 
-        mNumberLockerView.setOnNumberListener(new NumberLockerView.OnNumberListener() {
-            @Override
-            public void onNumberFinish(String[] numbers) {
-                if (mPresenter != null) {
-                    mPresenter.cacheNumber(numbers);
-                }
-            }
-
-            @Override
-            public void onNumberInput(String number) {
-                if (mPresenter != null) {
-                    mPresenter.dealPasscodeInput();
-                }
-            }
-
-            @Override
-            public void onNumberAllDeleted() {
-                if (mPresenter != null) {
-                    mPresenter.dealPasscodeAllDeleted();
-                }
-            }
-        });
-
-        mQuestionLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mQuestionListDialog == null) {
-                    mQuestionListDialog = new QuestionListDialog(mQuestionTip, QuestionListDialog.WEN_BIRTHDAY);
-                    mQuestionListDialog.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            //消失 执行旋转动画
-                            arrowRotateAnim(false);
-                            //分割线 变灰色
-                            mQuestionBotLine.setBackgroundColor(0xffcccccc);
-                        }
-                    });
-                }
-                mQuestionListDialog.showUnderView(mQuestionBotLine);
-                //显示 执行旋转动画
-                arrowRotateAnim(true);
-                //分割线 变蓝色
-                mQuestionBotLine.setBackgroundColor(0xff219eff);
-            }
-        });
-
-        mLockTypeSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPresenter != null) {
-                    mPresenter.chgLockerType();
-                }
-            }
-        });
-
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,140 +209,84 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
         });
     }
 
-    /**
-     * 箭头旋转动画
-     */
-    private void arrowRotateAnim(final boolean isPopUpWindowShow) {
-        if (mRotateAnimator == null) {
-            mRotateAnimator = ValueAnimator.ofFloat(0 , 1);
-        }
-        mRotateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (isPopUpWindowShow) {
-                    float now = (float) animation.getAnimatedValue();
-                    float rotate = -90 + now * 180;
-                    mArrow.setRotation(rotate);
-                } else {
-                    float now = (float) animation.getAnimatedValue();
-                    now = 1 - now;
-                    float rotate = -90 + now * 180;
-                    mArrow.setRotation(rotate);
-                }
-            }
-        });
-        mRotateAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (isPopUpWindowShow) {
-                    //执行变色
-                    mArrow.setColorFilter(0xff219eff, PorterDuff.Mode.SRC_ATOP);
-                } else {
-                    //执行变色
-                    mArrow.setColorFilter(0xffcccccc, PorterDuff.Mode.SRC_ATOP);
-                }
-            }
-        });
-        mRotateAnimator.start();
-    }
-
     @Override
     public void showStepTopPatternTip(int step) {
         switch (step) {
             case 1:
-                mTopTip.setText(R.string.set_graphic_password_message_draw);
+                mStepIv[0].setAlpha(1f);
+                mStepIv[1].setAlpha(0.5f);
+                mStepIv[2].setAlpha(0.5f);
+                setQuestionLayerVisiable(false);
+                mApplockTip.setText(R.string.applock_psd_set_step_1);
                 break;
             case 2:
-                mTopTip.setText(R.string.set_graphic_password_message_redraw);
+                mStepIv[0].setAlpha(0.5f);
+                mStepIv[1].setAlpha(1f);
+                mStepIv[2].setAlpha(0.5f);
+                setQuestionLayerVisiable(false);
+                mApplockTip.setText(R.string.applock_psd_set_step_2);
                 break;
             case 3:
-                mTopTip.setText(R.string.set_graphic_password_message_set_question);
+                mStepIv[0].setAlpha(0.5f);
+                mStepIv[1].setAlpha(0.5f);
+                mStepIv[2].setAlpha(1f);
+                setQuestionLayerVisiable(true);
+                mApplockTip.setText(R.string.applock_psd_set_step_3);
                 break;
         }
     }
 
     @Override
-    public void showStepTopNumberTip(int step) {
-        switch (step) {
-            case 1:
-                mTopTip.setText(R.string.set_number_password_message_draw);
-                break;
-            case 2:
-                mTopTip.setText(R.string.set_number_password_message_redraw);
-                break;
-            case 3:
-                mTopTip.setText(R.string.set_graphic_password_message_set_question);
-                break;
-        }
-    }
-
-    @Override
-    public void showPsdViewDismissQuestion(boolean isPatternPsd) {
-        if (isPatternPsd) {
-            mPatternView.setVisibility(View.VISIBLE);
-        } else {
-            mNumberLockerView.setVisibility(View.VISIBLE);
-        }
-        mSetProblemLayout.setVisibility(View.GONE);
+    public void showPsdViewDismissQuestion() {
+        mPatternView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showProblemViewDismissPsd() {
         mPatternView.setVisibility(View.GONE);
-        mNumberLockerView.setVisibility(View.GONE);
-        mSetProblemLayout.setVisibility(View.VISIBLE);
     }
 
     /**
-     * @param step    具体第几步
-     * @param isLarge 是否显示为大圆
+     * 设置问题层的展示
+     *
+     * @param show 是否展示
      */
-    @Override
-    public void showStep(int step, boolean isLarge) {
-        TextView temp = null;
-        switch (step) {
-            case 1:
-                temp = mStepTxt1;
-                break;
-            case 2:
-                temp = mStepTxt2;
-                break;
-            case 3:
-                temp = mStepTxt3;
-                break;
+    private void setQuestionLayerVisiable(boolean show) {
+        int visiable = show ? View.VISIBLE : View.GONE;
+        int unVisiable = show ? View.GONE : View.VISIBLE;
+        mQuestionView.setVisibility(visiable);
+        mQuestionTextView.setVisibility(visiable);
+        mQuestionBottomLine1.setVisibility(visiable);
+        mQuestionInput.setVisibility(visiable);
+        mQuestionBottomLine2.setVisibility(visiable);
+        mLockOptionsView.setVisibility(visiable);
+        mLockOptionsTip.setVisibility(visiable);
+        mLockOptionsTextView.setVisibility(visiable);
+        mQuestionBottomLine3.setVisibility(visiable);
+        mSave.setVisibility(visiable);
+        mPatternView.setVisibility(unVisiable);
+        if (show) {
+            String[] questions = this.getResources().getStringArray(R.array.pupup_window_reset_psd_questions);
+            String[] options = this.getResources().getStringArray(R.array.pupup_window_lock_options);
+            if (questions != null) {
+                mQuestionTextView.setText(questions[0]);
+            }
+            if (options != null) {
+                mLockOptionsTextView.setText(options[0]);
+            }
+            mQuestionInput.setText("");
+            if (mQuestionListDialog == null) {
+                mQuestionListDialog = new ListDialog(mQuestionTextView, R.array.pupup_window_reset_psd_questions);
+            }
+            if (mOptionsListDialog == null) {
+                mOptionsListDialog = new ListDialog(mLockOptionsTextView, R.array.pupup_window_lock_options);
+            }
         }
-        if (temp == null) {
-            return;
-        }
-        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) temp.getLayoutParams();
-        if (isLarge) {
-            layoutParams1.leftMargin = 0;
-            layoutParams1.rightMargin = 0;
-            layoutParams1.width = (int) mDefaultLSize;
-            layoutParams1.height = (int) mDefaultLSize;
-            temp.setBackgroundResource(R.drawable.ic_about_logo);
-            temp.setTextColor(0xff22a3fe);
-        } else {
-            layoutParams1.rightMargin = (int) mDefaultMargin;
-            layoutParams1.leftMargin = (int) mDefaultMargin;
-            layoutParams1.width = (int) mDefaultSSize;
-            layoutParams1.height = (int) mDefaultSSize;
-            temp.setBackgroundResource(R.drawable.ic_about_logo);
-            temp.setTextColor(0xffcee5ff);
-        }
-        temp.requestLayout();
     }
 
     @Override
     public void showPatternDiffTip() {
         Toast.makeText(this, R.string.set_graphic_password_message_wrong, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showNumberErrorAnim() {
-        if (mNumberLockerView != null) {
-            mNumberLockerView.shakeNumberLayout();
-        }
     }
 
     @Override
@@ -429,8 +296,7 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
 
     @Override
     public void invisiableStep3() {
-        mStepLine2.setVisibility(View.GONE);
-        mStepTxt3.setVisibility(View.GONE);
+        setQuestionLayerVisiable(false);
     }
 
     @Override
@@ -439,12 +305,7 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
     }
 
     @Override
-    public void dismissStepView() {
-        mStepLayout.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void setResult(boolean isPatternPsd, String passcode, String question, String answer) {
+    public void setResult(String passcode, String question, String answer, boolean isLockForLeave) {
         Intent intent = new Intent();
         if (!TextUtils.isEmpty(answer)) {
             intent.putExtra(PSD_ANSWER_WORD, answer);
@@ -452,83 +313,45 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
         if (!TextUtils.isEmpty(question)) {
             intent.putExtra(PSD_QUESTION_WORD, question);
         }
-        intent.putExtra(PSD_DEFAULT_TYPE_IS_PATTERN, isPatternPsd);
         intent.putExtra(PSD_GRAPHICAL_PASSCODE, passcode);
+        intent.putExtra(PSD_LOCK_OPTIONS, isLockForLeave);
         setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
     public String getProblem() {
-        if (mQuestionTip != null) {
-            return mQuestionTip.getText().toString().trim();
+        if (mQuestionTextView != null) {
+            return mQuestionTextView.getText().toString().trim();
         }
         return null;
     }
 
     @Override
     public String getAnswer() {
-        if (mAnswer != null) {
-            return mAnswer.getText().toString().trim();
+        if (mQuestionInput != null) {
+            return mQuestionInput.getText().toString().trim();
         }
         return null;
     }
 
     @Override
-    public void clearPsd(boolean isPatternPsd) {
-        if (isPatternPsd) {
-            mPatternView.clearPattern();
-            mPatternView.setDisplayMode(PatternView.DisplayMode.Correct);
-        } else {
-            mNumberLockerView.clean();
+    public int getLockOptions() {
+        if (mOptionsListDialog != null) {
+            return mOptionsListDialog.getCurrentPos();
         }
+        return 0;
+    }
+
+    @Override
+    public void clearPsd() {
+        mPatternView.clearPattern();
+        mPatternView.setDisplayMode(PatternView.DisplayMode.Correct);
     }
 
     @Override
     public void showPatternError() {
         mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
-    }
-
-    @Override
-    public void showLockerSwitch() {
-        mLockTypeSwitch.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showNumberSwitch() {
-        mLockTypeImg.setImageResource(R.drawable.ic_about_logo);
-    }
-
-    @Override
-    public void showPatternSwitch() {
-        mLockTypeImg.setImageResource(R.drawable.ic_about_logo);
-    }
-
-    @Override
-    public void showNumberPsdView() {
-        mNumberLockerView.setVisibility(View.VISIBLE);
-        mPatternView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showPatternPsdView() {
-        mNumberLockerView.setVisibility(View.GONE);
-        mPatternView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void cleanQuestionCache() {
-        if (mAnswer != null) {
-            mAnswer.setText("");
-        }
-        if (mQuestionTip != null) {
-            mQuestionTip.setText(getResources().getStringArray(R.array.pupup_window_reset_psd_questions)[QuestionListDialog.WEN_BIRTHDAY]);
-        }
-    }
-
-    @Override
-    public void dismissLockerSwitch() {
-        mLockTypeSwitch.setVisibility(View.GONE);
     }
 
     @Override
@@ -556,9 +379,6 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
         if (mPresenter != null) {
             mPresenter.release();
             mPresenter = null;
-        }
-        if (mRotateAnimator != null) {
-            mRotateAnimator.cancel();
         }
         super.onDestroy();
     }

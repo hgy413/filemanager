@@ -2,8 +2,6 @@ package com.jb.filemanager.database.table;
 
 import android.database.Cursor;
 
-import com.jb.filemanager.function.applock.model.bean.AntiPeepBean;
-
 /**
  * 防偷窥数据表
  *
@@ -49,13 +47,5 @@ public class AntiPeepTable implements ITable {
         b.append(CREATE_TIME + " LONG, ");
         b.append(FILE_NAME + " TEXT)");
         CREATE_TABLE = b.toString();
-    }
-
-    public static AntiPeepBean parseFromCursor(Cursor cursor) {
-        AntiPeepBean bean = new AntiPeepBean();
-        bean.setPath(cursor.getString(cursor.getColumnIndex(FILE_NAME)));
-        bean.setPackageName(cursor.getString(cursor.getColumnIndex(PKG_NAME)));
-        bean.setCreateTime(cursor.getLong(cursor.getColumnIndex(CREATE_TIME)));
-        return bean;
     }
 }

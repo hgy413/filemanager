@@ -9,6 +9,7 @@
     <string name="common_sure">Sure</string>
     <string name="common_ok">OK</string>
     <string name="common_stop">Stop</string>
+    <string name="common_continue">Continue</string>
 
 
     <string name="gp_not_connect">Unable to open connection</string>
@@ -124,6 +125,21 @@
     <string name="trash">trash</string>
     <!--应用锁-->
     <string name="activity_applock_title">App lock</string>
+    <string name="applock_psd_set_step_1">Place set up a psssword</string>
+    <string name="applock_psd_set_step_2">Place re-enter your psssword</string>
+    <string name="applock_psd_set_step_3">Psssword protection</string>
+    <string name="applock_psd_answer_question_edit_hint">Less than 15 words</string>
+    <string name="applock_psd_set_lock_options">Lock options</string>
+    <string-array name="pupup_window_lock_options">
+        <item>Lock everytime leaving an apps</item>
+        <item>Lock apps after screen is off</item>
+    </string-array>
+    <string-array name="applock_listview_group_title">
+        <item>Recommended</item>
+        <item>Others</item>
+        <item>Search Result</item>
+        <item>No match found</item>
+    </string-array>
     <string name="applock_pre_header_text1_new">Top %1$d app(s) recommended to locked up</string>
     <string name="applock_pre_header_text2_new">Ensure the private data of these app(s)</string>
     <string name="applock_pre_operate_txt">Lock</string>
@@ -143,11 +159,9 @@
     <string name="intruder_shot_info_desc">Input wrong code over %1$d times would be taken pic as a intruder.</string>
     <string name="intruder_shot_info_open_fail_tip">Failed to open, please open the camera access</string>
     <string name="intruder_main_no_content">Input wrong code over allows would be take pic as a intruder.</string>
-    <string name="applock_common_ok">ok</string>
     <string-array name="pupup_window_reset_psd_questions">
-        <item>Which movie do you like?</item>
-        <item>What\'s your name?</item>
-        <item>What time your birthday?</item>
+        <item>My Favorite Sport?</item>
+        <item>My Birthday?</item>
     </string-array>
     <!-- 应用锁设置页 -->
     <string name="app_lock_setting_title">AppLock Setting</string>
@@ -163,9 +177,8 @@
     <string name="app_lock_app_unlock_tip">Unlocked %1$s</string>
     <string name="app_lock_app_all_lock_tip">Locked all apps</string>
     <string name="app_lock_app_all_unlock_tip">All locks have been released</string>
-    <string name="applock_pre_header_last_step_text1">One more step for Android 5.0+ users</string>
-    <string name="applock_pre_header_last_step_text2">Turn on switch for Swift Cleaner to get full protection</string>
-    <string name="applock_pre_header_last_step_text3">permit usage access</string>
+    <string name="applock_pre_header_last_step_text1">On Android 5.0+,AppLock feature is not available by default</string>
+    <string name="applock_pre_header_last_step_text2">You need to read and agree to the permission to enable this feature</string>
     <string name="app_lock_anti_peep_img_app_info">&lt;font color="#FFFFFF">Catch you! Unlock my &lt;/font>&lt;font color="#ff0000">%1$s&lt;/font></string>
     <string name="applock_intruder_guide_btu_tip">Check</string>
     <string name="applock_float_view_forget_psd">Forget?</string>

@@ -16,4 +16,12 @@
 
     <dimen name="trash_ignore_status_bar_height">0dp</dimen>
     <dimen name="trash_ignore_title_height">48dp</dimen>
+
+    <!--字体-->
+    <dimen name="h1_20">20dp</dimen>
+    <dimen name="h2_18">18dp</dimen>
+    <dimen name="h3_16">16dp</dimen>
+    <dimen name="h4_14">14dp</dimen>
+    <dimen name="h5_12">12dp</dimen>
+    <dimen name="h6_10">10dp</dimen>
 </resources>

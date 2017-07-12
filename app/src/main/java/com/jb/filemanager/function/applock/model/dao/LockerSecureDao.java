@@ -127,13 +127,14 @@ public class LockerSecureDao {
      * 是否是图案面膜 默认是 图案密码
      * */
     public boolean isPatternPsd() {
-        return mSharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_PSD_TYPE, true);
+//        return mSharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_PSD_TYPE, true);
+        return true;
     }
 
     /**
      * 存储图案密码
      * */
     public void modifylockerPsdType(boolean isPatternPsd) {
-        mSharedPreferencesManager.commitBoolean(IPreferencesIds.KEY_APP_LOCK_PSD_TYPE, isPatternPsd);
+//        mSharedPreferencesManager.commitBoolean(IPreferencesIds.KEY_APP_LOCK_PSD_TYPE, isPatternPsd);
     }
 }

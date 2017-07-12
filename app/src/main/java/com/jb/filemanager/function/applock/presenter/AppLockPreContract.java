@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.applock.presenter;
 
+import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
 
 import java.util.List;
@@ -14,10 +15,9 @@ public interface AppLockPreContract {
         void showDataLoading();
         void showDataLoadFinish();
         void showDefaultRecommendAppsNum(int num);
-        void showAppDatas(List<LockerItem> lockerItems);
-        void showButtonEnableToLock();
-        void showButtonDisEnable();
+        void showAppDatas(List<AppLockGroupData> appLockGroupDataList);
         void gotoAppLockerView();
+        void gotoSetPsdView();
         void showPermisstionGuideView();
     }
 
@@ -26,19 +26,21 @@ public interface AppLockPreContract {
         void release();
         void dealPermissionCheck();
         void dealResume();
-        void cacheInitInfo(boolean isPatternPsd, String passcode, String answer, String question);
+        void handleOperateClick();
+        void cacheInitInfo(String passcode, String answer, String question, boolean isLockForLeave);
         void search(String keyWord);
-        void refreshOperateButState();
-        boolean isShouldShowBackTipDialog();
     }
 
-    interface Support extends ITaskSupport {
+    interface Support {
         List<LockerItem> getAppLockAppDatas();
         List<LockerItem> getRecommedAppDatas();
+        String[] getFloatListGroupTitle();
+        void toUiWork(Runnable work, long delay);
+        void removeUiWork(Runnable work);
+        void toAsynWork(Runnable work);
         boolean isHaveUsageStatePremisstion();
         void saveLockerInfo(List<LockerItem> allLockerItemList);
-        void savePasscodeAndQuestion(boolean isPatternPsd, String passcode, String question, String answer);
+        void savePasscodeAndQuestion(boolean isPatternPsd, String passcode, String question, String answer, boolean isLockForLeave);
         void setLockerEnable();
-        boolean isBackTipDialogPop();
     }
 }

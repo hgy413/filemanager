@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.applock.presenter;
 
+import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.applock.manager.LockerMonitorManager;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
@@ -8,6 +9,7 @@ import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.device.Machine;
+import com.jb.ga0.commerce.util.topApp.TopHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +19,6 @@ import java.util.List;
  */
 
 public class AppLockPreSupport implements AppLockPreContract.Support {
-
-    private TaskSupportImpl mTaskSupportImpl;
-
-    public AppLockPreSupport() {
-        mTaskSupportImpl = new TaskSupportImpl();
-    }
 
     @Override
     public List<LockerItem> getAppLockAppDatas() {
@@ -35,17 +31,22 @@ public class AppLockPreSupport implements AppLockPreContract.Support {
     }
 
     @Override
-    public void toAsynWork(Runnable work) {
-        if (mTaskSupportImpl != null) {
-            mTaskSupportImpl.toAsynWork(work);
+    public void toUiWork(Runnable work, long delay) {
+        if (work != null) {
+            TheApplication.postRunOnUiThread(work, delay);
         }
     }
 
     @Override
-    public void toUiWork(Runnable work, long delay) {
-        if (mTaskSupportImpl != null) {
-            mTaskSupportImpl.toUiWork(work, delay);
+    public void toAsynWork(Runnable work) {
+        if (work != null) {
+            TheApplication.postRunOnShortTaskThread(work);
         }
+    }
+
+    @Override
+    public String[] getFloatListGroupTitle() {
+        return TheApplication.getAppContext().getResources().getStringArray(R.array.applock_listview_group_title);
     }
 
     @Override
@@ -62,13 +63,6 @@ public class AppLockPreSupport implements AppLockPreContract.Support {
     }
 
     @Override
-    public void release() {
-        if(mTaskSupportImpl != null) {
-            mTaskSupportImpl.release();
-        }
-    }
-
-    @Override
     public void saveLockerInfo(List<LockerItem> allLockerItemList) {
         List<LockerItem> selectBeans = new ArrayList<>();
         for (LockerItem lockerItem : allLockerItemList) {
@@ -82,17 +76,18 @@ public class AppLockPreSupport implements AppLockPreContract.Support {
 
     @Override
     public void removeUiWork(Runnable work) {
-        if (mTaskSupportImpl != null) {
-            mTaskSupportImpl.removeUiWork(work);
+        if (work != null) {
+            TheApplication.removeFromUiThread(work);
         }
     }
 
     @Override
-    public void savePasscodeAndQuestion(boolean isPatternPsd, String passcode, String question, String answer) {
+    public void savePasscodeAndQuestion(boolean isPatternPsd, String passcode, String question, String answer, boolean isLockForLeave) {
         // 上锁勾选的应用
         AppLockerDataManager.getInstance().saveLockerAnswer(answer);
         AppLockerDataManager.getInstance().saveLockerQuestion(question);
         AppLockerDataManager.getInstance().modifyLockerPassword(passcode, isPatternPsd);
+        AppLockerDataManager.getInstance().setLockForLeave(isLockForLeave);
         AppLockerDataManager.getInstance().updatePassWord();
     }
 
@@ -103,15 +98,4 @@ public class AppLockPreSupport implements AppLockPreContract.Support {
         LockerMonitorManager.getInstance().startMonitor();
     }
 
-    @Override
-    public boolean isBackTipDialogPop() {
-        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
-        int times = sharedPreferencesManager.getInt(IPreferencesIds.KEY_BACK_TIP_DIALOG_SHOW_TIMES, 0);
-        if (times > 0) {
-            return false;
-        }
-        //直接增加一次
-        sharedPreferencesManager.commitInt(IPreferencesIds.KEY_BACK_TIP_DIALOG_SHOW_TIMES, ++times);
-        return true;
-    }
 }

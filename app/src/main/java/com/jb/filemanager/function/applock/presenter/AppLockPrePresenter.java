@@ -2,12 +2,14 @@ package com.jb.filemanager.function.applock.presenter;
 
 import android.text.TextUtils;
 
+import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
 import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,20 +21,21 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
 
     private final String TAG = "AppLockPrePresenter";
 
-    /**
-     * 推荐需要加锁的应用列表
-     */
+    //推荐需要加锁的应用列表
     private List<LockerItem> mRecommedLockItems;
-
-    /**
-     * 所有应用的列表
-     */
+    //所有应用的列表
     private List<LockerItem> mAllLockItems;
+    //除去推荐的其他列表
+    private List<LockerItem> mOtherLockItems;
+    //分组数据
+    private List<AppLockGroupData> mAppLockGroupDataList;
+    //搜索结果分组
+    private List<AppLockGroupData> mSearchResultGroupDataList;
     private AppLockPreContract.View mView;
     private AppLockPreContract.Support mSupport;
 
     private String mPasscode, mQuestion, mAnswer;
-    private boolean isPatternPsd = true;
+    private boolean isLockForLeave;
 
     public AppLockPrePresenter(AppLockPreContract.View view, AppLockPreContract.Support support) {
         this.mView = view;
@@ -48,63 +51,44 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
                 public void run() {
                     mAllLockItems = mSupport.getAppLockAppDatas();
                     mRecommedLockItems = mSupport.getRecommedAppDatas();
+                    mOtherLockItems = new ArrayList<>();
                     int size = 0;
                     if (mRecommedLockItems != null) {
-                        for (int i = 0; i < mAllLockItems.size(); i++) {
-                            for (int j = 0; j < mRecommedLockItems.size(); j++) {
-                                if (mRecommedLockItems.get(j).mPackageName.equals(mAllLockItems.get(i).mPackageName)) {
-                                    // 是推荐的
-                                    mAllLockItems.get(i).isChecked = true;
-                                    size++;
-                                    break;
-                                }
-                            }
+                        for (int j = 0; j < mRecommedLockItems.size(); j++) {
+                            LockerItem lockerItem = mRecommedLockItems.get(j);
+                            lockerItem.isChecked = true;
+                            size++;
                         }
                     }
-                    sortForCheckState(mAllLockItems);
+                    Iterator<LockerItem> itemIterator = mAllLockItems.iterator();
+                    while (itemIterator.hasNext()) {
+                        LockerItem lockerItem = itemIterator.next();
+                        if (!mRecommedLockItems.contains(lockerItem)) {
+                            mOtherLockItems.add(lockerItem);
+                        }
+                    }
+                    mAppLockGroupDataList = new ArrayList<>();
+                    String[] groupTitleArray = null;
+                    if (mSupport != null) {
+                        groupTitleArray = mSupport.getFloatListGroupTitle();
+                    }
+                    if (groupTitleArray != null && groupTitleArray.length >= 2) {
+                        mAppLockGroupDataList.add(new AppLockGroupData(mRecommedLockItems, groupTitleArray[0]));
+                        mAppLockGroupDataList.add(new AppLockGroupData(mOtherLockItems, groupTitleArray[1]));
+                    }
                     final int defaultRecommedSize = size;
                     mSupport.toUiWork(new Runnable() {
                         @Override
                         public void run() {
                             // 筛选默认选择的应用
                             mView.showDefaultRecommendAppsNum(defaultRecommedSize);
-                            mView.showAppDatas(mAllLockItems);
+                            mView.showAppDatas(mAppLockGroupDataList);
                             mView.showDataLoadFinish();
-                            if (defaultRecommedSize != 0) {
-                                mView.showButtonEnableToLock();
-                            } else {
-                                mView.showButtonDisEnable();
-                            }
                         }
                     }, 0);
                 }
             });
         }
-    }
-
-    /**
-     * 排序，选中的放前面，其他按照原本排序
-     */
-    private void sortForCheckState(List<LockerItem> lockerItems) {
-        Collections.sort(lockerItems, new Comparator<LockerItem>() {
-
-            @Override
-            public int compare(LockerItem lhs, LockerItem rhs) {
-                if (lhs.isChecked) {
-                    if (rhs.isChecked) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    if (rhs.isChecked) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }
-        });
     }
 
     @Override
@@ -117,7 +101,7 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
         }
         if (mSupport != null) {
             mView = null;
-            mSupport.release();
+            mSupport = null;
         }
     }
 
@@ -125,7 +109,7 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
     public void search(String keyWord) {
         if (mView != null) {
             if (TextUtils.isEmpty(keyWord)) {
-                mView.showAppDatas(mAllLockItems);
+                mView.showAppDatas(mAppLockGroupDataList);
             } else {
                 /**
                  * 搜索描述：<br/>
@@ -143,7 +127,7 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
                             if (searchStartPos == -1) {
                                 break;
                             } else {
-                                searchStartPos ++;
+                                searchStartPos++;
                             }
                         }
                         if (searchStartPos != -1) {
@@ -152,58 +136,46 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
                         }
                     }
                 }
-                mView.showAppDatas(tempSearchList);
-            }
-        }
-    }
-
-    @Override
-    public void refreshOperateButState() {
-        if (mView != null) {
-            if (mAllLockItems == null || mAllLockItems.size() == 0) {
-                mView.showButtonDisEnable();
-            } else {
-                boolean isEnable = true;
-                for (LockerItem lockerItem : mAllLockItems) {
-                    isEnable = lockerItem.isChecked;
-                    if (isEnable) {
-                        break;
+                if (mSearchResultGroupDataList == null) {
+                    mSearchResultGroupDataList = new ArrayList<>();
+                } else {
+                    mSearchResultGroupDataList.clear();
+                }
+                String[] groupTitleArray = null;
+                if (mSupport != null) {
+                    groupTitleArray = mSupport.getFloatListGroupTitle();
+                }
+                if (tempSearchList.size() > 0) {
+                    if (groupTitleArray != null && groupTitleArray.length >= 3) {
+                        mSearchResultGroupDataList.add(new AppLockGroupData(tempSearchList, groupTitleArray[2]));
+                    }
+                } else {
+                    if (groupTitleArray != null && groupTitleArray.length >= 4) {
+                        mSearchResultGroupDataList.add(new AppLockGroupData(tempSearchList, groupTitleArray[3]));
                     }
                 }
-                if (isEnable) {
-                    mView.showButtonEnableToLock();
-                } else {
-                    mView.showButtonDisEnable();
-                }
+                mView.showAppDatas(mSearchResultGroupDataList);
             }
         }
     }
 
     @Override
-    public void cacheInitInfo(boolean isPatternPsd, String passcode, String answer, String question) {
+    public void cacheInitInfo(String passcode, String answer, String question, boolean isLockForLeave) {
         mPasscode = passcode;
         mAnswer = answer;
         mQuestion = question;
-        this.isPatternPsd = isPatternPsd;
+        this.isLockForLeave = isLockForLeave;
         //当没有权限的时候需要获取权限
         if (mView != null) {
             if (mSupport != null && !mSupport.isHaveUsageStatePremisstion()) {
                 mView.showPermisstionGuideView();
             } else {
                 mSupport.saveLockerInfo(mAllLockItems);
-                mSupport.savePasscodeAndQuestion(isPatternPsd, mPasscode, mQuestion, mAnswer);
+                mSupport.savePasscodeAndQuestion(true, mPasscode, mQuestion, mAnswer, isLockForLeave);
                 mSupport.setLockerEnable();
                 mView.gotoAppLockerView();
             }
         }
-    }
-
-    @Override
-    public boolean isShouldShowBackTipDialog() {
-        if (mSupport != null) {
-            return mSupport.isBackTipDialogPop();
-        }
-        return false;
     }
 
     @Override
@@ -212,9 +184,17 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
             mSupport.removeUiWork(mDelayCheckWork);
             mSupport.removeUiWork(mCheckTimeOutWork);
             mSupport.saveLockerInfo(mAllLockItems);
-            mSupport.savePasscodeAndQuestion(isPatternPsd, mPasscode, mQuestion, mAnswer);
+            mSupport.savePasscodeAndQuestion(true, mPasscode, mQuestion, mAnswer, isLockForLeave);
             mSupport.setLockerEnable();
             mView.gotoAppLockerView();
+        }
+    }
+
+    @Override
+    public void handleOperateClick() {
+        // TODO: 17-7-11 操作按钮点击
+        if (mView != null) {
+            mView.gotoSetPsdView();
         }
     }
 
@@ -247,7 +227,7 @@ public class AppLockPrePresenter implements AppLockPreContract.Presenter {
                     mSupport.removeUiWork(mDelayCheckWork);
                     mSupport.removeUiWork(mCheckTimeOutWork);
                     mSupport.saveLockerInfo(mAllLockItems);
-                    mSupport.savePasscodeAndQuestion(isPatternPsd, mPasscode, mQuestion, mAnswer);
+                    mSupport.savePasscodeAndQuestion(true, mPasscode, mQuestion, mAnswer, isLockForLeave);
                     mSupport.setLockerEnable();
                     mView.gotoAppLockerView();
                 } else {

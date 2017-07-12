@@ -5,9 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.applock.activity.AppLockActivity;
-import com.jb.filemanager.function.applock.activity.IntruderHoriGalleryActivity;
-import com.jb.filemanager.function.applock.activity.IntruderOpenGuideActivity;
 import com.jb.filemanager.function.applock.activity.RetrievePasswordActivity;
 import com.jb.filemanager.function.applock.event.AppLockerKillAppEvent;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
@@ -78,7 +75,7 @@ public class LockerFloatLayerManager implements FloatAppLockerView.IFloatAppLock
         mFloatAppLockerView.bindViewData(mCurrentPkgName, FloatAppLockerView.VIEW_OUTSIDE_APP, AppLockerDataManager.getInstance().isPatternPsd());
         mFloatAppLockerView.resetPatternView();
         //获取最大的次数
-        mMaxWrongTimes = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getInt(IPreferencesIds.KEY_APP_LOCK_WRONG_PSD_TIMES, 2);
+//        mMaxWrongTimes = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getInt(IPreferencesIds.KEY_APP_LOCK_WRONG_PSD_TIMES, 2);
         mCustomWindowManager.addView(mFloatAppLockerView);
     }
 
@@ -92,7 +89,7 @@ public class LockerFloatLayerManager implements FloatAppLockerView.IFloatAppLock
         mFloatAppLockerView.bindViewData(mCurrentPkgName, FloatAppLockerView.VIEW_INSIDE_APP, AppLockerDataManager.getInstance().isPatternPsd());
         mFloatAppLockerView.resetPatternView();
         //获取最大的次数
-        mMaxWrongTimes = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getInt(IPreferencesIds.KEY_APP_LOCK_WRONG_PSD_TIMES, 2);
+//        mMaxWrongTimes = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getInt(IPreferencesIds.KEY_APP_LOCK_WRONG_PSD_TIMES, 2);
         mCustomWindowManager.addView(mFloatAppLockerView);
     }
 
@@ -110,22 +107,22 @@ public class LockerFloatLayerManager implements FloatAppLockerView.IFloatAppLock
             return false;
         }
         //弹出次数
-        int popTimes = sharedPreferencesManager.getInt(IPreferencesIds.KEY_INTRUDER_DIALOG_POP_TIMES, 0);
-        if (popTimes >= 2) {
-            return false;
-        }
+//        int popTimes = sharedPreferencesManager.getInt(IPreferencesIds.KEY_INTRUDER_DIALOG_POP_TIMES, 0);
+//        if (popTimes >= 2) {
+//            return false;
+//        }
         //上次弹出时间
-        long lastPopTimeLong = sharedPreferencesManager.getLong(IPreferencesIds.KEY_LAST_INTRUDER_DIALOG_POP_TIME, 0);
-        if (System.currentTimeMillis() - lastPopTimeLong < 86400000) {
-            return false;
-        }
+//        long lastPopTimeLong = sharedPreferencesManager.getLong(IPreferencesIds.KEY_LAST_INTRUDER_DIALOG_POP_TIME, 0);
+//        if (System.currentTimeMillis() - lastPopTimeLong < 86400000) {
+//            return false;
+//        }
         //是否之前开启过
-        if (sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_INTRUDER_SETTING_CHANGED, false)) {
-            return false;
-        }
+//        if (sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_INTRUDER_SETTING_CHANGED, false)) {
+//            return false;
+//        }
 
-        sharedPreferencesManager.commitInt(IPreferencesIds.KEY_INTRUDER_DIALOG_POP_TIMES, ++popTimes);
-        sharedPreferencesManager.commitLong(IPreferencesIds.KEY_LAST_INTRUDER_DIALOG_POP_TIME, System.currentTimeMillis());
+//        sharedPreferencesManager.commitInt(IPreferencesIds.KEY_INTRUDER_DIALOG_POP_TIMES, ++popTimes);
+//        sharedPreferencesManager.commitLong(IPreferencesIds.KEY_LAST_INTRUDER_DIALOG_POP_TIME, System.currentTimeMillis());
         return true;
     }
 
@@ -158,8 +155,10 @@ public class LockerFloatLayerManager implements FloatAppLockerView.IFloatAppLock
      * 是否开关打开
      */
     private boolean isIntruderOpen() {
+
         SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
-        return sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_REVEAL_ENABLE, false);
+        return true;
+//        return sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_APP_LOCK_REVEAL_ENABLE, false);
     }
 
     /***********
@@ -210,22 +209,22 @@ public class LockerFloatLayerManager implements FloatAppLockerView.IFloatAppLock
             } else {
                 boolean isInside = mFloatAppLockerView.isInsideAppLockPop();
                 //在外部锁上时 输对密码时
-                if (AntiPeepDataManager.getInstance(TheApplication.getAppContext()).getUnreadPhoto().size() != 0
-                        && !isInside) {
-                    //在外部解锁 并发现拥有图片
-                    //显示图片
-                    IntruderHoriGalleryActivity.gotoIntruderHoriGallery(TheApplication.getAppContext());
-                } else {
-                    //如果在内部则跳转到应用锁界面
-                    if (isInside) {
-                        AppLockActivity.gotoAppLock(TheApplication.getAppContext());
-                    }
-                    if (mCurrentWrongTime >= mMaxWrongTimes && isShouldShowIntruderGuideDialog()) {
-                        //达到了最大错误数量
-                        //是否需要引导打开入侵者拍照功能
-                        IntruderOpenGuideActivity.pop();
-                    }
-                }
+//                if (AntiPeepDataManager.getInstance(TheApplication.getAppContext()).getUnreadPhoto().size() != 0
+//                        && !isInside) {
+//                    //在外部解锁 并发现拥有图片
+//                    //显示图片
+//                    IntruderHoriGalleryActivity.gotoIntruderHoriGallery(TheApplication.getAppContext());
+//                } else {
+//                    //如果在内部则跳转到应用锁界面
+//                    if (isInside) {
+//                        AppLockActivity.gotoAppLock(TheApplication.getAppContext());
+//                    }
+//                    if (mCurrentWrongTime >= mMaxWrongTimes && isShouldShowIntruderGuideDialog()) {
+//                        //达到了最大错误数量
+//                        //是否需要引导打开入侵者拍照功能
+//                        IntruderOpenGuideActivity.pop();
+//                    }
+//                }
                 //当密码输入正确的时候 并且已经错过很多次
                 mCustomWindowManager.removeView(mFloatAppLockerView);
                 mCurrentWrongTime = 0;

@@ -4,9 +4,6 @@ import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
-import com.jb.filemanager.function.applock.event.AntiPeepAllUpdateDoneEvent;
-import com.jb.filemanager.function.applock.event.AppLockImageDeleteEvent;
-import com.jb.filemanager.function.applock.event.OnIntruderUnreadPhotoChangedEvent;
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
 
@@ -40,49 +37,12 @@ public class AppLockPresenter implements AppLockContract.Presenter {
         this.mSupport = mSupport;
     }
 
-    private IOnEventMainThreadSubscriber<AntiPeepAllUpdateDoneEvent> mAntiPeepAllUpdateDoneEvtSubscriber = new IOnEventMainThreadSubscriber<AntiPeepAllUpdateDoneEvent>() {
-        @Override
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        public void onEventMainThread(AntiPeepAllUpdateDoneEvent event) {
-            TheApplication.getGlobalEventBus().unregister(this);
-            if (mView != null && mSupport != null) {
-                mPhotoSize = mSupport.getIntruderPhotoSize();
-                mView.showIntruderPhotoCounts(mPhotoSize);
-            }
-        }
-    };
-
-    private IOnEventMainThreadSubscriber<AppLockImageDeleteEvent> mAppLockImageDeleteEvtSubscriber = new IOnEventMainThreadSubscriber<AppLockImageDeleteEvent>() {
-        @Override
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        public void onEventMainThread(AppLockImageDeleteEvent event) {
-            if (mView != null) {
-                mView.showIntruderPhotoCounts(--mPhotoSize);
-            }
-        }
-    };
-
-    private IOnEventMainThreadSubscriber<OnIntruderUnreadPhotoChangedEvent> mOnIntruderUnreadPhotoChangedEvtSubscriber = new IOnEventMainThreadSubscriber<OnIntruderUnreadPhotoChangedEvent>() {
-        @Override
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        public void onEventMainThread(OnIntruderUnreadPhotoChangedEvent event) {
-            // 更新顶部数字文案
-            if (mView != null && mSupport != null) {
-                mPhotoSize = mSupport.getIntruderPhotoSize();
-                mView.showIntruderPhotoCounts(mPhotoSize);
-            }
-        }
-    };
-
 
     @Override
     public void loadData() {
         mView.showDataLoading();
         if (mSupport != null) {
             //获取图片数目
-            TheApplication.getGlobalEventBus().register(mAntiPeepAllUpdateDoneEvtSubscriber);
-            TheApplication.getGlobalEventBus().register(mAppLockImageDeleteEvtSubscriber);
-            TheApplication.getGlobalEventBus().register(mOnIntruderUnreadPhotoChangedEvtSubscriber);
             mSupport.updateIntruderPhoto();
             final String appGroupName = mSupport.getAppLockGroupName();
             //获取锁信息
@@ -173,15 +133,6 @@ public class AppLockPresenter implements AppLockContract.Presenter {
         }
         if (mView != null) {
             mView = null;
-        }
-        if (TheApplication.getGlobalEventBus().isRegistered(mAntiPeepAllUpdateDoneEvtSubscriber)) {
-            TheApplication.getGlobalEventBus().unregister(mAntiPeepAllUpdateDoneEvtSubscriber);
-        }
-        if (TheApplication.getGlobalEventBus().isRegistered(mAppLockImageDeleteEvtSubscriber)) {
-            TheApplication.getGlobalEventBus().unregister(mAppLockImageDeleteEvtSubscriber);
-        }
-        if (TheApplication.getGlobalEventBus().isRegistered(mOnIntruderUnreadPhotoChangedEvtSubscriber)) {
-            TheApplication.getGlobalEventBus().unregister(mOnIntruderUnreadPhotoChangedEvtSubscriber);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.applock.presenter;
 
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
 
 /**
@@ -8,16 +9,10 @@ import com.jb.filemanager.function.applock.model.AppLockerDataManager;
 
 public class PsdInitSupport implements PsdInitContract.Support {
 
-    private TaskSupportImpl mTaskSupportImpl;
-
-    public PsdInitSupport() {
-        mTaskSupportImpl = new TaskSupportImpl(TaskSupportImpl.TYPE_SINGLE_UI);
-    }
-
     @Override
     public void updatePasscode(String passcode, boolean isPattern) {
-        AppLockerDataManager.getInstance().modifyLockerPassword(passcode, isPattern);
-        AppLockerDataManager.getInstance().updatePassWord();
+//        AppLockerDataManager.getInstance().modifyLockerPassword(passcode, isPattern);
+//        AppLockerDataManager.getInstance().updatePassWord();
     }
 
     @Override
@@ -27,28 +22,13 @@ public class PsdInitSupport implements PsdInitContract.Support {
     }
 
     @Override
-    public void toAsynWork(Runnable work) {
-
-    }
-
-    @Override
     public void toUiWork(Runnable work, long delay) {
-        if (mTaskSupportImpl != null) {
-            mTaskSupportImpl.toUiWork(work, delay);
-        }
+        TheApplication.postRunOnUiThread(work, delay);
     }
 
     @Override
     public void removeUiWork(Runnable work) {
-        if (mTaskSupportImpl != null) {
-            mTaskSupportImpl.removeUiWork(work);
-        }
+        TheApplication.removeFromUiThread(work);
     }
 
-    @Override
-    public void release() {
-        if (mTaskSupportImpl != null) {
-            mTaskSupportImpl.release( );
-        }
-    }
 }

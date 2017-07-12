@@ -105,7 +105,7 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
     public void gotoResetPsd() {
         Intent i = new Intent(RetrievePasswordActivity.this, PsdSettingActivity.class);
         i.putExtra(PsdSettingActivity.PSD_SETTING_MODE, PsdSettingActivity.PSD_REST);
-        i.putExtra(PsdSettingActivity.PSD_DEFAULT_TYPE_IS_PATTERN, AppLockerDataManager.getInstance().isPatternPsd());
+//        i.putExtra(PsdSettingActivity.PSD_DEFAULT_TYPE_IS_PATTERN, AppLockerDataManager.getInstance().isPatternPsd());
         startActivity(i);
         finish();
     }

@@ -8,6 +8,8 @@ import com.jb.filemanager.function.applock.model.bean.LockerGroup;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
 import com.jb.filemanager.function.applock.model.dao.LockerDao;
 import com.jb.filemanager.function.applock.model.dao.LockerSecureDao;
+import com.jb.filemanager.manager.spm.IPreferencesIds;
+import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,6 +181,14 @@ public class AppLockerDataManager {
      * */
     public boolean isPatternPsd() {
         return mLockerSecureDao.isPatternPsd();
+    }
+
+    public boolean isLockForLeave() {
+        return SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_APP_LOCK_IS_LOCK_FOR_LEAVE, true);
+    }
+
+    public void setLockForLeave(boolean isLockForLeave) {
+        SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitBoolean(IPreferencesIds.KEY_APP_LOCK_IS_LOCK_FOR_LEAVE, isLockForLeave);
     }
 
     public String getLockerPassword() {

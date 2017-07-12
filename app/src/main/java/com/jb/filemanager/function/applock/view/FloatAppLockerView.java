@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,7 +37,7 @@ import java.util.List;
  * 应用锁展示的view
  */
 
-public class FloatAppLockerView extends FrameLayout implements AntiPeepCameraHolder.CameraEventListener {
+public class FloatAppLockerView extends FrameLayout /*implements AntiPeepCameraHolder.CameraEventListener */{
 
     @IntDef({VIEW_OUTSIDE_APP, VIEW_INSIDE_APP})
     @Retention(RetentionPolicy.SOURCE)
@@ -74,7 +73,7 @@ public class FloatAppLockerView extends FrameLayout implements AntiPeepCameraHol
     //相机是否打开
     private boolean mIsCameraOpening;
     //拍照视图
-    private AntiPeepCameraHolder mCameraHolder;
+//    private AntiPeepCameraHolder mCameraHolder;
 
     private int mMode = VIEW_OUTSIDE_APP;
 
@@ -214,62 +213,62 @@ public class FloatAppLockerView extends FrameLayout implements AntiPeepCameraHol
      * 打开相机
      */
     public void openCamera(String pkgName) {
-        if (mCameraHolder == null) {
-            // 添加相机视图
-            mCameraHolder = new AntiPeepCameraHolder(this.getContext());
-            mCameraHolder.setOnCameraEventListener(this);
-            View contentView = mCameraHolder.getContentView();
-            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(2, 2);
-            contentView.setLayoutParams(layoutParams);
-            //此处必须addView 不然相机View将无法执行初始化
-            addView(contentView, 1);
-        }
-        if (mCameraHolder != null) {
-            // 打开相机
-            mCameraHolder.setPackageName(pkgName);
-            if (!mIsCameraOpening) {
-                mIsCameraOpening = true;
-                mCameraHolder.open();
-            }
-        }
+//        if (mCameraHolder == null) {
+//            // 添加相机视图
+//            mCameraHolder = new AntiPeepCameraHolder(this.getContext());
+//            mCameraHolder.setOnCameraEventListener(this);
+//            View contentView = mCameraHolder.getContentView();
+//            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(2, 2);
+//            contentView.setLayoutParams(layoutParams);
+//            //此处必须addView 不然相机View将无法执行初始化
+//            addView(contentView, 1);
+//        }
+//        if (mCameraHolder != null) {
+//            // 打开相机
+//            mCameraHolder.setPackageName(pkgName);
+//            if (!mIsCameraOpening) {
+//                mIsCameraOpening = true;
+//                mCameraHolder.open();
+//            }
+//        }
     }
 
     /**
      * 拍照
      */
     public void capturePeep() {
-        if (mCameraHolder != null) {
-            mCameraHolder.captureAuto();
-        }
+//        if (mCameraHolder != null) {
+//            mCameraHolder.captureAuto();
+//        }
     }
 
     /**
      * 关闭相机
      */
     private void closeCamera() {
-        if (mCameraHolder != null) {
-            mIsCameraOpening = false;
-            removeView(mCameraHolder.getContentView());
-            mCameraHolder.setOnCameraEventListener(null);
-            mCameraHolder.close();
-            mCameraHolder = null;
-        }
+//        if (mCameraHolder != null) {
+//            mIsCameraOpening = false;
+//            removeView(mCameraHolder.getContentView());
+//            mCameraHolder.setOnCameraEventListener(null);
+//            mCameraHolder.close();
+//            mCameraHolder = null;
+//        }
     }
 
-    @Override
-    public void onOpenFail() {
-        closeCamera();
-    }
-
-    @Override
-    public void onCapture() {
-
-    }
-
-    @Override
-    public void onImageSaved() {
-        closeCamera();
-    }
+//    @Override
+//    public void onOpenFail() {
+//        closeCamera();
+//    }
+//
+//    @Override
+//    public void onCapture() {
+//
+//    }
+//
+//    @Override
+//    public void onImageSaved() {
+//        closeCamera();
+//    }
 
     public void setIFloatAppLockerViewEvtListener(IFloatAppLockerViewEvtListener iFloatAppLockerViewEvtListener) {
         this.mIFloatAppLockerViewEvtListener = iFloatAppLockerViewEvtListener;

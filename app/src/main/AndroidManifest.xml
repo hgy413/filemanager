@@ -220,7 +220,7 @@
         <activity
             android:name=".function.applock.activity.AppLockPreActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg" />
         <activity
             android:name=".function.applock.activity.AppLockActivity"
             android:screenOrientation="portrait"
@@ -234,24 +234,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
         <activity
-            android:name=".function.applock.activity.IntruderHoriGalleryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-        <activity
-            android:name=".function.applock.activity.IntruderVertGalleryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-        <activity
             android:name=".function.applock.activity.RetrievePasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-        <activity
-            android:name=".function.applock.activity.IntruderOpenGuideActivity"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity=":IntruderOpenGuideTask"
-            android:theme="@style/Pop.Activity.Theme"/>
         <activity
             android:name=".function.permissionalarm.view.PermissionAlarmPopActivity"
             android:excludeFromRecents="true"

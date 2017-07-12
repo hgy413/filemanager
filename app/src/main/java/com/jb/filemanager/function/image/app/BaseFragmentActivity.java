@@ -90,7 +90,6 @@ public class BaseFragmentActivity extends FragmentActivity {
                 }
                 super.onBackPressed();
             } else {
-                super.onBackPressed();
             }
         } else {
             super.onBackPressed();

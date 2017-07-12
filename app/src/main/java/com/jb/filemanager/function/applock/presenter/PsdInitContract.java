@@ -11,51 +11,36 @@ import java.util.List;
 
 public interface PsdInitContract {
     interface View {
-        void showStep(int step, boolean isLarge);
-        void showPsdViewDismissQuestion(boolean isPatternPsd);
+        void showPsdViewDismissQuestion();
         void showProblemViewDismissPsd();
         void showStepTopPatternTip(int step);
-        void showStepTopNumberTip(int step);
-        void clearPsd(boolean isPatternPsd);
+        void clearPsd();
         void showPatternError();
-        void toBack(/*boolean isSystemBack*/);
+        void toBack();
         void showPatternDiffTip();
-        void showNumberErrorAnim();
         void showPatternShort();
         void invisiableStep3();
         void showAnswerShortTip();
-        void dismissStepView();
-        void setResult(boolean isPatternPsd, String passcode, String question, String answer);
+        int getLockOptions();
+        void setResult(String passcode, String question, String answer, boolean isLockForLeave);
         String getProblem();
         String getAnswer();
-        void showLockerSwitch();
-        void dismissLockerSwitch();
-        void showNumberSwitch();
-        void showPatternSwitch();
-        void showNumberPsdView();
-        void showPatternPsdView();
-        void cleanQuestionCache();
     }
 
-    interface Support extends ITaskSupport {
+    interface Support {
         void updatePasscode(String passcode, boolean isPattern);
         void updateIssureQuestion(String question, String answer);
+        void toUiWork(Runnable work, long delay);
+        void removeUiWork(Runnable work);
     }
 
     interface Presenter {
         void start();
         void cachePattern(List<PatternView.Cell> currentCells);
-        void cacheNumber(String[] number);
-        void chgLockerType();
         void dealBackPress();
         void setMode(int mode);
-        void setPsdType(boolean isPatternPsd);
         void dealSaveSecureProblem();
         void dealPatternStart();
-        void dealPasscodeInput();
-        void dealPasscodeAllDeleted();
         void release();
-        String getBackStatisticConst(boolean isSystemBack);
-        String getHomeStatisticConst();
     }
 }

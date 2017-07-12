@@ -9,61 +9,44 @@
     tools:background="#000000">
 
     <include
-        android:id="@+id/activity_applock_pre_header"
+        android:id="@+id/activity_applock_header"
         layout="@layout/common_applock_bar_layout"/>
 
     <com.jb.filemanager.function.applock.view.SearchBarLayout
-        android:id="@+id/activity_applock_pre_search_bar"
+        android:id="@+id/activity_applock_search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/activity_applock_pre_tip1"
+        android:id="@+id/activity_applock_tip1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"
-        android:layout_below="@id/activity_applock_pre_header"
+        android:layout_below="@id/activity_applock_header"
         android:text="@string/applock_pre_header_text1_new"
         android:textColor="@color/white"
         android:textSize="@dimen/h3_16"/>
 
     <TextView
-        android:id="@+id/activity_applock_pre_tip2"
+        android:id="@+id/activity_applock_tip2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
-        android:layout_below="@id/activity_applock_pre_tip1"
+        android:layout_below="@id/activity_applock_tip1"
         android:text="Activate Applock to stay protected"
         android:textColor="#66ffffff"
         android:textSize="@dimen/h4_14"/>
 
     <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
-        android:id="@+id/activity_applock_pre_float_view"
+        android:id="@+id/activity_applock_float_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/activity_applock_pre_tip2"
+        android:layout_below="@id/activity_applock_tip2"
         android:layout_marginTop="20dp"
         android:dividerHeight="0dp"
         android:divider="@null"
         android:background="#f5f6ff"
         android:groupIndicator="@null"/>
-
-    <ImageView
-        android:id="@+id/activity_applock_pre_lock"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/applock_lock_lock_icon"/>
-
-    <ViewStub
-        android:id="@+id/activity_applock_pre_permisstion"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/activity_applock_pre_header"
-        android:layout="@layout/view_useage_permisstion_layout"/>
-
 </RelativeLayout>
