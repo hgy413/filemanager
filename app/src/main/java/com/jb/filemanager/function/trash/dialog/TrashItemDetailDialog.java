@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.BaseDialog;
-import com.jb.filemanager.util.DrawUtils;
 
 
 /**
@@ -33,10 +31,8 @@ public class TrashItemDetailDialog extends BaseDialog {
     }
 
     private void initializeView() {
-        int width = mContext.getResources().getDisplayMetrics().widthPixels - DrawUtils.dip2px(32);
-        setSize(width, DrawUtils.dip2px(240));
         View view = View.inflate(mContext, R.layout.dialog_item_detail, null);
-        setContentView(view, new ViewGroup.LayoutParams(width, DrawUtils.dip2px(240)));
+        setContentView(view);
 
         mTvTitle = (TextView) view.findViewById(R.id.dialog_item_detail_title);
         mTvMessage1 = (TextView) view.findViewById(R.id.dialog_item_detail_message1);

@@ -1,6 +1,5 @@
 package com.jb.filemanager.function.trash.dialog;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.BaseDialog;
-import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
 
@@ -34,12 +32,8 @@ public class TrashIgnoreDialog extends BaseDialog {
     }
 
     private void initializeView() {
-        // set width of the dialog
-        int width = mContext.getResources().getDisplayMetrics().widthPixels - DrawUtils.dip2px(32);
-        setSize(width, DrawUtils.dip2px(240));
-        // widgets
         View view = View.inflate(mContext, R.layout.dialog_trash_ignore, null);
-        setContentView(view, new ActionBar.LayoutParams(width, DrawUtils.dip2px(240)));
+        setContentView(view);
         mIcon = (ImageView) view.findViewById(R.id.dialog_trash_ignore_icon);
         mTvName = (TextView) view.findViewById(R.id.dialog_trash_ignore_name);
         mBtnCancel = view.findViewById(R.id.dialog_trash_ignore_cancel_btn);
