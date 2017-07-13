@@ -1,5 +1,7 @@
 package com.jb.filemanager.function.samefile;
 
+import com.jb.filemanager.Const;
+
 /**
  * Created by bool on 17-6-30.
  */
@@ -16,6 +18,7 @@ public class FileInfo {
 //            MediaStore.Audio.Media.ARTIST
 //    };
 
+    public Const.FILE_TYPE mFileType;
     public String mId;
     public String mName;
     public long mSize;
@@ -24,4 +27,5 @@ public class FileInfo {
     public String mType;
     public long mDuration;
     public String mArtist;
+    public boolean isSelected = false;
 }

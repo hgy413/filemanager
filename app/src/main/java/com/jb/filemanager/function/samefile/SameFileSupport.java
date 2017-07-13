@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.TimeUtil;
 import java.io.File;
@@ -109,6 +111,11 @@ public class SameFileSupport implements SameFileContract.Support {
         while(cursor.moveToNext()) {
             if (null != (info = cursorToFileInfo(cursor))) {
                 modify = info.mModified;
+                if (uri == NUSIC_URI) {
+                    info.mFileType = Const.FILE_TYPE.MUSIC;
+                } else if (uri == VIDEO_URI) {
+                    info.mFileType = Const.FILE_TYPE.VIDEO;
+                }
                 boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
                 if (!isSameDay) {
                     lastModify = modify;

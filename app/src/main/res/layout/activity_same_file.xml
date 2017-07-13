@@ -17,25 +17,17 @@
         android:orientation="vertical"
         android:background="@color/white">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/elv_music"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/list_divider_line_color_f5f6ff"
-            >
-
-        </android.support.v7.widget.RecyclerView>
-        <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
+        <ExpandableListView
             android:id="@+id/elv_same_file_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:divider="@null"
+            android:background="@color/list_divider_line_color_f5f6ff"
+            android:divider="@color/list_divider_line_color_f5f6ff"
+            android:footerDividersEnabled="false"
             android:groupIndicator="@null"
             android:listSelector="@android:color/transparent"
             android:scrollbars="none">
-
-        </com.jb.filemanager.ui.widget.FloatingGroupExpandableListView>
+        </ExpandableListView>
 
         <com.jb.filemanager.ui.widget.BottomOperateBar
             android:id="@+id/bottom_operate_bar_container"
@@ -43,7 +35,6 @@
             android:layout_height="60dp"
             android:layout_gravity="bottom"
             />
-
     </FrameLayout>
 
 

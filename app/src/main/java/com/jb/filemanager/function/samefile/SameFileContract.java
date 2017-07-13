@@ -13,7 +13,7 @@ public interface SameFileContract {
     interface View {
         void initView(int fileType);
 
-        void showMusicList(GroupList<String, FileInfo> mMusicMaps);
+        void showFileList(GroupList<String, FileInfo> mMusicMaps);
 
         void showDeleteConfirmDialog();
 

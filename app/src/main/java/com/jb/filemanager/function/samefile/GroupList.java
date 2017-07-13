@@ -47,10 +47,6 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
         return null;
     }
 
-    public ArrayList<V> getGroup(int index){
-        return this.get(getGroupKey(index));
-    }
-
     public void addToGroup(int groupIndex, V value) {
         this.get(groupIndex).add(value);
     }

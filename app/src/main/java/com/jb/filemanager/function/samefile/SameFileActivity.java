@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -44,10 +45,11 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
     private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
-    private RecyclerView mRvMuscicList;
-    private FloatingGroupExpandableListView mElvFilelist;
+    //private RecyclerView mRvMuscicList;
+    private ExpandableListView mElvFilelist;
     private GroupList<String, FileInfo> mMusicDataArrayMap;
-    private RecyclerListAdapter mMusicListAdapter;
+    //private RecyclerListAdapter mMusicListAdapter;
+    private FileExpandableListAdapter mFileExpandableListAdapter;
     private BottomOperateBar mBottomOperateContainer;
 
     private boolean[] mItemSelected;
@@ -82,46 +84,9 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 back.setText("Transfer unknow type");
         }
         back.setOnClickListener(this);
-
-        mElvFilelist = (FloatingGroupExpandableListView) findViewById(R.id.elv_same_file_list);
-
-        mRvMuscicList = (RecyclerView) findViewById(R.id.elv_music);
-        int height = 40;
-        // 根据手机的分辨率从 px(像素) 的单位 转成为 dp
-        float scale = this.getResources().getDisplayMetrics().density;
-        height =  (int) (height * scale + 0.5f);
-        StickyDecoration decoration = StickyDecoration.Builder
-                .init(new StickyDecoration.GroupListener() {
-                    @Override
-                    public String getGroupName(int position) {
-                        //获取组名，用于判断是否是同一组
-                        return mMusicDataArrayMap.getGroupKey(position);
-                    }
-
-                    @Override
-                    public View getGroupView(int position) {
-                        //获取自定定义的组View
-                        if (position < mMusicDataArrayMap.itemSize()) {
-                            View view = getLayoutInflater().inflate(R.layout.item_samefile_group,
-                                    null, false);
-                            ((TextView) view.findViewById(R.id.tv_music_group_item_title))
-                                    .setText(mMusicDataArrayMap.getGroupKey(position));
-                            ((ImageView)view.findViewById(R.id.iv_music_group_item_select))
-                                    .setOnClickListener(SameFileActivity.this);
-                            return view;
-                        } else {
-                            return null;
-                        }
-                    }
-                })
-                .setGroupHeight(DensityUtil.dip2px(SameFileActivity.this, 40))   //设置高度40dp
-                .setGroupDevideHeight(DensityUtil.dip2px(SameFileActivity.this, 10))// Group devide line
-                .build();
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRvMuscicList.setLayoutManager(manager);
-        mRvMuscicList.addItemDecoration(decoration);
-        mMusicListAdapter = new RecyclerListAdapter(this, mMusicDataArrayMap);
-        mRvMuscicList.setAdapter(mMusicListAdapter);
+        mElvFilelist = (ExpandableListView) findViewById(R.id.elv_same_file_list);
+        mFileExpandableListAdapter = new FileExpandableListAdapter();
+        mElvFilelist.setAdapter(mFileExpandableListAdapter);
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mBottomOperateContainer.setListener(new BottomOperateBar.Listener() {
@@ -253,22 +218,27 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             case R.id.iv_common_action_bar_with_search_search:
                 // TODO
                 break;
-            case R.id.iv_music_group_item_select:
-                Toast.makeText(this, "Clicked", Toast.LENGTH_LONG);
+            //case R.id.iv_music_group_item_select:
+            //    Toast.makeText(this, "Clicked", Toast.LENGTH_LONG);
             default:
                 break;
         }
     }
 
     @Override
-    public void showMusicList(GroupList<String, FileInfo> mMusicMaps) {
+    public void showFileList(GroupList<String, FileInfo> mMusicMaps) {
         mMusicDataArrayMap = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
         for (int i = 0; i < mItemSelected.length; i++) {
             mItemSelected[i] = false;
         }
         mSelecedCount = 0;
-        mMusicListAdapter.notifyDataSetChanged();
+        //mMusicListAdapter.notifyDataSetChanged();
+        mFileExpandableListAdapter.reflaceDate(mMusicMaps);
+        int groupCount = mMusicDataArrayMap.size();
+        for (int i = 0; i < groupCount; i++) {
+            mElvFilelist.expandGroup(i);
+        }
     }
 
     @Override
@@ -351,95 +321,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                     popupWindow.dismiss();
                 }
             });
-        }
-    }
-
-    public class RecyclerListAdapter extends RecyclerView.Adapter {
-        private Context mContext;
-        //private GroupList<String, FileInfo> mMusicDataArrayMap;
-        private LayoutInflater mInflater;
-
-        public RecyclerListAdapter(@NonNull Context context, GroupList<String, FileInfo> mapList) {
-            mInflater = SameFileActivity.this.getLayoutInflater();
-            mContext = context;
-            mMusicDataArrayMap = mapList;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View convertView = mInflater.inflate(R.layout.item_samefile_child, parent, false);
-            ViewHolder holder = new ViewHolder(convertView);
-            holder.mIvCover = (ImageView) convertView.findViewById(R.id.iv_music_child_item_cover);
-            holder.mIvCover.setImageResource(R.drawable.img_music);
-            holder.mTvName = (TextView) convertView.findViewById(R.id.tv_music_child_item_name);
-            holder.mTvInfo = (TextView) convertView.findViewById(R.id.tv_music_child_item_info);
-            holder.mIvSelect = (ImageView) convertView.findViewById(R.id.iv_music_child_item_select);
-            holder.setCliceListener();
-            convertView.setTag(holder);
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ViewHolder viewHolder = (ViewHolder)holder;
-            FileInfo info = mMusicDataArrayMap.getItem(position);
-            if (mItemSelected[position]) {
-                viewHolder.mIvSelect.setImageResource(R.drawable.choose_all);
-            } else {
-                viewHolder.mIvSelect.setImageResource(R.drawable.choose_none);
-            }
-            if (info != null) {
-                viewHolder.mTvName.setText(info.mName);
-                viewHolder.mTvInfo.setText(info.mArtist + "  " +
-                        ConvertUtils.getReadableSize(info.mSize) + "  " +
-                        TimeUtil.getMSTime(info.mDuration));
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return mMusicDataArrayMap != null ? mMusicDataArrayMap.itemSize() : 0;
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-            ImageView mIvCover;
-            TextView mTvName;
-            TextView mTvInfo;
-            ImageView mIvSelect;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                itemView.setOnClickListener(this);
-            }
-
-            public void setCliceListener(){
-                mIvSelect.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View v) {
-                int posion = getAdapterPosition();
-                switch (v.getId()) {
-                    case R.id.iv_music_child_item_select:
-                        if (mItemSelected[posion]) {
-                            mItemSelected[posion] = false;
-                            mIvSelect.setImageResource(R.drawable.choose_none);
-                            SameFileActivity.this.mSelecedCount--;
-                        } else {
-                            mItemSelected[posion] = true;
-                            mIvSelect.setImageResource(R.drawable.ic_common_item_selected);
-                            SameFileActivity.this.mSelecedCount++;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if (SameFileActivity.this.mSelecedCount > 0) {
-                    mBottomOperateContainer.setVisibility(View.VISIBLE);
-                } else {
-                    mBottomOperateContainer.setVisibility(View.GONE);
-                }
-            }
         }
     }
 }

@@ -45,7 +45,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
             //Todo 显示没有音乐提示
         } else {
             // 显示列表
-            mView.showMusicList(mFileGroupList);
+            mView.showFileList(mFileGroupList);
         }
     }
 
@@ -57,7 +57,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     @Override
     public void onCreate(Intent intent) {
         if (intent != null) {
-            int fileType = intent.getIntExtra(Const.FILE_TYPE, -1);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
+            int fileType = intent.getIntExtra(Const.CLASSIFY_TYPE, -1);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
             mView.initView(fileType);
             this.start(fileType);
         }
