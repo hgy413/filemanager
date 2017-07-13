@@ -70,6 +70,10 @@ public class MainContract {
         ArrayList<File> getSelectedFiles();
         void updateCurrentPath(String path);
         String getCurrentPath();
+
+        boolean isFileExplorer();
+
+        String getTargetFilePath();
     }
 
     interface Support {
