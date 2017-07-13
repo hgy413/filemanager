@@ -34,6 +34,7 @@ import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.global.TheUncaughtExceptionHandler;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
+import com.jb.filemanager.receiver.ScreenStateReceiver;
 import com.jb.filemanager.statistics.AlarmEight;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.CrashHandler;
@@ -220,6 +221,7 @@ public class TheApplication extends Application {
         AdTrashManager.getInstance(getAppContext());
         CleanManager.getInstance(getApplicationContext()).startJunkFileScanTask();
         //应用锁
+        ScreenStateReceiver.getInstance().registerReceiver();
         AppLockerCenter.getInstance();
         //权限警报管理器准备工作
         PermissionAlarmManager.getInstance().toReady();

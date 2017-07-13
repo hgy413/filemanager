@@ -90,6 +90,14 @@ public class AppLockSettingActivity extends BaseActivity {
                 AppLockerDataManager.getInstance().setLockForLeave(mOptionsListDialog.getCurrentPos() == 0);
             }
         });
+        String [] array = getResources().getStringArray(R.array.pupup_window_lock_options);
+        if (array != null && array.length >= 2) {
+            if (AppLockerDataManager.getInstance().isLockForLeave()) {
+                mLockOptionsTextView.setText(array[0]);
+            } else {
+                mLockOptionsTextView.setText(array[1]);
+            }
+        }
     }
 
     @Override

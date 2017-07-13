@@ -17,8 +17,7 @@
         android:id="@+id/view_applock_outter_float_layout_shade"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.85"
-        android:background="#2c3d4a"/>
+        android:background="#99000000"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -112,14 +112,15 @@ public class FloatOuterAppLockerView extends FrameLayout {
                 if (mIFloatAppLockerViewEvtListener != null) {
                     mIFloatAppLockerViewEvtListener.onForgetClick(v);
                 }
-                // TODO: 17-7-12 忘记密码
             }
         });
 
         mDontLock.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 17-7-12 解除锁定这个密码
+                if (mIFloatAppLockerViewEvtListener != null) {
+                    mIFloatAppLockerViewEvtListener.onDonLockApp(v);
+                }
             }
         });
 

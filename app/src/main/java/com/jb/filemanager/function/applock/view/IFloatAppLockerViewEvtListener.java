@@ -13,6 +13,8 @@ public interface IFloatAppLockerViewEvtListener {
 
     void onForgetClick(View v);
 
+    void onDonLockApp(View v);
+
     void onInputCompleted(List<PatternView.Cell> cellList, String[] numbers);
 
     void onHomeClick();

@@ -50,26 +50,22 @@ public class AppLockPresenter implements AppLockContract.Presenter {
         mView.showDataLoading();
         if (mSupport != null) {
             mAllLockItems = mSupport.getAppLockAppDatas();
-            mRecommedLockItems = mSupport.getRecommedAppDatas();
+            List<LockerItem> recommedLockItems = mSupport.getRecommedAppDatas();
             mOtherLockItems = new ArrayList<>();
+            mRecommedLockItems = new ArrayList<>();
             int size = 0;
-            if (mRecommedLockItems != null) {
-                for (int j = 0; j < mRecommedLockItems.size(); j++) {
-                    LockerItem lockerItem = mRecommedLockItems.get(j);
-                    lockerItem.isChecked = true;
-                    size++;
-                }
-            }
             Iterator<LockerItem> itemIterator = mAllLockItems.iterator();
             while (itemIterator.hasNext()) {
                 LockerItem lockerItem = itemIterator.next();
-                if (!mRecommedLockItems.contains(lockerItem)) {
+                if (lockerItem.isChecked) {
+                    size++;
+                }
+                if (!recommedLockItems.contains(lockerItem)) {
                     mOtherLockItems.add(lockerItem);
+                } else {
+                    mRecommedLockItems.add(lockerItem);
                 }
             }
-            mAllLockItems.clear();
-            mAllLockItems.addAll(mRecommedLockItems);
-            mAllLockItems.addAll(mOtherLockItems);
             mAppLockGroupDataList = new ArrayList<>();
             String[] groupTitleArray = null;
             if (mSupport != null) {

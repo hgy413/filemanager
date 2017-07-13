@@ -59,7 +59,6 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
      * 初始化颜色值
      */
     private void initView() {
-        findViewById(android.R.id.content).setBackgroundColor(0xFF44D6C3);
         mBack = findViewById(R.id.common_applock_bar_layout_back);
         mTitle = (TextView)findViewById(R.id.common_applock_bar_layout_title);
         mSetting = findViewById(R.id.common_applock_bar_layout_setting);
@@ -219,6 +218,11 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
 
     @Override
     public void showLockAppsNum(int nums) {
+        if (nums > 0) {
+            findViewById(android.R.id.content).setBackgroundColor(0xFF44D6C3);
+        } else {
+            findViewById(android.R.id.content).setBackgroundColor(0xFFFF7D7D);
+        }
         mApplockTip2.setText(getString(R.string.applock_header_text2_new, nums));
     }
 

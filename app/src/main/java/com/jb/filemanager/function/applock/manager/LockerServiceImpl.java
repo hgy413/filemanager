@@ -16,11 +16,14 @@ public class LockerServiceImpl {
 
     private LockerServiceDataManager mLockerServiceDataManager;
 
+    private LockerOptionsManager mLockerOptionsManager;
+
     private Context mContext = null;
 
     public LockerServiceImpl(Context context) {
         mContext = context;
         mLockerFloatLayerManager = LockerFloatLayerManager.getInstance();
+        mLockerOptionsManager = LockerOptionsManager.getInstance();
         mLockerServiceDataManager = new LockerServiceDataManager(mContext);
     }
 
@@ -60,7 +63,9 @@ public class LockerServiceImpl {
      * 锁应用
      */
     public void actionLockApp(String pkgName) {
-        mLockerFloatLayerManager.showFloatViewOutSide(pkgName);
+        if (mLockerOptionsManager.isNeedLocker(pkgName)) {
+            mLockerFloatLayerManager.showFloatViewOutSide(pkgName);
+        }
     }
 
     /**
@@ -82,5 +87,6 @@ public class LockerServiceImpl {
         mLockerFloatLayerManager.onDestory();
         mLockerFloatLayerManager = null;
         mLockerServiceDataManager = null;
+        mLockerOptionsManager = null;
     }
 }

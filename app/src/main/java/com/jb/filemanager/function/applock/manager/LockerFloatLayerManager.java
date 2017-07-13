@@ -31,8 +31,8 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
     private FloatInnerAppLockerView mFloatInnerAppLockerView;
     //浮窗外部解锁
     private FloatOuterAppLockerView mFloatOuterAppLockerView;
-    //当前的应用包名
-    private String mCurrentPkgName;
+    //当前的应用包名 不要加锁的包名
+    private String mCurrentPkgName, mDontLockPkgName;
 
     private LockerFloatLayerManager() {
         mCustomWindowManager = new CustomWindowManager(TheApplication.getAppContext());
@@ -74,24 +74,28 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
 //            //之前锁过的界面 直接过滤
 //            return;
 //        }
-        //重置包名
-        mCurrentPkgName = pkgName;
-        safeToInitFloatOutterAppLockerView();
-        mFloatOuterAppLockerView.bindViewData(mCurrentPkgName);
-        mFloatOuterAppLockerView.resetPatternView();
-        //获取最大的次数
-        mCustomWindowManager.addView(mFloatOuterAppLockerView);
+        if (mFloatOuterAppLockerView == null || mFloatOuterAppLockerView.getParent() == null) {
+            //重置包名
+            mCurrentPkgName = pkgName;
+            safeToInitFloatOutterAppLockerView();
+            mFloatOuterAppLockerView.bindViewData(mCurrentPkgName);
+            mFloatOuterAppLockerView.resetPatternView();
+            //获取最大的次数
+            mCustomWindowManager.addView(mFloatOuterAppLockerView);
+        }
     }
 
     /**
      * 在外部展示悬浮窗
      */
     public void showFloatViewInSide() {
-        //重置包名
-        mCurrentPkgName = TheApplication.getAppContext().getPackageName();
-        safeToInitFloatInnerAppLockerView();
-        mFloatInnerAppLockerView.resetPatternView();
-        mCustomWindowManager.addView(mFloatInnerAppLockerView);
+        if (mFloatInnerAppLockerView == null || mFloatInnerAppLockerView.getParent() == null) {
+            //重置包名
+            mCurrentPkgName = TheApplication.getAppContext().getPackageName();
+            safeToInitFloatInnerAppLockerView();
+            mFloatInnerAppLockerView.resetPatternView();
+            mCustomWindowManager.addView(mFloatInnerAppLockerView);
+        }
     }
 
     /**
@@ -133,6 +137,7 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
         } else if (mFloatInnerAppLockerView != null && mFloatInnerAppLockerView.getParent() != null) {
             if (!mFloatInnerAppLockerView.isHandleBackPressed()) {
                 mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+                mDontLockPkgName = null;
             }
         }
     }
@@ -147,6 +152,15 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
         Intent i = new Intent(TheApplication.getAppContext(), RetrievePasswordActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         TheApplication.getAppContext().startActivity(i);
+    }
+
+    @Override
+    public void onDonLockApp(View v) {
+        mDontLockPkgName = mCurrentPkgName;
+        if (mFloatOuterAppLockerView != null && mFloatOuterAppLockerView.getParent() != null) {
+            mCustomWindowManager.removeView(mFloatOuterAppLockerView);
+        }
+        showFloatViewInSide();
     }
 
     @Override
@@ -165,9 +179,13 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
             if (!judgePasscode(cellList, numbers)) {
                 mFloatInnerAppLockerView.delayClearErrorPattern();
             } else {
-                AppLockActivity.gotoAppLock(TheApplication.getAppContext());
-                //当密码输入正确的时候 并且已经错过很多次
+                if (!TextUtils.isEmpty(mDontLockPkgName)) {
+                    AppLockerDataManager.getInstance().unlockItem(mDontLockPkgName);
+                } else {
+                    AppLockActivity.gotoAppLock(TheApplication.getAppContext());
+                }
                 mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+                mDontLockPkgName = null;
                 mFloatInnerAppLockerView.resetPatternView();
             }
         }
@@ -183,6 +201,7 @@ public class LockerFloatLayerManager implements IFloatAppLockerViewEvtListener {
         } else if (mFloatInnerAppLockerView != null && mFloatInnerAppLockerView.getParent() != null) {
             if (!mFloatInnerAppLockerView.isHandleBackPressed()) {
                 mCustomWindowManager.removeView(mFloatInnerAppLockerView);
+                mDontLockPkgName = null;
             }
         }
     }
