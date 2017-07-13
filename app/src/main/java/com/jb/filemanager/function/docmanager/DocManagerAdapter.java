@@ -75,7 +75,7 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         if (child.mFileType == DocChildBean.TYPE_DOC){
             viewHolder.mIvAppIcon.setImageResource(R.drawable.doc_icon);
         }else if (child.mFileType == DocChildBean.TYPE_PDF){
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.img_file);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.pdf_icon);
         }else if (child.mFileType == DocChildBean.TYPE_TXT){
             viewHolder.mIvAppIcon.setImageResource(R.drawable.img_file);
         }else {
