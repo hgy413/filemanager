@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -33,15 +32,10 @@ import com.jb.filemanager.function.rate.presenter.RateSupport;
 import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
+import com.jb.filemanager.home.fragment.storage.StorageFragment;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.CreateNewFolderDialog;
-import com.jb.filemanager.ui.dialog.DeleteFileDialog;
-import com.jb.filemanager.ui.dialog.DocRenameDialog;
-import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
-import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SortByDialog;
-import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
-import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
@@ -49,7 +43,6 @@ import com.jb.filemanager.util.FileUtil;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 import static com.jb.filemanager.home.MainPresenter.EXTRA_DIRS;
@@ -74,8 +67,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private ViewPager mVpPhoneStorage;
     private ViewPager.SimpleOnPageChangeListener mViewPageChangeListener;
     private TabLayout mTlViewPageTab;
-    private BottomOperateBar mLlBottomOperateFirstContainer;
-    private LinearLayout mLlBottomOperateSecondContainer;
+
     ///评分引导
     private RatePresenter mRatePresenter;
     //应用更新提醒
@@ -231,45 +223,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         if (mTlViewPageTab != null && mVpPhoneStorage != null) {
             mTlViewPageTab.setupWithViewPager(mVpPhoneStorage);
         }
-
-        mLlBottomOperateFirstContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
-        mLlBottomOperateFirstContainer.onClickedAction(new BottomOperateBar.OnBottomClicked() {
-            @Override
-            public void onCutClicked() {
-                mPresenter.onClickOperateCutButton();
-            }
-
-            @Override
-            public void onCopyClicked() {
-                mPresenter.onClickOperateCopyButton();
-            }
-
-            @Override
-            public void onDeleteClicked() {
-                mPresenter.onClickOperateDeleteButton();
-            }
-
-            @Override
-            public void onMoreClicked() {
-                mPresenter.onClickOperateMoreButton();
-            }
-        });
-
-        mLlBottomOperateSecondContainer = (LinearLayout) findViewById(R.id.ll_main_bottom_operate_second_container);
-        if (mLlBottomOperateSecondContainer != null) {
-            TextView cancel = (TextView) mLlBottomOperateSecondContainer.findViewById(R.id.tv_main_bottom_operate_second_container_cancel);
-            if (cancel != null) {
-                cancel.getPaint().setAntiAlias(true);
-                cancel.setOnClickListener(this);
-            }
-
-            TextView ok = (TextView) mLlBottomOperateSecondContainer.findViewById(R.id.tv_main_bottom_operate_second_container_paste);
-            if (ok != null) {
-                ok.getPaint().setAntiAlias(true);
-                ok.setOnClickListener(this);
-            }
-        }
-
     }
 
     private void gotoSplashActivity() {
@@ -416,142 +369,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
-    public void showBottomMoreOperatePopWindow(boolean multiSelected) {
-        int resId;
-        if (multiSelected) {
-            resId = R.layout.pop_mutli_file_operate_more;
-        } else {
-            resId = R.layout.pop_single_file_operate_more;
-        }
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = getLayoutInflater().inflate(resId, null);
-        TextView details = (TextView) contentView.findViewById(R.id.tv_main_operate_more_detail);
-        TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
-
-        int width = (int)getResources().getDimension(R.dimen.popup_window_width);
-        final PopupWindow popupWindow = new PopupWindow(contentView,
-                width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
-        popupWindow.setTouchable(true);
-
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
-
-        int marginRight = (int)getResources().getDimension(R.dimen.popup_window_margin_right);
-        int marginTarget = (int)getResources().getDimension(R.dimen.popup_window_margin_target);
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(mLlBottomOperateFirstContainer,
-                mLlBottomOperateFirstContainer.getWidth() - width - marginRight,
-                marginTarget);
-
-        if (details != null) {
-            details.getPaint().setAntiAlias(true);
-            details.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null) {
-                        mPresenter.onClickOperateDetailButton();
-                    }
-                    popupWindow.dismiss();
-                }
-            });
-        }
-
-        if (rename != null) {
-            rename.getPaint().setAntiAlias(true);
-            rename.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null) {
-                        mPresenter.onClickOperateRenameButton();
-                    }
-                    popupWindow.dismiss();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void showDeleteConfirmDialog() {
-        DeleteFileDialog dialog = new DeleteFileDialog(this, new DeleteFileDialog.Listener() {
-            @Override
-            public void onConfirm(DeleteFileDialog dialog) {
-                dialog.dismiss();
-                if (mPresenter != null) {
-                    mPresenter.onClickConfirmDeleteButton();
-                }
-            }
-
-            @Override
-            public void onCancel(DeleteFileDialog dialog) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    @Override
-    public void showRenameDialog(final File file) {
-        if (file != null && file.exists()) {
-            DocRenameDialog docRenameDialog = new DocRenameDialog(this, file.isDirectory(), new DocRenameDialog.Listener() {
-                @SuppressWarnings("ResultOfMethodCallIgnored")
-                @Override
-                public void onConfirm(DocRenameDialog dialog, String newName) {
-                    if (file.exists()) {
-                        file.renameTo(new File(file.getParentFile().getAbsolutePath() + File.separator + newName));
-                    }
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onCancel(DocRenameDialog dialog) {
-                    dialog.dismiss();
-                }
-            });
-            docRenameDialog.show();
-        }
-    }
-
-    @Override
-    public void showDetailSingleFile(File file) {
-        if (file != null && file.exists()) {
-
-            SingleFileDetailDialog singleFileDetailDialog = new SingleFileDetailDialog(this, file, new SingleFileDetailDialog.Listener() {
-                @Override
-                public void onConfirm(SingleFileDetailDialog dialog) {
-                    dialog.dismiss();
-                }
-            });
-            singleFileDetailDialog.show();
-        }
-    }
-
-    @Override
-    public void showDetailMultiFile(ArrayList<File> files) {
-        if (files != null && files.size() > 0) {
-            MultiFileDetailDialog multiFileDetailDialog = new MultiFileDetailDialog(this, files, new MultiFileDetailDialog.Listener() {
-                @Override
-                public void onConfirm(MultiFileDetailDialog dialog) {
-                    dialog.dismiss();
-                }
-            });
-            multiFileDetailDialog.show();
-        }
-    }
-
-    @Override
     public void showNewFolderDialog() {
         CreateNewFolderDialog dialog = new CreateNewFolderDialog(this, new CreateNewFolderDialog.Listener() {
             @Override
@@ -640,52 +457,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
-    public void showPasteNeedMoreSpaceDialog(long needMoreSpace) {
-        SpaceNotEnoughDialog dialog = new SpaceNotEnoughDialog(this, needMoreSpace, new SpaceNotEnoughDialog.Listener() {
-            @Override
-            public void onConfirm(SpaceNotEnoughDialog dialog) {
-                // TODO @wangzq
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onCancel(SpaceNotEnoughDialog dialog) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    @Override
     public void showStoragePage() {
         mVpPhoneStorage.setCurrentItem(1);
         mTlViewPageTab.getTabAt(1).select();
-    }
-
-    @Override
-    public void updateView() {
-        if (mPresenter != null) {
-            ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
-            ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
-            if ((copyList != null && copyList.size() > 0) || (cutList != null && cutList.size() > 0)) {
-                mLlBottomOperateFirstContainer.setVisibility(View.GONE);
-                mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
-            } else {
-                int status = mPresenter.getStatus();
-                switch (status) {
-                    case MainPresenter.MAIN_STATUS_NORMAL:
-                        mLlBottomOperateFirstContainer.setVisibility(View.GONE);
-                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
-                        break;
-                    case MainPresenter.MAIN_STATUS_SELECT:
-                        mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
-                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
     }
 
     @Override
@@ -721,16 +495,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             case R.id.iv_main_action_bar_more:
                 if (mPresenter != null) {
                     mPresenter.onClickActionMoreButton();
-                }
-                break;
-            case R.id.tv_main_bottom_operate_second_container_cancel:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperateCancelButton();
-                }
-                break;
-            case R.id.tv_main_bottom_operate_second_container_paste:
-                if (mPresenter != null) {
-                    mPresenter.onClickOperatePasteButton();
                 }
                 break;
             default:
@@ -802,9 +566,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 }
                     break;
                 case 1: {
-                    StorageFragment storageFragment = new StorageFragment();
-                    storageFragment.setPresenter(mPresenter);
-                    fragment = storageFragment;
+                    fragment = new StorageFragment();
 //                    Bundle args = new Bundle();
 //                    fragment.setArguments(args);
                 }

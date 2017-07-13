@@ -1,77 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:background="#FFFFFF" >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_main_storage_disk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginEnd="6dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/img_phone_storage" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:background="#FFFFFF" >
 
-        <com.jb.filemanager.ui.widget.HorizontalListView
-            android:id="@+id/lv_dirs"
-            android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/iv_main_storage_disk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/img_phone_storage" />
+
+            <com.jb.filemanager.ui.widget.HorizontalListView
+                android:id="@+id/lv_dirs"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" />
+
+            <ImageView
+                android:id="@+id/iv_main_storage_style_switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/main_storage_style_switch_selector" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E7E9F3"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:listSelector="@android:color/transparent"
-            android:scrollbars="none" />
+            android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/iv_main_storage_style_switcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/main_storage_style_switch_selector" />
+            <ListView
+                android:id="@+id/lv_main_storage_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/transparent"
+                android:dividerHeight="0dp"
+                android:footerDividersEnabled="false"
+                android:listSelector="@drawable/main_storage_style_list_item_selector" />
+
+            <GridView
+                android:id="@+id/gv_main_storage_grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="4"
+                android:verticalSpacing="10dp"
+                android:horizontalSpacing="10dp"
+                android:stretchMode="columnWidth"
+                android:gravity="center"
+                android:visibility="gone"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 
-    <View
+
+    <com.jb.filemanager.ui.widget.BottomOperateBar
+        android:id="@+id/bottom_operate_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E7E9F3"/>
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        />
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/ll_main_bottom_operate_second_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:background="#77000000"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-        <ListView
-            android:id="@+id/lv_main_storage_list"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_main_bottom_operate_second_container_cancel"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:divider="@color/transparent"
-            android:dividerHeight="0dp"
-            android:footerDividersEnabled="false"
-            android:listSelector="@drawable/main_storage_style_list_item_selector" />
-
-        <GridView
-            android:id="@+id/gv_main_storage_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:numColumns="4"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
-            android:stretchMode="columnWidth"
+            android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="gone"/>
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:drawableTop="@drawable/ic_cancel"
+            android:drawablePadding="2dp"
+            android:background="@drawable/bottom_item_selector"
+            android:text="@string/common_cancel"
+            android:textColor="#FFFFFF"
+            android:textSize="10dp"/>
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/tv_main_bottom_operate_second_container_paste"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:drawableTop="@drawable/ic_paste"
+            android:drawablePadding="2dp"
+            android:background="@drawable/bottom_item_selector"
+            android:text="@string/common_paste"
+            android:textColor="#FFFFFF"
+            android:textSize="10dp"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

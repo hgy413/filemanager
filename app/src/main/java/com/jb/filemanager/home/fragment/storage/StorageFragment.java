@@ -1,5 +1,6 @@
-package com.jb.filemanager.home;
+package com.jb.filemanager.home.fragment.storage;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,7 +29,10 @@ import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
+import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.HorizontalListView;
+import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
@@ -53,7 +58,8 @@ import java.util.Stack;
  */
 
 public class StorageFragment extends Fragment implements View.OnKeyListener,
-        LoaderManager.LoaderCallbacks<List<File>> {
+        LoaderManager.LoaderCallbacks<List<File>>,
+        StorageContract.View {
 
     private ImageView mIvStorageDisk;
     private HorizontalListView mHLvDirs;
@@ -66,7 +72,10 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     private FileListAdapter mListAdapter;
     private FileGridAdapter mGridAdapter;
 
-    private WeakReference<MainContract.Presenter> mMainPresenterRef;
+    private BottomOperateBar mLlBottomOperateFirstContainer;
+    private LinearLayout mLlBottomOperateSecondContainer;
+
+    private StorageContract.Presenter mPresenter;
 
     private IOnEventMainThreadSubscriber<SortByChangeEvent> mSortChangeEvent = new IOnEventMainThreadSubscriber<SortByChangeEvent>() {
 
@@ -77,10 +86,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         }
     };
 
-    public void setPresenter(MainContract.Presenter presenter) {
-        mMainPresenterRef = new WeakReference<>(presenter);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +95,10 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         mStorageList = new ArrayList<>();
         initStoragePath();
 
-        mListAdapter = new FileListAdapter(getActivity(), mStorageList, mMainPresenterRef.get());
-        mGridAdapter = new FileGridAdapter(getActivity(), mStorageList, mMainPresenterRef.get());
+        mPresenter = new StoragePresenter(this);
+
+        mListAdapter = new FileListAdapter(getActivity(), mStorageList, mPresenter);
+        mGridAdapter = new FileGridAdapter(getActivity(), mStorageList, mPresenter);
 
         EventBus.getDefault().register(mSortChangeEvent);
     }
@@ -171,11 +178,10 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
                 File file = adapter.getItem(position);
 
-                if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-                    MainContract.Presenter presenter = mMainPresenterRef.get();
-                    int status = presenter.getStatus();
+                if (mPresenter != null) {
+                    int status = mPresenter.getStatus();
 
-                    if (status == MainPresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
+                    if (status == StoragePresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
                         // 选择模式或者是单个文件点击处理
                         FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
                                 .getTag();
@@ -183,7 +189,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                             boolean isSelected = holder.mIvChecked.isSelected();
                             holder.mIvChecked.setSelected(!isSelected);
 
-                            presenter.addOrRemoveSelected(file);
+                            mPresenter.addOrRemoveSelected(file);
                         }
                     } else {
                         mPathStack.push(file);
@@ -203,13 +209,12 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                     return;
                 }
 
-                if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-                    MainContract.Presenter presenter = mMainPresenterRef.get();
-                    int status = presenter.getStatus();
+                if (mPresenter != null) {
+                    int status = mPresenter.getStatus();
 
                     File file = adapter.getItem(position);
 
-                    if (status == MainPresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
+                    if (status == StoragePresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
                         // 选择模式或者是单个文件点击处理
                         FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
                                 .getTag();
@@ -217,7 +222,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                             boolean isSelected = holder.mIvChecked.isSelected();
                             holder.mIvChecked.setSelected(!isSelected);
 
-                            presenter.addOrRemoveSelected(file);
+                            mPresenter.addOrRemoveSelected(file);
                         }
                     } else {
                         mPathStack.push(file);
@@ -227,6 +232,54 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             }
         });
         mGvFiles.setAdapter(mGridAdapter);
+
+        mLlBottomOperateFirstContainer = (BottomOperateBar) rootView.findViewById(R.id.bottom_operate_bar_container);
+        mLlBottomOperateFirstContainer.setListener(new BottomOperateBar.Listener() {
+            @Override
+            public ArrayList<File> getCurrentSelectedFiles() {
+                ArrayList<File> result = null;
+                if (mPresenter != null) {
+                    result = mPresenter.getSelectedFiles();
+                }
+                return result;
+            }
+
+            @Override
+            public Activity getActivity() {
+                return StorageFragment.this.getActivity();
+            }
+        });
+
+
+        mLlBottomOperateSecondContainer = (LinearLayout) rootView.findViewById(R.id.ll_main_bottom_operate_second_container);
+        if (mLlBottomOperateSecondContainer != null) {
+            TextView cancel = (TextView) mLlBottomOperateSecondContainer.findViewById(R.id.tv_main_bottom_operate_second_container_cancel);
+            if (cancel != null) {
+                cancel.getPaint().setAntiAlias(true);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mPresenter != null) {
+                            mPresenter.onClickOperateCancelButton();
+                        }
+                    }
+                });
+            }
+
+            TextView ok = (TextView) mLlBottomOperateSecondContainer.findViewById(R.id.tv_main_bottom_operate_second_container_paste);
+            if (ok != null) {
+                ok.getPaint().setAntiAlias(true);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mPresenter != null) {
+                            mPresenter.onClickOperatePasteButton();
+                        }
+                    }
+                });
+            }
+        }
+
         return rootView;
     }
 
@@ -297,6 +350,55 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     // implements LoaderManager.LoaderCallbacks<List<File>> end
 
+    // implements StorageContract.View start
+
+    @Override
+    public void updateView(int currentStatus) {
+        if (mPresenter != null) {
+            ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
+            ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
+            if ((copyList != null && copyList.size() > 0) || (cutList != null && cutList.size() > 0)) {
+                mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
+
+
+            } else {
+                switch (currentStatus) {
+                    case StoragePresenter.MAIN_STATUS_NORMAL:
+                        mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                        break;
+                    case StoragePresenter.MAIN_STATUS_SELECT:
+                        mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
+                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void showPasteNeedMoreSpaceDialog(long needMoreSpace) {
+        SpaceNotEnoughDialog dialog = new SpaceNotEnoughDialog(getActivity(), needMoreSpace, new SpaceNotEnoughDialog.Listener() {
+            @Override
+            public void onConfirm(SpaceNotEnoughDialog dialog) {
+                // TODO @wangzq
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancel(SpaceNotEnoughDialog dialog) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    // implements StorageContract.View end
+
+
     // private start
     private void initStoragePath() {
         String[] paths = FileUtil.getVolumePaths(getActivity());
@@ -317,8 +419,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     }
 
     private void updateCurrentDir(File file) {
-        if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-            mMainPresenterRef.get().updateCurrentPath(file.getAbsolutePath());
+        if (mPresenter != null) {
+            mPresenter.updateCurrentPath(file.getAbsolutePath());
         }
 
         String currentPath = "";
@@ -490,11 +592,11 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     private static class FileListAdapter extends FileAdapter {
 
-        WeakReference<MainContract.Presenter> mMainPresenterRef;
+        WeakReference<StorageContract.Presenter> mPresenterRef;
 
-        FileListAdapter(Context context, List<File> rootDirs, MainContract.Presenter presenter) {
+        FileListAdapter(Context context, List<File> rootDirs, StorageContract.Presenter presenter) {
             super(context, rootDirs);
-            mMainPresenterRef = new WeakReference<>(presenter);
+            mPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
@@ -556,8 +658,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             }
 
             // 选中标识
-            if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-                if (mMainPresenterRef.get().isSelected(file)) {
+            if (mPresenterRef != null && mPresenterRef.get() != null) {
+                if (mPresenterRef.get().isSelected(file)) {
                     holder.mIvChecked.setSelected(true);
                 } else {
                     holder.mIvChecked.setSelected(false);
@@ -567,15 +669,15 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
                     @Override
                     public void onClick(View v) {
-                        if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-                            int status = mMainPresenterRef.get().getStatus();
-                            if (status == MainPresenter.MAIN_STATUS_SELECT
-                                    || status == MainPresenter.MAIN_STATUS_NORMAL) {
+                        if (mPresenterRef != null && mPresenterRef.get() != null) {
+                            int status = mPresenterRef.get().getStatus();
+                            if (status == StoragePresenter.MAIN_STATUS_SELECT
+                                    || status == StoragePresenter.MAIN_STATUS_NORMAL) {
                                 boolean isSelected = holder.mIvChecked.isSelected();
                                 holder.mIvChecked.setSelected(!isSelected);
 
                                 File file = getItem(position);
-                                mMainPresenterRef.get().addOrRemoveSelected(file);
+                                mPresenterRef.get().addOrRemoveSelected(file);
                             }
                         }
                     }
@@ -594,11 +696,11 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     private static class FileGridAdapter extends FileAdapter {
 
-        WeakReference<MainContract.Presenter> mMainPresenterRef;
+        WeakReference<StorageContract.Presenter> mPresenterRef;
 
-        FileGridAdapter(Context context, List<File> rootDirs, MainContract.Presenter presenter) {
+        FileGridAdapter(Context context, List<File> rootDirs, StorageContract.Presenter presenter) {
             super(context, rootDirs);
-            mMainPresenterRef = new WeakReference<>(presenter);
+            mPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
@@ -642,8 +744,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             }
 
             // 选中标识
-            if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-                if (mMainPresenterRef.get().isSelected(file)) {
+            if (mPresenterRef != null && mPresenterRef.get() != null) {
+                if (mPresenterRef.get().isSelected(file)) {
                     holder.mIvChecked.setSelected(true);
                 } else {
                     holder.mIvChecked.setSelected(false);
@@ -653,15 +755,15 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
                     @Override
                     public void onClick(View v) {
-                        if (mMainPresenterRef != null && mMainPresenterRef.get() != null) {
-                            int status = mMainPresenterRef.get().getStatus();
-                            if (status == MainPresenter.MAIN_STATUS_SELECT
-                                    || status == MainPresenter.MAIN_STATUS_NORMAL) {
+                        if (mPresenterRef != null && mPresenterRef.get() != null) {
+                            int status = mPresenterRef.get().getStatus();
+                            if (status == StoragePresenter.MAIN_STATUS_SELECT
+                                    || status == StoragePresenter.MAIN_STATUS_NORMAL) {
                                 boolean isSelected = holder.mIvChecked.isSelected();
                                 holder.mIvChecked.setSelected(!isSelected);
 
                                 File file = getItem(position);
-                                mMainPresenterRef.get().addOrRemoveSelected(file);
+                                mPresenterRef.get().addOrRemoveSelected(file);
                             }
                         }
                     }

@@ -18,23 +18,16 @@ public class MainContract {
         void showNormalStatus(int tabPos);
         void showSearchStatus();
         void showActionMoreOperatePopWindow();
-        void showBottomMoreOperatePopWindow(boolean multiSelected);
 
-        void showDeleteConfirmDialog();
-        void showRenameDialog(File file);
-        void showDetailSingleFile(File file);
-        void showDetailMultiFile(ArrayList<File> files);
         void showNewFolderDialog();
         void showSortByDialog();
-        void showPasteNeedMoreSpaceDialog(long needMoreSpace);
         void showStoragePage();
-        void updateView();
 
         void openDrawer(int openType);
         void finishActivity();
     }
 
-    interface Presenter {
+    public interface Presenter {
         void onCreate(Intent intent);
         void onResume();
         void onPause();
@@ -43,8 +36,6 @@ public class MainContract {
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
 
-        int getStatus();
-
         void onSwitchTab(int tabPos);
         void onClickDrawerButton();
         void onClickActionSearchButton();
@@ -52,22 +43,8 @@ public class MainContract {
         void onClickActionNewFolderButton();
         void onClickActionSortByButton();
 
-        void onClickOperateCutButton();
-        void onClickOperateCopyButton();
-        void onClickOperateDeleteButton();
-        void onClickOperateMoreButton();
-        void onClickOperateDetailButton();
-        void onClickOperateRenameButton();
-        void onClickOperateCancelButton();
-        void onClickOperatePasteButton();
-
         boolean onClickConfirmCreateFolderButton(String name);
-        boolean onClickConfirmDeleteButton();
-        boolean onClickConfirmRenameButton(String name);
 
-        boolean isSelected(File file);
-        void addOrRemoveSelected(File file);
-        ArrayList<File> getSelectedFiles();
         void updateCurrentPath(String path);
         String getCurrentPath();
 
