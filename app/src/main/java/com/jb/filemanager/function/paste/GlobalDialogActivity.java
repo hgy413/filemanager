@@ -41,6 +41,10 @@ public class GlobalDialogActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        handleIntent();
+    }
+
+    private void handleIntent() {
         Intent intent = getIntent();
         int type = intent.getIntExtra(DIALOG_TYPE, 0);
         switch (type) {
@@ -54,8 +58,6 @@ public class GlobalDialogActivity extends Activity {
                 showPasteFailedDialog(intent);
                 break;
         }
-
-
     }
 
     private void showPasteDuplicateFileDialog(Intent intent) {
@@ -176,5 +178,11 @@ public class GlobalDialogActivity extends Activity {
         if (mDialogCount == 0) {
             super.finish();
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent();
     }
 }
