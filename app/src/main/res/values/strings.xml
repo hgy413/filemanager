@@ -11,6 +11,7 @@
     <string name="common_stop">Stop</string>
     <string name="common_continue">Continue</string>
     <string name="common_skip">Skip</string>
+    <string name="common_paste">Paste</string>
 
 
     <string name="gp_not_connect">Unable to open connection</string>

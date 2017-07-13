@@ -107,7 +107,7 @@
         <LinearLayout
             android:id="@+id/ll_main_bottom_operate_second_container"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_gravity="bottom"
             android:background="#77000000"
             android:orientation="horizontal"
@@ -120,10 +120,14 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:drawablePadding="3dp"
-                android:text="Cancel"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:drawableTop="@drawable/ic_cancel"
+                android:drawablePadding="2dp"
+                android:background="@drawable/bottom_item_selector"
+                android:text="@string/common_cancel"
                 android:textColor="#FFFFFF"
-                android:textSize="16dp"/>
+                android:textSize="10dp"/>
 
             <TextView
                 android:id="@+id/tv_main_bottom_operate_second_container_paste"
@@ -132,10 +136,14 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:drawablePadding="3dp"
-                android:text="Copy"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:drawableTop="@drawable/ic_paste"
+                android:drawablePadding="2dp"
+                android:background="@drawable/bottom_item_selector"
+                android:text="@string/common_paste"
                 android:textColor="#FFFFFF"
-                android:textSize="16dp"/>
+                android:textSize="10dp"/>
 
         </LinearLayout>
 
