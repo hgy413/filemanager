@@ -5,12 +5,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
+import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
+import com.jb.filemanager.util.imageloader.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -71,6 +77,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
         groupViewHolder.mTvTitle.setText(mGroupList.keyAt(groupPosition));
+        groupViewHolder.mIvSelect.setTag(groupPosition);
         return convertView;
     }
 
@@ -89,38 +96,38 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
 
         switch (fileType) {
             case APP:
-                holder.mIvCover.setImageResource(R.drawable.app_icon);
+                holder.mIvIcon.setImageResource(R.drawable.app_icon);
                 break;
             case DOC:
-                holder.mIvCover.setImageResource(R.drawable.doc_icon);
+                holder.mIvIcon.setImageResource(R.drawable.doc_icon);
                 break;
             case PDF:
-                holder.mIvCover.setImageResource(R.drawable.img_pdf);
+                holder.mIvIcon.setImageResource(R.drawable.img_pdf);
                 break;
             case TXT:
-                holder.mIvCover.setImageResource(R.drawable.img_txt);
+                holder.mIvIcon.setImageResource(R.drawable.img_txt);
                 break;
             case MUSIC:
-                holder.mIvCover.setImageResource(R.drawable.img_music);
+                holder.mIvIcon.setImageResource(R.drawable.img_music);
                 break;
             case VIDEO:
-                holder.mIvCover.setImageResource(R.drawable.video_icon);
+                holder.mIvIcon.setImageResource(R.drawable.video_icon);
                 break;
             case PICTURE:
-                holder.mIvCover.setImageResource(R.drawable.img_picture);
+                holder.mIvIcon.setImageResource(R.drawable.img_picture);
                 break;
             case ZIP:
-                holder.mIvCover.setImageResource(R.drawable.zip_icon);
+                holder.mIvIcon.setImageResource(R.drawable.zip_icon);
                 break;
             case OTHER:
             default:
-                holder.mIvCover.setImageResource(R.drawable.unknown_icon);
-
+                holder.mIvIcon.setImageResource(R.drawable.unknown_icon);
         }
         holder.mTvName.setText(fileInfo.mName);
         holder.mTvInfo.setText(fileInfo.mArtist + "  " +
                 ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
                 TimeUtil.getMSTime(fileInfo.mDuration));
+        holder.savePosition(groupPosition, childPosition, fileInfo);
         return convertView;
     }
 
@@ -139,11 +146,29 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_file_group_item_select:
+                ImageView ivSelect = (ImageView)v;
+                ivSelect.setImageResource(R.drawable.choose_all);
+                updateGroupView((int)v.getTag());
+                break;
+            case R.id.ll_file_item_container:
+                // Todo Show file by Type
                 break;
             case R.id.iv_music_child_item_select:
-
+                Binder binder = (Binder) v.getTag();
+                if (binder.mFileInfo.isSelected) {
+                    binder.mFileInfo.isSelected = false;
+                    ((ImageView)v).setImageResource(R.drawable.choose_none);
+                } else {
+                    binder.mFileInfo.isSelected = true;
+                    ((ImageView)v).setImageResource(R.drawable.choose_all);
+                }
+                updateGroupView(binder.groupPos);
                 break;
         }
+    }
+
+    private void updateGroupView(int groupPosition) {
+
     }
 
 
@@ -167,30 +192,41 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
      * Child Item View
      */
     private class ItemViewHolder {
-
-        ImageView mIvCover;
+        LinearLayout mLlItemContainer;
+        ImageView mIvIcon;
         TextView mTvName;
         TextView mTvInfo;
         ImageView mIvSelect;
-
         public ItemViewHolder(View itemView) {
-            mIvCover = (ImageView) itemView.findViewById(R.id.iv_music_child_item_cover);
+            mLlItemContainer = (LinearLayout)itemView.findViewById(R.id.ll_file_item_container);
+            mIvIcon = (ImageView) itemView.findViewById(R.id.iv_music_child_item_cover);
             mTvName = (TextView) itemView.findViewById(R.id.tv_music_child_item_name);
             mTvInfo = (TextView) itemView.findViewById(R.id.tv_music_child_item_info);
             mIvSelect = (ImageView) itemView.findViewById(R.id.iv_music_child_item_select);
             mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
+        }
+
+        void savePosition(int group, int child, FileInfo fileInfo) {
+            if (fileInfo != null) {
+                Binder binder = new Binder(group, child, fileInfo);
+                //更新数据 用于直接修改
+                mLlItemContainer.setTag(binder);
+                mIvSelect.setTag(binder);
+                mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
+                mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
+            }
         }
     }
 
     private class Binder {
         public int groupPos;
         public int childPos;
-        public FileInfo mImageModle;
+        public FileInfo mFileInfo;
 
-        public Binder(int groupPos, int childPos, FileInfo imageModle) {
+        public Binder(int groupPos, int childPos, FileInfo info) {
             this.groupPos = groupPos;
             this.childPos = childPos;
-            this.mImageModle = imageModle;
+            this.mFileInfo = info;
         }
     }
 }
