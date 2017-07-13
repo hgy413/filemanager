@@ -2,7 +2,6 @@ package com.jb.filemanager.ui.widget;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -24,7 +23,6 @@ import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +34,6 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
 
     private Context mContext;
     private LinearLayout mLlCut, mLlCopy, mLlDelete, mLlMore; // 四个按钮
-    private OnBottomClicked mBottomClicked;
     public BottomOperateBar(Context context) {
         this(context, null, 0);
     }
@@ -82,11 +79,6 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
         mLlMore.setOnClickListener(this);
     }
 
-    public BottomOperateBar onClickedAction(@NonNull OnBottomClicked clickedAction) {
-        mBottomClicked = clickedAction;
-        return this;
-    }
-
     public void setListener(Listener listener) {
         mListener = listener;
     }
@@ -100,11 +92,13 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
             case R.id.ll_common_operate_bar_cut: {
                 ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                 FileManager.getInstance().setCutFiles(selectedFiles);
+                mListener.afterCut();
             }
                 break;
             case R.id.ll_common_operate_bar_copy: {
                 ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                 FileManager.getInstance().setCopyFiles(selectedFiles);
+                mListener.afterCopy();
             }
                 break;
             case R.id.ll_common_operate_bar_delete: {
@@ -114,7 +108,8 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         dialog.dismiss();
                         if (mListener != null) {
                             ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
-                            ArrayList<File> deleteFailedFiles = FileUtil.deleteSelectedFiles(selectedFiles);
+                            FileUtil.deleteSelectedFiles(selectedFiles);
+                            mListener.afterDelete();
                         }
                     }
 
@@ -127,7 +122,7 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
             }
                 break;
             case R.id.ll_common_operate_bar_more:
-                mBottomClicked.onMoreClicked();
+                showPopupMore();
                 break;
         }
     }
@@ -237,6 +232,9 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         if (file.exists()) {
                             file.renameTo(new File(file.getParentFile().getAbsolutePath() + File.separator + newName));
                         }
+                        if (mListener != null) {
+                            mListener.afterRename();
+                        }
                         dialog.dismiss();
                     }
 
@@ -251,16 +249,25 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
 
     }
 
-    public interface OnBottomClicked{
-        void onCutClicked();
-        void onCopyClicked();
-        void onDeleteClicked();
-        void onMoreClicked();
-    }
-
     public interface Listener {
+
+        // 获取选中的文件，用于逻辑操作
         ArrayList<File> getCurrentSelectedFiles();
+
+        // 获取一个activity 用户dialog弹窗
         Activity getActivity();
+
+        // 点击复制后调用，逻辑处理已做，页面更新。
+        void afterCopy();
+
+        // 点击剪切后调用，逻辑处理已做，页面更新。
+        void afterCut();
+
+        // 重命名后调用，逻辑处理已做，页面更新。
+        void afterRename();
+
+        // 点击确认删除选中文件后调用，逻辑处理已做，页面更新
+        void afterDelete();
     }
 
 }

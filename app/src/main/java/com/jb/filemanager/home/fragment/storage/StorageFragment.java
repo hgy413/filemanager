@@ -32,7 +32,6 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.HorizontalListView;
-import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
@@ -46,9 +45,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -91,7 +88,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         super.onCreate(savedInstanceState);
 
         mPathStack = new Stack<>();
-        Iterator<File> iterator = mPathStack.iterator();
         mStorageList = new ArrayList<>();
         initStoragePath();
 
@@ -248,6 +244,34 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             public Activity getActivity() {
                 return StorageFragment.this.getActivity();
             }
+
+            @Override
+            public void afterCopy() {
+                if (mPresenter != null) {
+                    mPresenter.afterCopy();
+                }
+            }
+
+            @Override
+            public void afterCut() {
+                if (mPresenter != null) {
+                    mPresenter.afterCut();
+                }
+            }
+
+            @Override
+            public void afterRename() {
+                if (mPresenter != null) {
+                    mPresenter.afterRename();
+                }
+            }
+
+            @Override
+            public void afterDelete() {
+                if (mPresenter != null) {
+                    mPresenter.afterDelete();
+                }
+            }
         });
 
 
@@ -353,17 +377,15 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     // implements StorageContract.View start
 
     @Override
-    public void updateView(int currentStatus) {
+    public void updateView() {
         if (mPresenter != null) {
             ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
             ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
             if ((copyList != null && copyList.size() > 0) || (cutList != null && cutList.size() > 0)) {
                 mLlBottomOperateFirstContainer.setVisibility(View.GONE);
                 mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
-
-
             } else {
-                switch (currentStatus) {
+                switch (mPresenter.getStatus()) {
                     case StoragePresenter.MAIN_STATUS_NORMAL:
                         mLlBottomOperateFirstContainer.setVisibility(View.GONE);
                         mLlBottomOperateSecondContainer.setVisibility(View.GONE);

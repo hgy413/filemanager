@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.samefile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,9 @@ import com.jb.filemanager.util.DensityUtil;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by bool on 17-6-30.
@@ -116,28 +120,66 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         mRvMuscicList.setAdapter(mMusicListAdapter);
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
-        mBottomOperateContainer.onClickedAction(new BottomOperateBar.OnBottomClicked() {
+        mBottomOperateContainer.setListener(new BottomOperateBar.Listener() {
             @Override
-            public void onCutClicked() {
-                mPresenter.onClickOperateCutButton(mItemSelected);
+            public ArrayList<File> getCurrentSelectedFiles() {
+                // TODO @bool
+                return null;
             }
 
             @Override
-            public void onCopyClicked() {
-                mPresenter.onClickOperateCopyButton(mItemSelected);
+            public Activity getActivity() {
+                // TODO @bool
+                return SameFileActivity.this;
             }
 
             @Override
-            public void onDeleteClicked() {
-                mPresenter.onClickOperateDeleteButton();
+            public void afterCopy() {
+                // TODO @bool
 
             }
 
             @Override
-            public void onMoreClicked() {
-                mPresenter.onClickOperateMoreButton(mItemSelected);
+            public void afterCut() {
+                // TODO @bool
+
+            }
+
+            @Override
+            public void afterRename() {
+                // TODO @bool
+            }
+
+            @Override
+            public void afterDelete() {
+                // TODO @bool
+
             }
         });
+
+        // TODO @bool
+//        mBottomOperateContainer.onClickedAction(new BottomOperateBar.OnBottomClicked() {
+//            @Override
+//            public void onCutClicked() {
+//                mPresenter.onClickOperateCutButton(mItemSelected);
+//            }
+//
+//            @Override
+//            public void onCopyClicked() {
+//                mPresenter.onClickOperateCopyButton(mItemSelected);
+//            }
+//
+//            @Override
+//            public void onDeleteClicked() {
+//                mPresenter.onClickOperateDeleteButton();
+//
+//            }
+//
+//            @Override
+//            public void onMoreClicked() {
+//                mPresenter.onClickOperateMoreButton(mItemSelected);
+//            }
+//        });
     }
 
     @Override

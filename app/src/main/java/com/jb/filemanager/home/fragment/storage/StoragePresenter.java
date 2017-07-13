@@ -32,7 +32,7 @@ class StoragePresenter implements StorageContract.Presenter {
         if (mView != null) {
             FileManager.getInstance().clearCopyFiles();
             FileManager.getInstance().clearCutFiles();
-            mView.updateView(mStatus);
+            mView.updateView();
         }
     }
 
@@ -58,8 +58,28 @@ class StoragePresenter implements StorageContract.Presenter {
             FileManager.getInstance().clearCutFiles();
 
             mStatus = MAIN_STATUS_NORMAL;
-            mView.updateView(mStatus);
+            mView.updateView();
         }
+    }
+
+    @Override
+    public void afterCopy() {
+        resetSelectFile();
+    }
+
+    @Override
+    public void afterCut() {
+        resetSelectFile();
+    }
+
+    @Override
+    public void afterRename() {
+        resetSelectFile();
+    }
+
+    @Override
+    public void afterDelete() {
+        resetSelectFile();
     }
 
     @Override
@@ -99,7 +119,7 @@ class StoragePresenter implements StorageContract.Presenter {
                             mStatus = MAIN_STATUS_NORMAL;
                         }
 
-                        mView.updateView(mStatus);
+                        mView.updateView();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -126,4 +146,12 @@ class StoragePresenter implements StorageContract.Presenter {
     }
 
 
+
+    private void resetSelectFile() {
+        mSelectedFiles.clear();
+        mStatus = MAIN_STATUS_NORMAL;
+        if (mView != null) {
+            mView.updateView();
+        }
+    }
 }

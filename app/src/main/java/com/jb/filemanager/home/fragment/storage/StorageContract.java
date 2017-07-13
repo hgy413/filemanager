@@ -11,13 +11,18 @@ import java.util.ArrayList;
 public class StorageContract {
 
     interface View {
-        void updateView(int currentStatus);
+        void updateView();
         void showPasteNeedMoreSpaceDialog(long needMoreSpace);
     }
 
     interface Presenter {
         void onClickOperateCancelButton();
         void onClickOperatePasteButton();
+
+        void afterCopy();
+        void afterCut();
+        void afterRename();
+        void afterDelete();
 
         int getStatus();
         boolean isSelected(File file);
