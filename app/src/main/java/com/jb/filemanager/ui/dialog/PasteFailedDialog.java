@@ -1,12 +1,13 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
 
-import java.util.ArrayList;
+import java.io.File;
 
 /**
  * Created by bill wang on 2017/7/12.
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 public class PasteFailedDialog extends FMBaseDialog {
 
-    public PasteFailedDialog(Activity act, final ArrayList<String> failedFilePath, final PasteFailedDialog.Listener listener) {
+    public PasteFailedDialog(Activity act, final String failedFilePath, final PasteFailedDialog.Listener listener) {
         super(act, true);
 
         View dialogView = View.inflate(act, R.layout.dialog_paste_failed, null);
@@ -27,6 +28,12 @@ public class PasteFailedDialog extends FMBaseDialog {
         TextView desc = (TextView) dialogView.findViewById(R.id.tv_paste_failed_desc);
         if (desc != null) {
             desc.getPaint().setAntiAlias(true);
+            String failedFileName = "";
+            if (!TextUtils.isEmpty(failedFilePath)) {
+                File failedFile = new File(failedFilePath);
+                failedFileName = failedFile.getName();
+            }
+            desc.setText(getContext().getString(R.string.dialog_paste_failed_desc, failedFileName));
         }
 
         TextView desc2 = (TextView) dialogView.findViewById(R.id.tv_paste_failed_desc2);
@@ -63,7 +70,7 @@ public class PasteFailedDialog extends FMBaseDialog {
         /**
          * 点击确定按钮
          */
-        void onConfirm(PasteFailedDialog dialog, ArrayList<String> failedFile);
+        void onConfirm(PasteFailedDialog dialog, String failedFilePath);
 
         void onCancel(PasteFailedDialog dialog);
     }

@@ -35,6 +35,8 @@ public class GlobalDialogActivity extends Activity {
     public static final String PASTE_FAILED_IS_COPY = "paste_failed_is_copy";
     public static final String PASTE_FAILED_DEST_PATH = "paste_failed_dest_path";
 
+    private int mDialogCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +79,7 @@ public class GlobalDialogActivity extends Activity {
         });
 
         dialog.show();
+        mDialogCount++;
     }
 
     private void showPasteSubFolderDialog(Intent intent) {
@@ -99,65 +102,79 @@ public class GlobalDialogActivity extends Activity {
         });
 
         dialog.show();
+        mDialogCount++;
     }
 
     private void showPasteFailedDialog(Intent intent) {
-        final ArrayList<String> sourceArray = intent.getStringArrayListExtra(PASTE_FAILED_SOURCE_PATH);
+        ArrayList<String> sourceArray = intent.getStringArrayListExtra(PASTE_FAILED_SOURCE_PATH);
         final boolean isCopy = intent.getBooleanExtra(PASTE_FAILED_IS_COPY, true);
         final String dest = intent.getStringExtra(PASTE_FAILED_DEST_PATH);
 
-        PasteFailedDialog dialog = new PasteFailedDialog(this, sourceArray, new PasteFailedDialog.Listener() {
+        for (String path : sourceArray) {
+            PasteFailedDialog dialog = new PasteFailedDialog(this, path, new PasteFailedDialog.Listener() {
 
-            @Override
-            public void onConfirm(PasteFailedDialog dialog, ArrayList<String> failedFile) {
-                ArrayList<File> files = new ArrayList<>();
-                for (String source : sourceArray) {
-                    files.add(new File(source));
-                }
-                if (isCopy) {
-                    FileManager.getInstance().setCopyFiles(files);
-                } else {
-                    FileManager.getInstance().setCutFiles(files);
-                }
+                @Override
+                public void onConfirm(PasteFailedDialog dialog, String failedFilePath) {
+                    ArrayList<File> files = new ArrayList<>();
+                    File file = new File(failedFilePath);
+                    files.add(file);
 
-                boolean isStart = FileManager.getInstance().doPaste(dest, new FileManager.Listener() {
-                    @Override
-                    public void onPasteNeedMoreSpace(long needMoreSpace) {
-                        SpaceNotEnoughDialog dialog = new SpaceNotEnoughDialog(GlobalDialogActivity.this, needMoreSpace, new SpaceNotEnoughDialog.Listener() {
-                            @Override
-                            public void onConfirm(SpaceNotEnoughDialog dialog) {
-                                dialog.dismiss();
-                                GlobalDialogActivity.this.finish();
-                            }
-
-                            @Override
-                            public void onCancel(SpaceNotEnoughDialog dialog) {
-                                dialog.dismiss();
-                                GlobalDialogActivity.this.finish();
-                            }
-                        });
-                        dialog.show();
+                    if (isCopy) {
+                        FileManager.getInstance().setCopyFiles(files);
+                    } else {
+                        FileManager.getInstance().setCutFiles(files);
                     }
 
-                    @Override
-                    public void onPasteProgressUpdate(File file) {
+                    boolean isStart = FileManager.getInstance().doPaste(dest, new FileManager.Listener() {
+                        @Override
+                        public void onPasteNeedMoreSpace(long needMoreSpace) {
+                            SpaceNotEnoughDialog dialog = new SpaceNotEnoughDialog(GlobalDialogActivity.this, needMoreSpace, new SpaceNotEnoughDialog.Listener() {
+                                @Override
+                                public void onConfirm(SpaceNotEnoughDialog dialog) {
+                                    dialog.dismiss();
+                                    GlobalDialogActivity.this.finish();
+                                }
 
+                                @Override
+                                public void onCancel(SpaceNotEnoughDialog dialog) {
+                                    dialog.dismiss();
+                                    GlobalDialogActivity.this.finish();
+                                }
+                            });
+                            dialog.show();
+                            mDialogCount++;
+                        }
+
+                        @Override
+                        public void onPasteProgressUpdate(File file) {
+
+                        }
+                    });
+
+                    if (isStart) {
+                        dialog.dismiss();
+                        finish();
                     }
-                });
+                }
 
-                if (isStart) {
+                @Override
+                public void onCancel(PasteFailedDialog dialog) {
                     dialog.dismiss();
                     finish();
                 }
-            }
+            });
 
-            @Override
-            public void onCancel(PasteFailedDialog dialog) {
-                dialog.dismiss();
-                finish();
-            }
-        });
+            dialog.show();
+            mDialogCount++;
+        }
 
-        dialog.show();
+    }
+
+    @Override
+    public void finish() {
+        mDialogCount--;
+        if (mDialogCount == 0) {
+            super.finish();
+        }
     }
 }
