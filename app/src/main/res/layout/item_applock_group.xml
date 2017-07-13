@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="40dp">
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
         <TextView
             android:id="@+id/activity_applock_group_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:textColor="#333333"
-            android:textSize="16dp" />
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/black_40"
+            android:textSize="12dp"/>
 
         <com.jb.filemanager.commomview.GroupSelectBox
             android:id="@+id/activity_applock_group_selectbox"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="4dp"
             android:layout_centerVertical="true"
-            android:padding="8dp"
-            android:layout_marginRight="8dp"/>
+            android:padding="12dp"
+            android:src="@drawable/select_all"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/list_divider_line_color_e7e9f3"/>
 </RelativeLayout>

@@ -44,9 +44,9 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         final AppGroupBean appGroupBean = mGroups.get(groupPosition);
         viewHolder.mTvGroupTitle.setText(appGroupBean.mGroupTitle);
         viewHolder.mSelectBox
-                .setImageSource(R.drawable.choose_none,
-                        R.drawable.choose_part,
-                        R.drawable.choose_all);
+                .setImageSource(R.drawable.select_none,
+                        R.drawable.select_multi,
+                        R.drawable.select_all);
 
         viewHolder.mSelectBox.setState(appGroupBean.mSelectState);
         viewHolder.mSelectBox.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +79,8 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         IconLoader.getInstance().displayImage(child.mAppPackageName, viewHolder.mIvAppIcon);
         viewHolder.mTvAppName.setText(child.mAppName);
         viewHolder.mTvAppSize.setText(ConvertUtils.formatFileSize(child.mAppCodeSize));
-        viewHolder.mItemCheckBox.setImageRes(R.drawable.choose_none,
-                R.drawable.choose_all);
+        viewHolder.mItemCheckBox.setImageRes(R.drawable.select_none,
+                R.drawable.select_all);
         viewHolder.mItemCheckBox.setChecked(child.mIsChecked);
         viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override

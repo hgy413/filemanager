@@ -40,9 +40,9 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         final DocGroupBean appGroupBean = mGroups.get(groupPosition);
         viewHolder.mTvGroupTitle.setText(appGroupBean.mGroupTitle);
         viewHolder.mSelectBox
-                .setImageSource(R.drawable.choose_none,
-                        R.drawable.choose_part,
-                        R.drawable.choose_all);
+                .setImageSource(R.drawable.select_none,
+                        R.drawable.select_multi,
+                        R.drawable.select_all);
 
         viewHolder.mSelectBox.setState(appGroupBean.mSelectState);
         viewHolder.mSelectBox.setOnClickListener(new View.OnClickListener() {
@@ -72,11 +72,20 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         ChildItemViewHolder viewHolder = new ChildItemViewHolder(convertView);
         final DocGroupBean appGroupBean = mGroups.get(groupPosition);
         final DocChildBean child = appGroupBean.getChild(childPosition);
-        viewHolder.mIvAppIcon.setImageResource(R.mipmap.ic_launcher);
+        if (child.mFileType == DocChildBean.TYPE_DOC){
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.doc_icon);
+        }else if (child.mFileType == DocChildBean.TYPE_PDF){
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.img_file);
+        }else if (child.mFileType == DocChildBean.TYPE_TXT){
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.img_file);
+        }else {
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.unknown_icon);
+        }
+
         viewHolder.mTvAppName.setText(child.mDocName);
         viewHolder.mTvAppSize.setText(ConvertUtils.formatFileSize(Long.parseLong(child.mDocSize)));
-        viewHolder.mItemCheckBox.setImageRes(R.drawable.choose_none,
-                R.drawable.choose_all);
+        viewHolder.mItemCheckBox.setImageRes(R.drawable.select_none,
+                R.drawable.select_all);
         viewHolder.mItemCheckBox.setChecked(child.mIsChecked);
         viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
