@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.FileDeleteConfirmDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
@@ -50,8 +51,10 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private static final int TXT_PREVIEW_REQUEST_CODE = 103;
     private static final String TXT_FILE_DATA = "txt_file_data";
     private DocManagerPresenter mPresenter;
-    private LinearLayout mLlTitle;
+    private RelativeLayout mRlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
+    private ImageView mIvCommonActionBarBack;
+    private ImageView mIvClearSearchInput;
     private EditText mEtCommonActionBarWithSearchSearch;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private FloatingGroupExpandableListView mElvApk;
@@ -95,8 +98,10 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void initView() {
-        mLlTitle = (LinearLayout) findViewById(R.id.ll_title);
+        mRlTitle = (RelativeLayout) findViewById(R.id.ll_title);
         mTvCommonActionBarWithSearchTitle = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
+        mIvCommonActionBarBack = (ImageView) findViewById(R.id.iv_common_action_bar_back);
+        mIvClearSearchInput = (ImageView) findViewById(R.id.iv_clear_search_input);
         mEtCommonActionBarWithSearchSearch = (EditText) findViewById(R.id.et_common_action_bar_with_search_search);
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_with_search_search);
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
@@ -213,6 +218,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     public void initClick() {
         mRlCommonOperateBarContainer.setOnClickListener(this);
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
+        mIvCommonActionBarBack.setOnClickListener(this);
+        mIvClearSearchInput.setOnClickListener(this);
         mIvCommonActionBarWithSearchSearch.setOnClickListener(this);
         mElvApk.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -293,6 +300,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void refreshTitle() {
         mEtCommonActionBarWithSearchSearch.setVisibility(View.INVISIBLE);
+        mIvClearSearchInput.setVisibility(View.GONE);
         mTvCommonActionBarWithSearchTitle.setVisibility(View.VISIBLE);
         mIsSearchInput = false;
     }
@@ -444,10 +452,15 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 Toast.makeText(DocManagerActivity.this, "我是占位的bottom啦", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_common_action_bar_with_search_title:
+            case R.id.iv_common_action_bar_back:
                 finishActivity();
                 break;
             case R.id.iv_common_action_bar_with_search_search:
-                handleSearchButtonClick(mIsSearchInput);
+                startActivity(new Intent(this, SearchActivity.class));
+//                handleSearchButtonClick(mIsSearchInput);
+                break;
+            case R.id.iv_clear_search_input:
+                mEtCommonActionBarWithSearchSearch.setText("");
                 break;
             case R.id.tv_common_operate_bar_copy:
                 handleDataCopy();
@@ -599,6 +612,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
         //非搜索模式下点击搜索  出现搜索框
         mTvCommonActionBarWithSearchTitle.setVisibility(View.GONE);
+        mIvClearSearchInput.setVisibility(View.VISIBLE);
         mEtCommonActionBarWithSearchSearch.setVisibility(View.VISIBLE);
         mEtCommonActionBarWithSearchSearch.requestFocus();//请求焦点
         mEtCommonActionBarWithSearchSearch.setText(mAppInfo.get(0).getChild(0).mDocName);//默认内容是第一个的APP的名字

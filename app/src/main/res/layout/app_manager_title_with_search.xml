@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage"
     android:id="@+id/ll_title"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
-    android:layout_height="48dp"
+    android:layout_height="56dp"
     android:orientation="horizontal"
+    tools:background="@color/colorAccent"
     android:background="@android:color/transparent">
+
+    <ImageView
+        android:id="@+id/iv_common_action_bar_back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/action_bar_back_drawable_selector"/>
 
     <TextView
         android:id="@+id/tv_common_action_bar_with_search_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="50dp"
+        android:layout_marginLeft="36dp"
+        android:layout_centerVertical="true"
+        android:gravity="center"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:drawablePadding="16dp"
-        android:drawableLeft="@drawable/action_bar_back_drawable_selector"
-        android:drawableStart="@drawable/action_bar_back_drawable_selector"
-        android:text="@string/common_action_bar_title"
+        android:text="@string/app_name"
+        android:textSize="16dp"
         android:textColor="@drawable/action_bar_back_text_selector"
-        android:textSize="20dp"/>
+        android:visibility="visible"/>
 
     <EditText
         android:id="@+id/et_common_action_bar_with_search_search"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:gravity="center_vertical"
         android:hint="@string/app_name"
         android:textColor="#000000"
-        android:textSize="18dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="36dp"
+        android:textSize="16dp"
         android:inputType="text"
         android:imeOptions="actionSearch"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/iv_clear_search_input"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="46dp"
+        android:src="@drawable/ic_cancel"
         android:visibility="invisible"/>
 
     <ImageView
@@ -41,7 +61,10 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
+        android:layout_alignParentRight="true"
         android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:padding="16dp"
         android:src="@drawable/ic_action_bar_search"/>
 
-</LinearLayout>
+</RelativeLayout>
