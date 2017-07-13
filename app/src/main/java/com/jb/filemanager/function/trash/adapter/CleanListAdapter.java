@@ -17,6 +17,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
+import com.jb.filemanager.function.fileexplorer.FileBrowserActivity;
 import com.jb.filemanager.function.scanframe.bean.CleanGroupsBean;
 import com.jb.filemanager.function.scanframe.bean.adbean.AdBean;
 import com.jb.filemanager.function.scanframe.bean.cachebean.AppCacheBean;
@@ -40,7 +41,6 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.dialog.TrashIgnoreDialog;
 import com.jb.filemanager.function.trash.dialog.TrashItemDetailDialog;
 import com.jb.filemanager.function.trash.dialog.TrashSubItemDetailDialog;
-import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileTypeUtil;
 import com.jb.filemanager.util.IntentUtil;
@@ -878,23 +878,18 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 if (isFile && !fileType.equals(FileType.OTHER)) {
                     if (!IntentUtil.openFileWithIntent(mContext, fileType,
                             child.getPath())) {
-                        /*FileBrowserActivity.browserFile(mContext,
-                                child.getTitle(), child.getPath());*/
-                        MainActivity.browserFile(mContext,child.getTitle(),child.getPath());
+                        FileBrowserActivity.browserFile(mContext,
+                                child.getTitle(), child.getPath());
                     }
 //                    StatisticsTools.uploadClickData(StatisticsConstants.DET_FO_OPEN);
                 } else {
                     if (isFile) {
-                        /*FileBrowserActivity.browserFile(mContext,
-                                child.getTitle(), child.getPath());*/
-                        MainActivity.browserFile(mContext,child.getTitle(),child.getPath());
+                       FileBrowserActivity.browserFile(mContext,
+                                child.getTitle(), child.getPath());
                     } else {
                         HashSet<String> paths = child.getPaths();
                         String[] array = paths.toArray(new String[paths.size()]);
-                        /*FileBrowserActivity.browserDirs(mContext,
-                                child.getTitle(), array);*/
-
-                        MainActivity.browserDirs(mContext,
+                        FileBrowserActivity.browserDirs(mContext,
                                 child.getTitle(), array);
                     }
 //                    StatisticsTools.uploadClickData(StatisticsConstants.DET_VIEW_CLI);
@@ -971,15 +966,10 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                 }
 //                StatisticsTools.uploadClickData(StatisticsConstants.JUNK_FINE_VIEW);
                 if (isFile) {
-                    /*FileBrowserActivity.browserFile(mContext,
-                            subItem.getTitle(mContext), subItem.getPath());*/
-                    MainActivity.browserFile(mContext,
+                    FileBrowserActivity.browserFile(mContext,
                             subItem.getTitle(mContext), subItem.getPath());
                 } else {
-                   /* FileBrowserActivity.browserDirs(mContext,
-                            subItem.getTitle(mContext),
-                            FileUtil.removeEndSeparator(subItem.getPath()));*/
-                    MainActivity.browserDirs(mContext,
+                   FileBrowserActivity.browserDirs(mContext,
                             subItem.getTitle(mContext),
                             FileUtil.removeEndSeparator(subItem.getPath()));
                 }
