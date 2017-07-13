@@ -354,6 +354,13 @@
     <!-- Toast -->
     <string name="toast_create_folder_failed">Create folder failed</string>
     <string name="toast_rename_failed">Rename failed</string>
+    <string name="toast_usb_plugin_switch_enable">Usb plug-in message enable</string>
+    <string name="toast_usb_plugin_switch_disable">Usb plug-in message disable</string>
+    <string name="toast_low_space_switch_enable">Low space warning enable</string>
+    <string name="toast_low_space_switch_disable">Low space warning disable</string>
+    <string name="toast_logger_notification_switch_enable">Logger notification enable</string>
+    <string name="toast_logger_notification_switch_disable">Logger notification disable</string>
+
 
     <string name="see"><u><![CDATA[See>>]]></u></string>
     <string name="zip">Zip</string>

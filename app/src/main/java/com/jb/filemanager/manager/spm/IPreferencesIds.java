@@ -80,4 +80,12 @@ public class IPreferencesIds {
     public static final String KEY_PERMISSION_DLG_SHOW_TIMES = "key_permission_dlg_show_times";
     //是否监听usb
     public static final String KEY_USB_CONNECTED_TIP_ENABLE = "key_usb_connected_tip_enable";
+
+
+    // Low Space Warning开关
+    public static final String KEY_LOW_SPACE_WARNING_ENABLE = "key_low_space_warning_enable";
+
+    // Logger Notification开关
+    public static final String KEY_LOGGER_NOTIFICATION_ENABLE = "key_logger_notification_enable";
+
 }

@@ -21,9 +21,12 @@ import com.jb.filemanager.function.about.AboutActivity;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.setting.SettingActivity;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
+import com.jb.filemanager.manager.spm.IPreferencesIds;
+import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.statistics.bean.Statistics101Bean;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.QuickClickGuard;
 
@@ -129,24 +132,65 @@ public class MainDrawer implements View.OnClickListener {
     }
 
     private void initDrawerItems() {
+        TextView appLockerItem = (TextView) mActivity.findViewById(R.id.tv_drawer_app_locker);
+        if (appLockerItem != null) {
+            appLockerItem.getPaint().setAntiAlias(true);
+            appLockerItem.setOnClickListener(this);
+        }
+
+        TextView smartLockerItem = (TextView) mActivity.findViewById(R.id.tv_drawer_smart_locker);
+        if (smartLockerItem != null) {
+            smartLockerItem.getPaint().setAntiAlias(true);
+            smartLockerItem.setOnClickListener(this);
+        }
+
+        TextView smartChargeItem = (TextView) mActivity.findViewById(R.id.tv_drawer_smart_charge);
+        if (smartChargeItem != null) {
+            smartChargeItem.getPaint().setAntiAlias(true);
+            smartChargeItem.setOnClickListener(this);
+        }
+
+        TextView usbPluginItem = (TextView) mActivity.findViewById(R.id.tv_drawer_usb_plugin);
+        if (usbPluginItem != null) {
+            usbPluginItem.getPaint().setAntiAlias(true);
+            usbPluginItem.setOnClickListener(this);
+        }
+
+        TextView lowSpaceItem = (TextView) mActivity.findViewById(R.id.tv_drawer_low_space);
+        if (lowSpaceItem != null) {
+            lowSpaceItem.getPaint().setAntiAlias(true);
+            lowSpaceItem.setOnClickListener(this);
+        }
+
+        TextView loggerNotificationItem = (TextView) mActivity.findViewById(R.id.tv_drawer_logger_notification);
+        if (loggerNotificationItem != null) {
+            loggerNotificationItem.getPaint().setAntiAlias(true);
+            loggerNotificationItem.setOnClickListener(this);
+        }
+
+        TextView ratingItem = (TextView) mActivity.findViewById(R.id.tv_drawer_rating);
+        if (ratingItem != null) {
+            ratingItem.getPaint().setAntiAlias(true);
+            ratingItem.setOnClickListener(this);
+        }
+
+        TextView updateItem = (TextView) mActivity.findViewById(R.id.tv_drawer_update);
+        if (updateItem != null) {
+            updateItem.getPaint().setAntiAlias(true);
+            updateItem.setOnClickListener(this);
+        }
+
+        TextView helpItem = (TextView) mActivity.findViewById(R.id.tv_drawer_help);
+        if (helpItem != null) {
+            helpItem.getPaint().setAntiAlias(true);
+            helpItem.setOnClickListener(this);
+        }
+
         TextView aboutItem = (TextView) mActivity.findViewById(R.id.tv_drawer_about);
         if (aboutItem != null) {
             aboutItem.getPaint().setAntiAlias(true);
             aboutItem.setOnClickListener(this);
         }
-    }
-
-    private List<DrawerItemBean> getDrawerList() {
-        List<DrawerItemBean> itemBeanArrayList = new ArrayList<>();
-
-        DrawerItemBean feedback = new DrawerItemBean(mActivity.getString(R.string.drawer_feedback), R.drawable.ic_drawer_feedback, FEED_BACK);
-        DrawerItemBean about = new DrawerItemBean(mActivity.getString(R.string.drawer_about), R.drawable.ic_drawer_about, ABOUT);
-        DrawerItemBean trash = new DrawerItemBean(mActivity.getString(R.string.trash), R.drawable.ic_drawer_about, CLEAN_TRASH);
-
-        itemBeanArrayList.add(feedback);
-        itemBeanArrayList.add(about);
-        itemBeanArrayList.add(trash);
-        return itemBeanArrayList;
     }
 
     void openDrawerWithDelay(int delayMills) {
@@ -221,6 +265,51 @@ public class MainDrawer implements View.OnClickListener {
             return;
         }
         switch (v.getId()){
+            case R.id.tv_drawer_app_locker:
+                // TODO @wangzq
+                break;
+            case R.id.tv_drawer_smart_locker:
+                // TODO @wangzq
+                break;
+            case R.id.tv_drawer_smart_charge:
+                // TODO @wangzq
+                break;
+            case R.id.tv_drawer_usb_plugin:{
+                boolean usbPluginEnable = !v.isSelected();
+                v.setSelected(usbPluginEnable);
+                SharedPreferencesManager spm = SharedPreferencesManager.getInstance(TheApplication.getInstance());
+                spm.commitBoolean(IPreferencesIds.KEY_USB_CONNECTED_TIP_ENABLE, usbPluginEnable);
+
+                AppUtils.showToast(TheApplication.getInstance(), usbPluginEnable ? R.string.toast_usb_plugin_switch_enable : R.string.toast_usb_plugin_switch_disable);
+            }
+                break;
+            case R.id.tv_drawer_low_space: {
+                boolean lowSpaceEnable = !v.isSelected();
+                v.setSelected(lowSpaceEnable);
+                SharedPreferencesManager spm = SharedPreferencesManager.getInstance(TheApplication.getInstance());
+                spm.commitBoolean(IPreferencesIds.KEY_LOW_SPACE_WARNING_ENABLE, lowSpaceEnable);
+
+                AppUtils.showToast(TheApplication.getInstance(), lowSpaceEnable ? R.string.toast_low_space_switch_enable : R.string.toast_low_space_switch_disable);
+            }
+                break;
+            case R.id.tv_drawer_logger_notification: {
+                boolean loggerNotificationEnable = !v.isSelected();
+                v.setSelected(loggerNotificationEnable);
+                SharedPreferencesManager spm = SharedPreferencesManager.getInstance(TheApplication.getInstance());
+                spm.commitBoolean(IPreferencesIds.KEY_LOGGER_NOTIFICATION_ENABLE, loggerNotificationEnable);
+
+                AppUtils.showToast(TheApplication.getInstance(), loggerNotificationEnable ? R.string.toast_logger_notification_switch_enable : R.string.toast_logger_notification_switch_disable);
+            }
+                break;
+            case R.id.tv_drawer_rating:
+                // TODO @wangzq
+                break;
+            case R.id.tv_drawer_update:
+                // TODO @wangzq
+                break;
+            case R.id.tv_drawer_help:
+                // TODO @wangzq
+                break;
             case R.id.tv_drawer_about:
                 jumpToAbout();
                 break;
@@ -263,6 +352,4 @@ public class MainDrawer implements View.OnClickListener {
             }
         }, 260);
     }
-
-
 }

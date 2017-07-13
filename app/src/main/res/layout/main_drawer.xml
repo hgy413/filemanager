@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
     android:id="@+id/left_drawer"
-    android:layout_width="240dp"
+    android:layout_width="270dp"
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@color/white"
@@ -87,88 +87,54 @@
             android:textSize="16dp"
             android:text="@string/drawer_setting"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_drawer_usb_plugin"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_drawer_usb"
+            android:drawableStart="@drawable/ic_drawer_usb"
+            android:drawableRight="@drawable/drawer_setting_switcher_selector"
+            android:drawableEnd="@drawable/drawer_setting_switcher_selector"
+            android:drawablePadding="15dp"
+            android:textColor="#B2000000"
+            android:textSize="15dp"
+            android:text="@string/drawer_usb_plugin_message"/>
 
-            <TextView
-                android:id="@+id/tv_drawer_usb_plugin"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_drawer_usb"
-                android:drawableStart="@drawable/ic_drawer_usb"
-                android:drawablePadding="15dp"
-                android:textColor="#B2000000"
-                android:textSize="15dp"
-                android:text="@string/drawer_usb_plugin_message"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/drawer_setting_switcher_selector"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_drawer_low_space"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_drawer_low_space"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_drawer_low_space"
-                android:drawableStart="@drawable/ic_drawer_low_space"
-                android:drawablePadding="15dp"
-                android:textColor="#B2000000"
-                android:textSize="15dp"
-                android:text="@string/drawer_low_space_warning"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/drawer_setting_switcher_selector"/>
-
-        </LinearLayout>
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_drawer_low_space"
+            android:drawableStart="@drawable/ic_drawer_low_space"
+            android:drawableRight="@drawable/drawer_setting_switcher_selector"
+            android:drawableEnd="@drawable/drawer_setting_switcher_selector"
+            android:drawablePadding="15dp"
+            android:textColor="#B2000000"
+            android:textSize="15dp"
+            android:text="@string/drawer_low_space_warning"/>
 
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_drawer_logger_notification"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_drawer_logger_notification"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_drawer_logger"
-                android:drawableStart="@drawable/ic_drawer_logger"
-                android:drawablePadding="15dp"
-                android:textColor="#B2000000"
-                android:textSize="15dp"
-                android:text="@string/drawer_logger_notification"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/drawer_setting_switcher_selector"/>
-
-        </LinearLayout>
-
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_drawer_logger"
+            android:drawableStart="@drawable/ic_drawer_logger"
+            android:drawableRight="@drawable/drawer_setting_switcher_selector"
+            android:drawableEnd="@drawable/drawer_setting_switcher_selector"
+            android:drawablePadding="15dp"
+            android:textColor="#B2000000"
+            android:textSize="15dp"
+            android:text="@string/drawer_logger_notification"/>
 
         <View
             android:layout_width="match_parent"
