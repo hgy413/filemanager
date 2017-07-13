@@ -47,6 +47,7 @@
     <string name="main_info_other">Other</string>
     <string name="main_info_switch_phone">Phone</string>
     <string name="main_info_switch_sdcard">SD</string>
+    <string name="main_directory_count">%1$d Items</string>
 
     <!-- 抽屉栏 -->
     <string name="drawer_tools">TOOLS</string>

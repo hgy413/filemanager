@@ -529,13 +529,18 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
             // 描述
             if (holder.mTvFileDesc != null) {
-                long fileSize = FileUtil.getSize(file);
-                String fileSizeString = ConvertUtils.getReadableSizeNoSpace(fileSize);
-
+                String descString = "";
+                if (file.isDirectory()) {
+                    String[] subFiles = file.list();
+                    descString += mInflater.getContext().getString(R.string.main_directory_count, subFiles.length);
+                } else {
+                    long fileSize = FileUtil.getSize(file);
+                    descString += ConvertUtils.getReadableSizeNoSpace(fileSize);
+                }
                 long lastModify = file.lastModified();
-                String lastModifyString = TimeUtil.getTime(lastModify, TimeUtil.DATE_FORMATTER_FILE_LAST_MODIFY);
+                descString += " " + TimeUtil.getTime(lastModify, TimeUtil.DATE_FORMATTER_FILE_LAST_MODIFY);
 
-                holder.mTvFileDesc.setText(fileSizeString + " " + lastModifyString);
+                holder.mTvFileDesc.setText(descString);
             }
 
             // icon
