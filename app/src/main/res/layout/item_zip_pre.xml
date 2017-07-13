@@ -49,4 +49,13 @@
         android:layout_marginRight="4dp"
         android:contentDescription="@null"
         android:padding="12dp"/>
+
+    <View
+        android:id="@+id/item_zip_pre_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="68dp"
+        android:layout_marginStart="68dp"
+        android:background="#f5f6ff"/>
 </RelativeLayout>

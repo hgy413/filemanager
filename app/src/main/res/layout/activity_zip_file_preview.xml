@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/navigation"
-        android:background="@color/black_20"/>
+        android:background="#e7e9f3"/>
 
     <ListView
         android:id="@+id/zip_pre_lv"
@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/navigation"
         android:layout_marginTop="1dp"
+        android:divider="@android:color/transparent"
         android:overScrollMode="never"
         android:scrollbars="none"/>
 

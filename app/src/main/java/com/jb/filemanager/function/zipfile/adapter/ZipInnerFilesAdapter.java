@@ -53,6 +53,7 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
             holder.name = (TextView) convertView.findViewById(R.id.item_zip_pre_name);
             holder.size = (TextView) convertView.findViewById(R.id.item_zip_pre_size);
             holder.checkbox = (ImageView) convertView.findViewById(R.id.item_zip_pre_checkbox);
+            holder.divider = convertView.findViewById(R.id.item_zip_pre_divider);
             convertView.setTag(R.layout.item_zip_pre, holder);
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.item_zip_pre);
@@ -82,6 +83,7 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
         } else {
             holder.size.setText(ConvertUtils.formatFileSize(item.getSize()) + " " + TimeUtil.getTime(item.getLastModifyTime()));
         }
+        holder.divider.setVisibility(position == getCount() - 1 ? View.GONE : View.VISIBLE);
         holder.checkbox.setImageResource(item.isSelected() ? R.drawable.choose_all : R.drawable.choose_none);
         holder.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +104,9 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
         public TextView size;
         public TextView date;
         public ImageView checkbox;
+        public View divider;
     }
+
     public void setListener(ZipListAdapterClickListener listener) {
         mListener = listener;
     }
