@@ -5,11 +5,8 @@
     android:id="@+id/tv_dir"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_item_main_content_list_style_dir"
-    android:paddingRight="16dp"
-    android:paddingEnd="16dp"
-    android:paddingLeft="0dp"
-    android:paddingStart="0dp"
+    android:drawableRight="@drawable/ic_path_separate"
+    android:drawableEnd="@drawable/ic_path_separate"
     android:gravity="center"
     android:textColor="#66000000"
     android:textSize="12dp">

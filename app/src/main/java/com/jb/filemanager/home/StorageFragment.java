@@ -30,6 +30,7 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.HorizontalListView;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
@@ -54,6 +55,7 @@ import java.util.Stack;
 public class StorageFragment extends Fragment implements View.OnKeyListener,
         LoaderManager.LoaderCallbacks<List<File>> {
 
+    private ImageView mIvStorageDisk;
     private HorizontalListView mHLvDirs;
     private ImageView mIvStyleSwitcher;
     private ListView mLvFiles;
@@ -136,6 +138,16 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                     mIvStyleSwitcher.setSelected(!isGridStyle);
                 }
             });
+        }
+
+        mIvStorageDisk = (ImageView) rootView.findViewById(R.id.iv_main_storage_disk);
+        if (mIvStorageDisk != null) {
+            if (mPathStack != null && mPathStack.size() > 0) {
+                File file = mPathStack.firstElement();
+                boolean isInternal = FileUtil.isInternalStoragePath(
+                        getActivity(), file.getAbsolutePath());
+                mIvStorageDisk.setImageResource(isInternal ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
+            }
         }
 
         mHLvDirs = (HorizontalListView) rootView.findViewById(R.id.lv_dirs);
@@ -487,6 +499,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            Logger.e("wangzq", "get list view");
             final ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_main_storage_list_style, null);
@@ -529,7 +542,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             if (file.isDirectory()) {
                 if (isRootDir(file.getAbsolutePath())) {
                     boolean isInternalStorage = FileUtil.isInternalStoragePath(mInflater.getContext(), file.getAbsolutePath());
-                    holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone : R.drawable.img_sdcard);
+                    holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
                 } else {
                     holder.mIvFileThumb.setImageResource(R.drawable.img_folder);
                 }
@@ -585,6 +598,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            Logger.e("wangzq", "get grid view");
+
             final ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_main_storage_grid_style, null);
@@ -613,7 +628,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             if (file.isDirectory()) {
                 if (isRootDir(file.getAbsolutePath())) {
                     boolean isInternalStorage = FileUtil.isInternalStoragePath(mInflater.getContext(), file.getAbsolutePath());
-                    holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone : R.drawable.img_sdcard);
+                    holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
                 } else {
                     holder.mIvFileThumb.setImageResource(R.drawable.img_folder);
                 }
