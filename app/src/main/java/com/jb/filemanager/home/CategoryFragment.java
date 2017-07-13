@@ -35,6 +35,7 @@ import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.function.samefile.SameFileActivity;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
+import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.home.bean.CategoryBean;
@@ -367,6 +368,14 @@ public class CategoryFragment extends Fragment {
             if (mTvCleanTrash != null) {
                 mTvCleanTrash.setText(getString(R.string.home_trash_notice, data));
             }
+        }
+    }
+
+    @Subscribe
+    public void onEventMainThread(CleanStateEvent event) {
+        if (CleanStateEvent.DELETE_ING.equals(event) && mTvCleanTrash != null) {
+            //垃圾清理开始  改变文字显示
+            mTvCleanTrash.setText(R.string.home_button_clean);
         }
     }
 

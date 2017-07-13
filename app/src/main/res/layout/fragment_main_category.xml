@@ -208,7 +208,7 @@
         android:layout_marginRight="9dp"
         android:textStyle="bold"
         android:textSize="16dp"
-        android:text="Clean"
+        android:text="@string/home_button_clean"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:background="#39BDAC"/>
