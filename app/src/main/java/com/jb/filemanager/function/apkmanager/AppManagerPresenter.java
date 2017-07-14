@@ -92,8 +92,8 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
     @Override
     public List<AppGroupBean> getAppInfo() {
         List<AppGroupBean> appGroupBeen = new ArrayList<>();
-        AppGroupBean userApp = new AppGroupBean(mUserAppBean, AppUtils.getString(R.string.user_app), GroupSelectBox.SelectState.NONE_SELECTED, true);
-        AppGroupBean systemApp = new AppGroupBean(mSystemAppBean, AppUtils.getString(R.string.system_app), GroupSelectBox.SelectState.NONE_SELECTED, false);
+        AppGroupBean userApp = new AppGroupBean(mUserAppBean, AppUtils.getString(R.string.user_app), GroupSelectBox.SelectState.NONE_SELECTED, true, AppGroupBean.USER_APP);
+        AppGroupBean systemApp = new AppGroupBean(mSystemAppBean, AppUtils.getString(R.string.system_app), GroupSelectBox.SelectState.NONE_SELECTED, false, AppGroupBean.SYSTEM_APP);
         appGroupBeen.add(userApp);
         appGroupBeen.add(systemApp);
         return appGroupBeen;

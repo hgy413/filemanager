@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/white"
+    android:background="@color/list_divider_line_color_f5f6ff"
     tools:context="com.jb.filemanager.function.docmanager.DocManagerActivity">
 
     <LinearLayout
@@ -20,7 +20,6 @@
             android:id="@+id/elv_apk"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:divider="@null"
             android:groupIndicator="@null"
             android:listSelector="@android:color/transparent"

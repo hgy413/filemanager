@@ -75,6 +75,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         });
         mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
         mAdapter.handleCheckedCount();
+        mElvApk.expandGroup(0, true);//只展开 第一个
     }
 
     @Override

@@ -45,6 +45,10 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         final AppGroupBean appGroupBean = mGroups.get(groupPosition);
         viewHolder.mTvGroupTitle.setText(appGroupBean.mGroupTitle);
         viewHolder.mTvGroupTitleItemCount.setText(TheApplication.getAppContext().getString(R.string.item_count, appGroupBean.getchildrenSize()));
+        if (appGroupBean.mAppType == AppGroupBean.SYSTEM_APP) {//系统app不显示选择框
+            viewHolder.mSelectBox.setVisibility(View.GONE);
+            return convertView;
+        }
         viewHolder.mSelectBox
                 .setImageSource(R.drawable.select_none,
                         R.drawable.select_multi,
@@ -81,16 +85,27 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         IconLoader.getInstance().displayImage(child.mAppPackageName, viewHolder.mIvAppIcon, R.drawable.app_icon_default);
         viewHolder.mTvAppName.setText(child.mAppName);
         viewHolder.mTvAppSize.setText(ConvertUtils.formatFileSize(child.mAppCodeSize));
+        if (appGroupBean.mAppType == AppGroupBean.SYSTEM_APP) {//系统app不显示选择框
+            viewHolder.mItemCheckBox.setVisibility(View.GONE);
+            return convertView;
+        }
         viewHolder.mItemCheckBox.setImageRes(R.drawable.select_none,
                 R.drawable.select_all);
         viewHolder.mItemCheckBox.setChecked(child.mIsChecked);
-        viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 child.mIsChecked = !child.mIsChecked;
                 updateGroupState(appGroupBean);
             }
         });
+        /*viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                child.mIsChecked = !child.mIsChecked;
+                updateGroupState(appGroupBean);
+            }
+        });*/
         return convertView;
     }
 
@@ -153,6 +168,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     }
 
     private static class ChildItemViewHolder {
+        View mView;
         ImageView mIvAppIcon;
         TextView mTvAppName;
         TextView mTvAppSize;
@@ -163,6 +179,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
             mTvAppName = (TextView) convertView.findViewById(R.id.tv_app_name);
             mTvAppSize = (TextView) convertView.findViewById(R.id.tv_app_size);
             mItemCheckBox = (ItemCheckBox) convertView.findViewById(R.id.icb_child_check);
+            mView = convertView;
         }
     }
 
