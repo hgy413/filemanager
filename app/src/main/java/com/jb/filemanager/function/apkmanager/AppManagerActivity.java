@@ -147,6 +147,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
     protected void onDestroy() {
         if (mPresenter != null) {
             mPresenter.onDestroy();
+            mPresenter = null;
         }
         releaseBroadcastReceiver();
         super.onDestroy();
