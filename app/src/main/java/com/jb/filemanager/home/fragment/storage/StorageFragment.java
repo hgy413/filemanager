@@ -229,7 +229,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
                     if (status == StoragePresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
                         // 选择模式或者是单个文件点击处理
-                        FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
+                        FileGridAdapter.ViewHolder holder = (FileGridAdapter.ViewHolder) view
                                 .getTag();
                         if (holder != null) {
                             boolean isSelected = holder.mIvChecked.isSelected();
@@ -657,7 +657,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            Logger.e("wangzq", "get list view");
             final ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_main_storage_list_style, null);
@@ -761,8 +760,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            Logger.e("wangzq", "get grid view");
-
             final ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_main_storage_grid_style, null);
