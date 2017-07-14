@@ -23,14 +23,14 @@
     <!-- home -->
     <color name="main_tab_text_color_select">#B2000000</color>
     <color name="main_tab_text_color_normal">#66000000</color>
-    <color name="main_tab_indicator">#42C0AE</color>
+    <color name="main_tab_indicator">#42CBAE</color>
     <color name="main_category_info_storage_value_color">#39BDAC</color>
     <color name="main_category_info_photo_color">#85FFEB</color>
-    <color name="main_category_info_music_color">#FFCBA0</color>
-    <color name="main_category_info_video_color">#68E0FF</color>
+    <color name="main_category_info_music_color">#E1FF3C</color>
+    <color name="main_category_info_video_color">#B4FF2B</color>
     <color name="main_category_info_docs_color">#C2BBFF</color>
-    <color name="main_category_info_apps_color">#6CAAFF</color>
-    <color name="main_category_info_other_color">#FFB4F5</color>
+    <color name="main_category_info_apps_color">#68E0FF</color>
+    <color name="main_category_info_other_color">#6CAAFF</color>
     <color name="main_category_info_unused_color">#EBEBFF</color>
 
     <!-- about -->

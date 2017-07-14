@@ -65,7 +65,7 @@ public class UsageAnalysis extends View {
             Collections.sort(mItemsForDraw, new Comparator<Bean>() {
                 @Override
                 public int compare(Bean o1, Bean o2) {
-                    return Long.valueOf(o1.mSize).compareTo(o2.mSize);
+                    return Long.valueOf(o2.mSize).compareTo(o1.mSize);
                 }
             });
 

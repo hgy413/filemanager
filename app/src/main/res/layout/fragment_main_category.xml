@@ -211,6 +211,6 @@
         android:text="@string/home_button_clean"
         android:gravity="center"
         android:textColor="#FFFFFF"
-        android:background="#39BDAC"/>
+        android:background="#42CBAE"/>
 
 </LinearLayout>
