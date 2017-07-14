@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.samefile;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
@@ -66,15 +68,12 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder groupViewHolder;
-        if (groupPosition == 0) {
+        if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_samefile_group, parent, false);
             groupViewHolder = new GroupViewHolder(convertView);
             convertView.setTag(groupViewHolder);
         } else {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_samefile_group_divider, parent, false);
-            groupViewHolder = new GroupViewHolder(convertView);
-            convertView.setTag(groupViewHolder);
-            groupViewHolder = (GroupViewHolder) convertView.getTag();
+            groupViewHolder = (GroupViewHolder)convertView.getTag();
         }
         groupViewHolder.mTvTitle.setText(mGroupList.keyAt(groupPosition));
         groupViewHolder.mIvSelect.setTag(groupPosition);
@@ -90,6 +89,19 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             convertView.setTag(holder);
         } else {
             holder = (ItemViewHolder) convertView.getTag();
+        }
+        if (0 == childPosition) {
+            holder.mLlItemContainer.setBackgroundResource(R.drawable.bg_item_samefile_list_group_style);
+        } else {
+            holder.mLlItemContainer.setBackgroundColor(Color.WHITE);
+        }
+        // Set divide line and group divide space
+        if (getChildrenCount(groupPosition) -1 == childPosition) {
+            holder.mLlItemDivideLine .setBackgroundColor(Color.WHITE);
+            holder.mTvGroupDivideSpace.setVisibility(View.VISIBLE);
+        } else {
+            holder.mLlItemDivideLine.setBackgroundResource(R.drawable.bg_item_main_storage_list_style);
+            holder.mTvGroupDivideSpace.setVisibility(View.GONE);
         }
         FileInfo fileInfo = mGroupList.valueAt(groupPosition).get(childPosition);
         Const.FILE_TYPE fileType = mGroupList.valueAt(groupPosition).get(childPosition).mFileType;
@@ -123,6 +135,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             default:
                 holder.mIvIcon.setImageResource(R.drawable.unknown_icon);
         }
+        if (fileInfo.isSelected) {
+            holder.mIvSelect.setImageResource(R.drawable.choose_all);
+        } else {
+            holder.mIvSelect.setImageResource(R.drawable.choose_none);
+        }
         holder.mTvName.setText(fileInfo.mName);
         holder.mTvInfo.setText(fileInfo.mArtist + "  " +
                 ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
@@ -152,6 +169,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 break;
             case R.id.ll_file_item_container:
                 // Todo Show file by Type
+
                 break;
             case R.id.iv_music_child_item_select:
                 Binder binder = (Binder) v.getTag();
@@ -192,28 +210,33 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
      * Child Item View
      */
     private class ItemViewHolder {
-        LinearLayout mLlItemContainer;
+        LinearLayout mLlItemContainer; // Have set tag for ItemViewHolder, can't set tag fot other.
+        LinearLayout mLlItemDivideLine;
         ImageView mIvIcon;
         TextView mTvName;
         TextView mTvInfo;
         ImageView mIvSelect;
+        TextView mTvGroupDivideSpace;
         public ItemViewHolder(View itemView) {
             mLlItemContainer = (LinearLayout)itemView.findViewById(R.id.ll_file_item_container);
+            mLlItemDivideLine = (LinearLayout)itemView.findViewById(R.id.ll_item_view_with_divide_line);
             mIvIcon = (ImageView) itemView.findViewById(R.id.iv_music_child_item_cover);
             mTvName = (TextView) itemView.findViewById(R.id.tv_music_child_item_name);
             mTvInfo = (TextView) itemView.findViewById(R.id.tv_music_child_item_info);
             mIvSelect = (ImageView) itemView.findViewById(R.id.iv_music_child_item_select);
+            mTvGroupDivideSpace = (TextView)itemView.findViewById(R.id.tv_group_divide_space);
             mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
+            mLlItemContainer.setOnClickListener(FileExpandableListAdapter.this);
         }
 
         void savePosition(int group, int child, FileInfo fileInfo) {
             if (fileInfo != null) {
                 Binder binder = new Binder(group, child, fileInfo);
                 //更新数据 用于直接修改
-                mLlItemContainer.setTag(binder);
+                //mLlItemContainer.setTag(binder);
                 mIvSelect.setTag(binder);
-                mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
-                mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
+                //mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
+                //mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
             }
         }
     }

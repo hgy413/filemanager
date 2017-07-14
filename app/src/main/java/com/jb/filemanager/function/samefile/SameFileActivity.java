@@ -1,36 +1,23 @@
 package com.jb.filemanager.function.samefile;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
-import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.util.APIUtil;
-import com.jb.filemanager.util.ConvertUtils;
-import com.jb.filemanager.util.DensityUtil;
-import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -42,13 +29,10 @@ import java.util.ArrayList;
 public class SameFileActivity extends BaseActivity implements SameFileContract.View,
         View.OnClickListener {
 
-    private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
     private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
-    //private RecyclerView mRvMuscicList;
     private ExpandableListView mElvFilelist;
     private GroupList<String, FileInfo> mMusicDataArrayMap;
-    //private RecyclerListAdapter mMusicListAdapter;
     private FileExpandableListAdapter mFileExpandableListAdapter;
     private BottomOperateBar mBottomOperateContainer;
 
@@ -98,7 +82,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public Activity getActivity() {
-                // TODO @bool
                 return SameFileActivity.this;
             }
 

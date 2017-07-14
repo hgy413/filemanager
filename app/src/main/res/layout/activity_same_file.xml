@@ -26,7 +26,8 @@
             android:footerDividersEnabled="false"
             android:groupIndicator="@null"
             android:listSelector="@android:color/transparent"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            >
         </ExpandableListView>
 
         <com.jb.filemanager.ui.widget.BottomOperateBar
