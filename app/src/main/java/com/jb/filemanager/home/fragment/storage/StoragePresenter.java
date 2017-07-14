@@ -15,6 +15,7 @@ class StoragePresenter implements StorageContract.Presenter {
 
     public static final int MAIN_STATUS_NORMAL = 0;
     public static final int MAIN_STATUS_SELECT = 1;
+    public static final int MAIN_STATUS_PASTE = 2;
 
     private ArrayList<File> mSelectedFiles = new ArrayList<>();
     private String mCurrentPath;
@@ -32,6 +33,7 @@ class StoragePresenter implements StorageContract.Presenter {
         if (mView != null) {
             FileManager.getInstance().clearCopyFiles();
             FileManager.getInstance().clearCutFiles();
+            mStatus = MAIN_STATUS_NORMAL;
             mView.updateView();
         }
     }
@@ -64,21 +66,25 @@ class StoragePresenter implements StorageContract.Presenter {
 
     @Override
     public void afterCopy() {
+        mStatus = MAIN_STATUS_PASTE;
         resetSelectFile();
     }
 
     @Override
     public void afterCut() {
+        mStatus = MAIN_STATUS_PASTE;
         resetSelectFile();
     }
 
     @Override
     public void afterRename() {
+        mStatus = MAIN_STATUS_NORMAL;
         resetSelectFile();
     }
 
     @Override
     public void afterDelete() {
+        mStatus = MAIN_STATUS_NORMAL;
         resetSelectFile();
     }
 
@@ -149,7 +155,6 @@ class StoragePresenter implements StorageContract.Presenter {
 
     private void resetSelectFile() {
         mSelectedFiles.clear();
-        mStatus = MAIN_STATUS_NORMAL;
         if (mView != null) {
             mView.updateView();
         }

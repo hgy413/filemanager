@@ -379,24 +379,21 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     @Override
     public void updateView() {
         if (mPresenter != null) {
-            ArrayList<File> copyList = FileManager.getInstance().getCopyFiles();
-            ArrayList<File> cutList = FileManager.getInstance().getCutFiles();
-            if ((copyList != null && copyList.size() > 0) || (cutList != null && cutList.size() > 0)) {
-                mLlBottomOperateFirstContainer.setVisibility(View.GONE);
-                mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
-            } else {
-                switch (mPresenter.getStatus()) {
-                    case StoragePresenter.MAIN_STATUS_NORMAL:
-                        mLlBottomOperateFirstContainer.setVisibility(View.GONE);
-                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
-                        break;
-                    case StoragePresenter.MAIN_STATUS_SELECT:
-                        mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
-                        mLlBottomOperateSecondContainer.setVisibility(View.GONE);
-                        break;
-                    default:
-                        break;
-                }
+            switch (mPresenter.getStatus()) {
+                case StoragePresenter.MAIN_STATUS_PASTE:
+                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                    mLlBottomOperateSecondContainer.setVisibility(View.VISIBLE);
+                    break;
+                case StoragePresenter.MAIN_STATUS_NORMAL:
+                    mLlBottomOperateFirstContainer.setVisibility(View.GONE);
+                    mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                    break;
+                case StoragePresenter.MAIN_STATUS_SELECT:
+                    mLlBottomOperateFirstContainer.setVisibility(View.VISIBLE);
+                    mLlBottomOperateSecondContainer.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
             }
         }
     }
