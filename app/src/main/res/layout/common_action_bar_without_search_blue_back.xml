@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_title"
@@ -20,9 +20,22 @@
         android:text="@string/clean_storage"
         android:textColor="@drawable/action_bar_back_text_selector_black"
         android:textSize="16dp"/>
+
+    <ImageView
+        android:id="@+id/iv_common_action_bar_search"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:padding="16dp"
+        android:src="@drawable/ic_action_bar_search"/>
     
     <View
+        android:layout_alignParentBottom="true"
         android:background="@drawable/main_shadow"
         android:layout_width="match_parent"
         android:layout_height="6dp"/>
-</LinearLayout>
+</RelativeLayout>

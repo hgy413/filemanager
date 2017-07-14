@@ -54,7 +54,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             refreshData();
         } else if (requestCode == AppManagerActivity.SEARCH_RESULT_REQUEST_CODE) {
             refreshData();//在结果页可能操作了APP  所以刷新数据
-            mView.hideProgress();
         }
     }
 
@@ -67,9 +66,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     @Override
     public void onClickBackButton(boolean isSearchBack) {
         if (mView != null) {
-            if (isSearchBack) {
-                mView.refreshTitle();
-            } else {
+            if (!isSearchBack) {
                 mView.finishActivity();
             }
         }

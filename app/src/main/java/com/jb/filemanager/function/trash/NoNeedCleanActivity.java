@@ -2,7 +2,6 @@ package com.jb.filemanager.function.trash;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -10,7 +9,6 @@ import com.jb.filemanager.R;
 
 public class NoNeedCleanActivity extends BaseActivity {
 
-    private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarTitle;
 
     @Override
@@ -22,7 +20,6 @@ public class NoNeedCleanActivity extends BaseActivity {
     }
 
     private void initView() {
-        mLlTitle = (LinearLayout) findViewById(R.id.ll_title);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
     }
 

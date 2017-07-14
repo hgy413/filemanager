@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,7 +16,6 @@ import com.jb.filemanager.R;
 public class CleanResultActivity extends BaseActivity implements View.OnClickListener {
     public static final String CLEAN_SIZE = "clean_size";
     public static final String TAG = CleanResultActivity.class.getSimpleName();
-    private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarTitle;
     private RelativeLayout mRlBlueRect;
     private TextView mTvTrashSizeNumber;
@@ -42,7 +40,6 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        mLlTitle = (LinearLayout) findViewById(R.id.ll_title);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mRlBlueRect = (RelativeLayout) findViewById(R.id.rl_blue_rect);
         mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);

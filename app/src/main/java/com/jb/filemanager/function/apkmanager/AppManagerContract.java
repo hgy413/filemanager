@@ -22,8 +22,6 @@ public class AppManagerContract {
         void releaseBroadcastReceiver();
         void refreshList();
         void finishActivity();
-        void refreshTitle();
-        void hideProgress();
     }
 
     interface Presenter {

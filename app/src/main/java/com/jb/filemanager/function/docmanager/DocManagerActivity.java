@@ -8,15 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,8 +34,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.jb.filemanager.function.apkmanager.AppManagerActivity.hideInputMethod;
-
 public class DocManagerActivity extends BaseActivity implements DocManagerContract.View, View.OnClickListener {
     //    public static final int UNINSTALL_APP_REQUEST_CODE = 101;
     public static final String TAG = "DocManagerActivity";
@@ -51,11 +42,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private static final int TXT_PREVIEW_REQUEST_CODE = 103;
     private static final String TXT_FILE_DATA = "txt_file_data";
     private DocManagerPresenter mPresenter;
-    private RelativeLayout mRlTitle;
     private TextView mTvCommonActionBarWithSearchTitle;
-    private ImageView mIvCommonActionBarBack;
-    private ImageView mIvClearSearchInput;
-    private EditText mEtCommonActionBarWithSearchSearch;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private FloatingGroupExpandableListView mElvApk;
     private RelativeLayout mRlCommonOperateBarContainer;
@@ -73,10 +60,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private int mChosenCount;
     private List<DocGroupBean> mAppInfo;
     private BroadcastReceiver mReceiver;
-    private boolean mIsSearchInput;
-    private boolean mIsSearchProgress;
-    private FrameLayout mFlProgressContainer;
-    private Handler mHandler;
     private boolean mIsMoreOperatorShown;
     private BroadcastReceiver mScanSdReceiver;
     private SingleFileDetailDialog mSingleFileDetailDialog;
@@ -98,14 +81,9 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void initView() {
-        mRlTitle = (RelativeLayout) findViewById(R.id.ll_title);
-        mTvCommonActionBarWithSearchTitle = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
-        mIvCommonActionBarBack = (ImageView) findViewById(R.id.iv_common_action_bar_back);
-        mIvClearSearchInput = (ImageView) findViewById(R.id.iv_clear_search_input);
-        mEtCommonActionBarWithSearchSearch = (EditText) findViewById(R.id.et_common_action_bar_with_search_search);
-        mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_with_search_search);
+        mTvCommonActionBarWithSearchTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
+        mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_search);
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
-        mFlProgressContainer = (FrameLayout) findViewById(R.id.fl_progress_container);
         mRlCommonOperateBarContainer = (RelativeLayout) findViewById(R.id.rl_common_operate_bar_container);
         mLlOperateBar = (LinearLayout) findViewById(R.id.ll_operate_bar);
         mTvCommonOperateBarCut = (TextView) findViewById(R.id.tv_common_operate_bar_cut);
@@ -116,78 +94,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
         mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
         mTvBottomFileRename = (TextView) findViewById(R.id.tv_bottom_rename);
-
-
-        //监听搜索
-        mEtCommonActionBarWithSearchSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) {
-                    return handleSearchInput();
-                }
-                return false;
-            }
-        });
-    }
-
-    //处理输入内容
-    private boolean handleSearchInput() {
-        String keyTag = mEtCommonActionBarWithSearchSearch.getText().toString().trim();
-        Logger.d(TAG, keyTag);
-        if (TextUtils.isEmpty(keyTag)) {
-            Toast.makeText(DocManagerActivity.this, "请输入搜索关键字", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        // 搜索功能主体
-        goToSearchResult(keyTag);
-        return true;
-    }
-
-    private void goToSearchResult(String keyTag) {
-        mFlProgressContainer.setVisibility(View.VISIBLE);
-        mFlProgressContainer.requestFocus();
-        mFlProgressContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(DocManagerActivity.this, "please wait", Toast.LENGTH_SHORT).show();
-            }
-        });
-        mHandler = new Handler();
-        /*mEtCommonActionBarWithSearchSearch.clearFocus();
-        mIvCommonActionBarWithSearchSearch.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(mEtCommonActionBarWithSearchSearch.getWindowToken(), InputMethodManager.RESULT_HIDDEN);//手动隐藏输入法  貌似无效?? 至少米3上是有问题的*/
-        hideInputMethod(this);
-        final ArrayList<DocChildBean> mResultPackage = new ArrayList<>();
-        Toast.makeText(DocManagerActivity.this, "我要搜索" + keyTag, Toast.LENGTH_SHORT).show();
-        //在本界面处理搜索结果
-        keyTag = keyTag.toLowerCase();
-        for (DocGroupBean groupBean : mAppInfo) {
-            List<DocChildBean> children = groupBean.getChildren();
-            if (children == null || children.isEmpty()) {
-                continue;
-            }
-            for (DocChildBean childBean : children) {
-                if (childBean.mDocName.toLowerCase().contains(keyTag)) {
-                    // TODO: 2017/7/4 add by --miwo 封装搜索结果
-                    /*SearchResultBean resultBean = new SearchResultBean();
-                    resultBean.mAppName = childBean.mDocName;
-                    resultBean.mPackageName = childBean.mPackageName;
-                    mResultPackage.add(resultBean);*/
-                    mResultPackage.add(childBean);
-                }
-            }
-        }
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // TODO: 2017/7/4 add by --miwo 跳转结果页
-                /*Intent intent = new Intent(DocManagerActivity.this, AppManagerSearchResultActivity.class);
-                intent.putExtra(SEARCH_RESULT, mResultPackage);
-                startActivityForResult(intent, SEARCH_RESULT_REQUEST_CODE);*/
-                Toast.makeText(DocManagerActivity.this, "我找到了" + mResultPackage.size() + "个文件呢", Toast.LENGTH_SHORT).show();
-            }
-        }, 2500);
+        mIvCommonActionBarWithSearchSearch.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -218,8 +125,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     public void initClick() {
         mRlCommonOperateBarContainer.setOnClickListener(this);
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
-        mIvCommonActionBarBack.setOnClickListener(this);
-        mIvClearSearchInput.setOnClickListener(this);
         mIvCommonActionBarWithSearchSearch.setOnClickListener(this);
         mElvApk.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -295,19 +200,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void finishActivity() {
         finish();
-    }
-
-    @Override
-    public void refreshTitle() {
-        mEtCommonActionBarWithSearchSearch.setVisibility(View.INVISIBLE);
-        mIvClearSearchInput.setVisibility(View.GONE);
-        mTvCommonActionBarWithSearchTitle.setVisibility(View.VISIBLE);
-        mIsSearchInput = false;
-    }
-
-    @Override
-    public void hideProgress() {
-        mFlProgressContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -429,9 +321,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void onBackPressed() {
-        if (mPresenter != null) {
-            mPresenter.onClickBackButton(mIsSearchInput);
-        }
+        super.onBackPressed();
     }
 
     @Override
@@ -451,16 +341,12 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             case R.id.rl_common_operate_bar_container:
                 Toast.makeText(DocManagerActivity.this, "我是占位的bottom啦", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.tv_common_action_bar_with_search_title:
-            case R.id.iv_common_action_bar_back:
+            case R.id.tv_common_action_bar_title:
                 finishActivity();
                 break;
-            case R.id.iv_common_action_bar_with_search_search:
+            case R.id.iv_common_action_bar_search:
                 startActivity(new Intent(this, SearchActivity.class));
 //                handleSearchButtonClick(mIsSearchInput);
-                break;
-            case R.id.iv_clear_search_input:
-                mEtCommonActionBarWithSearchSearch.setText("");
                 break;
             case R.id.tv_common_operate_bar_copy:
                 handleDataCopy();
@@ -599,25 +485,5 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         List<DocChildBean> checkedDoc = getCheckedDoc();
         Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will cut", Toast.LENGTH_SHORT).show();
         // TODO: 2017/7/4 add by --miwo 此处应有剪切的逻辑
-    }
-
-    private void handleSearchButtonClick(boolean isSearchMode) {
-        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //说明现在是搜索模式  那么点击搜索要进行搜索了(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(WidgetSearchActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);  (WidgetSearchActivity是当前的Activity)
-
-        if (isSearchMode) {
-            handleSearchInput();
-            return;
-        }
-
-        //非搜索模式下点击搜索  出现搜索框
-        mTvCommonActionBarWithSearchTitle.setVisibility(View.GONE);
-        mIvClearSearchInput.setVisibility(View.VISIBLE);
-        mEtCommonActionBarWithSearchSearch.setVisibility(View.VISIBLE);
-        mEtCommonActionBarWithSearchSearch.requestFocus();//请求焦点
-        mEtCommonActionBarWithSearchSearch.setText(mAppInfo.get(0).getChild(0).mDocName);//默认内容是第一个的APP的名字
-        mEtCommonActionBarWithSearchSearch.selectAll();//全选
-        inputManager.showSoftInput(mEtCommonActionBarWithSearchSearch, InputMethodManager.SHOW_IMPLICIT);//手动调起输入法
-        mIsSearchInput = true;
     }
 }

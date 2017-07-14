@@ -21,8 +21,6 @@ public class DocManagerContract {
         void initBroadcastReceiver();
         void releaseBroadcastReceiver();
         void finishActivity();
-        void refreshTitle();
-        void hideProgress();
         void showDocDetail(List<DocChildBean> docList);
         void fileRename(List<DocChildBean> docList);
         void openWith(List<DocChildBean> docList);

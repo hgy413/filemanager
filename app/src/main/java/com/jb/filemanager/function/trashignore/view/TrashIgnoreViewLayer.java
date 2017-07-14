@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -27,7 +26,6 @@ public class TrashIgnoreViewLayer implements Contract.View {
 
     private Context mContext;
     private Activity mActivity;
-    private LinearLayout mLlTitle;
     private TextView mTvCommonActionBarTitle;
     private View mNoDataTip;
     private View mHasDataTip;
@@ -43,7 +41,6 @@ public class TrashIgnoreViewLayer implements Contract.View {
 
     private void initializeView() {
         mView = View.inflate(mContext, R.layout.trash_ignore_view_layer, null);
-        mLlTitle = (LinearLayout) mView.findViewById(R.id.ll_title);
         mTvCommonActionBarTitle = (TextView) mView.findViewById(R.id.tv_common_action_bar_title);
         mNoDataTip = mView.findViewById(R.id.trash_ignore_no_data_tip);
         mHasDataTip = mView.findViewById(R.id.trash_ignore_has_data_tip);
