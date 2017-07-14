@@ -32,7 +32,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:listSelector="@android:color/transparent"
                 android:scrollbars="none" />
 
             <ImageView
@@ -62,8 +61,7 @@
                 android:layout_height="match_parent"
                 android:divider="@color/transparent"
                 android:dividerHeight="0dp"
-                android:footerDividersEnabled="false"
-                android:listSelector="@drawable/main_storage_style_list_item_selector" />
+                android:footerDividersEnabled="false" />
 
             <GridView
                 android:id="@+id/gv_main_storage_grid"
