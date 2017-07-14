@@ -78,7 +78,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         ChildItemViewHolder viewHolder = new ChildItemViewHolder(convertView);
         final AppGroupBean appGroupBean = mGroups.get(groupPosition);
         final AppItemInfo child = appGroupBean.getChild(childPosition);
-        IconLoader.getInstance().displayImage(child.mAppPackageName, viewHolder.mIvAppIcon);
+        IconLoader.getInstance().displayImage(child.mAppPackageName, viewHolder.mIvAppIcon, R.drawable.app_icon_default);
         viewHolder.mTvAppName.setText(child.mAppName);
         viewHolder.mTvAppSize.setText(ConvertUtils.formatFileSize(child.mAppCodeSize));
         viewHolder.mItemCheckBox.setImageRes(R.drawable.select_none,

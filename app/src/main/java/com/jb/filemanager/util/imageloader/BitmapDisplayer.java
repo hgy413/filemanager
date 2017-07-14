@@ -3,6 +3,7 @@ package com.jb.filemanager.util.imageloader;
 import android.graphics.Bitmap;
 
 import com.jb.filemanager.util.imageloader.imageaware.ImageAware;
+import com.jb.filemanager.util.imageloader.imageaware.ImageViewAware;
 
 /**
  * Displays {@link Bitmap} in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware}. Implementations can

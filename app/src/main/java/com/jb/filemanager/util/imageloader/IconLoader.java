@@ -2,6 +2,7 @@ package com.jb.filemanager.util.imageloader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -11,6 +12,8 @@ import com.jb.filemanager.util.imageloader.imageaware.ImageViewAware;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jb.filemanager.util.imageloader.ImageLoader.NONE_DEFAULT_IMAGE;
 
 /**
  * 应用/APK图标的图片加载器
@@ -82,6 +85,16 @@ public class IconLoader {
 	}
 
 	/**
+	 *
+	 * @param uri APK包名或者APK路径
+	 * @param imageView
+	 * @param drawableId 占位图
+	 */
+	public void displayImage(String uri, ImageView imageView, int drawableId) {
+		displayImage(uri, new ImageViewAware(imageView),drawableId);
+	}
+
+	/**
 	 * 显示应用图标或者APK图标
 	 * 
 	 * @param uri APK包名或者APK路径
@@ -94,6 +107,33 @@ public class IconLoader {
 			mDisplayer.display(bitmap, imageViewAware);
 		} else {
 			imageViewAware.setImageDrawable(null);
+			IconLoadTask.Builder builder = new IconLoadTask.Builder(uri,
+					imageViewAware);
+			builder.setContext(mContext).setCacheKey(uri).setEngine(mEngine)
+					.setCache(mCache).setBitmapDisplayer(mDisplayer)
+					.setReentrantLock(mEngine.getLockForUri(uri))
+					.setHandler(mHandler);
+			mEngine.submit(new IconLoadTask(builder));
+		}
+	}
+
+
+	public void displayImage(String uri, ImageViewAware imageViewAware,int drawableId) {
+		mEngine.prepareDisplayTaskFor(imageViewAware, uri);
+		Bitmap bitmap = mCache.get(uri);
+		if (bitmap != null && !bitmap.isRecycled()) {
+			mDisplayer.display(bitmap, imageViewAware);
+		} else {
+			Bitmap bm = null;
+			if (drawableId != NONE_DEFAULT_IMAGE) {
+				try {
+					bm = BitmapFactory.decodeResource(mContext.getResources(),
+							drawableId);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			imageViewAware.setImageBitmap(bm);
 			IconLoadTask.Builder builder = new IconLoadTask.Builder(uri,
 					imageViewAware);
 			builder.setContext(mContext).setCacheKey(uri).setEngine(mEngine)
@@ -128,7 +168,6 @@ public class IconLoader {
 	/**
 	 * Cancels all running and scheduled display image tasks.<br />
 	 * <b>NOTE:</b> This method doesn't shutdown
-	 * {@linkplain com.nostra13.universalimageloader.core.ImageLoaderConfiguration.Builder#taskExecutor(java.util.concurrent.Executor)
 	 * custom task executors} if you set them.<br />
 	 * ImageLoader still can be used after calling this method.
 	 */
@@ -174,8 +213,7 @@ public class IconLoader {
 
 	/**
 	 * 销毁单例<br>
-	 * 
-	 * @param context
+
 	 */
 	private static void destroySingleton() {
 		if (isSingletonInit()) {
