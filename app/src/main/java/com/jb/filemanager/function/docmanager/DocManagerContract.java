@@ -25,6 +25,7 @@ public class DocManagerContract {
         void fileRename(List<DocChildBean> docList);
         void openWith(List<DocChildBean> docList);
         void updateDeleteProgress(int done,int total);
+        void refreshTile();
     }
 
     interface Presenter {

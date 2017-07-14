@@ -12,23 +12,30 @@
     android:background="@android:color/transparent">
 
 
+    <ImageView
+        android:id="@+id/iv_common_action_bar_back"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/action_bar_back_drawable_selector_blue"/>
+
 
     <TextView
-        android:id="@+id/tv_common_action_bar_with_search_title"
+        android:id="@+id/tv_common_action_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:drawablePadding="16dp"
-        android:drawableLeft="@drawable/action_bar_back_drawable_selector"
+        android:layout_marginLeft="52dp"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:paddingLeft="16dp"
         android:text="@string/app_name"
         android:textSize="16dp"
-        android:textColor="@drawable/action_bar_back_text_selector"
+        android:textColor="@drawable/action_bar_back_text_selector_black"
         android:visibility="visible"/>
 
     <ImageView
-        android:id="@+id/iv_common_action_bar_with_search_search"
+        android:id="@+id/iv_common_action_bar_search"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.FileDeleteConfirmDialog;
@@ -43,6 +44,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private static final String TXT_FILE_DATA = "txt_file_data";
     private DocManagerPresenter mPresenter;
     private TextView mTvCommonActionBarWithSearchTitle;
+    private ImageView mIvCommonActionBarBack;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private FloatingGroupExpandableListView mElvApk;
     private RelativeLayout mRlCommonOperateBarContainer;
@@ -59,11 +61,12 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private DocManagerAdapter mAdapter;
     private int mChosenCount;
     private List<DocGroupBean> mAppInfo;
-    private BroadcastReceiver mReceiver;
     private boolean mIsMoreOperatorShown;
     private BroadcastReceiver mScanSdReceiver;
     private SingleFileDetailDialog mSingleFileDetailDialog;
     private MultiFileDetailDialog mMultiFileDetailDialog;
+    private boolean mIsSelectMode;
+    private boolean mIsAllSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     @Override
     public void initView() {
         mTvCommonActionBarWithSearchTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
+        mIvCommonActionBarBack = (ImageView) findViewById(R.id.iv_common_action_bar_back);
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_search);
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
         mRlCommonOperateBarContainer = (RelativeLayout) findViewById(R.id.rl_common_operate_bar_container);
@@ -94,7 +98,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
         mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
         mTvBottomFileRename = (TextView) findViewById(R.id.tv_bottom_rename);
-        mIvCommonActionBarWithSearchSearch.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -105,10 +108,42 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             @Override
             public void onItemChosen(int chosenCount) {
                 handleBottomDeleteShow(chosenCount);
+                handleTitleSelectChange(chosenCount);
             }
         });
         mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
         mAdapter.handleCheckedCount();
+    }
+
+    /**
+     * 处理标题栏的变化
+     *
+     * @param chosenCount 选中的数量
+     */
+    private void handleTitleSelectChange(int chosenCount) {
+        if (chosenCount == 0) {
+            mIsSelectMode = false;
+            refreshTile();
+        } else {
+            handleTitleSelectMode(chosenCount);
+        }
+    }
+
+    private void handleTitleSelectMode(int chosenCount) {
+        if (!mIsSelectMode) {//只有之前不是选择模式  才需要改变图片
+            mIvCommonActionBarBack.setImageResource(R.drawable.ic_cancel_blue);
+        }
+        int totalCount = 0;
+        for (DocGroupBean groupBean : mAppInfo) {
+            totalCount += groupBean.getchildrenSize();
+        }
+        if (chosenCount == totalCount) {
+            mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.select_all);
+        } else {
+            mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.title_select_all);
+        }
+        mTvCommonActionBarWithSearchTitle.setText(getString(R.string.doc_manager_title_select_mode, chosenCount));
+        mIsSelectMode = true;
     }
 
     private void handleBottomDeleteShow(int chosenCount) {
@@ -125,6 +160,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     public void initClick() {
         mRlCommonOperateBarContainer.setOnClickListener(this);
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
+        mIvCommonActionBarBack.setOnClickListener(this);
         mIvCommonActionBarWithSearchSearch.setOnClickListener(this);
         mElvApk.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -288,6 +324,14 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     @Override
+    public void refreshTile() {
+        mTvCommonActionBarWithSearchTitle.setText(R.string.app_name);
+        mIvCommonActionBarBack.setImageResource(R.drawable.action_bar_back_drawable_selector_blue);
+        mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.search_icon);
+        mIsSelectMode = false;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
@@ -342,10 +386,24 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 Toast.makeText(DocManagerActivity.this, "我是占位的bottom啦", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_common_action_bar_title:
-                finishActivity();
+                if (!mIsSelectMode) {
+                    finishActivity();
+                }
+                break;
+            case R.id.iv_common_action_bar_back:
+                if (mIsSelectMode) {
+                    refreshTile();
+                    unSelectAllItem();
+                } else {
+                    finishActivity();
+                }
                 break;
             case R.id.iv_common_action_bar_search:
-                startActivity(new Intent(this, SearchActivity.class));
+                if (mIsSelectMode) {
+                    handleTitleSelect(mIsAllSelect);
+                } else {
+                    startActivity(new Intent(this, SearchActivity.class));
+                }
 //                handleSearchButtonClick(mIsSearchInput);
                 break;
             case R.id.tv_common_operate_bar_copy:
@@ -380,6 +438,45 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             default:
                 break;
         }
+    }
+
+    private void unSelectAllItem() {
+        for (DocGroupBean groupBean : mAppInfo) {
+            if (groupBean.getchildrenSize() == 0) {
+                continue;
+            }
+            groupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
+            List<DocChildBean> children = groupBean.getChildren();
+            for (DocChildBean childBean : children) {
+                childBean.mIsChecked = false;
+            }
+        }
+        mAdapter.handleCheckedCount();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    protected void selectAllItem() {
+        for (DocGroupBean groupBean : mAppInfo) {
+            if (groupBean.getchildrenSize() == 0) {
+                continue;
+            }
+            groupBean.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
+            List<DocChildBean> children = groupBean.getChildren();
+            for (DocChildBean childBean : children) {
+                childBean.mIsChecked = true;
+            }
+        }
+        mAdapter.handleCheckedCount();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void handleTitleSelect(boolean isAllSelect) {
+        if (isAllSelect) {
+            unSelectAllItem();
+        } else {
+            selectAllItem();
+        }
+        mIsAllSelect = !isAllSelect;
     }
 
     private List<DocChildBean> getCheckedDoc() {

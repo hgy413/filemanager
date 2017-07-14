@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/common_action_bar_without_search_blue_back"/>
+        <include layout="@layout/app_manager_title_with_search"/>
 
         <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
             android:id="@+id/elv_apk"
