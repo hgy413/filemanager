@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
@@ -43,6 +44,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         GroupItemViewHolder viewHolder = new GroupItemViewHolder(convertView);
         final AppGroupBean appGroupBean = mGroups.get(groupPosition);
         viewHolder.mTvGroupTitle.setText(appGroupBean.mGroupTitle);
+        viewHolder.mTvGroupTitleItemCount.setText(TheApplication.getAppContext().getString(R.string.item_count, appGroupBean.getchildrenSize()));
         viewHolder.mSelectBox
                 .setImageSource(R.drawable.select_none,
                         R.drawable.select_multi,
@@ -139,12 +141,14 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     private static class GroupItemViewHolder {
         View mView;
         TextView mTvGroupTitle;
+        TextView mTvGroupTitleItemCount;
         GroupSelectBox mSelectBox;
 
         GroupItemViewHolder(View convertView) {
             mView = convertView;
             mSelectBox = (GroupSelectBox) convertView.findViewById(R.id.activity_applock_group_selectbox);
             mTvGroupTitle = (TextView) convertView.findViewById(R.id.activity_applock_group_title);
+            mTvGroupTitleItemCount = (TextView) convertView.findViewById(R.id.activity_applock_group_title_item_count);
         }
     }
 

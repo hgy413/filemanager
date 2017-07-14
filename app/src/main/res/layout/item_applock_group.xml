@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:background="@color/white">
 
         <TextView
@@ -10,6 +11,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
+            tools:text="asdasdasdas"
+            android:textColor="@color/black_40"
+            android:textSize="12dp"/>
+
+        <TextView
+            android:id="@+id/activity_applock_group_title_item_count"
+            android:layout_toRightOf="@+id/activity_applock_group_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            tools:text="ewrwerewrw"
+            tools:background="@color/colorAccent"
             android:textColor="@color/black_40"
             android:textSize="12dp"/>
 
