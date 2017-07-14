@@ -16,6 +16,10 @@ public class StorageContract {
     }
 
     interface Presenter {
+        void onResume();
+        void onPause();
+        void onDestroy();
+
         void onClickOperateCancelButton();
         void onClickOperatePasteButton();
 

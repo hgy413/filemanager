@@ -29,6 +29,31 @@ class StoragePresenter implements StorageContract.Presenter {
     }
 
     @Override
+    public void onResume() {
+        ArrayList<File> copyFiles = FileManager.getInstance().getCopyFiles();
+        ArrayList<File> cutFiles = FileManager.getInstance().getCutFiles();
+        if ((copyFiles != null && copyFiles.size() > 0) || (cutFiles != null && cutFiles.size() > 0)) {
+            mStatus = MAIN_STATUS_PASTE;
+            if (mView != null) {
+                mView.updateView();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mSelectedFiles != null) {
+            mSelectedFiles.clear();
+            mSelectedFiles = null;
+        }
+    }
+
+    @Override
     public void onClickOperateCancelButton() {
         if (mView != null) {
             FileManager.getInstance().clearCopyFiles();
