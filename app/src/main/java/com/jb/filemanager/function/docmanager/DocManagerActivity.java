@@ -113,6 +113,9 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         });
         mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
         mAdapter.handleCheckedCount();
+        for (int i = 0; i < mAppInfo.size(); i++) {
+            mElvApk.expandGroup(i);
+        }
     }
 
     /**

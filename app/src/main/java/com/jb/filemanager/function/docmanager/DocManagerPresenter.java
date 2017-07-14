@@ -86,7 +86,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     public void scanFinished() {
         Toast.makeText(TheApplication.getAppContext(), "System scan finish ,refresh the list", Toast.LENGTH_SHORT).show();
         //更新数据
-        refreshData();
+        //refreshData(); 暂时不处理
     }
 
     @Override
