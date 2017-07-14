@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.docmanager;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,9 +22,9 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
-import com.jb.filemanager.ui.dialog.FileDeleteConfirmDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
+import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
@@ -32,7 +33,6 @@ import com.jb.filemanager.util.StorageUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class DocManagerActivity extends BaseActivity implements DocManagerContract.View, View.OnClickListener {
@@ -57,6 +57,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private TextView mTvBottomDetail;
     private TextView mTvBottomOpen;
     private TextView mTvBottomFileRename;
+    private BottomOperateBar mBobBottomOperator;
 
     private DocManagerAdapter mAdapter;
     private int mChosenCount;
@@ -67,12 +68,14 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private MultiFileDetailDialog mMultiFileDetailDialog;
     private boolean mIsSelectMode;
     private boolean mIsAllSelect;
+    ArrayList<File> mChosenFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc_manager);
 
+        mChosenFiles = new ArrayList<>();
         mPresenter = new DocManagerPresenter(this, new DocManagerSupport());
         mPresenter.onCreate(getIntent());
         initView();
@@ -98,6 +101,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
         mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
         mTvBottomFileRename = (TextView) findViewById(R.id.tv_bottom_rename);
+        mBobBottomOperator = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
     }
 
     @Override
@@ -153,15 +157,49 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mChosenCount = chosenCount;
         hideMoreOperator();
         if (chosenCount == 0) {
-            mRlCommonOperateBarContainer.setVisibility(View.GONE);
+            mBobBottomOperator.setVisibility(View.GONE);
+//            mRlCommonOperateBarContainer.setVisibility(View.GONE);
         } else {
-            mRlCommonOperateBarContainer.setVisibility(View.VISIBLE);
+//            mRlCommonOperateBarContainer.setVisibility(View.VISIBLE);
+            mBobBottomOperator.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void initClick() {
-        mRlCommonOperateBarContainer.setOnClickListener(this);
+//        mRlCommonOperateBarContainer.setOnClickListener(this);
+//        mBobBottomOperator.setOnClickListener(this);
+        mBobBottomOperator.setListener(new BottomOperateBar.Listener() {
+            @Override
+            public ArrayList<File> getCurrentSelectedFiles() {
+                return mChosenFiles;
+            }
+
+            @Override
+            public Activity getActivity() {
+                return DocManagerActivity.this;
+            }
+
+            @Override
+            public void afterCopy() {
+                handleDataCopy();
+            }
+
+            @Override
+            public void afterCut() {
+                handleDataCut();
+            }
+
+            @Override
+            public void afterRename() {
+
+            }
+
+            @Override
+            public void afterDelete() {
+                handleDataDelete();
+            }
+        });
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
         mIvCommonActionBarBack.setOnClickListener(this);
         mIvCommonActionBarWithSearchSearch.setOnClickListener(this);
@@ -535,6 +573,11 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             Toast.makeText(DocManagerActivity.this, "there is not enough space, plz try again later", Toast.LENGTH_SHORT).show();
         }
         // TODO: 2017/7/4 add by --miwo 传递复制的参数
+        mChosenFiles.clear();
+        for (int i = 0; i < checkedDoc.size(); i++) {
+            DocChildBean childBean = checkedDoc.get(i);
+            mChosenFiles.add(new File(childBean.mDocPath));
+        }
     }
 
     private void handleDataDelete() {
@@ -542,7 +585,12 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         Logger.d(TAG, "之前选中的数量" + checkedDoc.size());
         Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will delete", Toast.LENGTH_SHORT).show();
         // TODO: 2017/7/4 add by --miwo 此处应有删除的逻辑
-        ArrayList<File> fileList = new ArrayList<>();
+        mChosenFiles.clear();
+        for (int i = 0; i < checkedDoc.size(); i++) {
+            DocChildBean childBean = checkedDoc.get(i);
+            mChosenFiles.add(new File(childBean.mDocPath));
+        }
+        /*ArrayList<File> fileList = new ArrayList<>();
         for (DocChildBean childBean : checkedDoc) {
             fileList.add(new File(childBean.mDocPath));
         }
@@ -554,10 +602,10 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 Iterator<DocGroupBean> groupIterator = mAppInfo.iterator();
                 while (groupIterator.hasNext()) {
                     DocGroupBean group = groupIterator.next();
-                    /*if (group.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {//如果全选  那么就全部删除
+                    *//*if (group.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {//如果全选  那么就全部删除
                         groupIterator.remove();
                         continue;
-                    }*/
+                    }*//*
                     Iterator<DocChildBean> childIterator = group.getChildren().iterator();
                     while (childIterator.hasNext()) {
                         DocChildBean child = childIterator.next();
@@ -568,7 +616,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 }
                 mPresenter.handleFileDelete(checkedDoc);
                 //隐藏底部栏
-                mRlCommonOperateBarContainer.setVisibility(View.GONE);
+//                mRlCommonOperateBarContainer.setVisibility(View.GONE);
+                mBobBottomOperator.setVisibility(View.GONE);
                 mPresenter.refreshData();
                 Logger.d(TAG, "剩余选中的数量" + getCheckedDoc().size());
             }
@@ -578,12 +627,17 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             }
         });
-        confirmDialog.show();
+        confirmDialog.show();*/
     }
 
     private void handleDataCut() {
         List<DocChildBean> checkedDoc = getCheckedDoc();
         Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will cut", Toast.LENGTH_SHORT).show();
         // TODO: 2017/7/4 add by --miwo 此处应有剪切的逻辑
+        mChosenFiles.clear();
+        for (int i = 0; i < checkedDoc.size(); i++) {
+            DocChildBean childBean = checkedDoc.get(i);
+            mChosenFiles.add(new File(childBean.mDocPath));
+        }
     }
 }

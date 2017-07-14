@@ -75,11 +75,11 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         final DocGroupBean appGroupBean = mGroups.get(groupPosition);
         final DocChildBean child = appGroupBean.getChild(childPosition);
         if (child.mFileType == DocChildBean.TYPE_DOC){
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.doc_icon);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_doc);
         }else if (child.mFileType == DocChildBean.TYPE_PDF){
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.pdf_icon);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_pdf);
         }else if (child.mFileType == DocChildBean.TYPE_TXT){
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.img_file);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_txt);
         }else {
             viewHolder.mIvAppIcon.setImageResource(R.drawable.unknown_icon);
         }
