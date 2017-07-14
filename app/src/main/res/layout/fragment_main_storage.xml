@@ -52,7 +52,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@color/white">
 
             <ListView
@@ -76,57 +77,56 @@
 
         </FrameLayout>
 
-    </LinearLayout>
+        <com.jb.filemanager.ui.widget.BottomOperateBar
+            android:id="@+id/bottom_operate_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom" />
 
+        <LinearLayout
+            android:id="@+id/ll_main_bottom_operate_second_container"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="#77000000"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-    <com.jb.filemanager.ui.widget.BottomOperateBar
-        android:id="@+id/bottom_operate_bar_container"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        />
+            <TextView
+                android:id="@+id/tv_main_bottom_operate_second_container_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:drawableTop="@drawable/ic_cancel"
+                android:drawablePadding="2dp"
+                android:background="@drawable/bottom_item_selector"
+                android:text="@string/common_cancel"
+                android:textColor="#FFFFFF"
+                android:textSize="10dp"/>
 
-    <LinearLayout
-        android:id="@+id/ll_main_bottom_operate_second_container"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        android:background="#77000000"
-        android:orientation="horizontal"
-        android:visibility="gone">
+            <TextView
+                android:id="@+id/tv_main_bottom_operate_second_container_paste"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:drawableTop="@drawable/ic_paste"
+                android:drawablePadding="2dp"
+                android:background="@drawable/bottom_item_selector"
+                android:text="@string/common_paste"
+                android:textColor="#FFFFFF"
+                android:textSize="10dp"/>
 
-        <TextView
-            android:id="@+id/tv_main_bottom_operate_second_container_cancel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:paddingBottom="6dp"
-            android:drawableTop="@drawable/ic_cancel"
-            android:drawablePadding="2dp"
-            android:background="@drawable/bottom_item_selector"
-            android:text="@string/common_cancel"
-            android:textColor="#FFFFFF"
-            android:textSize="10dp"/>
-
-        <TextView
-            android:id="@+id/tv_main_bottom_operate_second_container_paste"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:paddingBottom="6dp"
-            android:drawableTop="@drawable/ic_paste"
-            android:drawablePadding="2dp"
-            android:background="@drawable/bottom_item_selector"
-            android:text="@string/common_paste"
-            android:textColor="#FFFFFF"
-            android:textSize="10dp"/>
+        </LinearLayout>
 
     </LinearLayout>
+
 
 </FrameLayout>

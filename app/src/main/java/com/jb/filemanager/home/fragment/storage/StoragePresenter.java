@@ -1,21 +1,42 @@
 package com.jb.filemanager.home.fragment.storage;
 
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.text.TextUtils;
+
+import com.jb.filemanager.R;
+import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
+import com.jb.filemanager.home.event.SortByChangeEvent;
+import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.util.AppUtils;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by bill wang on 2017/7/13.
  *
  */
 
-class StoragePresenter implements StorageContract.Presenter {
+class StoragePresenter implements StorageContract.Presenter,
+        LoaderManager.LoaderCallbacks<List<File>> {
 
     public static final int MAIN_STATUS_NORMAL = 0;
     public static final int MAIN_STATUS_SELECT = 1;
     public static final int MAIN_STATUS_PASTE = 2;
+
+    private ArrayList<File> mStorageList;
+    private Stack<File> mPathStack;
 
     private ArrayList<File> mSelectedFiles = new ArrayList<>();
     private String mCurrentPath;
@@ -23,9 +44,39 @@ class StoragePresenter implements StorageContract.Presenter {
     private int mStatus = MAIN_STATUS_NORMAL;
 
     private StorageContract.View mView;
+    private StorageContract.Support mSupport;
 
-    StoragePresenter(StorageContract.View view) {
+    private IOnEventMainThreadSubscriber<SortByChangeEvent> mSortChangeEvent = new IOnEventMainThreadSubscriber<SortByChangeEvent>() {
+
+        @Override
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(SortByChangeEvent event) {
+            restartLoad();
+        }
+    };
+
+    StoragePresenter(StorageContract.View view, StorageContract.Support support) {
         mView = view;
+        mSupport = support;
+    }
+
+    @Override
+    public void onCreate() {
+        mPathStack = new Stack<>();
+        mStorageList = new ArrayList<>();
+        initStoragePath();
+
+        EventBus.getDefault().register(mSortChangeEvent);
+    }
+
+    @Override
+    public void onActivityCreated() {
+        if (mSupport != null) {
+            LoaderManager loaderManager = mSupport.getLoaderManager();
+            if (loaderManager != null) {
+                loaderManager.initLoader(FileManager.LOADER_FILES, null, this);
+            }
+        }
     }
 
     @Override
@@ -35,7 +86,7 @@ class StoragePresenter implements StorageContract.Presenter {
         if ((copyFiles != null && copyFiles.size() > 0) || (cutFiles != null && cutFiles.size() > 0)) {
             mStatus = MAIN_STATUS_PASTE;
             if (mView != null) {
-                mView.updateView();
+                mView.updateBottomBar();
             }
         }
     }
@@ -47,10 +98,124 @@ class StoragePresenter implements StorageContract.Presenter {
 
     @Override
     public void onDestroy() {
+        if (EventBus.getDefault().isRegistered(mSortChangeEvent)) {
+            EventBus.getDefault().unregister(mSortChangeEvent);
+        }
+
+        if (mSupport != null) {
+            LoaderManager loaderManager = mSupport.getLoaderManager();
+            if (loaderManager != null) {
+                loaderManager.destroyLoader(FileManager.LOADER_FILES);
+            }
+        }
+
         if (mSelectedFiles != null) {
             mSelectedFiles.clear();
             mSelectedFiles = null;
         }
+
+        mView = null;
+        mSupport = null;
+    }
+
+    @Override
+    public boolean onClickSystemBack() {
+        boolean result = false;
+        if (mView != null && mSupport != null) {
+            if (mStatus == MAIN_STATUS_SELECT) {
+                result = true;
+                mStatus = MAIN_STATUS_NORMAL;
+                resetSelectFile();
+            } else {
+                if (mPathStack.size() > 1) {
+                    mPathStack.pop();
+                    restartLoad();
+                    return true;
+                } else if (mPathStack.size() == 1) {
+                    if (mStorageList.size() == 1) {
+                        return false;
+                    } else {
+                        mPathStack.pop();
+                        mCurrentPath = null;
+                        mView.updateCurrentPath(mStorageList, null);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public void onClickItem(File file, Object holder) {
+        if (mView != null && mSupport != null) {
+            boolean handleClick = false;
+            boolean enterFolder = false;
+
+            if (mStatus == MAIN_STATUS_SELECT) {
+                handleClick = true;
+                enterFolder = false;
+            } else if (mStatus == MAIN_STATUS_NORMAL) {
+                handleClick = true;
+                enterFolder = file.isDirectory();
+            } else if (mStatus == MAIN_STATUS_PASTE){
+                if (file.isDirectory()) {
+                    handleClick = true;
+                    enterFolder = true;
+                }
+            }
+
+            if (handleClick) {
+                if (file.isDirectory() && enterFolder) {
+                    mPathStack.push(file);
+                    restartLoad();
+                } else {
+                    mView.updateItemSelectStatus(holder);
+                    addOrRemoveSelected(file);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onClickPath(String word) {
+        if (mView != null && mSupport != null) {
+            String clickDirectory = word;
+            for (File file : mStorageList) {
+                if ((FileUtil.isInternalStoragePath(mSupport.getContext(), file.getAbsolutePath()) && word.equals(mSupport.getContext().getString(R.string.main_internal_storage)))
+                        || file.getName().equals(word)) {
+                    clickDirectory = file.getAbsolutePath();
+                    break;
+                }
+            }
+            if (mPathStack.isEmpty()) {
+                return;
+            }
+            String currentDir = mPathStack.lastElement().getAbsolutePath();
+            if (currentDir.endsWith(clickDirectory)) {
+                if (isRootDir(currentDir) && mStorageList.size() > 1) {
+                    mPathStack.clear();
+                    mCurrentPath = null;
+                    mView.updateCurrentPath(mStorageList, null);
+                }
+            } else {
+                int index = currentDir.indexOf(clickDirectory);
+                String dir = currentDir.substring(0,
+                        index + clickDirectory.length());
+                Stack<File> temp = new Stack<>();
+                for (File file : mPathStack) {
+                    temp.push(file);
+                    if (file.getAbsolutePath().equals(dir)) {
+                        break;
+                    }
+                }
+                mPathStack.clear();
+                mPathStack.addAll(temp);
+                restartLoad();
+            }
+        }
+
     }
 
     @Override
@@ -59,33 +224,37 @@ class StoragePresenter implements StorageContract.Presenter {
             FileManager.getInstance().clearCopyFiles();
             FileManager.getInstance().clearCutFiles();
             mStatus = MAIN_STATUS_NORMAL;
-            mView.updateView();
+            mView.updateBottomBar();
         }
     }
 
     @Override
     public void onClickOperatePasteButton() {
         if (mView != null) {
-            FileManager.getInstance().doPaste(mCurrentPath, new FileManager.Listener() {
+            if (!TextUtils.isEmpty(mCurrentPath)) {
+                FileManager.getInstance().doPaste(mCurrentPath, new FileManager.Listener() {
 
-                @Override
-                public void onPasteNeedMoreSpace(long needMoreSpace) {
-                    if (mView != null) {
-                        mView.showPasteNeedMoreSpaceDialog(needMoreSpace);
+                    @Override
+                    public void onPasteNeedMoreSpace(long needMoreSpace) {
+                        if (mView != null) {
+                            mView.showPasteNeedMoreSpaceDialog(needMoreSpace);
+                        }
                     }
-                }
 
-                @Override
-                public void onPasteProgressUpdate(File file) {
-                    Logger.e("wangzq", "on paste: " + file.getAbsolutePath());
-                }
-            });
+                    @Override
+                    public void onPasteProgressUpdate(File file) {
+                        Logger.e("wangzq", "on paste: " + file.getAbsolutePath());
+                    }
+                });
 
-            FileManager.getInstance().clearCopyFiles();
-            FileManager.getInstance().clearCutFiles();
+                FileManager.getInstance().clearCopyFiles();
+                FileManager.getInstance().clearCutFiles();
 
-            mStatus = MAIN_STATUS_NORMAL;
-            mView.updateView();
+                mStatus = MAIN_STATUS_NORMAL;
+                mView.updateBottomBar();
+            } else {
+                AppUtils.showToast(mSupport.getContext(), R.string.toast_paste_dest_disable);
+            }
         }
     }
 
@@ -150,7 +319,7 @@ class StoragePresenter implements StorageContract.Presenter {
                             mStatus = MAIN_STATUS_NORMAL;
                         }
 
-                        mView.updateView();
+                        mView.updateBottomBar();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -167,21 +336,89 @@ class StoragePresenter implements StorageContract.Presenter {
     }
 
     @Override
-    public void updateCurrentPath(String path) {
-        mCurrentPath = path;
-    }
-
-    @Override
     public String getCurrentPath() {
         return mCurrentPath;
     }
 
+    @Override
+    public ArrayList<File> getStorageList() {
+        return mStorageList;
+    }
 
+    // implements LoaderManager.LoaderCallbacks<List<File>> start
+    @Override
+    public Loader<List<File>> onCreateLoader(int id, Bundle args) {
+        Loader<List<File>> result = null;
+        if (mSupport != null) {
+            if (mPathStack != null && !mPathStack.isEmpty()) {
+                result = new FileLoader(mSupport.getContext(), mPathStack.lastElement().getAbsolutePath(), FileManager.getInstance().getFileSort());
+            } else {
+                result = new FileLoader(mSupport.getContext(), null, FileManager.getInstance().getFileSort());
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
+        if (mView != null && data != null && mPathStack != null && !mPathStack.isEmpty()) {
+            mCurrentPath = mPathStack.lastElement().getAbsolutePath();
+            mView.updateCurrentPath(data, mPathStack.lastElement());
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<File>> loader) {
+        if (mView != null) {
+            mCurrentPath = null;
+            mView.updateCurrentPath(null, null);
+        }
+    }
+
+    // implements LoaderManager.LoaderCallbacks<List<File>> end
+
+
+    // ************************* private start *************************
+    private void initStoragePath() {
+        if (mSupport != null) {
+            String[] paths = FileUtil.getVolumePaths(mSupport.getContext());
+            if (paths != null && paths.length > 0) {
+                for (String path : paths) {
+                    File file = new File(path);
+                    mStorageList.add(file);
+                }
+                if (paths.length == 1) {
+                    mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
+                }
+            }
+        }
+    }
 
     private void resetSelectFile() {
         mSelectedFiles.clear();
         if (mView != null) {
-            mView.updateView();
+            mView.updateListAndGrid();
+            mView.updateBottomBar();
         }
+    }
+
+    private void restartLoad() {
+        if (mSupport != null) {
+            LoaderManager loaderManager = mSupport.getLoaderManager();
+            if (loaderManager != null) {
+                loaderManager.restartLoader(FileManager.LOADER_FILES, null, this);
+            }
+        }
+    }
+
+    private boolean isRootDir(String path) {
+        if (mStorageList.size() > 0) {
+            for (File file : mStorageList) {
+                if (path.equals(file.getAbsolutePath())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -24,30 +23,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
-import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.PackageManagerLocker;
-import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.HorizontalListView;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
-import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by bill wang on 2017/6/22.
@@ -55,7 +45,6 @@ import java.util.Stack;
  */
 
 public class StorageFragment extends Fragment implements View.OnKeyListener,
-        LoaderManager.LoaderCallbacks<List<File>>,
         StorageContract.View {
 
     private ImageView mIvStorageDisk;
@@ -64,8 +53,6 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
     private ListView mLvFiles;
     private GridView mGvFiles;
 
-    private List<File> mStorageList;
-    private Stack<File> mPathStack;
     private FileListAdapter mListAdapter;
     private FileGridAdapter mGridAdapter;
 
@@ -74,44 +61,29 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
     private StorageContract.Presenter mPresenter;
 
-    private IOnEventMainThreadSubscriber<SortByChangeEvent> mSortChangeEvent = new IOnEventMainThreadSubscriber<SortByChangeEvent>() {
 
-        @Override
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        public void onEventMainThread(SortByChangeEvent event) {
-            restartLoad();
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPathStack = new Stack<>();
-        mStorageList = new ArrayList<>();
-        initStoragePath();
+        mPresenter = new StoragePresenter(this, new StorageSupport(this));
+        mPresenter.onCreate();
 
-        mPresenter = new StoragePresenter(this);
-
-        mListAdapter = new FileListAdapter(getActivity(), mStorageList, mPresenter);
-        mGridAdapter = new FileGridAdapter(getActivity(), mStorageList, mPresenter);
-
-        EventBus.getDefault().register(mSortChangeEvent);
+        mListAdapter = new FileListAdapter(getActivity(), mPresenter);
+        mGridAdapter = new FileGridAdapter(getActivity(), mPresenter);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader(FileManager.LOADER_FILES, null, this);
+        if (mPresenter != null) {
+            mPresenter.onActivityCreated();
+        }
 
         mLvFiles.setAdapter(mListAdapter);
         mGvFiles.setAdapter(mGridAdapter);
-
-        if (mStorageList != null && mStorageList.size() > 1) {
-            mListAdapter.setListItems(mStorageList);
-            mGridAdapter.setListItems(mStorageList);
-        }
     }
 
     @Override
@@ -145,10 +117,12 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         mIvStorageDisk = (ImageView) rootView.findViewById(R.id.iv_main_storage_disk);
         if (mIvStorageDisk != null) {
-            if (mPathStack != null && mPathStack.size() > 0) {
-                File file = mPathStack.firstElement();
-                boolean isInternal = FileUtil.isInternalStoragePath(
-                        getActivity(), file.getAbsolutePath());
+            String currentPath = null;
+            if (mPresenter != null) {
+                currentPath = mPresenter.getCurrentPath();
+            }
+            if (!TextUtils.isEmpty(currentPath)) {
+                boolean isInternal = FileUtil.isInternalStoragePath(getActivity(), currentPath);
                 mIvStorageDisk.setImageResource(isInternal ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
             }
         }
@@ -159,7 +133,9 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 String word = (String) ((HorizontalListView) parent).getAdapter().getItem(position);
-                backToClickedDirectory(word);
+                if (mPresenter != null) {
+                    mPresenter.onClickPath(word);
+                }
             }
         });
 
@@ -172,42 +148,9 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                     return;
                 }
 
-                File file = adapter.getItem(position);
-
                 if (mPresenter != null) {
-                    int status = mPresenter.getStatus();
-
-                    boolean handleClick = false;
-                    boolean enterFolder = false;
-
-                    if (status == StoragePresenter.MAIN_STATUS_SELECT) {
-                        handleClick = true;
-                        enterFolder = false;
-                    } else if (status == StoragePresenter.MAIN_STATUS_NORMAL) {
-                        handleClick = true;
-                        enterFolder = file.isDirectory();
-                    } else if (status == StoragePresenter.MAIN_STATUS_PASTE){
-                        if (file.isDirectory()) {
-                            handleClick = true;
-                            enterFolder = true;
-                        }
-                    }
-
-                    if (handleClick) {
-                        if (file.isDirectory() && enterFolder) {
-                            mPathStack.push(file);
-                            restartLoad();
-                        } else {
-                            FileListAdapter.ViewHolder holder = (FileListAdapter.ViewHolder) view
-                                    .getTag();
-                            if (holder != null) {
-                                boolean isSelected = holder.mIvChecked.isSelected();
-                                holder.mIvChecked.setSelected(!isSelected);
-
-                                mPresenter.addOrRemoveSelected(file);
-                            }
-                        }
-                    }
+                    File file = adapter.getItem(position);
+                    mPresenter.onClickItem(file, view.getTag());
                 }
             }
         });
@@ -223,24 +166,8 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                 }
 
                 if (mPresenter != null) {
-                    int status = mPresenter.getStatus();
-
                     File file = adapter.getItem(position);
-
-                    if (status == StoragePresenter.MAIN_STATUS_SELECT || !file.isDirectory()) {
-                        // 选择模式或者是单个文件点击处理
-                        FileGridAdapter.ViewHolder holder = (FileGridAdapter.ViewHolder) view
-                                .getTag();
-                        if (holder != null) {
-                            boolean isSelected = holder.mIvChecked.isSelected();
-                            holder.mIvChecked.setSelected(!isSelected);
-
-                            mPresenter.addOrRemoveSelected(file);
-                        }
-                    } else {
-                        mPathStack.push(file);
-                        restartLoad();
-                    }
+                    mPresenter.onClickItem(file, view.getTag());
                 }
             }
         });
@@ -346,75 +273,31 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         if (mPresenter != null) {
             mPresenter.onDestroy();
         }
-
-        if (EventBus.getDefault().isRegistered(mSortChangeEvent)) {
-            EventBus.getDefault().unregister(mSortChangeEvent);
-        }
-
-        getLoaderManager().destroyLoader(FileManager.LOADER_FILES);
         super.onDestroy();
     }
 
     // implements OnKeyListener start
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_UP) {
-            if (mPathStack.size() > 1) {
-                mPathStack.pop();
-                restartLoad();
-                return true;
-            } else if (mPathStack.size() == 1) {
-                if (mStorageList.size() == 1) {
-                    return false;
-                } else {
-                    mPathStack.pop();
-                    mHLvDirs.setVisibility(View.GONE);
-                    mListAdapter.setListItems(mStorageList);
-                    mGridAdapter.setListItems(mStorageList);
-                    return true;
-                }
-            }
-        }
-        return false;
+        return keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP && mPresenter.onClickSystemBack();
     }
 
     // implements OnKeyListener end
 
 
-    // implements LoaderManager.LoaderCallbacks<List<File>> start
-    @Override
-    public Loader<List<File>> onCreateLoader(int id, Bundle args) {
-        if (mPathStack != null && !mPathStack.isEmpty()) {
-            return new FileLoader(getActivity(), mPathStack.lastElement().getAbsolutePath(), FileManager.getInstance().getFileSort());
-        }
-        return new FileLoader(getActivity(), null, FileManager.getInstance().getFileSort());
-    }
 
-    @Override
-    public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
-        if (data != null) {
-            mListAdapter.setListItems(data);
-            mGridAdapter.setListItems(data);
-
-            if (!mPathStack.isEmpty()) {
-                updateCurrentDir(mPathStack.lastElement());
-            }
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<File>> loader) {
-        mListAdapter.clear();
-        mGridAdapter.clear();
-    }
-
-    // implements LoaderManager.LoaderCallbacks<List<File>> end
 
     // implements StorageContract.View start
 
+
     @Override
-    public void updateView() {
+    public void updateListAndGrid() {
+        mListAdapter.notifyDataSetChanged();
+        mGridAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateBottomBar() {
         if (mPresenter != null) {
             switch (mPresenter.getStatus()) {
                 case StoragePresenter.MAIN_STATUS_PASTE:
@@ -431,6 +314,38 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                     break;
                 default:
                     break;
+            }
+        }
+    }
+
+    @Override
+    public void updateCurrentPath(List<File> data, File currentPath) {
+        if (data != null) {
+            mListAdapter.setListItems(data);
+            mGridAdapter.setListItems(data);
+
+            if (currentPath == null) {
+                mHLvDirs.setVisibility(View.GONE);
+            } else {
+                updateCurrentDir(currentPath);
+            }
+        } else {
+            mListAdapter.clear();
+            mGridAdapter.clear();
+        }
+    }
+
+    @Override
+    public void updateItemSelectStatus(Object holder) {
+        if (holder != null) {
+            if (holder instanceof ListItemViewHolder) {
+                ListItemViewHolder viewHolder = (ListItemViewHolder) holder;
+                boolean isSelected = viewHolder.mIvChecked.isSelected();
+                viewHolder.mIvChecked.setSelected(!isSelected);
+            } else if (holder instanceof GridItemViewHolder) {
+                GridItemViewHolder viewHolder = (GridItemViewHolder) holder;
+                boolean isSelected = viewHolder.mIvChecked.isSelected();
+                viewHolder.mIvChecked.setSelected(!isSelected);
             }
         }
     }
@@ -456,104 +371,38 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
 
     // private start
-    private void initStoragePath() {
-        String[] paths = FileUtil.getVolumePaths(getActivity());
-        if (paths != null && paths.length > 0) {
-            for (String path : paths) {
-                File file = new File(path);
-                mStorageList.add(file);
-            }
-            if (paths.length == 1) {
-                mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
-            }
-        }
-    }
-
-    public void restartLoad() {
-//        mProgressBar.setVisibility(View.VISIBLE);
-        getLoaderManager().restartLoader(FileManager.LOADER_FILES, null, this);
-    }
 
     private void updateCurrentDir(File file) {
         if (mPresenter != null) {
-            mPresenter.updateCurrentPath(file.getAbsolutePath());
-        }
-
-        String currentPath = "";
-        int count = mStorageList.size();
-        for (int i = 0; i < count; i++) {
-            String filePath = file.getAbsolutePath();
-            String storagePath = mStorageList.get(i).getAbsolutePath();
-            int index = filePath.indexOf(storagePath);
-            if (index != -1) {
-                boolean isInternal = FileUtil.isInternalStoragePath(
-                        getActivity(), storagePath);
-                currentPath = filePath.replace(storagePath, isInternal ? getString(R.string.main_internal_storage)
-                        : new File(mStorageList.get(i).getAbsolutePath()).getName());
-                break;
-            }
-
-        }
-        final String[] words = currentPath.split(File.separator);
-        mHLvDirs.setVisibility(View.VISIBLE);
-        mHLvDirs.setAdapter(new ArrayAdapter<>(getActivity(),
-                R.layout.item_main_storage_list_dir, R.id.tv_dir, words));
-        mHLvDirs.post(new Runnable() {
-
-            @Override
-            public void run() {
-                mHLvDirs.scrollTo(Integer.MAX_VALUE);
-            }
-        });
-
-    }
-
-    private void backToClickedDirectory(String word) {
-        String clickDirectory = word;
-        for (File file : mStorageList) {
-            if ((FileUtil.isInternalStoragePath(getActivity(), file.getAbsolutePath()) && word.equals(getString(R.string.main_internal_storage)))
-                    || file.getName().equals(word)) {
-                clickDirectory = file.getAbsolutePath();
-                break;
-            }
-        }
-        if (mPathStack.isEmpty()) {
-            return;
-        }
-        String currentDir = mPathStack.lastElement().getAbsolutePath();
-        if (currentDir.endsWith(clickDirectory)) {
-            if (isRootDir(currentDir) && mStorageList.size() > 1) {
-                mPathStack.clear();
-                mListAdapter.setListItems(mStorageList);
-                mGridAdapter.setListItems(mStorageList);
-                mHLvDirs.setVisibility(View.GONE);
-            }
-        } else {
-            int index = currentDir.indexOf(clickDirectory);
-            String dir = currentDir.substring(0,
-                    index + clickDirectory.length());
-            Stack<File> temp = new Stack<>();
-            for (File file : mPathStack) {
-                temp.push(file);
-                if (file.getAbsolutePath().equals(dir)) {
-                    break;
+            String currentPath = "";
+            ArrayList<File> storageList = mPresenter.getStorageList();
+            if (storageList != null && storageList.size() > 0) {
+                int count = storageList.size();
+                for (int i = 0; i < count; i++) {
+                    String filePath = file.getAbsolutePath();
+                    String storagePath = storageList.get(i).getAbsolutePath();
+                    int index = filePath.indexOf(storagePath);
+                    if (index != -1) {
+                        boolean isInternal = FileUtil.isInternalStoragePath(
+                                getActivity(), storagePath);
+                        currentPath = filePath.replace(storagePath, isInternal ? getString(R.string.main_internal_storage)
+                                : new File(storageList.get(i).getAbsolutePath()).getName());
+                        break;
+                    }
                 }
             }
-            mPathStack.clear();
-            mPathStack.addAll(temp);
-            restartLoad();
-        }
-    }
+            final String[] words = currentPath.split(File.separator);
+            mHLvDirs.setVisibility(View.VISIBLE);
+            mHLvDirs.setAdapter(new ArrayAdapter<>(getActivity(),
+                    R.layout.item_main_storage_list_dir, R.id.tv_dir, words));
+            mHLvDirs.post(new Runnable() {
 
-    private boolean isRootDir(String path) {
-        if (mStorageList.size() > 0) {
-            for (File file : mStorageList) {
-                if (path.equals(file.getAbsolutePath())) {
-                    return true;
+                @Override
+                public void run() {
+                    mHLvDirs.scrollTo(Integer.MAX_VALUE);
                 }
-            }
+            });
         }
-        return false;
     }
 
     // private end
@@ -650,24 +499,24 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
 
         WeakReference<StorageContract.Presenter> mPresenterRef;
 
-        FileListAdapter(Context context, List<File> rootDirs, StorageContract.Presenter presenter) {
-            super(context, rootDirs);
+        FileListAdapter(Context context, StorageContract.Presenter presenter) {
+            super(context, presenter == null ? null : presenter.getStorageList());
             mPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            final ViewHolder holder;
+            final ListItemViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_main_storage_list_style, null);
-                holder = new ViewHolder();
+                holder = new ListItemViewHolder();
                 holder.mIvFileThumb = (ImageView) convertView.findViewById(R.id.iv_main_storage_style_list_item_icon);
                 holder.mTvFileName = (TextView) convertView.findViewById(R.id.tv_main_storage_style_list_item_name);
                 holder.mTvFileDesc = (TextView) convertView.findViewById(R.id.tv_main_storage_style_list_item_desc);
                 holder.mIvChecked = (ImageView) convertView.findViewById(R.id.iv_main_storage_style_list_item_selected);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                holder = (ListItemViewHolder) convertView.getTag();
             }
 
             File file = getItem(position);
@@ -740,36 +589,36 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
             }
             return convertView;
         }
+    }
 
-        private static class ViewHolder {
-            ImageView mIvFileThumb;
-            TextView mTvFileName;
-            TextView mTvFileDesc;
-            ImageView mIvChecked;
-        }
+    private static class ListItemViewHolder {
+        ImageView mIvFileThumb;
+        TextView mTvFileName;
+        TextView mTvFileDesc;
+        ImageView mIvChecked;
     }
 
     private static class FileGridAdapter extends FileAdapter {
 
         WeakReference<StorageContract.Presenter> mPresenterRef;
 
-        FileGridAdapter(Context context, List<File> rootDirs, StorageContract.Presenter presenter) {
-            super(context, rootDirs);
+        FileGridAdapter(Context context, StorageContract.Presenter presenter) {
+            super(context, presenter == null ? null : presenter.getStorageList());
             mPresenterRef = new WeakReference<>(presenter);
         }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            final ViewHolder holder;
+            final GridItemViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_main_storage_grid_style, null);
-                holder = new ViewHolder();
+                holder = new GridItemViewHolder();
                 holder.mIvFileThumb = (ImageView) convertView.findViewById(R.id.iv_main_storage_style_grid_item_icon);
                 holder.mTvFileName = (TextView) convertView.findViewById(R.id.tv_main_storage_style_grid_item_name);
                 holder.mIvChecked = (ImageView) convertView.findViewById(R.id.iv_main_storage_style_grid_item_selected);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                holder = (GridItemViewHolder) convertView.getTag();
             }
 
             File file = getItem(position);
@@ -822,15 +671,13 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
                     }
                 });
             }
-
-
             return convertView;
         }
+    }
 
-        private static class ViewHolder {
-            ImageView mIvFileThumb;
-            TextView mTvFileName;
-            ImageView mIvChecked;
-        }
+    private static class GridItemViewHolder {
+        ImageView mIvFileThumb;
+        TextView mTvFileName;
+        ImageView mIvChecked;
     }
 }

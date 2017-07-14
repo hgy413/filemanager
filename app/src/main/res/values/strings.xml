@@ -343,6 +343,7 @@
     <string name="toast_low_space_switch_disable">Low space warning disable</string>
     <string name="toast_logger_notification_switch_enable">Logger notification enable</string>
     <string name="toast_logger_notification_switch_disable">Logger notification disable</string>
+    <string name="toast_paste_dest_disable">Can not paste here</string>
 
 
     <string name="see"><u><![CDATA[See>>]]></u></string>
