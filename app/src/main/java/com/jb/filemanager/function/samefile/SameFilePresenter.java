@@ -8,9 +8,10 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.home.MainActivity;
+
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -42,7 +43,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     public void onLoadFinished(Loader<GroupList<String, FileInfo>> loader, GroupList<String, FileInfo> data) {
         mFileGroupList = data;
         if (mFileGroupList == null) {
-            //Todo 显示没有音乐提示
+            mView.onNoFileFindShow();
         } else {
             // 显示列表
             mView.showFileList(mFileGroupList);
@@ -100,70 +101,18 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         }
     }
 
-    @Override
-    public void onClickOperateCutButton(boolean[] selectedPosition) {
-        if (selectedPosition != null && selectedPosition.length >0 ) {
-            Intent intent = new Intent(mView, MainActivity.class);
-            intent.putExtra(Const.BOTTOM_OPERATE, Const.BOTTOM_OPERATE_BAR_CUT);
-            intent.putExtra(Const.BOTTOM_OPERATE_DATA, selectedPositon2PathList(selectedPosition));
-            mView.startActivity(intent);
-        } else {
-            Toast.makeText(mView, "No Item is selected!", Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
-    public void onClickOperateCopyButton(boolean[] selectedPosition) {
-        if (selectedPosition != null && selectedPosition.length >0 ) {
-            Intent intent = new Intent(mView, MainActivity.class);
-            intent.putExtra(Const.BOTTOM_OPERATE, Const.BOTTOM_OPERATE_BAR_COPY);
-            intent.putExtra(Const.BOTTOM_OPERATE_DATA, selectedPositon2PathList(selectedPosition));
-            mView.startActivity(intent);
-        } else {
-            Toast.makeText(mView, "No Item is selected!", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onClickOperateDeleteButton() {
-        mView.showDeleteConfirmDialog();
-    }
-
-    @Override
-    public void onClickOperateMoreButton(boolean[] selectedPosition) {
-        int selectCount = 0;
-        for (boolean isSelected : selectedPosition) {
-            if (isSelected) {
-                selectCount++;
+    public ArrayList<File> getSelectFile() {
+        ArrayList<File> selectedFile = new ArrayList<>();
+        for (int i = 0; i < mFileGroupList.size(); i++) {
+            for (FileInfo info : mFileGroupList.valueAt(i)) {
+                if (info.isSelected) {
+                    selectedFile.add(new File(info.mFullPath));
+                }
             }
         }
-        // 这里size 只可能是大于等于1，没有选中文件的时候应该不会出现底部操作栏
-        switch (selectCount) {
-            case 1:
-                mView.showBottomMoreOperatePopWindow(false);
-                break;
-            default:
-                mView.showBottomMoreOperatePopWindow(true);
-                break;
-        }
-    }
-
-    @Override
-    public void onClickConfirmDeleteButton(boolean[] selectedPosition) {
-        if (selectedPosition != null && selectedPosition.length >0 ) {
-            mSupport.delete(selectedPositon2PathList(selectedPosition));
-        } else {
-            Toast.makeText(mView, "No Item is selected!", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onClickOperateDetailButton() {
-
-    }
-
-    @Override
-    public void onClickOperateRenameButton() {
+        return  selectedFile;
 
     }
 
@@ -173,5 +122,12 @@ public class SameFilePresenter implements SameFileContract.Presenter,
             selectedFile.add(mFileGroupList.getItem(i).mFullPath);
         }
         return  selectedFile;
+    }
+
+    @Override
+    public void jumpToStoragePage(){
+        Intent intent = new Intent(mView, MainActivity.class);
+        intent.putExtra("HAVE_PAST_DATE", true);
+        mView.startActivity(intent);
     }
 }

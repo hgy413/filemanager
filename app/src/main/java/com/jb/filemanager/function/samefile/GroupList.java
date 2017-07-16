@@ -3,6 +3,8 @@ package com.jb.filemanager.function.samefile;
 
 import android.support.v4.util.ArrayMap;
 
+import com.jb.filemanager.commomview.GroupSelectBox;
+
 import java.util.ArrayList;
 
 /**
@@ -50,4 +52,5 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
     public void addToGroup(int groupIndex, V value) {
         this.get(groupIndex).add(value);
     }
+
 }

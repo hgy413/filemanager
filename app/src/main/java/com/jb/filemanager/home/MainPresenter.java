@@ -69,7 +69,11 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onResume() {
-
+        MainActivity activity = (MainActivity)mView;
+        boolean haveDateToPase = activity.getIntent().getBooleanExtra("HAVE_PAST_DATE",false);
+        if (haveDateToPase) {
+            mView.showStoragePage();
+        }
     }
 
     @Override

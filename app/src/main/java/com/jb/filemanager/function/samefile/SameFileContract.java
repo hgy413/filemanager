@@ -2,6 +2,7 @@ package com.jb.filemanager.function.samefile;
 
 import android.content.Intent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -15,9 +16,20 @@ public interface SameFileContract {
 
         void showFileList(GroupList<String, FileInfo> mMusicMaps);
 
-        void showDeleteConfirmDialog();
-
-        void showBottomMoreOperatePopWindow(boolean b);
+        //        if (rename != null) {
+        //            rename.getPaint().setAntiAlias(true);
+        //            rename.setOnClickListener(new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    if (mPresenter != null) {
+        //                        mPresenter.onClickOperateRenameButton();
+        //                    }
+        //                    popupWindow.dismiss();
+        //                }
+        //            });
+        //        }
+        //    }
+        void onNoFileFindShow();
     }
 
     interface Presenter {
@@ -27,19 +39,16 @@ public interface SameFileContract {
 
         void start(final int fileType);
 
-        void onClickOperateCutButton(boolean[] selectedPosition);
+        ArrayList<File> getSelectFile();
 
-        void onClickOperateCopyButton(boolean[] selectedPosition);
+        void jumpToStoragePage();
 
-        void onClickOperateDeleteButton();
 
-        void onClickOperateMoreButton(boolean[] selectedPosition);
-
-        void onClickConfirmDeleteButton(boolean[] selectedPosition);
-
-        void onClickOperateDetailButton();
-
-        void onClickOperateRenameButton();
+//        void onClickConfirmDeleteButton(boolean[] selectedPosition);
+//
+//        void onClickOperateDetailButton();
+//
+//        void onClickOperateRenameButton();
     }
 
     interface Support {

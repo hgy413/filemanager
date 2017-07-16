@@ -62,17 +62,9 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
     protected void onFinishInflate() {
         super.onFinishInflate();
         mLlCut = (LinearLayout) findViewById(R.id.ll_common_operate_bar_cut);
-        //mLlCut.getPaint().setAntiAlias(true);
-
         mLlCopy = (LinearLayout) findViewById(R.id.ll_common_operate_bar_copy);
-        //mLlCopy.getPaint().setAntiAlias(true);
-
         mLlDelete = (LinearLayout) findViewById(R.id.ll_common_operate_bar_delete);
-        //mLlDelete.getPaint().setAntiAlias(true);
-
         mLlMore = (LinearLayout) findViewById(R.id.ll_common_operate_bar_more);
-        //mLlMore.getPaint().setAntiAlias(true);
-
         mLlCut.setOnClickListener(this);
         mLlCopy.setOnClickListener(this);
         mLlDelete.setOnClickListener(this);

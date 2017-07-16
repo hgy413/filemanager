@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
@@ -35,7 +36,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private GroupList<String, FileInfo> mMusicDataArrayMap;
     private FileExpandableListAdapter mFileExpandableListAdapter;
     private BottomOperateBar mBottomOperateContainer;
-
+    private LinearLayout mLlNoFileView;
     private boolean[] mItemSelected;
     private int mSelecedCount = 0;
 
@@ -69,15 +70,24 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         }
         back.setOnClickListener(this);
         mElvFilelist = (ExpandableListView) findViewById(R.id.elv_same_file_list);
-        mFileExpandableListAdapter = new FileExpandableListAdapter();
+        mFileExpandableListAdapter = new FileExpandableListAdapter(
+                new FileExpandableListAdapter.ItemChooseChangeListener(){
+                    @Override
+                    public void onChooseNumChanged(int num) {
+                       if (num > 0) {
+                           mBottomOperateContainer.setVisibility(View.VISIBLE);
+                       } else {
+                           mBottomOperateContainer.setVisibility(View.GONE);
+                       }
+                    }
+                });
         mElvFilelist.setAdapter(mFileExpandableListAdapter);
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mBottomOperateContainer.setListener(new BottomOperateBar.Listener() {
             @Override
             public ArrayList<File> getCurrentSelectedFiles() {
-                // TODO @bool
-                return null;
+                return mPresenter.getSelectFile();
             }
 
             @Override
@@ -87,25 +97,22 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void afterCopy() {
-                // TODO @bool
-
+                mPresenter.jumpToStoragePage();
             }
 
             @Override
             public void afterCut() {
-                // TODO @bool
-
+                mPresenter.jumpToStoragePage();
             }
 
             @Override
             public void afterRename() {
-                // TODO @bool
+                mPresenter.onCreate(getIntent());
             }
 
             @Override
             public void afterDelete() {
-                // TODO @bool
-
+                mPresenter.onCreate(getIntent());
             }
         });
 
@@ -132,6 +139,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 //                mPresenter.onClickOperateMoreButton(mItemSelected);
 //            }
 //        });
+        mLlNoFileView = (LinearLayout)findViewById(R.id.ll_no_file);
     }
 
     @Override
@@ -201,8 +209,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             case R.id.iv_common_action_bar_with_search_search:
                 // TODO
                 break;
-            //case R.id.iv_music_group_item_select:
-            //    Toast.makeText(this, "Clicked", Toast.LENGTH_LONG);
             default:
                 break;
         }
@@ -224,86 +230,90 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         }
     }
 
+//    @Override
+//    public void showDeleteConfirmDialog() {
+//        DeleteFileDialog dialog = new DeleteFileDialog(this, new DeleteFileDialog.Listener() {
+//            @Override
+//            public void onConfirm(DeleteFileDialog dialog) {
+//                dialog.dismiss();
+//                if (mPresenter != null) {
+//                    mPresenter.onClickConfirmDeleteButton(mItemSelected);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancel(DeleteFileDialog dialog) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
+
+//    @Override
+//    public void showBottomMoreOperatePopWindow(boolean multiSelected) {
+//        int resId;
+//        if (multiSelected) {
+//            resId = R.layout.pop_mutli_file_operate_more;
+//        } else {
+//            resId = R.layout.pop_single_file_operate_more;
+//        }
+
+//        // 一个自定义的布局，作为显示的内容
+//        View contentView = getLayoutInflater().inflate(resId, null);
+//        TextView details = (TextView) contentView.findViewById(R.id.tv_main_operate_more_detail);
+//        TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
+//
+//        final PopupWindow popupWindow = new PopupWindow(contentView,
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//
+//        popupWindow.setTouchable(true);
+//
+//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return false;
+//                // 这里如果返回true的话，touch事件将被拦截
+//                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+//            }
+//        });
+//
+//        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+//        // 我觉得这里是API的一个bug
+//        popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
+//
+//        // 设置好参数之后再show
+//        popupWindow.showAsDropDown(mBottomOperateContainer,
+//                mBottomOperateContainer.getWidth() - contentView.getWidth(), 5);
+//
+//        if (details != null) {
+//            details.getPaint().setAntiAlias(true);
+//            details.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mPresenter != null) {
+//                        mPresenter.onClickOperateDetailButton();
+//                    }
+//                    popupWindow.dismiss();
+//                }
+//            });
+//        }
+
+//        if (rename != null) {
+//            rename.getPaint().setAntiAlias(true);
+//            rename.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mPresenter != null) {
+//                        mPresenter.onClickOperateRenameButton();
+//                    }
+//                    popupWindow.dismiss();
+//                }
+//            });
+//        }
+//    }
     @Override
-    public void showDeleteConfirmDialog() {
-        DeleteFileDialog dialog = new DeleteFileDialog(this, new DeleteFileDialog.Listener() {
-            @Override
-            public void onConfirm(DeleteFileDialog dialog) {
-                dialog.dismiss();
-                if (mPresenter != null) {
-                    mPresenter.onClickConfirmDeleteButton(mItemSelected);
-                }
-            }
-
-            @Override
-            public void onCancel(DeleteFileDialog dialog) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    @Override
-    public void showBottomMoreOperatePopWindow(boolean multiSelected) {
-        int resId;
-        if (multiSelected) {
-            resId = R.layout.pop_mutli_file_operate_more;
-        } else {
-            resId = R.layout.pop_single_file_operate_more;
-        }
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = getLayoutInflater().inflate(resId, null);
-        TextView details = (TextView) contentView.findViewById(R.id.tv_main_operate_more_detail);
-        TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
-
-        final PopupWindow popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
-        popupWindow.setTouchable(true);
-
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(mBottomOperateContainer,
-                mBottomOperateContainer.getWidth() - contentView.getWidth(), 5);
-
-        if (details != null) {
-            details.getPaint().setAntiAlias(true);
-            details.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null) {
-                        mPresenter.onClickOperateDetailButton();
-                    }
-                    popupWindow.dismiss();
-                }
-            });
-        }
-
-        if (rename != null) {
-            rename.getPaint().setAntiAlias(true);
-            rename.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null) {
-                        mPresenter.onClickOperateRenameButton();
-                    }
-                    popupWindow.dismiss();
-                }
-            });
-        }
+    public void onNoFileFindShow () {
+        mLlNoFileView.setVisibility(View.VISIBLE);
     }
 }

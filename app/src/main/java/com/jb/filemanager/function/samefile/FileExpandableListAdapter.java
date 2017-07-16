@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.samefile;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +9,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
-import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
-import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
-import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
-import com.jb.filemanager.util.imageloader.ImageLoader;
-
 import java.util.ArrayList;
 
 /**
@@ -29,6 +23,11 @@ import java.util.ArrayList;
 
 public class FileExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener{
     GroupList<String, FileInfo> mGroupList;
+    private ItemChooseChangeListener mChooseChangeListener;
+    public FileExpandableListAdapter(@NonNull ItemChooseChangeListener chooseChangeListener) {
+        mChooseChangeListener = chooseChangeListener;
+    }
+
     @Override
     public int getGroupCount() {
         return mGroupList == null ? 0 : mGroupList.size();
@@ -76,6 +75,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             groupViewHolder = (GroupViewHolder)convertView.getTag();
         }
         groupViewHolder.mTvTitle.setText(mGroupList.keyAt(groupPosition));
+        groupViewHolder.mIvSelect.setState(getGroupSelectState(groupPosition));
         groupViewHolder.mIvSelect.setTag(groupPosition);
         return convertView;
     }
@@ -164,8 +164,15 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         switch (v.getId()) {
             case R.id.iv_file_group_item_select:
                 ImageView ivSelect = (ImageView)v;
-                ivSelect.setImageResource(R.drawable.choose_all);
-                updateGroupView((int)v.getTag());
+                int group = (int)ivSelect.getTag();
+                boolean selectResoult = true;
+                if (GroupSelectBox.SelectState.ALL_SELECTED == getGroupSelectState(group)) {
+                    selectResoult = false;
+                }
+                for ( FileInfo info : mGroupList.valueAt(group)) {
+                    info.isSelected = selectResoult;
+                }
+                notifyDataSetChanged();
                 break;
             case R.id.ll_file_item_container:
                 // Todo Show file by Type
@@ -180,15 +187,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                     binder.mFileInfo.isSelected = true;
                     ((ImageView)v).setImageResource(R.drawable.choose_all);
                 }
-                updateGroupView(binder.groupPos);
+                notifyDataSetChanged();
                 break;
         }
+        mChooseChangeListener.onChooseNumChanged(getSelectCount());
     }
-
-    private void updateGroupView(int groupPosition) {
-
-    }
-
 
     /**
      * Group Item View
@@ -197,11 +200,12 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         // Title
         private TextView mTvTitle;
         // Select icon
-        private ImageView mIvSelect;
+        private GroupSelectBox mIvSelect;
 
         public GroupViewHolder(View itemView) {
             mTvTitle = (TextView) itemView.findViewById(R.id.tv_file_group_item_title);
-            mIvSelect = (ImageView) itemView.findViewById(R.id.iv_file_group_item_select);
+            mIvSelect = (GroupSelectBox) itemView.findViewById(R.id.iv_file_group_item_select);
+            mIvSelect.setImageSource(R.drawable.choose_none, R.drawable.choose_part, R.drawable.choose_all);
             mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
         }
     }
@@ -233,10 +237,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             if (fileInfo != null) {
                 Binder binder = new Binder(group, child, fileInfo);
                 //更新数据 用于直接修改
-                //mLlItemContainer.setTag(binder);
                 mIvSelect.setTag(binder);
-                //mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
-                //mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
             }
         }
     }
@@ -251,5 +252,37 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             this.childPos = childPos;
             this.mFileInfo = info;
         }
+    }
+
+    public GroupSelectBox.SelectState getGroupSelectState(int group) {
+        GroupSelectBox.SelectState selectState = GroupSelectBox.SelectState.NONE_SELECTED;
+        if (0 <= group && group <= mGroupList.size()) {
+            int selectCount = 0;
+            for (FileInfo info : mGroupList.valueAt(group)) {
+                if (info.isSelected) selectCount++;
+            }
+
+            if (selectCount == mGroupList.valueAt(group).size()) {
+                selectState = GroupSelectBox.SelectState.ALL_SELECTED;
+            } else if (selectCount > 0) {
+                selectState = GroupSelectBox.SelectState.MULT_SELECTED;
+            }
+        }
+        return selectState;
+    }
+
+    public int getSelectCount() {
+        int count = 0;
+        if (mGroupList == null) return count;
+        for (int i = 0; i < mGroupList.size(); i++) {
+            for (FileInfo info : mGroupList.valueAt(i)) {
+                if (info.isSelected) count++;
+            }
+        }
+        return count;
+    }
+
+    interface ItemChooseChangeListener {
+        public void onChooseNumChanged(int num);
     }
 }
