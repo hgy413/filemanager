@@ -269,6 +269,10 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 break;
         }
 
+        if (mIvActionBarBack != null) {
+            mIvActionBarBack.setVisibility(View.GONE);
+        }
+
         if (mEtActionBarSearch != null) {
             mEtActionBarSearch.setVisibility(View.GONE);
         }
@@ -293,6 +297,10 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showSearchStatus() {
+        if (mIvActionBarBack != null) {
+            mIvActionBarBack.setVisibility(View.VISIBLE);
+        }
+
         if (mEtActionBarSearch != null) {
             mEtActionBarSearch.setVisibility(View.VISIBLE);
         }
@@ -497,7 +505,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 }
                 break;
             case R.id.iv_main_action_bar_back:
-                // TODO
+                if (mPresenter != null) {
+                    mPresenter.onClickActionBackButton();
+                }
                 break;
             case R.id.iv_main_action_bar_search:
                 if (mPresenter != null) {

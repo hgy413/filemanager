@@ -38,6 +38,7 @@ public class MainContract {
 
         void onSwitchTab(int tabPos);
         void onClickDrawerButton();
+        void onClickActionBackButton();
         void onClickActionSearchButton();
         void onClickActionMoreButton();
         void onClickActionNewFolderButton();

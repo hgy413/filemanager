@@ -134,6 +134,13 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public void onClickActionBackButton() {
+        if (mView != null) {
+            mView.showNormalStatus(mCurrentTab);
+        }
+    }
+
+    @Override
     public void onClickActionSearchButton() {
         if (mView != null) {
             mIsInSearchMode = true;
