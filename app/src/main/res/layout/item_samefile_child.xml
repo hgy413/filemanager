@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/list_item_bg_selector"
         android:clickable="true">
         <ImageView
             android:id="@+id/iv_music_child_item_cover"

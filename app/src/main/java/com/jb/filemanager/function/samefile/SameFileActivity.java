@@ -33,7 +33,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private BottomOperateBar mBottomOperateContainer;
     private LinearLayout mLlNoFileView;
     private boolean[] mItemSelected;
-    private int mSelecedCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         }
         back.setOnClickListener(this);
         mElvFilelist = (ExpandableListView) findViewById(R.id.elv_same_file_list);
-        mFileExpandableListAdapter = new FileExpandableListAdapter(
+        mFileExpandableListAdapter = new FileExpandableListAdapter( SameFileActivity.this,
                 new FileExpandableListAdapter.ItemChooseChangeListener(){
                     @Override
                     public void onChooseNumChanged(int num) {
@@ -193,7 +192,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         for (int i = 0; i < mItemSelected.length; i++) {
             mItemSelected[i] = false;
         }
-        mSelecedCount = 0;
         //mMusicListAdapter.notifyDataSetChanged();
         mFileExpandableListAdapter.reflaceDate(mMusicMaps);
         int groupCount = mMusicDataArrayMap.size();

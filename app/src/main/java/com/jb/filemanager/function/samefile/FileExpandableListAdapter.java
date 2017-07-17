@@ -1,7 +1,11 @@
 package com.jb.filemanager.function.samefile;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +16,14 @@ import android.widget.TextView;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.function.trash.presenter.Contract;
+import com.jb.filemanager.manager.PackageManagerLocker;
+import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
+import com.jb.filemanager.util.images.ImageFetcher;
+import com.jb.filemanager.util.images.ImageUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -24,8 +34,15 @@ import java.util.ArrayList;
 public class FileExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener{
     GroupList<String, FileInfo> mGroupList;
     private ItemChooseChangeListener mChooseChangeListener;
-    public FileExpandableListAdapter(@NonNull ItemChooseChangeListener chooseChangeListener) {
+    private ImageFetcher mImageFetcher;
+    private Context mContext;
+    public FileExpandableListAdapter(Context context, @NonNull ItemChooseChangeListener chooseChangeListener) {
         mChooseChangeListener = chooseChangeListener;
+        mContext = context;
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        int mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
+        mImageFetcher = ImageUtils.createImageFetcher((SameFileActivity)context, mImageSize, R.drawable.img_picture);
+
     }
 
     @Override
@@ -106,10 +123,12 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         }
         FileInfo fileInfo = mGroupList.valueAt(groupPosition).get(childPosition);
         Const.FILE_TYPE fileType = mGroupList.valueAt(groupPosition).get(childPosition).mFileType;
-
+        // Set Icon
         switch (fileType) {
             case APP:
                 holder.mIvIcon.setImageResource(R.drawable.app_icon);
+                holder.mIvIcon.setImageDrawable(PackageManagerLocker.getInstance()
+                        .getApplicationIconByPath(fileInfo.mFullPath, 120, 120));
                 break;
             case DOC:
                 holder.mIvIcon.setImageResource(R.drawable.doc_icon);
@@ -125,9 +144,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 break;
             case VIDEO:
                 holder.mIvIcon.setImageResource(R.drawable.video_icon);
+                mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case PICTURE:
                 holder.mIvIcon.setImageResource(R.drawable.img_picture);
+                mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case ZIP:
                 holder.mIvIcon.setImageResource(R.drawable.zip_icon);
@@ -146,6 +167,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
                 TimeUtil.getMSTime(fileInfo.mDuration));
         holder.savePosition(groupPosition, childPosition, fileInfo);
+
         return convertView;
     }
 
@@ -176,7 +198,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 notifyDataSetChanged();
                 break;
             case R.id.ll_file_item_container:
-                // Todo Show file by Type
+                // Todo handle file by Type
 
                 break;
             case R.id.iv_music_child_item_select:
