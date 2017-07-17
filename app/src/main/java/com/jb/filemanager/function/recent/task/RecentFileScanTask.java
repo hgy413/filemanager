@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.recent.task;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.recent.bean.BlockBean;
@@ -47,6 +46,7 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
             File root = new File(path);
             if (root.isDirectory()) {
                 for (File dir : root.listFiles()) {
+                    if (isCancelled()) return null;
                     scanPath(dir, 0);
                 }
             }
@@ -60,7 +60,6 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
     // 一个文件夹可能不需要BlockBean, 也可能需要一个或多个BlockBean
     // 注意图片和文件不可放到同一个Block
     private void scanPath(File dir, int depth) {
-        Log.e("scan", dir.getPath());
         if (depth > DEPTH_THRESHOLD) return;
         if (!dir.exists() || !dir.isDirectory()) return;
         List<BlockBean> currentDir = new ArrayList<>();
@@ -80,6 +79,7 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
                     boolean isExist = false;
                     int blockTime = RecentFileUtil.calculateWithinMinute(deltaTime);
                     for (BlockBean blockBean : currentDir) {
+                        if (isCancelled()) return;
                         if (blockBean.getWithinTime() == blockTime && (RecentFileUtil
                                 .isPictureType(file.getName()) == blockBean.isPictureType())) {
                             blockBean.addBlockItemFile(file);
@@ -125,13 +125,13 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
         }
     }
 
-    private void sortResult() {
+//    private void sortResult() {
 //        Collections.sort(mGroupList, new Comparator<ZipFileGroupBean>() {
 //            @Override
 //            public int compare(ZipFileGroupBean o1, ZipFileGroupBean o2) {
 //                return (int) (o1.getGroupTime() - o2.getGroupTime());
 //            }
 //        });
-    }
+//    }
 
 }

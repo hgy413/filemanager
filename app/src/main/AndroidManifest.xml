@@ -126,6 +126,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
+        <!-- 最近文件页 -->
+        <activity
+            android:name=".function.recent.RecentFileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <!-- 隐私页 -->
         <activity
             android:name=".function.privacy.PrivacyActivity"
@@ -207,10 +213,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
-        <activity android:name=".function.search.view.SearchActivity"
+        <activity
+            android:name=".function.search.view.SearchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_transparent_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_transparent_bg"
+            android:windowSoftInputMode="stateVisible"/>
 
         <!--清理结果页-->
         <activity
@@ -221,7 +228,7 @@
         <activity
             android:name=".function.applock.activity.AppLockPreActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg" />
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
         <activity
             android:name=".function.applock.activity.AppLockActivity"
             android:screenOrientation="portrait"

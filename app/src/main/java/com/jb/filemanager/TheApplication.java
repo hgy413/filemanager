@@ -233,6 +233,7 @@ public class TheApplication extends Application {
         StorageTipManager.getInstance().toReady();
         //搜索管家启动
         SearchManager.getInstance().toReady();
+        // 最近文件 应用启动时进行全盘扫描
         RecentFileManager.getInstance().scanAllFile();
         // 主进程启动完毕,更新上一次启动的版本号和时间 **这句永远在最后
         appLaunchFinished();
