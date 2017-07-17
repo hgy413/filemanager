@@ -6,7 +6,7 @@ import android.widget.Toast;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.eventbus.FileOperateEvent;
-import com.jb.filemanager.function.apkmanager.AppManagerActivity;
+import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,6 +24,7 @@ import java.util.List;
  */
 
 public class DocManagerPresenter implements DocManagerContract.Presenter{
+    public static final String TAG = "DocManagerPresenter";
     private DocManagerContract.View mView;
     private DocManagerContract.Support mSupport;
 
@@ -62,18 +63,13 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == AppManagerActivity.UNINSTALL_APP_REQUEST_CODE) {
-            //卸载完应用  所有数据重新获取
-            refreshData();
-        } else if (requestCode == AppManagerActivity.SEARCH_RESULT_REQUEST_CODE) {
-            refreshData();//在结果页可能操作了APP  所以刷新数据
-        }
+
     }
 
     @Override
-    public void refreshData() {
+    public void refreshData(boolean keepUserCheck) {
         onCreate(null);
-        mView.refreshList();
+        mView.refreshList(keepUserCheck);
     }
 
     @Override
@@ -92,14 +88,16 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void scanStart() {
+        Logger.d(TAG, "scan start");
         Toast.makeText(TheApplication.getAppContext(), "System Scan Start", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void scanFinished() {
+        Logger.d(TAG, "scan finish");
         Toast.makeText(TheApplication.getAppContext(), "System scan finish ,refresh the list", Toast.LENGTH_SHORT).show();
         //更新数据
-        //refreshData(); 暂时不处理
+        refreshData(true); //暂时不处理
     }
 
     @Override
@@ -136,31 +134,36 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
             handleFileCut(fileOperateEvent);
         }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
-            handleFileDelete(fileOperateEvent);
-        }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
             handleFileRename(fileOperateEvent);
+        }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
+            handleFileDelete(fileOperateEvent);
         }else {
             handleError();
         }
     }
 
     private void handleFileCopy(FileOperateEvent fileOperateEvent) {
-
+        mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
+        Logger.d(TAG, "copy   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
     private void handleFileCut(FileOperateEvent fileOperateEvent) {
-
+        mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
+        mSupport.handleFileDelete(fileOperateEvent.mOldFile.getAbsolutePath());
+        Logger.d(TAG, "cut   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
     private void handleFileDelete(FileOperateEvent fileOperateEvent) {
-        mSupport.handleFileDelete(fileOperateEvent.mOldFile.getAbsolutePath());
+        mSupport.handleFileDelete(fileOperateEvent.mOldFile.getParent());
+        Logger.d(TAG, "delete   " + fileOperateEvent.mOldFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
     private void handleFileRename(FileOperateEvent fileOperateEvent) {
-
+        mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
+        Logger.d(TAG, "rename   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
     private void handleError() {
-
+        Logger.d(TAG, "some thing wrong");
     }
 }

@@ -47,9 +47,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private BottomOperateBar mBobBottomOperator;
 
     private DocManagerAdapter mAdapter;
-    private int mChosenCount;
     private List<DocGroupBean> mAppInfo;
-    private boolean mIsMoreOperatorShown;
     private BroadcastReceiver mScanSdReceiver;
     private SingleFileDetailDialog mSingleFileDetailDialog;
     private MultiFileDetailDialog mMultiFileDetailDialog;
@@ -131,7 +129,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     private void handleBottomDeleteShow(int chosenCount) {
-        mChosenCount = chosenCount;
         if (chosenCount == 0) {
             mBobBottomOperator.setVisibility(View.GONE);
 //            mRlCommonOperateBarContainer.setVisibility(View.GONE);
@@ -174,7 +171,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             @Override
             public void afterRename() {
-
+                handleRename();
             }
 
             @Override
@@ -210,8 +207,9 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     @Override
-    public void refreshList() {
-        mAdapter.setListData(mPresenter.getDocInfo());
+    public void refreshList(boolean keepUserCheck) {
+        List<DocGroupBean> docInfo = mPresenter.getDocInfo();//新获取到的数据
+        mAdapter.setListData(docInfo,keepUserCheck);
     }
 
     @Override
@@ -482,17 +480,26 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     //处理选中的数据
     private void handleDataCopy() {
-
+        refreshTile();
+        //隐藏底部栏
+        mBobBottomOperator.setVisibility(View.GONE);
     }
 
     private void handleDataDelete() {
-        mPresenter.handleFileDelete(mChosenFiles);//处理数据库的删除
+        refreshTile();
         //隐藏底部栏
         mBobBottomOperator.setVisibility(View.GONE);
-        mPresenter.refreshData();
     }
 
     private void handleDataCut() {
+        refreshTile();
+        //隐藏底部栏
+        mBobBottomOperator.setVisibility(View.GONE);
+    }
 
+    private void handleRename() {
+        refreshTile();
+        //隐藏底部栏
+        mBobBottomOperator.setVisibility(View.GONE);
     }
 }

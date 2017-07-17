@@ -18,7 +18,7 @@ public class DocManagerContract {
         void initData();
         void initList();
         void initClick();
-        void refreshList();
+        void refreshList(boolean keepUserCheck);
         void initBroadcastReceiver();
         void releaseBroadcastReceiver();
         void finishActivity();
@@ -35,7 +35,7 @@ public class DocManagerContract {
         void onPause();
         void onDestroy();
         void onActivityResult(int requestCode, int resultCode, Intent data);
-        void refreshData();
+        void refreshData(boolean keepUserCheck);
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
         void scanStart();
@@ -51,5 +51,6 @@ public class DocManagerContract {
         void handleFileDelete(String docPath);
         void handleFileCopy(DocChildBean file);
         void handleFileCut(DocChildBean file);
+        void scanBroadcastReceiver(File file);
     }
 }

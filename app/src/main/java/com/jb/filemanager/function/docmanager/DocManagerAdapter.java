@@ -15,6 +15,7 @@ import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +30,11 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
     private static final String TAG = "mCheckedCount";
     private int mCheckedCount;
     private OnItemChosenListener mOnItemChosenListener;
+    private ArrayList<DocChildBean> mCheckedFile;
 
     public DocManagerAdapter(List<DocGroupBean> groups) {
         super(groups);
+        mCheckedFile = new ArrayList<>();
     }
 
     @Override
@@ -119,10 +122,12 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
 
     public void handleCheckedCount() {
         mCheckedCount = 0;
+        mCheckedFile.clear();
         for (DocGroupBean groupBean : mGroups) {
             List<DocChildBean> children = groupBean.getChildren();
             for (DocChildBean childBean : children) {
                 if (childBean.mIsChecked) {
+                    mCheckedFile.add(childBean);
                     mCheckedCount++;
                 }
             }
@@ -133,11 +138,40 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         Logger.d(TAG, ":    " + mCheckedCount);
     }
 
-    public void setListData(List<DocGroupBean> groups){
+    public void setListData(List<DocGroupBean> groups, boolean keepUserCheck) {
+        if (keepUserCheck) {
+            handleUserChecked(groups);
+        }
         mGroups.clear();
         mGroups.addAll(groups);
 //        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中
         notifyDataSetChanged();
+    }
+
+    private void handleUserChecked(List<DocGroupBean> groups) {
+        //保留用户之前的选中的部分
+        for (DocGroupBean groupBean : groups) {
+            List<DocChildBean> children = groupBean.getChildren();
+            int chosenCount = 0;
+            for (int i = 0; i < children.size(); i++) {
+                DocChildBean childBean = children.get(i);
+                for (DocChildBean child : mCheckedFile) {
+                    if (child.mDocPath.equals(childBean.mDocPath)) {
+                        Logger.d(TAG, "发现目标" + childBean.mDocPath);
+                        childBean.mIsChecked = true;
+                        chosenCount++;
+                        break;
+                    }
+                }
+            }
+            if (chosenCount == 0) {
+                groupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
+            } else if (chosenCount == groupBean.getchildrenSize()) {
+                groupBean.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
+            } else {
+                groupBean.mSelectState = GroupSelectBox.SelectState.MULT_SELECTED;
+            }
+        }
     }
 
     public void setOnItemChosenListener(@NonNull OnItemChosenListener itemChosnListener) {

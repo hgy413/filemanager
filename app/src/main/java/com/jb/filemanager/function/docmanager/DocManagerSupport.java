@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.docmanager;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -8,6 +9,7 @@ import android.provider.MediaStore;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,5 +144,14 @@ public class DocManagerSupport implements DocManagerContract.Support {
         TheApplication.getAppContext().getContentResolver().update(
                 Uri.parse("content://media/external/file"), contentValues,
                 MediaStore.Files.FileColumns._ID + " like ?", new String[]{file.mDocId});
+    }
+
+    @Override
+    public void scanBroadcastReceiver(File file) {
+        //扫描sd的广播在19以后只有系统才能发出   之后只能扫描制定的文件或者文件夹
+        final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        final Uri contentUri = Uri.fromFile(file);
+        scanIntent.setData(contentUri);
+        TheApplication.getAppContext().sendBroadcast(scanIntent);
     }
 }
