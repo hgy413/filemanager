@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.search.view;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -26,10 +27,11 @@ import java.util.ArrayList;
  * 搜索的进度的页面 用户在此页面进行搜索 如果结果出来了就跳转到结果页
  */
 
-public class SearchFragment extends BaseFragment implements SearchContract.View {
+public class SearchFragment extends BaseFragment implements SearchContract.View, View.OnClickListener {
     //搜索输入框
     private EditText mEtSearchInput;
     private ImageView mIvSearchDelete;
+    private ImageView mIvSearch;
     private SearchContract.Presenter mPresenter;
 
     @Nullable
@@ -41,8 +43,16 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mEtSearchInput = (EditText) view.findViewById(R.id.et_action_bar_search);
+
         mIvSearchDelete = (ImageView) view.findViewById(R.id.iv_action_bar_clear_input);
+
+        mIvSearch = (ImageView) view.findViewById(R.id.iv_action_bar_search);
+        if (mIvSearch != null) {
+            mIvSearch.setOnClickListener(this);
+        }
+
         mPresenter = new SearchPresenter(this, new SearchSupport());
         initLogic();
         mPresenter.onViewCreated(mEtSearchInput);
@@ -110,5 +120,18 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
     @Override
     public void tipInputEmpty() {
         Toast.makeText(getContext(), "多输入几个字会死??", Toast.LENGTH_SHORT).show();
+    }
+
+
+    // implements View.OnClickListener
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_action_bar_search:
+                if (mPresenter != null) {
+                    mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
+                }
+                break;
+        }
     }
 }

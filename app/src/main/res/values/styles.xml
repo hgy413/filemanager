@@ -39,6 +39,8 @@
     <!--带有window背景的主题 透明背景-->
     <style name="AppTheme.NoActionBar_TranslucentBar_with_transparent_bg" parent="AppTheme.NoActionBar_TranslucentBar_without_bg">
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation_NoAnimation</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!-- 自定义弹出框基础样式， 自定义样式的Dialog如需定义theme, 请继承此theme -->

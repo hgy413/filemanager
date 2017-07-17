@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="#7f000000"
     android:orientation="vertical">
 
@@ -59,6 +59,13 @@
                 android:scaleType="center" />
 
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_action_bar_search"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_bar_search"/>
 
     </LinearLayout>
 
