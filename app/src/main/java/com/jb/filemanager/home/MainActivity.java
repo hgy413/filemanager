@@ -444,11 +444,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                     mPresenter.onClickDrawerButton();
                 }
                 break;
-            case R.id.iv_main_action_bar_back:
-                if (mPresenter != null) {
-                    mPresenter.onClickActionBackButton();
-                }
-                break;
             case R.id.iv_main_action_bar_search:
                 if (mPresenter != null) {
                     mPresenter.onClickActionSearchButton();

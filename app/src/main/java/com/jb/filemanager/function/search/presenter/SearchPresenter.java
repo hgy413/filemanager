@@ -75,4 +75,19 @@ public class SearchPresenter implements SearchContract.Presenter {
             TheApplication.getGlobalEventBus().unregister(mSearchFinishMainThreadSubscriber);
         }
     }
+
+
+    @Override
+    public void onClickBackButton(boolean systemBack) {
+        if (mView != null) {
+            mView.finishActivity();
+        }
+    }
+
+    @Override
+    public void onCLickClearInputButton() {
+        if (mView != null) {
+            mView.clearInput();
+        }
+    }
 }

@@ -15,7 +15,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/iv_main_action_bar_back"
+            android:id="@+id/iv_common_action_bar_back"
             android:layout_width="52dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"

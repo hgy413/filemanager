@@ -1,6 +1,5 @@
 package com.jb.filemanager.function.search.view;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -44,9 +43,34 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ImageView ivBack = (ImageView) view.findViewById(R.id.iv_common_action_bar_back);
+        if (ivBack != null) {
+            ivBack.setOnClickListener(this);
+        }
+
         mEtSearchInput = (EditText) view.findViewById(R.id.et_action_bar_search);
+        if (mEtSearchInput != null) {
+            mEtSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (mQuickClickGuard.isQuickClick(v.getId())) {
+                        return false;
+                    }
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        if (mPresenter != null) {
+                            mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
 
         mIvSearchDelete = (ImageView) view.findViewById(R.id.iv_action_bar_clear_input);
+        if (mIvSearchDelete != null) {
+            mIvSearchDelete.setOnClickListener(this);
+        }
 
         mIvSearch = (ImageView) view.findViewById(R.id.iv_action_bar_search);
         if (mIvSearch != null) {
@@ -54,38 +78,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
         }
 
         mPresenter = new SearchPresenter(this, new SearchSupport());
-        initLogic();
         mPresenter.onViewCreated(mEtSearchInput);
-    }
-
-    /**
-     * 初始化逻辑
-     * */
-    private void initLogic() {
-        mIvSearchDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!mQuickClickGuard.isQuickClick(v.getId())){
-                    mEtSearchInput.setText("");
-                }
-            }
-        });
-
-        mEtSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (mQuickClickGuard.isQuickClick(v.getId())) {
-                    return false;
-                }
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (mPresenter != null) {
-                        mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -122,14 +115,44 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
         Toast.makeText(getContext(), "多输入几个字会死??", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void clearInput() {
+        if (mEtSearchInput != null) {
+            mEtSearchInput.setText("");
+        }
+    }
+
+    @Override
+    public void finishActivity() {
+        getActivity().finish();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mPresenter != null) {
+            mPresenter.onClickBackButton(true);
+            return true;
+        }
+        return super.onBackPressed();
+    }
 
     // implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_common_action_bar_back:
+                if (mPresenter != null) {
+                    mPresenter.onClickBackButton(false);
+                }
+                break;
             case R.id.iv_action_bar_search:
                 if (mPresenter != null) {
                     mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
+                }
+                break;
+            case R.id.iv_action_bar_clear_input:
+                if (mPresenter != null) {
+                    mPresenter.onCLickClearInputButton();
                 }
                 break;
         }

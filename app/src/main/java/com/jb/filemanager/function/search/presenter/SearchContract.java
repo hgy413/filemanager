@@ -19,12 +19,18 @@ public interface SearchContract {
         void dissmissLoading();
         void showResult(ArrayList<FileInfo> fileInfoList);
         void tipInputEmpty();
+
+        void clearInput();
+        void finishActivity();
     }
 
     interface Presenter {
         void onViewCreated(EditText editText);
         void search(String input, Activity activity);
         void release();
+
+        void onClickBackButton(boolean systemBack);
+        void onCLickClearInputButton();
     }
 
     interface Support {
