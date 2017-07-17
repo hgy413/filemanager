@@ -16,19 +16,6 @@ public interface SameFileContract {
 
         void showFileList(GroupList<String, FileInfo> mMusicMaps);
 
-        //        if (rename != null) {
-        //            rename.getPaint().setAntiAlias(true);
-        //            rename.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    if (mPresenter != null) {
-        //                        mPresenter.onClickOperateRenameButton();
-        //                    }
-        //                    popupWindow.dismiss();
-        //                }
-        //            });
-        //        }
-        //    }
         void onNoFileFindShow();
     }
 
@@ -42,13 +29,6 @@ public interface SameFileContract {
         ArrayList<File> getSelectFile();
 
         void jumpToStoragePage();
-
-
-//        void onClickConfirmDeleteButton(boolean[] selectedPosition);
-//
-//        void onClickOperateDetailButton();
-//
-//        void onClickOperateRenameButton();
     }
 
     interface Support {

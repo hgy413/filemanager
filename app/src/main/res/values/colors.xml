@@ -81,6 +81,7 @@
     <color name="dark_gray">#363636</color>
     <color name="middle_gray">#404040</color>
     <color name="light_gray">#4c4c4c</color>
+    <color name="light_gray1">#d4d4d6</color>
 
 
     <!--文字样式-->

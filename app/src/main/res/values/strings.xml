@@ -365,7 +365,6 @@
     <string name="home_button_clean">Clean</string>
     <string name="doc_manager_title_select_mode">%1$d file(s) selected</string>
     <string name="item_count">(%1$d)</string>
-    <string name="no_file_hint">没有文件</string>
 
     <!--通用标题栏-->
     <string name="common_title_bar_choose_tip">%1$d File(s) selected</string>
@@ -376,5 +375,5 @@
     <string name="search_result_title">P(%1$d Items)</string>
     <string name="search_result_empty_tips">No items</string>
 
-
+    <string name="no_file_hint">No items</string>
 </resources>
