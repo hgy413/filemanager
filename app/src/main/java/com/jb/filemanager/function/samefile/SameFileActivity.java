@@ -4,19 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
-import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
-import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 import java.io.File;
@@ -116,29 +111,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             }
         });
 
-        // TODO @bool
-//        mBottomOperateContainer.onClickedAction(new BottomOperateBar.OnBottomClicked() {
-//            @Override
-//            public void onCutClicked() {
-//                mPresenter.onClickOperateCutButton(mItemSelected);
-//            }
-//
-//            @Override
-//            public void onCopyClicked() {
-//                mPresenter.onClickOperateCopyButton(mItemSelected);
-//            }
-//
-//            @Override
-//            public void onDeleteClicked() {
-//                mPresenter.onClickOperateDeleteButton();
-//
-//            }
-//
-//            @Override
-//            public void onMoreClicked() {
-//                mPresenter.onClickOperateMoreButton(mItemSelected);
-//            }
-//        });
         mLlNoFileView = (LinearLayout)findViewById(R.id.ll_no_file);
     }
 
@@ -230,88 +202,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         }
     }
 
-//    @Override
-//    public void showDeleteConfirmDialog() {
-//        DeleteFileDialog dialog = new DeleteFileDialog(this, new DeleteFileDialog.Listener() {
-//            @Override
-//            public void onConfirm(DeleteFileDialog dialog) {
-//                dialog.dismiss();
-//                if (mPresenter != null) {
-//                    mPresenter.onClickConfirmDeleteButton(mItemSelected);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancel(DeleteFileDialog dialog) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-//    }
-
-//    @Override
-//    public void showBottomMoreOperatePopWindow(boolean multiSelected) {
-//        int resId;
-//        if (multiSelected) {
-//            resId = R.layout.pop_mutli_file_operate_more;
-//        } else {
-//            resId = R.layout.pop_single_file_operate_more;
-//        }
-
-//        // 一个自定义的布局，作为显示的内容
-//        View contentView = getLayoutInflater().inflate(resId, null);
-//        TextView details = (TextView) contentView.findViewById(R.id.tv_main_operate_more_detail);
-//        TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
-//
-//        final PopupWindow popupWindow = new PopupWindow(contentView,
-//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-//
-//        popupWindow.setTouchable(true);
-//
-//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return false;
-//                // 这里如果返回true的话，touch事件将被拦截
-//                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-//            }
-//        });
-//
-//        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-//        // 我觉得这里是API的一个bug
-//        popupWindow.setBackgroundDrawable(APIUtil.getDrawable(this, R.color.white));
-//
-//        // 设置好参数之后再show
-//        popupWindow.showAsDropDown(mBottomOperateContainer,
-//                mBottomOperateContainer.getWidth() - contentView.getWidth(), 5);
-//
-//        if (details != null) {
-//            details.getPaint().setAntiAlias(true);
-//            details.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mPresenter != null) {
-//                        mPresenter.onClickOperateDetailButton();
-//                    }
-//                    popupWindow.dismiss();
-//                }
-//            });
-//        }
-
-//        if (rename != null) {
-//            rename.getPaint().setAntiAlias(true);
-//            rename.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mPresenter != null) {
-//                        mPresenter.onClickOperateRenameButton();
-//                    }
-//                    popupWindow.dismiss();
-//                }
-//            });
-//        }
-//    }
     @Override
     public void onNoFileFindShow () {
         mLlNoFileView.setVisibility(View.VISIBLE);

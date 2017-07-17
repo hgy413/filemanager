@@ -92,69 +92,69 @@ public class SameFileSupport implements SameFileContract.Support {
         for (FileInfo info : infoList) {
             if (info.mFullPath.endsWith("zip") || info.mFullPath.endsWith("tar.jz")) {
                 info.mFileType = Const.FILE_TYPE.ZIP;
-                list = infoGroupList.get("zip");
+                list = infoGroupList.get("Zip");
                 if (null == list) {
                     list = new ArrayList();
-                    infoGroupList.put("zip",list);
+                    infoGroupList.put("Zip",list);
                 }
                 list.add(info);
                 continue;
             }
             if (info.mFullPath.endsWith("mp4") || info.mFullPath.endsWith("avi")) {
                 info.mFileType = Const.FILE_TYPE.VIDEO;
-                list = infoGroupList.get("VIDEO");
+                list = infoGroupList.get("Video");
                 if (null == list) {
                     list = new ArrayList();
-                    infoGroupList.put("VIDEO", list);
+                    infoGroupList.put("Video", list);
                 }
                 list.add(info);
                 continue;
             }
             if (info.mFullPath.endsWith("mp3") || info.mFullPath.endsWith("acc")) {
                 info.mFileType = Const.FILE_TYPE.VIDEO;
-                list = infoGroupList.get("MUSIC");
+                list = infoGroupList.get("Music");
                 if (null == list) {
                     list = new ArrayList();
-                    infoGroupList.put("MUSIC", list);
+                    infoGroupList.put("Music", list);
                 }
                 list.add(info);
                 continue;
             }
             if (info.mFullPath.endsWith("doc") || info.mFullPath.endsWith("docx")) {
                 info.mFileType = Const.FILE_TYPE.DOC;
-                list = infoGroupList.get("DOCUMENT");
+                list = infoGroupList.get("Document");
                 if (null == list) {
                     list = new ArrayList();
-                    infoGroupList.put("DOCUMENT", list);
+                    infoGroupList.put("Document", list);
                 }
                 list.add(info);
                 continue;
             }
             if (info.mFullPath.endsWith("txt") ) {
                 info.mFileType = Const.FILE_TYPE.DOC;
-                list = infoGroupList.get("TXT");
+                list = infoGroupList.get("Txt");
                 if (null == list) {
                     list = new ArrayList();
-                    infoGroupList.put("TXT", list);
+                    infoGroupList.put("Txt", list);
                 }
                 list.add(info);
                 continue;
             }
             if (info.mFullPath.endsWith("pdf")) {
                 info.mFileType = Const.FILE_TYPE.DOC;
-                list = infoGroupList.get("PDF");
+                list = infoGroupList.get("Pdf");
                 if (null == list) {
                     list = new ArrayList();
-                    infoGroupList.put("PDF", list);
+                    infoGroupList.put("Pdf", list);
                 }
                 list.add(info);
                 continue;
             }
             info.mFileType = Const.FILE_TYPE.OTHER;
-            list = infoGroupList.get("OTHER");
+            list = infoGroupList.get("Other");
             if (null == list) {
                 list = new ArrayList();
-                infoGroupList.put("OTHER", list);
+                infoGroupList.put("Other", list);
             }
             list.add(info);
         }

@@ -74,7 +74,8 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         } else {
             groupViewHolder = (GroupViewHolder)convertView.getTag();
         }
-        groupViewHolder.mTvTitle.setText(mGroupList.keyAt(groupPosition));
+        groupViewHolder.mTvTitle.setText(mGroupList.keyAt(groupPosition) +
+                "(" +mGroupList.valueAt(groupPosition).size() + ")");
         groupViewHolder.mIvSelect.setState(getGroupSelectState(groupPosition));
         groupViewHolder.mIvSelect.setTag(groupPosition);
         return convertView;
