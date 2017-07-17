@@ -163,6 +163,13 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public void onClickSearchMask() {
+        if (mView != null) {
+            mView.showNormalStatus(mCurrentTab);
+        }
+    }
+
+    @Override
     public boolean onClickConfirmCreateFolderButton(String name) {
         return FileUtil.createFolder(mCurrentPath + File.separator + name);
     }

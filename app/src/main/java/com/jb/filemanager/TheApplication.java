@@ -197,6 +197,9 @@ public class TheApplication extends Application {
     }
 
     private void onCreateForMainProcess() {
+        // 初始化统计
+        initStatistics();
+
         // 初始化8小时定期上传统计
         initEightUploadStatistic();
 
@@ -205,9 +208,6 @@ public class TheApplication extends Application {
 
         // 初始化ABTest
         initABTest();
-
-        // 初始化统计
-        initStatistics();
 
         // 初始化买量SDK
         BuyUserManager.initSingleton(getAppContext());

@@ -38,6 +38,15 @@
             android:textColor="#B2000000"
             android:textSize="20dp" />
 
+        <ImageView
+            android:id="@+id/iv_main_action_bar_back"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/action_bar_back_drawable_selector_blue"
+            android:visibility="gone"/>
+        
         <EditText
             android:id="@+id/et_main_action_bar_search"
             android:layout_width="0dp"

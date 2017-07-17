@@ -60,8 +60,10 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private ImageView mIvActionBarMenu;
     private TextView mTvActionBarTitle;
     private EditText mEtActionBarSearch;
+    private ImageView mIvActionBarBack;
     private ImageView mIvActionBarSearch;
     private ImageView mIvActionBarMore;
+    private View mViewSearchMask;
 
     private PhoneStoragePagerAdapter mPagerAdapter;
     private ViewPager mVpPhoneStorage;
@@ -73,7 +75,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     //应用更新提醒
     private AppUpdatePresenter mAppUpdatePresenter;
 
-    private View mViewSearchMask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +185,11 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             mEtActionBarSearch.setOnClickListener(this);
         }
 
+        mIvActionBarBack = (ImageView) findViewById(R.id.iv_main_action_bar_back);
+        if (mIvActionBarBack != null) {
+            mIvActionBarBack.setOnClickListener(this);
+        }
+
         mIvActionBarSearch = (ImageView) findViewById(R.id.iv_main_action_bar_search);
         if (mIvActionBarSearch != null) {
             mIvActionBarSearch.setOnClickListener(this);
@@ -199,6 +205,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         mViewSearchMask.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (mPresenter != null) {
+                    mPresenter.onClickSearchMask();
+                }
                 return true;
             }
         });
@@ -486,6 +495,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 if (mPresenter != null) {
                     mPresenter.onClickDrawerButton();
                 }
+                break;
+            case R.id.iv_main_action_bar_back:
+                // TODO
                 break;
             case R.id.iv_main_action_bar_search:
                 if (mPresenter != null) {

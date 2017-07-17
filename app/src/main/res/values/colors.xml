@@ -33,6 +33,9 @@
     <color name="main_category_info_apps_color">#68E0FF</color>
     <color name="main_category_info_other_color">#6CAAFF</color>
     <color name="main_category_info_unused_color">#EBEBFF</color>
+    <color name="main_category_item_bg_normal">#FFFFFF</color>
+    <color name="main_category_item_bg_pressed">#F5F6FF</color>
+    <color name="main_category_item_bg_mask">#E7E9F3</color>
 
     <!-- about -->
     <color name="about_item_pressed">#EEEEEE</color>

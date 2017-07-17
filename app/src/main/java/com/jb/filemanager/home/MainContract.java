@@ -42,6 +42,7 @@ public class MainContract {
         void onClickActionMoreButton();
         void onClickActionNewFolderButton();
         void onClickActionSortByButton();
+        void onClickSearchMask();
 
         boolean onClickConfirmCreateFolderButton(String name);
 
