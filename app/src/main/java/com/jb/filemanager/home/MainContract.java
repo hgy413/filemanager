@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
-import java.io.File;
-import java.util.ArrayList;
-
 /**
  * Created by bill wang on 2017/6/21.
  *
@@ -16,7 +13,6 @@ public class MainContract {
 
     interface View {
         void showNormalStatus(int tabPos);
-        void showSearchStatus();
         void showActionMoreOperatePopWindow();
 
         void showNewFolderDialog();
@@ -25,6 +21,8 @@ public class MainContract {
 
         void openDrawer(int openType);
         void finishActivity();
+
+        void goToSearchActivity();
     }
 
     public interface Presenter {
@@ -43,7 +41,6 @@ public class MainContract {
         void onClickActionMoreButton();
         void onClickActionNewFolderButton();
         void onClickActionSortByButton();
-        void onClickSearchMask();
 
         boolean onClickConfirmCreateFolderButton(String name);
 

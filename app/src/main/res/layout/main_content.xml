@@ -39,27 +39,6 @@
             android:textSize="20dp" />
 
         <ImageView
-            android:id="@+id/iv_main_action_bar_back"
-            android:layout_width="52dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="center"
-            android:src="@drawable/action_bar_back_drawable_selector_blue"
-            android:visibility="gone"/>
-        
-        <EditText
-            android:id="@+id/et_main_action_bar_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="@string/app_name"
-            android:textColor="#000000"
-            android:textSize="18dp"
-            android:inputType="text"
-            android:visibility="gone"/>
-
-        <ImageView
             android:id="@+id/iv_main_action_bar_search"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -105,13 +84,6 @@
             android:layout_height="6dp"
             android:layout_marginTop="50dp"
             android:background="@drawable/main_shadow"/>
-
-        <View
-            android:id="@+id/view_home_search_mask"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#77000000"
-            android:visibility="gone"/>
 
     </FrameLayout>
 </LinearLayout>

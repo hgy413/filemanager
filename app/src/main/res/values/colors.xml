@@ -43,6 +43,8 @@
     <!-- common -->
     <color name="common_status_bar_bg">#1C72B4</color>
     <color name="common_action_bar_bg">#4FABFF</color>
+    <color name="common_action_bar_search_under_line">#BABABA</color>
+    <color name="common_action_bar_search_cursor_color">#39BDAC</color>
 
     <!-- feedback -->
     <color name="feedback_drop_box_background_pressed">#FFFFFF</color>

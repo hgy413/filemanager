@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ import com.jb.filemanager.function.rate.dialog.RateToGpDialog;
 import com.jb.filemanager.function.rate.presenter.RateContract;
 import com.jb.filemanager.function.rate.presenter.RatePresenter;
 import com.jb.filemanager.function.rate.presenter.RateSupport;
+import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.splash.SplashActivity;
 import com.jb.filemanager.function.update.AppUpdatePresenter;
 import com.jb.filemanager.home.event.SortByChangeEvent;
@@ -59,11 +59,8 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     private ImageView mIvActionBarMenu;
     private TextView mTvActionBarTitle;
-    private EditText mEtActionBarSearch;
-    private ImageView mIvActionBarBack;
     private ImageView mIvActionBarSearch;
     private ImageView mIvActionBarMore;
-    private View mViewSearchMask;
 
     private PhoneStoragePagerAdapter mPagerAdapter;
     private ViewPager mVpPhoneStorage;
@@ -179,17 +176,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             mTvActionBarTitle.getPaint().setAntiAlias(true);
         }
 
-        mEtActionBarSearch = (EditText) findViewById(R.id.et_main_action_bar_search);
-        if (mEtActionBarSearch != null) {
-            mEtActionBarSearch.getPaint().setAntiAlias(true);
-            mEtActionBarSearch.setOnClickListener(this);
-        }
-
-        mIvActionBarBack = (ImageView) findViewById(R.id.iv_main_action_bar_back);
-        if (mIvActionBarBack != null) {
-            mIvActionBarBack.setOnClickListener(this);
-        }
-
         mIvActionBarSearch = (ImageView) findViewById(R.id.iv_main_action_bar_search);
         if (mIvActionBarSearch != null) {
             mIvActionBarSearch.setOnClickListener(this);
@@ -199,18 +185,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         if (mIvActionBarMore != null) {
             mIvActionBarMore.setOnClickListener(this);
         }
-
-        // Mask 显示后要屏蔽触摸事件
-        mViewSearchMask = findViewById(R.id.view_home_search_mask);
-        mViewSearchMask.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mPresenter != null) {
-                    mPresenter.onClickSearchMask();
-                }
-                return true;
-            }
-        });
 
         mVpPhoneStorage = (ViewPager) findViewById(R.id.vp_main_phone_storage);
         if (mVpPhoneStorage != null) {
@@ -269,14 +243,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 break;
         }
 
-        if (mIvActionBarBack != null) {
-            mIvActionBarBack.setVisibility(View.GONE);
-        }
-
-        if (mEtActionBarSearch != null) {
-            mEtActionBarSearch.setVisibility(View.GONE);
-        }
-
         if (mIvActionBarMenu != null) {
             mIvActionBarMenu.setVisibility(View.VISIBLE);
         }
@@ -287,38 +253,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
         if (mIvActionBarMore != null) {
             mIvActionBarMore.setVisibility(moreButtonStatus);
-        }
-
-        if (mViewSearchMask != null) {
-            mViewSearchMask.setVisibility(View.GONE);
-        }
-
-    }
-
-    @Override
-    public void showSearchStatus() {
-        if (mIvActionBarBack != null) {
-            mIvActionBarBack.setVisibility(View.VISIBLE);
-        }
-
-        if (mEtActionBarSearch != null) {
-            mEtActionBarSearch.setVisibility(View.VISIBLE);
-        }
-
-        if (mIvActionBarMenu != null) {
-            mIvActionBarMenu.setVisibility(View.GONE);
-        }
-
-        if (mTvActionBarTitle != null) {
-            mTvActionBarTitle.setVisibility(View.GONE);
-        }
-
-        if (mIvActionBarMore != null) {
-            mIvActionBarMore.setVisibility(View.GONE);
-        }
-
-        if (mViewSearchMask != null) {
-            mViewSearchMask.setVisibility(View.VISIBLE);
         }
     }
 
@@ -490,6 +424,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     @Override
     public void finishActivity() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void goToSearchActivity() {
+        // TODO @wangzq
+        startActivity(new Intent(this, SearchActivity.class));
     }
 
     // implements View.OnClickListener

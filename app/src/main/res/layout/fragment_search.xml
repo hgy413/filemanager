@@ -1,48 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage,ContentDescription"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#7f000000"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/fragment_search_titlelayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#0000FF"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/fragment_search_title_search_input"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:inputType="text"
-            android:textColor="#000000"
-            android:textSize="18dp"
-            android:maxLines="1"
-            android:imeOptions="actionSearch"
-            android:visibility="visible">
-
-            <requestFocus/>
-        </EditText>
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/white">
 
         <ImageView
-            android:id="@+id/fragment_search_title_search_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_action_bar_search"/>
+            android:id="@+id/iv_main_action_bar_back"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/action_bar_back_drawable_selector_blue" />
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_main_action_bar_search_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_action_bar_search_container">
+
+            <EditText
+                android:id="@+id/et_action_bar_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/iv_action_bar_clear_input"
+                android:layout_toStartOf="@+id/iv_action_bar_clear_input"
+                android:background="@null"
+                android:hint="@string/common_search"
+                android:textColor="@color/black_70"
+                android:textColorHint="@color/black_20"
+                android:textCursorDrawable="@drawable/common_action_bar_search_cursor"
+                android:textSize="18dp"
+                android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/iv_action_bar_clear_input"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_search_delete"
+                android:scaleType="center" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <View
         android:id="@+id/fragment_search_transparent_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fragment_search_titlelayout"
         android:background="#7f000000"/>
 
     <!--中间有一个加载动画-->
 
-</RelativeLayout>
+</LinearLayout>

@@ -2,17 +2,13 @@ package com.jb.filemanager.home;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
-import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Created by bill wang on 2017/6/21.
@@ -47,7 +43,6 @@ public class MainPresenter implements MainContract.Presenter {
     private MainContract.View mView;
     private MainContract.Support mSupport;
 
-    private boolean mIsInSearchMode;
     private int mCurrentTab = 0;
 
     private long mExitTime;
@@ -96,16 +91,11 @@ public class MainPresenter implements MainContract.Presenter {
     public void onClickBackButton(boolean systemBack) {
         if (mView != null) {
             if (systemBack) {
-                if (mIsInSearchMode) {
-                    mIsInSearchMode = false;
-                    mView.showNormalStatus(mCurrentTab);
+                if (System.currentTimeMillis() - mExitTime > 2000) {
+                    mExitTime = System.currentTimeMillis();
+                    Toast.makeText(mSupport.getContext(), R.string.main_double_click_exit_app_tips, Toast.LENGTH_SHORT).show();
                 } else {
-                    if (System.currentTimeMillis() - mExitTime > 2000) {
-                        mExitTime = System.currentTimeMillis();
-                        Toast.makeText(mSupport.getContext(), R.string.main_double_click_exit_app_tips, Toast.LENGTH_SHORT).show();
-                    } else {
-                        mView.finishActivity();
-                    }
+                    mView.finishActivity();
                 }
             } else {
                 // 首页没有非系统返回
@@ -143,8 +133,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void onClickActionSearchButton() {
         if (mView != null) {
-            mIsInSearchMode = true;
-            mView.showSearchStatus();
+            mView.goToSearchActivity();
         }
     }
 
@@ -166,13 +155,6 @@ public class MainPresenter implements MainContract.Presenter {
     public void onClickActionSortByButton() {
         if (mView != null) {
             mView.showSortByDialog();
-        }
-    }
-
-    @Override
-    public void onClickSearchMask() {
-        if (mView != null) {
-            mView.showNormalStatus(mCurrentTab);
         }
     }
 

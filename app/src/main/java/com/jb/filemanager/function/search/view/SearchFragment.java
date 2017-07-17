@@ -28,8 +28,8 @@ import java.util.ArrayList;
 
 public class SearchFragment extends BaseFragment implements SearchContract.View {
     //搜索输入框
-    private EditText mSearchInput;
-    private ImageView mDeleteBtu;
+    private EditText mEtSearchInput;
+    private ImageView mIvSearchDelete;
     private SearchContract.Presenter mPresenter;
 
     @Nullable
@@ -41,27 +41,27 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mSearchInput = (EditText) view.findViewById(R.id.fragment_search_title_search_input);
-        mDeleteBtu = (ImageView) view.findViewById(R.id.fragment_search_title_search_icon);
+        mEtSearchInput = (EditText) view.findViewById(R.id.et_action_bar_search);
+        mIvSearchDelete = (ImageView) view.findViewById(R.id.iv_action_bar_clear_input);
         mPresenter = new SearchPresenter(this, new SearchSupport());
         initLogic();
-        mPresenter.onViewCreated(mSearchInput);
+        mPresenter.onViewCreated(mEtSearchInput);
     }
 
     /**
      * 初始化逻辑
      * */
     private void initLogic() {
-        mDeleteBtu.setOnClickListener(new View.OnClickListener() {
+        mIvSearchDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!mQuickClickGuard.isQuickClick(v.getId())){
-                    mSearchInput.setText("");
+                    mEtSearchInput.setText("");
                 }
             }
         });
 
-        mSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mEtSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (mQuickClickGuard.isQuickClick(v.getId())) {
@@ -69,7 +69,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
                 }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (mPresenter != null) {
-                        mPresenter.search(mSearchInput.getText().toString(), getActivity());
+                        mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
                     }
                     return true;
                 }
