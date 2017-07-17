@@ -2,34 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#FFEEEEEE">
+                android:fitsSystemWindows="true"
+                android:background="#f6f6ff">
 
     <include
-        android:id="@+id/filebrowser_title_layout"
-        layout="@layout/common_title_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentTop="true"/>
+        android:id="@+id/ll_title"
+        layout="@layout/common_action_bar_without_search_blue_back"/>
 
     <View
         android:id="@+id/bg_color"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_below="@id/filebrowser_title_layout"
+        android:layout_height="40dp"
+        android:layout_below="@id/ll_title"
+        android:background="@color/white"
         />
 
     <View
-        android:id="@+id/bg_streak_view"
+        android:layout_below="@id/ll_title"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_below="@id/filebrowser_title_layout"
-        android:background="@drawable/storage_main_act_bg"/>
-
+        android:background="@color/list_divider_line_color_e7e9f3"
+        android:layout_height="1dp"/>
     <com.jb.filemanager.function.fileexplorer.BreadcrumbNavigation
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/filebrowser_title_layout"
+        android:layout_below="@id/ll_title"
         android:overScrollMode="never"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -38,7 +36,7 @@
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"/>
     </com.jb.filemanager.function.fileexplorer.BreadcrumbNavigation>
@@ -46,6 +44,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
         android:layout_below="@id/navigation">
 
         <ListView

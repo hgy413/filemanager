@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:drawablePadding="15dp"
-    android:drawableTop="@drawable/filebrowser_nofiles"
+    android:drawableTop="@drawable/empty_img"
     android:gravity="center"
     android:textColor="#FFDDDDDD"
     android:textSize="17sp"

@@ -1,10 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:background="@drawable/dialog_item_selector"
-    android:ellipsize="middle"
-    android:gravity="center"
-    android:singleLine="true"
-    android:textColor="#FF777777"
-    android:textSize="16sp" />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog_backup"
+    tools:background="@color/colorAccent">
+
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:paddingLeft="24dp"
+        android:text="@string/file_open_as"
+        android:textColor="@color/black_70"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_type_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingTop="20dp"
+        android:text="@string/filetype_text"
+        android:textColor="@color/main_category_info_storage_value_color"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_type_audio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingTop="20dp"
+        android:text="@string/filetype_audio"
+        android:textColor="@color/main_category_info_storage_value_color"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_type_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingTop="20dp"
+        android:text="@string/filetype_video"
+        android:textColor="@color/main_category_info_storage_value_color"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_type_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:paddingLeft="24dp"
+        android:paddingTop="24dp"
+        android:text="@string/filetype_image"
+        android:textColor="@color/main_category_info_storage_value_color"
+        android:textSize="16sp"/>
+</LinearLayout>

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.function.scanframe.clean.FileInfo;
-import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.IntentUtil;
 import com.jb.filemanager.util.file.FileSizeFormatter;
 
@@ -94,10 +92,9 @@ public class FileBrowserActivity extends ListActivity implements
     private ArrayList<FileInfo> mFileInfos = new ArrayList<FileInfo>();
     private FilesAdapter mFilesAdapter;
 
-    private CommonTitle mTitle;
     private BreadcrumbNavigation mNavigation;
 
-    private ListItemDialog mDialog;
+    private NewListItemDialog mDialog;
 
     /**
      * 记录路径堆栈，以便后退
@@ -106,8 +103,7 @@ public class FileBrowserActivity extends ListActivity implements
     /**
      * 主题相关
      */
-    private View mBgColorView = null;
-    private View mBgStreakView = null;
+    private TextView mTvCommonActionBarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,34 +111,23 @@ public class FileBrowserActivity extends ListActivity implements
         //ColorStatusBarUtil.transparentStatusBar(this);
 
         setContentView(R.layout.activity_filebrowser);
-        mTitle = (CommonTitle) findViewById(R.id.filebrowser_title_layout);
-        mTitle.setBackgroundColor(Color.parseColor("#FF76B54B"));
-        mTitle.setOnBackListener(this);
+        mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
+        mTvCommonActionBarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         CommonEmptyView empty = (CommonEmptyView) findViewById(android.R.id.empty);
         empty.setTips(R.string.clean_file_browser_no_files);
         mNavigation = (BreadcrumbNavigation) findViewById(R.id.navigation);
         mNavigation.setOnBreadcrumbClickListener(this);
-        // 主题
-        mBgColorView = findViewById(R.id.bg_color);
-        GradientDrawable temperatureBg = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{Color.parseColor("#0084ff"), Color.parseColor("#3bd6f2")});
-        temperatureBg.setShape(GradientDrawable.RECTANGLE);
-        APIUtil.setBackground(mBgColorView, temperatureBg);
-        mBgStreakView = findViewById(R.id.bg_streak_view);
-//        String theme = LauncherModel.getInstance().getSettingManager().getAppTheme();
-//        if (theme.equals(ThemeConstant.THEME_ID_CLASSIC)) {
-//        	mBgColorView.setBackgroundColor(ColorPatternV2.GREEN);
-//        	mBgStreakView.setVisibility(View.GONE);
-//        } else if (theme.equals(ThemeConstant.THEME_ID_SIMPLE)) {
-//        	mBgColorView.setBackgroundColor(ColorPatternV2.GRAY);
-//        	mBgStreakView.setVisibility(View.VISIBLE);
-//        }
 
         // 获取路径参数
         String filePath = null;
         Intent intent = getIntent();
         if (intent != null) {
-            mTitle.setTitleName(intent.getStringExtra(EXTRA_TITLE));
+//            mTitle.setTitleName(intent.getStringExtra(EXTRA_TITLE));
             mBaseDirs = intent.getStringArrayExtra(EXTRA_DIRS);
             if (mBaseDirs == null) {
                 filePath = intent.getStringExtra(EXTRA_FOCUS_FILE);
@@ -291,16 +276,13 @@ public class FileBrowserActivity extends ListActivity implements
             }
             FileInfo fileInfo = getItem(position);
             item.mFileName.setText(fileInfo.mFileName);
-            item.mFileTime.setText(fileInfo.mTime);
             if (fileInfo.isFile()) {
-                toggleFilesize(item, View.VISIBLE);
                 FileSizeFormatter.FileSize fz = FileSizeFormatter.formatFileSize(fileInfo.mSize);
-                item.mFileSize.setText(fz.mSize);
-                item.mUnit.setText(fz.mUnit.mFullValue);
-                item.mIcon.setImageResource(R.drawable.filebrowser_file);
+                item.mFileTime.setText(String.format("%s %s", fz.toFullString(), fileInfo.mTime));
+                item.mIcon.setImageResource(R.drawable.img_file);
             } else {
-                toggleFilesize(item, View.GONE);
-                item.mIcon.setImageResource(R.drawable.filebrowser_dir);
+                item.mFileTime.setText(fileInfo.mTime);
+                item.mIcon.setImageResource(R.drawable.img_folder);
             }
             convertView
                     .setBackgroundResource(R.drawable.common_list_item_white_selector);
@@ -320,27 +302,13 @@ public class FileBrowserActivity extends ListActivity implements
                 if (position == mFocusFileIdx) {
                     item.mFileName.setTextColor(Color.parseColor("#85c443"));
                     item.mFileTime.setTextColor(Color.parseColor("#85c443"));
-                    item.mFileSize.setTextColor(Color.parseColor("#85c443"));
-                    item.mUnit.setTextColor(Color.parseColor("#85c443"));
                 } else {
                     item.mFileName.setTextColor(Color.parseColor("#787878"));
                     item.mFileTime.setTextColor(Color.parseColor("#bebebe"));
-                    item.mFileSize.setTextColor(Color.parseColor("#787878"));
-                    item.mUnit.setTextColor(Color.parseColor("#bcbcbc"));
                 }
             }
         }
 
-        /**
-         * 隐藏/显示文件大小参数
-         *
-         * @param item
-         * @param visible
-         */
-        private void toggleFilesize(FileItem item, int visible) {
-            item.mFileSize.setVisibility(visible);
-            item.mUnit.setVisibility(visible);
-        }
 
     }
 
@@ -352,16 +320,13 @@ public class FileBrowserActivity extends ListActivity implements
         public ImageView mIcon;
         public TextView mFileName;
         public TextView mFileTime;
-        public TextView mFileSize;
-        public TextView mUnit;
+
         public View mMask;
 
         FileItem(View item) {
             mIcon = (ImageView) item.findViewById(R.id.icon);
             mFileName = (TextView) item.findViewById(R.id.title);
             mFileTime = (TextView) item.findViewById(R.id.time);
-            mFileSize = (TextView) item.findViewById(R.id.size);
-            mUnit = (TextView) item.findViewById(R.id.unit);
             mMask = item.findViewById(R.id.mask);
         }
 
@@ -423,48 +388,36 @@ public class FileBrowserActivity extends ListActivity implements
      */
     private void showOpenWithDialog(final FileInfo fi) {
         if (mDialog == null) {
-            mDialog = new ListItemDialog(this, R.style.base_dialog_theme, true);
-            mDialog.setTitle(R.string.file_open_as);
-            mDialog.addItem(R.id.file_type_text,
-                    getString(R.string.filetype_text));
-            mDialog.addItem(R.id.file_type_audio,
-                    getString(R.string.filetype_audio));
-            mDialog.addItem(R.id.file_type_video,
-                    getString(R.string.filetype_video));
-            mDialog.addItem(R.id.file_type_image,
-                    getString(R.string.filetype_image));
-            mDialog.build();
+            mDialog = new NewListItemDialog(this, true);
         }
         if (!isFinishing()) {
-            mDialog.setOnItemClickListener(new ListItemDialog.OnItemClickListener() {
+            mDialog.setFileTypeClickListener(new NewListItemDialog.OnFileTypeClickListener() {
                 @Override
-                public void onItemClick(int id, int position) {
-                    FileType type = getType(id);
+                public void onTypeTextClick() {
                     IntentUtil.openFileWithIntent(FileBrowserActivity.this,
-                            type, fi.mPath);
+                            FileType.DOCUMENT, fi.mPath);
+                }
+
+                @Override
+                public void onTypeAudioClick() {
+                    IntentUtil.openFileWithIntent(FileBrowserActivity.this,
+                            FileType.MUSIC, fi.mPath);
+                }
+
+                @Override
+                public void onTypeVideoClick() {
+                    IntentUtil.openFileWithIntent(FileBrowserActivity.this,
+                            FileType.VIDEO, fi.mPath);
+                }
+
+                @Override
+                public void onTypeImageClick() {
+                    IntentUtil.openFileWithIntent(FileBrowserActivity.this,
+                            FileType.IMAGE, fi.mPath);
                 }
             });
-            mDialog.showDialog();
+            mDialog.show();
         }
-    }
-
-    private FileType getType(int id) {
-        FileType type = null;
-        switch (id) {
-            case R.id.file_type_text:
-                type = FileType.DOCUMENT;
-                break;
-            case R.id.file_type_audio:
-                type = FileType.MUSIC;
-                break;
-            case R.id.file_type_video:
-                type = FileType.VIDEO;
-                break;
-            case R.id.file_type_image:
-                type = FileType.IMAGE;
-                break;
-        }
-        return type;
     }
 
     @Override
