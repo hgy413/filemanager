@@ -33,16 +33,6 @@ public class ImagePresenter implements ImageContract.Presenter {
     }
 
     @Override
-    public void handlePressHomeKey() {
-        // nothing to do
-    }
-
-    @Override
-    public void handleBackPressed() {
-
-    }
-
-    @Override
     public void handleBackClick() {
         if (mView != null) {
             mView.finish();
@@ -60,14 +50,11 @@ public class ImagePresenter implements ImageContract.Presenter {
         }
         mView.notifyViewChg();
         mSelectedImageList.clear();
-        if (mView != null) {
-            mView.showNoSelected();
-        }
     }
 
     @Override
     public void handleCheck(boolean isCheck) {
-        if (isCheck) {
+        if (!isCheck) {
             //改成全取消
             handleCancel();
         } else {
@@ -87,7 +74,6 @@ public class ImagePresenter implements ImageContract.Presenter {
                     }
                 }
                 //全选
-                mView.showAllSelected();
                 mView.notifyViewChg();
             }
         }
@@ -100,28 +86,23 @@ public class ImagePresenter implements ImageContract.Presenter {
             mSelectedImageList.clear();
             for (int i = 0; i < imageGroupModleList.size(); i++) {
                 ImageGroupModle imageGroupModle = imageGroupModleList.get(i);
+                boolean isAllSelected = true;
                 for (int i1 = 0; i1 < imageGroupModle.mImageModleList.size(); i1++) {
                     List<ImageModle> imageModles = imageGroupModle.mImageModleList.get(i1);
                     for (int i2 = 0; i2 < imageModles.size(); i2++) {
                         ImageModle imageModle = imageModles.get(i2);
                         if (imageModle.isChecked) {
                             mSelectedImageList.add(imageModle);
+                        } else {
+                            isAllSelected = false;
                         }
                     }
                     mTotalSize += imageModles.size();
                 }
+                imageGroupModle.isCheck = isAllSelected;
             }
             if (mView != null) {
-                if (mTotalSize == mSelectedImageList.size()) {
-                    //全选
-                    mView.showAllSelected();
-                } else if (mSelectedImageList.size() > 0) {
-                    //选择了一部分
-                    mView.showSelected(mSelectedImageList.size());
-                } else {
-                    //没有选择
-                    mView.showNoSelected();
-                }
+                mView.showSelected(mSelectedImageList.size(), mTotalSize);
             }
         }
     }

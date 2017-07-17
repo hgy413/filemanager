@@ -8,7 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.QuickClickGuard;
+import com.jb.filemanager.util.WindowUtil;
 import com.jb.filemanager.util.device.Machine;
 
 /**
@@ -59,6 +62,7 @@ public class BaseFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setImmersiveStatusBar(view);
         //刷新成当前时间
         mVisiableTime = System.currentTimeMillis();
     }
@@ -70,7 +74,13 @@ public class BaseFragment extends android.support.v4.app.Fragment {
         //沉浸式状态栏 fragment不能使用fitsysWindows
         if (Machine.HAS_SDK_KITKAT) {
             //设置顶部内边距 分隔开内容与顶部
-//            root.setPadding(0, StatusBarCompat.getStatusBarHeight(TheApplication.getAppContext()), 0, 0);
+            int paddingTop = 0;
+            try {
+                paddingTop = WindowUtil.getStatusBarHeight();
+            } catch (Exception ex) {
+                paddingTop = DrawUtils.dip2px(25);
+            }
+            root.setPadding(0, paddingTop, 0, 0);
         }
     }
 

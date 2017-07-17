@@ -8,25 +8,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
-import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.app.BaseFragment;
+import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
 import com.jb.filemanager.function.image.presenter.ImagePresenter;
 import com.jb.filemanager.function.image.presenter.ImageSupport;
-import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.ui.widget.CommonTitleBar;
 
 import java.util.List;
 
@@ -34,7 +29,7 @@ import java.util.List;
  * Created by nieyh on 17-7-3.
  */
 
-public class ImageManagerFragment extends BaseFragment implements View.OnClickListener, ImageContract.View {
+public class ImageManagerFragment extends BaseFragment implements ImageContract.View, CommonTitleBar.OnActionListener {
 
     private ImageContract.Presenter mPresenter;
     //是否是内部存储
@@ -44,11 +39,7 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     //图片列表
     private ExpandableListView mExpandableListView;
     private ImageExpandableAdapter mAdapter;
-    private ImageView mSearch;
-    private GroupSelectBox mGroupSelectBox;
-    private TextView mTitle;
-    private ImageView mBack;
-    private ImageView mCancel;
+    private CommonTitleBar mCommonTitleBar;
 
     @Nullable
     @Override
@@ -60,21 +51,10 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         handleExtras();
-        mTitle = (TextView) view.findViewById(R.id.fragment_image_title);
-        mBack = (ImageView) view.findViewById(R.id.fragment_image_back);
-        mCancel = (ImageView) view.findViewById(R.id.fragment_image_cancel);
-        if (mTitle != null) {
-            mTitle.getPaint().setAntiAlias(true);
-            mTitle.setText(R.string.image_title);
-        }
-        mSearch = (ImageView) view.findViewById(R.id.fragment_image_search);
-        mGroupSelectBox = (GroupSelectBox) view.findViewById(R.id.fragment_image_check_group);
-        mGroupSelectBox.setImageSource(R.drawable.choose_none, R.drawable.choose_all, R.drawable.choose_all);
-        mSearch.setOnClickListener(this);
+        mCommonTitleBar = (CommonTitleBar) view.findViewById(R.id.fragment_image_title_bar);
+        mCommonTitleBar.setBarDefaultTitle(R.string.image_title);
+        mCommonTitleBar.setOnActionListener(this);
         mExpandableListView = (ExpandableListView) view.findViewById(R.id.fragment_image_el);
-        mCancel.setOnClickListener(this);
-        mBack.setOnClickListener(this);
-        mGroupSelectBox.setOnClickListener(this);
         mPresenter = new ImagePresenter(this, new ImageSupport());
         loadData();
     }
@@ -113,31 +93,10 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void showSelected(int size) {
-        if (size > 0) {
-            //修改标题
-            mTitle.setText(size + ">> 被选");
-            mGroupSelectBox.setVisibility(View.VISIBLE);
-            mGroupSelectBox.setState(GroupSelectBox.SelectState.NONE_SELECTED);
-            mCancel.setVisibility(View.VISIBLE);
-            mSearch.setVisibility(View.GONE);
-            mBack.setVisibility(View.GONE);
+    public void showSelected(int selectSize, int allSize) {
+        if (mCommonTitleBar != null) {
+            mCommonTitleBar.notifyChoose(selectSize, allSize);
         }
-    }
-
-    @Override
-    public void showNoSelected() {
-        //修改标题
-        mTitle.setText(R.string.image_title);
-        mGroupSelectBox.setVisibility(View.GONE);
-        mCancel.setVisibility(View.GONE);
-        mSearch.setVisibility(View.VISIBLE);
-        mBack.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showAllSelected() {
-        mGroupSelectBox.setState(GroupSelectBox.SelectState.ALL_SELECTED);
     }
 
     @Override
@@ -151,46 +110,11 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onPressedHomeKey() {
-        if (mPresenter != null) {
-            mPresenter.handlePressHomeKey();
-        }
-    }
-
-    @Override
     public boolean onBackPressed() {
-        if (mPresenter != null) {
-            mPresenter.handleBackPressed();
+        if (mCommonTitleBar != null) {
+            return !mCommonTitleBar.onBackPressed();
         }
         return super.onBackPressed();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fragment_image_back:
-                if (mPresenter != null) {
-                    mPresenter.handleBackClick();
-                }
-                break;
-            case R.id.fragment_image_search:
-                SearchActivity.showSearchResult(getActivity());
-                break;
-            case R.id.fragment_image_cancel:
-                //cancel
-                if (mPresenter != null) {
-                    mPresenter.handleCancel();
-                }
-                break;
-            case R.id.fragment_image_check_group:
-                //check
-                if (mPresenter != null) {
-                    mPresenter.handleCheck(mGroupSelectBox.getState() == GroupSelectBox.SelectState.ALL_SELECTED);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     private void loadData() {
@@ -220,5 +144,29 @@ public class ImageManagerFragment extends BaseFragment implements View.OnClickLi
 
             }
         });
+    }
+
+    @Override
+    public void onCheckAction(boolean isCheck) {
+        //check
+        if (mPresenter != null) {
+            mPresenter.handleCheck(isCheck);
+        }
+    }
+
+    @Override
+    public void onBackAction() {
+        //back
+        if (mPresenter != null) {
+            mPresenter.handleBackClick();
+        }
+    }
+
+    @Override
+    public void onCancelAction() {
+        //cancel
+        if (mPresenter != null) {
+            mPresenter.handleCancel();
+        }
     }
 }

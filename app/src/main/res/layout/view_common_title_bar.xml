@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/common_title_bar_total_height"
+       android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/view_common_title_bar_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_title_bar_exclude_shadow_height"
+        tools:background="@color/colorAccent">
+
+        <ImageView
+            android:id="@+id/view_common_title_bar_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/action_bar_back_drawable_selector_blue"/>
+
+        <ImageView
+            android:id="@+id/view_common_title_bar_cancel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/ic_cancel_blue"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/view_common_title_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/view_common_title_bar_back"
+            android:text="@string/common_action_bar_title"
+            android:textColor="@color/black_70"
+            android:textSize="@dimen/h3_16"/>
+
+        <ImageView
+            android:id="@+id/view_common_title_bar_search"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_bar_search"/>
+
+        <FrameLayout
+            android:id="@+id/view_common_title_bar_search_check_group_fl"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/view_common_title_bar_check_group"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                tools:visibility="visible"/>
+        </FrameLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_common_title_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_title_bar_shadow_height"
+        android:background="@drawable/main_shadow"/>
+</merge>

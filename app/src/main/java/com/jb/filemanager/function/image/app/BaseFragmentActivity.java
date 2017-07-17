@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 
 import com.jb.filemanager.receiver.HomeWatcherReceiver;
+import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,6 +92,7 @@ public class BaseFragmentActivity extends FragmentActivity {
                 }
                 super.onBackPressed();
             } else {
+                Logger.w("nieyh", "don back!!");
             }
         } else {
             super.onBackPressed();
@@ -127,6 +130,7 @@ public class BaseFragmentActivity extends FragmentActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(android.R.id.content, aimFragment, aimFragment.getClass().getSimpleName());
+        //不要调用 addToBackStack
         transaction.commit();
     }
 

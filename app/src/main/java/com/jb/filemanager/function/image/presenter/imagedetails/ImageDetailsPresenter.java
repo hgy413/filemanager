@@ -34,13 +34,13 @@ public class ImageDetailsPresenter implements ImageDetailsContract.Presenter {
                 mImageModleList.add((ImageModle) parcelable);
             }
         }
-        if (mView != null) {
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(mCurrentPos + 1);
-            stringBuffer.append("/");
-            stringBuffer.append(mImageModleList.size());
-            mView.chgTitle(stringBuffer.toString());
-        }
+//        if (mView != null) {
+//            StringBuffer stringBuffer = new StringBuffer();
+//            stringBuffer.append(mCurrentPos + 1);
+//            stringBuffer.append("/");
+//            stringBuffer.append(mImageModleList.size());
+//            mView.chgTitle(stringBuffer.toString());
+//        }
         mView.bindData(mImageModleList);
         mView.setViewPos(mCurrentPos);
     }
@@ -48,13 +48,13 @@ public class ImageDetailsPresenter implements ImageDetailsContract.Presenter {
     @Override
     public void handlePagerChange(int pos) {
         mCurrentPos = pos;
-        if (mView != null) {
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(mCurrentPos + 1);
-            stringBuffer.append("/");
-            stringBuffer.append(mImageModleList.size());
-            mView.chgTitle(stringBuffer.toString());
-        }
+//        if (mView != null) {
+//            StringBuffer stringBuffer = new StringBuffer();
+//            stringBuffer.append(mCurrentPos + 1);
+//            stringBuffer.append("/");
+//            stringBuffer.append(mImageModleList.size());
+//            mView.chgTitle(stringBuffer.toString());
+//        }
     }
 
     @Override

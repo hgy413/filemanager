@@ -37,8 +37,6 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
     private ViewPager mImageDitalsViewPager;
     //返回
     private ImageView mBack;
-    //标题
-    private TextView mTitle;
     //设置壁纸
     private TextView mSetWallPaper;
 
@@ -56,7 +54,6 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBack = (ImageView) view.findViewById(R.id.fragment_image_details_icon);
-        mTitle = (TextView) view.findViewById(R.id.fragment_image_details_tip_word);
         mSetWallPaper = (TextView) view.findViewById(R.id.fragment_image_details_set_wallpaper);
         mImageDitalsViewPager = (ViewPager) view.findViewById(R.id.fragment_image_details_view_paper);
         mPresenter = new ImageDetailsPresenter(this, new ImageDetailsSupport());
@@ -119,11 +116,6 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
     @Override
     public void setViewPos(int pos) {
         mImageDitalsViewPager.setCurrentItem(pos, false);
-    }
-
-    @Override
-    public void chgTitle(String title) {
-        mTitle.setText(title);
     }
 
     @Override

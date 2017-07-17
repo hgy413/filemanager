@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.image.adapter;
 
+import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.jb.filemanager.function.image.app.BaseFragment;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
+import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.QuickClickGuard;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
@@ -31,12 +33,20 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
     private BaseFragment mCurrentFragment;
     private ImageContract.Presenter mPresenter;
     private QuickClickGuard mQuickClickGuard;
+    private int m6dpDx;
+    private int m10dpDx;
+    private int mPhotoSize;
 
     public ImageExpandableAdapter(List<ImageGroupModle> imageGroupModleList, BaseFragment currentFragment, ImageContract.Presenter presenter) {
         this.mImageGroupModleList = imageGroupModleList;
         this.mCurrentFragment = currentFragment;
         this.mPresenter = presenter;
         mQuickClickGuard = new QuickClickGuard();
+        m6dpDx = DrawUtils.dip2px(6);
+        m10dpDx = DrawUtils.dip2px(10);
+        int widthPixels = TheApplication.getAppContext().getResources().getDisplayMetrics().widthPixels;
+        int interval = TheApplication.getInstance().getResources().getDimensionPixelSize(R.dimen.image_interval_distance);
+        mPhotoSize = (widthPixels - interval * 2) / 3;
     }
 
     @Override
@@ -127,8 +137,9 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             viewItemHolder.showVisiable(i, groupPosition, childPosition, imageModle);
         }
         int end = size;
-        while (end++ < 3) {
+        while (end < 3) {
             viewItemHolder.gone(end);
+            end ++;
         }
 
         return convertView;
@@ -230,16 +241,30 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
     private class ViewItemHolder {
 
         SubViewItemHolder[] mSubViewItem = new SubViewItemHolder[3];
-
+        Space mSpace;
         public ViewItemHolder(View itemView) {
             mSubViewItem[0] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_1));
             mSubViewItem[1] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_2));
             mSubViewItem[2] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_3));
+            mSpace = (Space) itemView.findViewById(R.id.item_image_result_bottom_space);
         }
 
         void showVisiable(int pos, int group, int child, ImageModle imageModle) {
             mSubViewItem[pos].showVisiable();
             mSubViewItem[pos].updateView(group, child, imageModle);
+        }
+
+        /**
+         * 是否是最后一个视图
+         * */
+        void showViewSpace(boolean isLastChild) {
+            ViewGroup.LayoutParams layoutParams = mSpace.getLayoutParams();
+            if (isLastChild) {
+                layoutParams.height = m10dpDx;
+            } else {
+                layoutParams.height = m6dpDx;
+            }
+            mSpace.setLayoutParams(layoutParams);
         }
 
         void gone(int pos) {
@@ -262,6 +287,8 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         public SubViewItemHolder(View itemView) {
             root = itemView;
             mPhoto = (ImageView) itemView.findViewById(R.id.item_sub_image_photo);
+            mPhoto.setMaxHeight(mPhotoSize);
+            mPhoto.setMaxWidth(mPhotoSize);
             mGroupSelectBox = (GroupSelectBox) itemView.findViewById(R.id.item_sub_image_gsb);
             mGroupSelectBox.setImageSource(R.drawable.choose_none, R.drawable.choose_all, R.drawable.choose_all);
             mMask = itemView.findViewById(R.id.item_sub_image_photo_mask);

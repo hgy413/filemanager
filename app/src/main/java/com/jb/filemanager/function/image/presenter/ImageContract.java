@@ -16,16 +16,12 @@ public class ImageContract {
 
     public interface View {
         void bindData(List<ImageGroupModle> imageGroupModleList);
-        void showSelected(int size);
-        void showNoSelected();
-        void showAllSelected();
+        void showSelected(int selectSize, int allSize);
         void notifyViewChg();
         void finish();
     }
 
     public interface Presenter {
-        void handlePressHomeKey();
-        void handleBackPressed();
         void handleBackClick();
         void handleCancel();
         void handleCheck(boolean isCheck);

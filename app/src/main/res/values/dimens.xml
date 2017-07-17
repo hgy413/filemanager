@@ -28,4 +28,11 @@
     <dimen name="h4_14">14dp</dimen>
     <dimen name="h5_12">12dp</dimen>
     <dimen name="h6_10">10dp</dimen>
+
+    <!--标题栏的高度-->
+    <dimen name="common_title_bar_exclude_shadow_height">50dp</dimen>
+    <dimen name="common_title_bar_shadow_height">6dp</dimen>
+    <dimen name="common_title_bar_total_height">56dp</dimen>
+    <!--图片管理间隔-->
+    <dimen name="image_interval_distance">6dp</dimen>
 </resources>

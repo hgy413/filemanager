@@ -17,7 +17,6 @@ public interface ImageDetailsContract {
     interface View {
         void bindData(List<ImageModle> imageModleList);
         void setViewPos(int pos);
-        void chgTitle(String title);
         Bitmap getCurrentBitmap();
     }
 

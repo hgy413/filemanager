@@ -173,11 +173,8 @@
         <item>My Favorite Sport?</item>
         <item>My Birthday?</item>
     </string-array>
-    <!-- 应用锁设置页 -->
     <string name="app_lock_setting_title">AppLock Setting</string>
-    <string name="app_lock_setting_passcode">Passcode</string>
     <string name="app_lock_setting_passcode_change_passcode">Change Passcode</string>
-    <string name="app_lock_setting_passcode_change_security_question">Change security issues</string>
     <string name="app_lock_app_lock_tip">Locked %1$s</string>
     <string name="app_lock_app_unlock_tip">Unlocked %1$s</string>
     <string name="applock_pre_header_last_step_text1">On Android 5.0+,AppLock feature is not available by default</string>
@@ -186,7 +183,6 @@
     <string name="applock_float_view_forget_psd">Forget Password</string>
     <string name="applock_float_view_dont_lock_this_app">Don\'t Lock This App</string>
     <string name="applock_forget_psd_title">Retrieve password</string>
-    <string name="applock_common_finish">Finish</string>
     <string name="applock_retrieve_psd_error_tip">The answer is wrong. Please re-enter.</string>
 
 
@@ -369,4 +365,7 @@
     <string name="doc_manager_title_select_mode">%1$d file(s) selected</string>
     <string name="item_count">(%1$d)</string>
     <string name="no_file_hint">没有文件</string>
+
+    <!--通用标题栏-->
+    <string name="common_title_bar_choose_tip">%1$d File(s) selected</string>
 </resources>

@@ -145,7 +145,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         } else {
             mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.title_select_all);
         }
-        mTvCommonActionBarWithSearchTitle.setText(getString(R.string.doc_manager_title_select_mode, chosenCount));
+        mTvCommonActionBarWithSearchTitle.setText(getString(R.string.common_title_bar_choose_tip, chosenCount));
         mIsSelectMode = true;
     }
 

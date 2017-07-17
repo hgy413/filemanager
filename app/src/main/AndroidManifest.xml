@@ -106,7 +106,7 @@
         <activity
             android:name=".function.image.ImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_bg"/>
 
         <!-- 音乐管理页 -->
         <!--视频管理页 -->

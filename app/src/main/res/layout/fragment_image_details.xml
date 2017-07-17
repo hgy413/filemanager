@@ -3,36 +3,25 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:fitsSystemWindows="true"
               android:orientation="vertical"
               android:clickable="true"
-              android:background="#000000">
+              android:background="@color/white">
 
     <!-- Title -->
     <RelativeLayout
         android:id="@+id/fragment_image_details_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:orientation="horizontal">
+        android:layout_height="50dp"
+        android:background="#4c4c4c">
 
         <ImageView
             android:id="@+id/fragment_image_details_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:contentDescription="@null"
-            android:padding="16dp"
-            android:src="@drawable/ic_about_logo"/>
-
-        <TextView
-            android:id="@+id/fragment_image_details_tip_word"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/fragment_image_details_icon"
-            android:text="Image Details"
-            android:textColor="@android:color/white"
-            android:textSize="16dp"/>
+            android:padding="15dp"
+            android:layout_marginLeft="1dp"
+            android:src="@drawable/common_white_back"/>
 
         <TextView
             android:id="@+id/fragment_image_details_set_wallpaper"
@@ -40,8 +29,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:text="设置壁纸"
+            android:textColor="@color/white_40"
+            android:text="Set As Wallpaper"
+            android:textSize="@dimen/h5_12"
+            android:gravity="center"
+            android:drawableRight="@drawable/ic_set_wallpaper"
+            android:drawablePadding="16dp"
             android:layout_marginRight="16dp"
             tools:ignore="ContentDescription"/>
     </RelativeLayout>

@@ -16,6 +16,6 @@ public class ImageActivity extends BaseFragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //不用设置视图 直接使用Content视图 减少没必要的层次
-        addFragment(new ImageManagerFragment());
+        setDefaultFragment(new ImageManagerFragment());
     }
 }
