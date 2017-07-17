@@ -3,6 +3,7 @@ package com.jb.filemanager.manager.file.task;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
@@ -106,6 +107,8 @@ public class CopyFileTask {
                             boolean success = FileUtil.copyFileOrDirectory(file.getAbsolutePath(), mDest);
                             if (!success) {
                                 mFailed.add(file);
+                            } else {
+                                TheApplication.postEvent(new FileOperateEvent(null, file, FileOperateEvent.OperateType.COPY));//add by 李启发  告知页面copy完成
                             }
                             result = result && success;
                         } else {

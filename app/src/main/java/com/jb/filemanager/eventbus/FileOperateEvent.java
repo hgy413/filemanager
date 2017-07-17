@@ -27,7 +27,7 @@ public class FileOperateEvent {
      *                删除传null,重命名传命名后的文件)
      * @param type    操作类型
      */
-    public FileOperateEvent(@NonNull File oldFile, @Nullable File newFile, @NonNull OperateType type) {
+    public FileOperateEvent(@Nullable File oldFile, @Nullable File newFile, @NonNull OperateType type) {
         this.mOldFile = oldFile;
         this.mNewFile = newFile;
         this.mOperateType = type;

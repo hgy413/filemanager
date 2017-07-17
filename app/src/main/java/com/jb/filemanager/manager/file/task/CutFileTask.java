@@ -4,7 +4,7 @@ package com.jb.filemanager.manager.file.task;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.util.Logger;
 
 import java.io.File;
@@ -104,9 +104,12 @@ public class CutFileTask {
 
                         if (!mIsSkip) {
                             Logger.i(LOG_TAG, "覆盖:" + file.getAbsolutePath());
-                            boolean success = file.renameTo(new File(mDest + File.separator + file.getName()));
+                            File targetFile = new File(mDest + File.separator + file.getName());
+                            boolean success = file.renameTo(targetFile);
                             if (!success) {
                                 mFailed.add(file);
+                            }else {
+                                TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.CUT));//add by 李启发  告知页面cut完成
                             }
                             result = result && success;
                         } else {

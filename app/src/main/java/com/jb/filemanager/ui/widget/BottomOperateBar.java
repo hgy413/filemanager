@@ -14,6 +14,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
@@ -222,7 +224,9 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                     @Override
                     public void onConfirm(DocRenameDialog dialog, String newName) {
                         if (file.exists()) {
-                            file.renameTo(new File(file.getParentFile().getAbsolutePath() + File.separator + newName));
+                            File targetFile = new File(file.getParentFile().getAbsolutePath() + File.separator + newName);
+                            file.renameTo(targetFile);
+                            TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
                         }
                         if (mListener != null) {
                             mListener.afterRename();

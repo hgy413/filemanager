@@ -5,7 +5,12 @@ import android.widget.Toast;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +34,10 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void onCreate(Intent intent) {
-
+        EventBus globalEventBus = TheApplication.getGlobalEventBus();
+        if (!globalEventBus.isRegistered(this)) {
+            globalEventBus.register(this);
+        }
     }
 
     @Override
@@ -44,6 +52,10 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void onDestroy() {
+        EventBus globalEventBus = TheApplication.getGlobalEventBus();
+        if (globalEventBus.isRegistered(this)) {
+            globalEventBus.unregister(this);
+        }
         mView = null;
         mSupport = null;
     }
@@ -115,5 +127,40 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             mSupport.handleFileDelete(docPathList.get(i).getAbsolutePath());
             mView.updateDeleteProgress(i + 1, size + 1);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(FileOperateEvent fileOperateEvent){
+        if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
+            handleFileCopy(fileOperateEvent);
+        }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
+            handleFileCut(fileOperateEvent);
+        }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
+            handleFileDelete(fileOperateEvent);
+        }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
+            handleFileRename(fileOperateEvent);
+        }else {
+            handleError();
+        }
+    }
+
+    private void handleFileCopy(FileOperateEvent fileOperateEvent) {
+
+    }
+
+    private void handleFileCut(FileOperateEvent fileOperateEvent) {
+
+    }
+
+    private void handleFileDelete(FileOperateEvent fileOperateEvent) {
+        mSupport.handleFileDelete(fileOperateEvent.mOldFile.getAbsolutePath());
+    }
+
+    private void handleFileRename(FileOperateEvent fileOperateEvent) {
+
+    }
+
+    private void handleError() {
+
     }
 }
