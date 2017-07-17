@@ -23,9 +23,7 @@
             android:divider="@null"
             android:groupIndicator="@null"
             android:listSelector="@android:color/transparent"
-            android:scrollbars="none">
-
-        </com.jb.filemanager.ui.widget.FloatingGroupExpandableListView>
+            android:scrollbars="none"/>
     </LinearLayout>
 
     <include layout="@layout/common_operate_bar_modify"/>

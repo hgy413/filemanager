@@ -7,6 +7,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,12 +108,11 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     @Override
-    public void handleFileDelete(List<DocChildBean> childBeenList) {
-//        mSupport.handleFileDelete(childBeenList);
+    public void handleFileDelete(List<File> docPathList) {
         //处理删除进度的问题
-        int size = childBeenList.size();
+        int size = docPathList.size();
         for (int i = 0; i < size; i++) {
-            mSupport.handleFileDelete(childBeenList.get(i));
+            mSupport.handleFileDelete(docPathList.get(i).getAbsolutePath());
             mView.updateDeleteProgress(i + 1, size + 1);
         }
     }

@@ -1,11 +1,11 @@
 package com.jb.filemanager.function.docmanager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
@@ -90,6 +90,7 @@ public class DocManagerSupport implements DocManagerContract.Support {
                     int dot = path.lastIndexOf("/");
                     String name = path.substring(dot + 1);
                     DocChildBean childBean = new DocChildBean();
+                    childBean.mDocId = id;
                     childBean.mDocPath = path;
                     childBean.mDocSize = size;
                     childBean.mDocName = name;
@@ -110,13 +111,36 @@ public class DocManagerSupport implements DocManagerContract.Support {
     }
 
     @Override
-    public void handleFileDelete(DocChildBean child) {
+    public void handleFileDelete(String docPath) {
             int delete = TheApplication.getAppContext().getContentResolver().delete(
                     Uri.parse("content://media/external/file"),
                     MediaStore.Files.FileColumns.DATA + " like ?",
-                    new String[]{child.mDocPath});
-            Logger.d(TAG, "delete number" + delete + "   " + child.mDocName);
+                    new String[]{docPath});
+        Logger.d(TAG, "delete number" + delete + "   " + docPath);
+    }
 
-        FileUtil.deleteFile(child.mDocPath);
+    @Override
+    public void handleFileCopy(DocChildBean file) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Files.FileColumns._ID, file.mDocId);
+        contentValues.put(MediaStore.Files.FileColumns.DATA, file.mDocDate);
+        contentValues.put(MediaStore.Files.FileColumns.SIZE, file.mDocSize);
+        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, file.mAddDate);
+        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, file.mModifyDate);
+        TheApplication.getAppContext().getContentResolver().insert(
+                Uri.parse("content://media/external/file"), contentValues);
+    }
+
+    @Override
+    public void handleFileCut(DocChildBean file) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Files.FileColumns._ID, file.mDocId);
+        contentValues.put(MediaStore.Files.FileColumns.DATA, file.mDocDate);
+        contentValues.put(MediaStore.Files.FileColumns.SIZE, file.mDocSize);
+        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, file.mAddDate);
+        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, file.mModifyDate);
+        TheApplication.getAppContext().getContentResolver().update(
+                Uri.parse("content://media/external/file"), contentValues,
+                MediaStore.Files.FileColumns._ID + " like ?", new String[]{file.mDocId});
     }
 }

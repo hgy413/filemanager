@@ -28,8 +28,6 @@ import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
-import com.jb.filemanager.util.Logger;
-import com.jb.filemanager.util.StorageUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -172,6 +170,12 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mBobBottomOperator.setListener(new BottomOperateBar.Listener() {
             @Override
             public ArrayList<File> getCurrentSelectedFiles() {
+                List<DocChildBean> checkedDoc = getCheckedDoc();
+                mChosenFiles.clear();
+                for (int i = 0; i < checkedDoc.size(); i++) {
+                    DocChildBean childBean = checkedDoc.get(i);
+                    mChosenFiles.add(new File(childBean.mDocPath));
+                }
                 return mChosenFiles;
             }
 
@@ -558,86 +562,17 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     //处理选中的数据
     private void handleDataCopy() {
-        List<DocChildBean> checkedDoc = getCheckedDoc();
-        Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will copy", Toast.LENGTH_SHORT).show();
-        //判断空间是否充足
-        long totalSize = 0;
-        for (DocChildBean childBean : checkedDoc) {
-            totalSize += Long.parseLong(childBean.mDocSize);
-        }
-        if (!StorageUtil.isSDCardAvailable()) {
-            Toast.makeText(DocManagerActivity.this, "sd card is not available plz try again later", Toast.LENGTH_SHORT).show();
-        }
-        long freeSize = StorageUtil.getSDCardInfo(this.getApplicationContext()).mFree;
-        if (freeSize < totalSize) {
-            Toast.makeText(DocManagerActivity.this, "there is not enough space, plz try again later", Toast.LENGTH_SHORT).show();
-        }
-        // TODO: 2017/7/4 add by --miwo 传递复制的参数
-        mChosenFiles.clear();
-        for (int i = 0; i < checkedDoc.size(); i++) {
-            DocChildBean childBean = checkedDoc.get(i);
-            mChosenFiles.add(new File(childBean.mDocPath));
-        }
+
     }
 
     private void handleDataDelete() {
-        final List<DocChildBean> checkedDoc = getCheckedDoc();
-        Logger.d(TAG, "之前选中的数量" + checkedDoc.size());
-        Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will delete", Toast.LENGTH_SHORT).show();
-        // TODO: 2017/7/4 add by --miwo 此处应有删除的逻辑
-        mChosenFiles.clear();
-        for (int i = 0; i < checkedDoc.size(); i++) {
-            DocChildBean childBean = checkedDoc.get(i);
-            mChosenFiles.add(new File(childBean.mDocPath));
-        }
-        /*ArrayList<File> fileList = new ArrayList<>();
-        for (DocChildBean childBean : checkedDoc) {
-            fileList.add(new File(childBean.mDocPath));
-        }
-        FileDeleteConfirmDialog confirmDialog = new FileDeleteConfirmDialog(this, fileList);
-        confirmDialog.setOnDialogClickListener(new FileDeleteConfirmDialog.OnClickListener() {
-            @Override
-            public void clickConfirm() {
-                //刷新页面数据
-                Iterator<DocGroupBean> groupIterator = mAppInfo.iterator();
-                while (groupIterator.hasNext()) {
-                    DocGroupBean group = groupIterator.next();
-                    *//*if (group.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {//如果全选  那么就全部删除
-                        groupIterator.remove();
-                        continue;
-                    }*//*
-                    Iterator<DocChildBean> childIterator = group.getChildren().iterator();
-                    while (childIterator.hasNext()) {
-                        DocChildBean child = childIterator.next();
-                        if (child.mIsChecked) {//删除选中的文件
-                            childIterator.remove();
-                        }
-                    }
-                }
-                mPresenter.handleFileDelete(checkedDoc);
-                //隐藏底部栏
-//                mRlCommonOperateBarContainer.setVisibility(View.GONE);
-                mBobBottomOperator.setVisibility(View.GONE);
-                mPresenter.refreshData();
-                Logger.d(TAG, "剩余选中的数量" + getCheckedDoc().size());
-            }
-
-            @Override
-            public void clickCancel() {
-
-            }
-        });
-        confirmDialog.show();*/
+        mPresenter.handleFileDelete(mChosenFiles);//处理数据库的删除
+        //隐藏底部栏
+        mBobBottomOperator.setVisibility(View.GONE);
+        mPresenter.refreshData();
     }
 
     private void handleDataCut() {
-        List<DocChildBean> checkedDoc = getCheckedDoc();
-        Toast.makeText(DocManagerActivity.this, checkedDoc.size() + "will cut", Toast.LENGTH_SHORT).show();
-        // TODO: 2017/7/4 add by --miwo 此处应有剪切的逻辑
-        mChosenFiles.clear();
-        for (int i = 0; i < checkedDoc.size(); i++) {
-            DocChildBean childBean = checkedDoc.get(i);
-            mChosenFiles.add(new File(childBean.mDocPath));
-        }
+
     }
 }

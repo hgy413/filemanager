@@ -16,6 +16,7 @@ public class DocChildBean implements Parcelable{
     public static final int TYPE_TXT = 1;
     public static final int TYPE_PDF = 2;
 
+    public String mDocId;
     public int mFileType;
     public String mDocDate;
     public long mAddDate;
@@ -28,6 +29,7 @@ public class DocChildBean implements Parcelable{
     }
 
     protected DocChildBean(Parcel in) {
+        mDocId = in.readString();
         mFileType = in.readInt();
         mDocDate = in.readString();
         mAddDate = in.readLong();
@@ -57,6 +59,7 @@ public class DocChildBean implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mDocId);
         parcel.writeInt(mFileType);
         parcel.writeString(mDocDate);
         parcel.writeLong(mAddDate);
