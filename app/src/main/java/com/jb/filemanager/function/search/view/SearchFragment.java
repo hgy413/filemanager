@@ -96,7 +96,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
     }
 
     @Override
-    public void dissmissLoading() {
+    public void dismissLoading() {
         // TODO: 17-7-6 消失加载动画
         Toast.makeText(getContext(), "动画消失了", Toast.LENGTH_SHORT).show();
     }

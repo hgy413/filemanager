@@ -369,4 +369,12 @@
 
     <!--通用标题栏-->
     <string name="common_title_bar_choose_tip">%1$d File(s) selected</string>
+
+    <!-- 搜索页 -->
+
+    <!-- 搜索结果页 -->
+    <string name="search_result_title">P(%1$d Items)</string>
+    <string name="search_result_empty_tips">No items</string>
+
+
 </resources>

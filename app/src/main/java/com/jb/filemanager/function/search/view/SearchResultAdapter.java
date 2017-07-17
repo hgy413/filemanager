@@ -15,12 +15,14 @@ import java.util.List;
 
 /**
  * Created by nieyh on 17-7-5.
+ *
  */
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ItemViewHolder> {
 
     //图片分组数据列表
     private List<FileInfo> mFileInfoList;
+    private View.OnClickListener mOnItemClickListener;
 
     public SearchResultAdapter(List<FileInfo> fileInfoList) {
         this.mFileInfoList = fileInfoList;
@@ -35,13 +37,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         FileInfo fileInfo = mFileInfoList.get(position);
         if (FilePlus.isDirectoryType(fileInfo.mFileType)) {
-            //展示文件夹图标
-//            holder.mIcon.set
+            // 展示文件夹图标
+            holder.mIcon.setImageResource(R.drawable.img_folder);
         } else {
-            //展示对应文件图标
+            // 展示对应文件图标
+            holder.mIcon.setImageResource(R.drawable.img_file);
         }
         holder.mPath.setText(fileInfo.mFileAbsolutePath);
         holder.mName.setText(fileInfo.mFileName);
+
+        holder.itemView.setOnClickListener(mOnItemClickListener);
+        holder.itemView.setTag(fileInfo);
     }
 
     @Override
@@ -51,6 +57,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
         return mFileInfoList.size();
     }
+
+    public void setOnItemClickListener(View.OnClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
