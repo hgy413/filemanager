@@ -1,5 +1,6 @@
 package com.jb.filemanager.home;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -101,6 +102,7 @@ public class CategoryFragment extends Fragment {
     private boolean mHasExternalStorage = false;
     private TextView mTvCleanTrash;
     private boolean mHasShowedNotice = false;
+    private ValueAnimator mValueAnimator;
 
 
     @Override
@@ -341,6 +343,13 @@ public class CategoryFragment extends Fragment {
         mPhotoLoaderCallback = null;
         mVideoLoaderCallback = null;
 
+        if (mValueAnimator != null) {
+            mValueAnimator.cancel();
+            mValueAnimator.removeAllUpdateListeners();
+            mValueAnimator.removeAllListeners();
+            mValueAnimator = null;
+        }
+
         super.onDestroy();
     }
 
@@ -367,12 +376,23 @@ public class CategoryFragment extends Fragment {
     public void onEventMainThread(CleanScanDoneEvent event) {
         boolean allDone = CleanScanDoneEvent.isAllDone();
 //        Logger.e("Main", isNeedShowAnim() + "接收到CleanScanDoneEvent事件: " + allDone + event.name());
-        if (allDone && CleanScanFileSizeEvent.getJunkFileAllSize() > 100 * 1024 * 1024 && !mHasShowedNotice) {
+        long junkFileAllSize = CleanScanFileSizeEvent.getJunkFileAllSize();
+        if (allDone && junkFileAllSize > 100 * 1024 * 1024 && !mHasShowedNotice) {
             mHasShowedNotice = true;
-            String data = ConvertUtils.formatFileSize(CleanScanFileSizeEvent.getJunkFileAllSize());
-            if (mTvCleanTrash != null) {
-                mTvCleanTrash.setText(getString(R.string.home_trash_notice, data));
-            }
+//            String data = ConvertUtils.formatFileSize(CleanScanFileSizeEvent.getJunkFileAllSize());
+            final String[] data = ConvertUtils.getFormatterStorage(junkFileAllSize);
+            float size = Float.parseFloat(data[0]);
+            mValueAnimator = ValueAnimator.ofFloat(0, size);
+            mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    Float value = (Float) animation.getAnimatedValue();
+                    String format = String.format("%.1f", value);
+                    mTvCleanTrash.setText(getString(R.string.home_trash_notice, format + data[1]));
+                }
+            });
+            mValueAnimator.setDuration((long) (size * 80));
+            mValueAnimator.start();
         }
     }
 
