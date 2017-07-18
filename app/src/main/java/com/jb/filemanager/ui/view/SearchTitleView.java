@@ -29,6 +29,7 @@ public class SearchTitleView extends RelativeLayout {
     }
 
     private void initializeView() {
+        setBackgroundColor(0xffffffff);
         mTvTitleName = (TextView) findViewById(R.id.search_title_name);
         mIvSearchIcon = (ImageView) findViewById(R.id.search_title_search_icon);
     }

@@ -54,7 +54,7 @@ public class RecentInnerFileAdapter extends BaseAdapter {
             holder.icon = (ImageView) convertView.findViewById(R.id.inner_item_file_icon);
             holder.name = (TextView) convertView.findViewById(R.id.inner_item_file_name);
             holder.selectBtn = (ImageView) convertView.findViewById(R.id.inner_item_file_select);
-
+            holder.divider = convertView.findViewById(R.id.inner_item_file_divider);
             convertView.setTag(R.layout.inner_item_file, holder);
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.inner_item_file);
@@ -63,6 +63,13 @@ public class RecentInnerFileAdapter extends BaseAdapter {
         holder.icon.setImageResource(R.drawable.img_file);
         holder.name.setText(item.getFileName());
         holder.selectBtn.setImageResource(item.isSelected() ? R.drawable.select_all : R.drawable.select_none);
+        if (mItemFiles.size() > 3) {
+            // 有More按钮
+            holder.divider.setVisibility(View.VISIBLE);
+        } else {
+            // 没有More按钮 最后一个隐藏
+            holder.divider.setVisibility(position == getCount() - 1 ? View.GONE : View.VISIBLE);
+        }
         holder.selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,5 +91,6 @@ public class RecentInnerFileAdapter extends BaseAdapter {
         ImageView icon;
         TextView name;
         ImageView selectBtn;
+        View divider;
     }
 }

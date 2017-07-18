@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@null"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitCenter"/>
 
         <ImageView
             android:id="@+id/inner_item_pic_select1"
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@null"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitCenter"/>
 
         <ImageView
             android:id="@+id/inner_item_pic_select2"
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@null"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitCenter"/>
 
         <ImageView
             android:id="@+id/inner_item_pic_select3"

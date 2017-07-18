@@ -10,8 +10,10 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
+import com.jb.filemanager.function.recent.util.RecentFileUtil;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -44,7 +46,7 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Context context = parent.getContext().getApplicationContext();
+        final Context context = parent.getContext().getApplicationContext();
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -66,12 +68,17 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
             int index = position * 3 + i;
             if (index < size) {
                 final BlockItemFileBean bean = mItemFiles.get(index);
-                ImageLoader.getInstance(context).displayImage(bean.getFilePath(), holder.images[i]);
-//                holder.images[i].setImageResource(R.drawable.icon2);
-                holder.btns[i].setImageResource(bean.isSelected() ? R.drawable.select_all : R.drawable.select_none);
+                ImageLoader.getInstance(context).displayImage(bean.getFilePath(), holder.images[i], R.drawable.common_default_app_icon);
+                holder.btns[i].setImageResource(bean.isSelected() ? R.drawable.select_all : R.drawable.select_none_image);
                 if (index == 5) {
                     holder.moreMask.setVisibility(View.VISIBLE);
                 }
+                holder.images[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RecentFileUtil.openFile(context, new File(bean.getFilePath()));
+                    }
+                });
                 holder.btns[i].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
