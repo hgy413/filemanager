@@ -32,6 +32,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
+import com.jb.filemanager.function.recent.RecentFileActivity;
 import com.jb.filemanager.function.samefile.SameFileActivity;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
@@ -177,7 +178,7 @@ public class CategoryFragment extends Fragment {
                             startActivity(intent);
                             break;
                         case 5:
-                            // app管理
+                            // zip
                             startActivity(new Intent(getContext(), ZipFileActivity.class));
                             break;
                         case 6:
@@ -185,6 +186,10 @@ public class CategoryFragment extends Fragment {
                             intent = new Intent(getContext(), SameFileActivity.class);
                             intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_DOWNLOAD);
                             startActivity(intent);
+                            break;
+                        case 7:
+                            // 最近文件
+                            startActivity(new Intent(getContext(), RecentFileActivity.class));
                             break;
                         default:
                             break;

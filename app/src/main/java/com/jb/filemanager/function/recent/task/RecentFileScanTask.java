@@ -10,6 +10,8 @@ import com.jb.filemanager.util.StorageUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -115,7 +117,7 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
 
     @Override
     protected void onPostExecute(List<BlockBean> v) {
-//        sortResult();
+        sortResult();
         if (mListener != null) {
             if (v == null) {
                 mListener.onScanError();
@@ -125,13 +127,13 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
         }
     }
 
-//    private void sortResult() {
-//        Collections.sort(mGroupList, new Comparator<ZipFileGroupBean>() {
-//            @Override
-//            public int compare(ZipFileGroupBean o1, ZipFileGroupBean o2) {
-//                return (int) (o1.getGroupTime() - o2.getGroupTime());
-//            }
-//        });
-//    }
+    private void sortResult() {
+        Collections.sort(mGroupList, new Comparator<BlockBean>() {
+            @Override
+            public int compare(BlockBean o1, BlockBean o2) {
+                return o1.getWithinTime() - o2.getWithinTime();
+            }
+        });
+    }
 
 }

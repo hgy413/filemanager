@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+              android:orientation="horizontal"
+              android:paddingBottom="2dp"
+              android:paddingEnd="8dp"
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp"
+              android:paddingStart="8dp">
+
+    <com.jb.filemanager.function.recent.SquareRelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.jb.filemanager.function.recent.SquareImageView
+            android:id="@+id/inner_item_pic1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:id="@+id/inner_item_pic_select1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:padding="8dp"/>
+
+    </com.jb.filemanager.function.recent.SquareRelativeLayout>
+
+    <com.jb.filemanager.function.recent.SquareRelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_weight="1">
+
+        <com.jb.filemanager.function.recent.SquareImageView
+            android:id="@+id/inner_item_pic2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:id="@+id/inner_item_pic_select2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:padding="8dp"/>
+
+    </com.jb.filemanager.function.recent.SquareRelativeLayout>
+
+    <com.jb.filemanager.function.recent.SquareRelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.jb.filemanager.function.recent.SquareImageView
+            android:id="@+id/inner_item_pic3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:id="@+id/inner_item_pic_select3"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:padding="8dp"/>
+
+        <com.jb.filemanager.function.recent.SquareTextView
+            android:id="@+id/inner_item_pic_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:gravity="center"
+            android:text="More>>"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:visibility="gone"/>
+    </com.jb.filemanager.function.recent.SquareRelativeLayout>
+</LinearLayout>

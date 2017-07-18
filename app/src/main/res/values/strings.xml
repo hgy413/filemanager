@@ -380,4 +380,9 @@
     <string name="tip_free_space_content">Your Unused Storage Usage has less than 10%，Maybe you need to manage your Files</string>
     <string name="tip_usb_state_content">USB Has Already Connected.</string>
     <string name="tip_usb_state_btu">Manage Your Files</string>
+    <string name="recent">Recent</string>
+    <string name="winthin_min">Within %1$d min</string>
+    <string name="within_hours">Within %1$d hours</string>
+    <string name="within_days">Within %1$d days</string>
+    <string name="early">Early</string>
 </resources>

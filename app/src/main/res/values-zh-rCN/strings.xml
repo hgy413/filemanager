@@ -22,5 +22,10 @@
     <string name="file_decompression_complete">文件解压完成</string>
     <string name="extract_to">解压至: %1$s</string>
     <string name="extract_error">解压错误.</string>
-    <string name="extract_cancel">Extract Canceled.</string>
+    <string name="extract_cancel">取消解压.</string>
+    <string name="recent">最近文件</string>
+    <string name="winthin_min">%1$d分钟前</string>
+    <string name="within_hours">%1$d小时前</string>
+    <string name="within_days">%1$d天前</string>
+    <string name="early">更早</string>
 </resources>

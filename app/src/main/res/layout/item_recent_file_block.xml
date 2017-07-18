@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f5f6ff"
+    android:paddingBottom="8dp"
+    android:paddingEnd="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingStart="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_block"
+        android:paddingBottom="10dp"
+        android:orientation="vertical">
+        <!-- Title -->
+        <RelativeLayout
+            android:id="@+id/item_block_title_view_group"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/item_dir_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="160dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="160dp"
+                android:layout_marginStart="16dp"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="DirName"
+                android:textColor="@color/black_70"
+                android:textSize="12dp"/>
+
+            <TextView
+                android:id="@+id/item_within_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="Within 3 hours"
+                android:textColor="@color/black_40"
+                android:textSize="12dp"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e7e9f3"/>
+
+        <ListView
+            android:id="@+id/item_block_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollbars="none"/>
+
+        <TextView
+            android:id="@+id/item_btn_more"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="More>>"
+            android:textColor="@color/black_40"
+            android:textSize="16dp"/>
+    </LinearLayout>
+</LinearLayout>

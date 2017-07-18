@@ -1,7 +1,9 @@
 package com.jb.filemanager.function.recent.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 
+import com.jb.filemanager.R;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
 
 /**
@@ -52,6 +54,7 @@ public final class RecentFileUtil {
 
     /**
      * 最近文件类型 : 文件或者图片
+     *
      * @param filePath 文件名
      * @return f
      */
@@ -60,5 +63,28 @@ public final class RecentFileUtil {
         if (TextUtils.isEmpty(extension)) return false;
         return "bmp".equalsIgnoreCase(extension) || "jpg".equalsIgnoreCase(extension)
                 || "png".equalsIgnoreCase(extension);
+    }
+
+    /**
+     * 将分钟转化字符串以显示
+     *
+     * @param min 分钟
+     * @return s
+     */
+    public static String formatWithinTime(Context context, int min) {
+        // 1小时以内, 返回分钟值
+        if (min < 60) {
+            return context.getString(R.string.winthin_min, min);
+        }
+        // 1天以内, 返回整数小时转化为分钟的值
+        if (min < VALUE_ONE_DAY_TIME) {
+            return context.getString(R.string.within_hours, min / 60);
+        }
+        // 1周以内, 返回整数天转化为分钟的值
+        if (min < VALUE_SEVEN_DAY_TIME) {
+            return context.getString(R.string.within_days, min / 60 / 24);
+        }
+        // 超过一周, 返回VALUE_EARLY_TIME
+        return context.getString(R.string.early);
     }
 }
