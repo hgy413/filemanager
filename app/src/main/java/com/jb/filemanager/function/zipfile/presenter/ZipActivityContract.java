@@ -17,12 +17,16 @@ public interface ZipActivityContract {
         void showOperationDialog(ZipFileItemBean fileItem);
         void hideMoreOperator();
         void showMoreOperator(int count);
+        void switchSelectMode(boolean isToSelectMode);
+        void setSearchTitleSelectBtnState(int state);
+        void setSearchTitleSelectCount(int count);
     }
     interface Presenter{
         void onCreate();
         void onItemClick(int groupPosition, int childPosition);// 弹窗
         void onItemStateChange();
-        void extractZipFile(ZipFileItemBean fileItem);
         void onDestroy();
+        void onTitleCancelBtnClick();
+        void onTitleSelectBtnClick();
     }
 }

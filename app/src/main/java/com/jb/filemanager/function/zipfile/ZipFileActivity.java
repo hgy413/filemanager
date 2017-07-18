@@ -19,6 +19,7 @@ import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.presenter.ZipActivityContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
 import com.jb.filemanager.ui.view.SearchTitleView;
+import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     private TextView mTvBottomOpen;
     private TextView mTvBottomShowInFolder;
     private boolean mIsMoreOperatorShown;
+    private SearchTitleView mSearchTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,17 +86,26 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         mTvBottomShowInFolder.setOnClickListener(this);
 
 
-        SearchTitleView searchTitle = (SearchTitleView) findViewById(search_title);
-        searchTitle.setOnBackClickListener(new View.OnClickListener() {
+        mSearchTitle = (SearchTitleView) findViewById(search_title);
+        mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
             @Override
-            public void onClick(View v) {
+            public void onSearchClick() {
+                SearchActivity.showSearchResult(getApplicationContext());
+            }
+
+            @Override
+            public void onIvBackClick() {
                 finish();
             }
-        });
-        searchTitle.setOnSearchClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                SearchActivity.showSearchResult(getApplicationContext());
+            public void onIvCancelSelectClick() {
+                mPresenter.onTitleCancelBtnClick();
+            }
+
+            @Override
+            public void onSelectBtnClick() {
+                mPresenter.onTitleSelectBtnClick();
             }
         });
 
@@ -156,7 +167,6 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
@@ -213,6 +223,21 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
             mTvBottomOpen.setVisibility(View.GONE);
             mTvBottomShowInFolder.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void switchSelectMode(boolean isToSelectMode) {
+        mSearchTitle.switchTitleMode(isToSelectMode);
+    }
+
+    @Override
+    public void setSearchTitleSelectBtnState(int state) {
+        mSearchTitle.setSelectBtnResId(state);
+    }
+
+    @Override
+    public void setSearchTitleSelectCount(int count) {
+        mSearchTitle.setSelectedCount(count);
     }
 
     //隐藏more的内容

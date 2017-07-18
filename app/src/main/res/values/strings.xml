@@ -387,4 +387,5 @@
     <string name="within_hours">Within %1$d hours</string>
     <string name="within_days">Within %1$d days</string>
     <string name="early">Early</string>
+    <string name="file_selected">%1$dfile(s) selected</string>
 </resources>

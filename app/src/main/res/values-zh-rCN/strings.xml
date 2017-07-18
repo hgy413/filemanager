@@ -28,4 +28,5 @@
     <string name="within_hours">%1$d小时前</string>
     <string name="within_days">%1$d天前</string>
     <string name="early">更早</string>
+    <string name="file_selected">%1$d个文件被选中</string>
 </resources>

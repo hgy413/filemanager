@@ -31,4 +31,34 @@
         android:contentDescription="@null"
         android:src="@drawable/black_search_icon_selector"
         />
+
+    <TextView
+        android:id="@+id/search_title_tv_select_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:drawableLeft="@drawable/iv_cancel_blue_selector"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/iv_cancel_blue_selector"
+        android:text="@string/zip"
+        android:textColor="@color/tv_back_black_text_selector"
+        android:textSize="16dp"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/search_title_select_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:contentDescription="@null"
+        android:src="@drawable/choose_none_black"
+        android:visibility="gone"
+        />
 </merge>

@@ -25,8 +25,6 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
     private ZipActivityContract.View mView;
     private List<ZipFileGroupBean> mGroupList = new ArrayList<>();
 
-    private List<ZipFileItemBean> mSelectedBean = new ArrayList<>();
-
     public ZipFileActivityPresenter(ZipActivityContract.View view) {
         mView = view;
     }
@@ -48,28 +46,75 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
 
     @Override
     public void onItemStateChange() {
-        mSelectedBean.clear();
+        int selectCount = 0;
+        int totalCount = 0;
         for (ZipFileGroupBean groupBean : mGroupList) {
             List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
             for (ZipFileItemBean itemBean : zipFileList) {
-                mSelectedBean.add(itemBean);
+                totalCount ++;
+                if (itemBean.isSelected()) {
+                    selectCount ++;
+                }
             }
         }
-        if (mSelectedBean.size() > 0) {
-            mView.showMoreOperator(mSelectedBean.size());
+        if (selectCount > 0) {
+            mView.showMoreOperator(selectCount);
+            mView.switchSelectMode(true);
+            mView.setSearchTitleSelectBtnState(selectCount == totalCount ? 2 : 1);
+            mView.setSearchTitleSelectCount(selectCount);
         } else {
             mView.hideMoreOperator();
+            mView.switchSelectMode(false);
         }
-    }
-
-    @Override
-    public void extractZipFile(ZipFileItemBean fileItem) {
-
     }
 
     @Override
     public void onDestroy() {
 
+    }
+
+    @Override
+    public void onTitleCancelBtnClick() {
+        changeAllItemState(false);
+        mView.switchSelectMode(false);
+        mView.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onTitleSelectBtnClick() {
+        int selectCount = 0;
+        int totalCount = 0;
+        for (ZipFileGroupBean groupBean : mGroupList) {
+            List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
+            for (ZipFileItemBean itemBean : zipFileList) {
+                totalCount ++;
+                if (itemBean.isSelected()) {
+                    selectCount ++;
+                }
+            }
+        }
+        if (selectCount == totalCount) {
+            // 设为全不选
+            changeAllItemState(false);
+            mView.setSearchTitleSelectBtnState(0);
+            mView.setSearchTitleSelectCount(0);
+            mView.switchSelectMode(false);
+        } else {
+            // 设为全选
+            changeAllItemState(true);
+            mView.setSearchTitleSelectBtnState(2);
+            mView.setSearchTitleSelectCount(totalCount);
+        }
+        mView.notifyDataSetChanged();
+    }
+
+    private void changeAllItemState(boolean isSelect) {
+        for (ZipFileGroupBean groupBean : mGroupList) {
+            List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
+            for (ZipFileItemBean itemBean : zipFileList) {
+                itemBean.setSelected(isSelect);
+            }
+        }
     }
 
     /**
