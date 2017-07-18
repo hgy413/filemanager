@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.image;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.image.adapter.ImageDetailsPagerAdapter;
-import com.jb.filemanager.function.image.app.BaseFragment;
+import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsContract;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsPresenter;
@@ -27,7 +26,7 @@ import java.util.List;
  * Created by nieyh on 17-7-4.
  */
 
-public class ImageDetailFragment extends BaseFragment implements ImageDetailsContract.View {
+public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar implements ImageDetailsContract.View {
 
     //图片详情列表
     private final String ARG_IMG_DITALS_LIST = "arg_img_ditals_list";

@@ -15,7 +15,7 @@ import android.widget.ExpandableListView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
-import com.jb.filemanager.function.image.app.BaseFragment;
+import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
 import com.jb.filemanager.function.image.presenter.ImagePresenter;
@@ -29,7 +29,7 @@ import java.util.List;
  * Created by nieyh on 17-7-3.
  */
 
-public class ImageManagerFragment extends BaseFragment implements ImageContract.View, CommonTitleBar.OnActionListener {
+public class ImageManagerFragment extends BaseFragmentWithImmersiveStatusBar implements ImageContract.View, CommonTitleBar.OnActionListener {
 
     private ImageContract.Presenter mPresenter;
     //是否是内部存储

@@ -8,11 +8,12 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.image.ImageDetailFragment;
-import com.jb.filemanager.function.image.app.BaseFragment;
+import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
@@ -37,7 +38,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
     private int m10dpDx;
     private int mPhotoSize;
 
-    public ImageExpandableAdapter(List<ImageGroupModle> imageGroupModleList, BaseFragment currentFragment, ImageContract.Presenter presenter) {
+    public ImageExpandableAdapter(List<ImageGroupModle> imageGroupModleList, BaseFragmentWithImmersiveStatusBar currentFragment, ImageContract.Presenter presenter) {
         this.mImageGroupModleList = imageGroupModleList;
         this.mCurrentFragment = currentFragment;
         this.mPresenter = presenter;

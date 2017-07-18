@@ -1,6 +1,7 @@
-package com.jb.filemanager.function.image.app;
+package com.jb.filemanager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,25 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.util.DrawUtils;
+import com.jb.filemanager.function.image.app.BaseFragmentActivity;
+import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.util.QuickClickGuard;
-import com.jb.filemanager.util.WindowUtil;
-import com.jb.filemanager.util.device.Machine;
 
 /**
- * Created by bill wang on 16/9/21.
+ * Created by bill wang on 2017/7/18.
+ *
  */
 
 public class BaseFragment extends android.support.v4.app.Fragment {
-
     protected Activity mActivity;
 
     protected QuickClickGuard mQuickClickGuard;
     //这个主要是为防止快速点击不同的控件
     protected QuickClickGuard mQuickClickGuardForTwoView;
     //显示的时间 (用于区分当前显示的Fragment 时间排序可以判断上一个显示的Fragment)
-    private long mVisiableTime;
+    private long mVisibleTime;
     //是否参与返回统计
     private boolean isTitleBack;
 
@@ -37,10 +36,10 @@ public class BaseFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof BaseFragmentActivity) {
-            mBaseFragmentActivity = (BaseFragmentActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof BaseFragmentActivity) {
+            mBaseFragmentActivity = (BaseFragmentActivity) context;
         }
     }
 
@@ -62,26 +61,8 @@ public class BaseFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setImmersiveStatusBar(view);
         //刷新成当前时间
-        mVisiableTime = System.currentTimeMillis();
-    }
-
-    /**
-     * 设置沉浸式状态栏
-     */
-    protected void setImmersiveStatusBar(View root) {
-        //沉浸式状态栏 fragment不能使用fitsysWindows
-        if (Machine.HAS_SDK_KITKAT) {
-            //设置顶部内边距 分隔开内容与顶部
-            int paddingTop = 0;
-            try {
-                paddingTop = WindowUtil.getStatusBarHeight();
-            } catch (Exception ex) {
-                paddingTop = DrawUtils.dip2px(25);
-            }
-            root.setPadding(0, paddingTop, 0, 0);
-        }
+        mVisibleTime = System.currentTimeMillis();
     }
 
     @Override
@@ -97,7 +78,7 @@ public class BaseFragment extends android.support.v4.app.Fragment {
      * */
     public void onHandlePop() {
         //刷新当前显示时间
-        mVisiableTime = System.currentTimeMillis();
+        mVisibleTime = System.currentTimeMillis();
     }
 
     /**
@@ -157,7 +138,7 @@ public class BaseFragment extends android.support.v4.app.Fragment {
     /**
      * 获取当前Fragment显示的时间
      * */
-    public long getVisiableTime() {
-        return mVisiableTime;
+    public long getVisibleTime() {
+        return mVisibleTime;
     }
 }

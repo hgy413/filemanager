@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.image.app.BaseFragment;
 import com.jb.filemanager.function.search.modle.FileInfo;
 import com.jb.filemanager.util.AppUtils;
-import com.jb.filemanager.util.FileManagerUtil;
 
 import java.util.ArrayList;
 

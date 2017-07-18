@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.image.app.BaseFragment;
 import com.jb.filemanager.function.search.modle.FileInfo;
 import com.jb.filemanager.function.search.presenter.SearchContract;
 import com.jb.filemanager.function.search.presenter.SearchPresenter;

@@ -18,6 +18,42 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <!-- 灰色状态栏 透明窗体 -->
+    <style name="AppTheme.NoActionBar_Gray_StateBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:statusBarColor">@color/common_status_bar_gray</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustNothing</item>
+    </style>
+
+    <!-- 绿色状态栏 透明窗体 -->
+    <style name="AppTheme.NoActionBar_Green_StateBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:statusBarColor">@color/common_status_bar_green</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustNothing</item>
+    </style>
+
+    <!-- 红色状态栏 透明窗体 -->
+    <style name="AppTheme.NoActionBar_Red_StateBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:statusBarColor">@color/common_status_bar_red</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustNothing</item>
+    </style>
+
     <!--透明状态栏-->
     <!--带有window背景的主题  适用于页面没有设置背景色的情况-->
     <style name="AppTheme.NoActionBar_TranslucentBar_with_bg" parent="AppTheme">

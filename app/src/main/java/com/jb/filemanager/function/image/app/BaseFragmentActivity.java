@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 
+import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.receiver.HomeWatcherReceiver;
 import com.jb.filemanager.util.Logger;
 
@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Created by nieyh on 2017/4/25.
+ *
  */
 
 public class BaseFragmentActivity extends FragmentActivity {
@@ -32,9 +33,9 @@ public class BaseFragmentActivity extends FragmentActivity {
     private Comparator<BaseFragment> mComparator = new Comparator<BaseFragment>() {
         @Override
         public int compare(BaseFragment o1, BaseFragment o2) {
-            if (o2.getVisiableTime() > o1.getVisiableTime()) {
+            if (o2.getVisibleTime() > o1.getVisibleTime()) {
                 return -1;
-            } else if (o2.getVisiableTime() < o1.getVisiableTime()) {
+            } else if (o2.getVisibleTime() < o1.getVisibleTime()) {
                 return 1;
             } else {
                 return 0;

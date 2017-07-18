@@ -87,7 +87,7 @@
         <activity
             android:name=".home.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg">
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -216,8 +216,7 @@
         <activity
             android:name=".function.search.view.SearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_transparent_bg"
-            android:windowSoftInputMode="stateVisible"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!--清理结果页-->
         <activity
