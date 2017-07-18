@@ -130,11 +130,6 @@ public class PermissionAlarmManager {
      * @return 开启状态
      */
     public boolean isSwitchEnable() {
-        //服务器配置 返回是否打开
-        // TODO: 17-6-29 @nieyh 需要看是否依靠服务器控制
-//        boolean isEnable = RemoteConfigManager.getInstance().getPermissionCheckConfig().funcEnable();
-        //保持与服务器控制的一致
-//        SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitBoolean(IPreferencesIds.KEY_PERMISSION_ALARM_ENABLE, isEnable);
         return SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_PERMISSION_ALARM_ENABLE, true);
     }
 
@@ -341,17 +336,6 @@ public class PermissionAlarmManager {
      */
     private void gotoPermissionAlarmPopActivity(final String pkgName, final List<String> permissions, final boolean isNeedShowAd, @PermissionAlarmPopActivity.PermissionAlarmDlgType final int type) {
         if (isNeedShowAd) {
-//            ViewBinder.Builder mopubNativeViewBuilder = new ViewBinder.Builder(R.layout.layout_permission_alarm_ad)
-//                    .iconImageId(R.id.ad_icon)
-//                    .mainImageId(R.id.ad_head)
-//                    .titleId(R.id.ad_info_title)
-//                    .textId(R.id.ad_info_detail)
-//                    .callToActionId(R.id.ad_action)
-//                    .privacyInformationIconImageId(R.id.ad_mopub_logo);
-//            MoPubStaticNativeAdRenderer renderer = new MoPubStaticNativeAdRenderer(mopubNativeViewBuilder.build());
-//            MoPubAdConfig moPubAdConfig = new MoPubAdConfig().moPubNativeConfig(new MoPubNativeConfig(renderer, null));
-            // TODO: 17-6-29 @nieyh mopub广告 与 请求广告
-//            AdManager.getInstance().loadAd(BasePermissionView.mAdEntrance, 1, moPubAdConfig, true);
             TheApplication.postRunOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -411,42 +395,13 @@ public class PermissionAlarmManager {
      */
     private void gotoPermissionMergePopActivity(final String pkgName, final List<String> newPermission) {
         //服务器配置返回功能可以展示广告 并且这个没有新增权限的也可以展示广告
-        // TODO: 17-6-29 @nieyh 是否远程控制展示广告
-        //RemoteConfigManager.getInstance().getPermissionCheckConfig().showAd()
         if (false) {
             //如果activiity已经存在 则直接展示对话框
             if (PermissionAlarmPopActivity.isLive) {
                 PermissionAlarmPopActivity.show(pkgName, newPermission, true, PermissionAlarmPopActivity.DLG_MERGE);
             } else {
-                if (!PermissionAlarmPopActivity.isAlreadyRequestAd) {
-                    //当没有请求过广告 则请求一次
-                    // TODO: 17-6-29 @nieyh 是否展示mopub广告
-//                    PermissionAlarmPopActivity.isAlreadyRequestAd = true;
-//                    ViewBinder.Builder mopubNativeViewBuilder = new ViewBinder.Builder(R.layout.layout_permission_alarm_ad)
-//                            .iconImageId(R.id.ad_icon)
-//                            .mainImageId(R.id.ad_head)
-//                            .titleId(R.id.ad_info_title)
-//                            .textId(R.id.ad_info_detail)
-//                            .callToActionId(R.id.ad_action)
-//                            .privacyInformationIconImageId(R.id.ad_mopub_logo);
-//                    MoPubStaticNativeAdRenderer renderer = new MoPubStaticNativeAdRenderer(mopubNativeViewBuilder.build());
-//                    MoPubAdConfig moPubAdConfig = new MoPubAdConfig().moPubNativeConfig(new MoPubNativeConfig(renderer, null));
-//
-//                    AdManager.getInstance().loadAd(BasePermissionView.mAdEntrance, 1, moPubAdConfig, true);
-//                    //并且等待五秒再展示对话框
-//                    TheApplication.postRunOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //加一个过滤 当开关已经关上时 不再弹框
-//                            if (PermissionAlarmManager.this.isSwitchEnable()) {
-//                                PermissionAlarmPopActivity.show(pkgName, newPermission, true, PermissionAlarmPopActivity.DLG_MERGE);
-//                            }
-//                        }
-//                    }, 5000);
-                } else {
-                    //如果在这个五秒等待中 又有对话框需要展示 则直接展示
-                    PermissionAlarmPopActivity.show(pkgName, newPermission, true, PermissionAlarmPopActivity.DLG_MERGE);
-                }
+                //如果在这个五秒等待中 又有对话框需要展示 则直接展示
+                PermissionAlarmPopActivity.show(pkgName, newPermission, true, PermissionAlarmPopActivity.DLG_MERGE);
             }
         } else {
             PermissionAlarmPopActivity.show(pkgName, newPermission, false, PermissionAlarmPopActivity.DLG_MERGE);

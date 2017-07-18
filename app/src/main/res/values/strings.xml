@@ -256,7 +256,7 @@
     <string name="permission_alarm_dialog_content_lv1">might cost some related fees, still continue?</string>
     <string name="permission_alarm_dialog_content_lv2">involving your personal information, still continue?</string>
     <string name="permission_alarm_dialog_content_lv3">may network communications, still continue?</string>
-    <string name="no_new_permissions_line1">%d apps updated</string>
+    <string name="no_new_permissions_line1">&lt;font color="#FF3737">%1$d &lt;/font> apps updated</string>
     <string name="no_new_permissions_line2">%s detected no new alarm permission(s) wanted</string>
     <string name="request_app_permission_content">%s can check if certain sensitive permission(s) will used by any apps!</string>
     <string name="permission_dialog_dital_txt_tip">Details >> </string>

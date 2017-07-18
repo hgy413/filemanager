@@ -76,8 +76,6 @@ public class IPreferencesIds {
     public static final String KEY_PERMISSION_ALARM_ENABLE = "key_permission_alarm_enable";
     //买量用户是否展示开关
     public static final String KEY_PERMISSION_ALARM_SWITCHER_BUY_USER_SHOW = "key_permission_alert_switcher_buy_user_show";
-    //权限对话框展示次数
-    public static final String KEY_PERMISSION_DLG_SHOW_TIMES = "key_permission_dlg_show_times";
     //是否监听usb
     public static final String KEY_USB_CONNECTED_TIP_ENABLE = "key_usb_connected_tip_enable";
 

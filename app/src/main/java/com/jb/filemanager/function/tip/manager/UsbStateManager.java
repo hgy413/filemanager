@@ -24,7 +24,10 @@ public class UsbStateManager {
 
     private static UsbStateManager sInstance;
 
+    private boolean isFirstTip;
+
     private UsbStateManager() {
+        isFirstTip = true;
     }
 
     public static UsbStateManager getInstance() {
@@ -43,7 +46,8 @@ public class UsbStateManager {
             if (bundle != null) {
                 boolean isConnected = bundle.getBoolean("connected");
                 boolean isHostConnected = bundle.getBoolean("host_connected");
-                if (isConnected && !isHostConnected) {
+                if (isConnected && !isHostConnected && !isFirstTip) {
+                    isFirstTip = false;
                     //当USB连接上 并且 设备不是充当主设备 (也就是代表着usb连接电脑设备)
                     tryShowTipWindow();
                 }

@@ -7,16 +7,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <View
+    <android.support.v4.widget.Space
             android:id="@+id/v_permission_logo_merge_left_margin"
-            android:layout_width="14dp"
+            android:layout_width="9dp"
             android:layout_height="match_parent"/>
 
-    <ImageView
+    <com.jb.filemanager.function.permissionalarm.view.RoundImageView
             android:id="@+id/iv_permission_logo_merge_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerHorizontal="true"
+            imagecontrol:circle = "true"
             tools:src="@mipmap/ic_launcher"/>
 
 </LinearLayout>

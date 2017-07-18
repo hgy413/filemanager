@@ -121,7 +121,8 @@ public class PermissionAlarmPopActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRoot = (FrameLayout) findViewById(android.R.id.content);
-        mCurShowTimes = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getInt(IPreferencesIds.KEY_PERMISSION_DLG_SHOW_TIMES, 0);
+        //半透明
+        mRoot.setBackgroundColor(0x7f000000);
         dealIntent(getIntent());
         TheApplication.getGlobalEventBus().register(mPermissionViewDismissEvtSubscriber);
 
@@ -191,7 +192,7 @@ public class PermissionAlarmPopActivity extends BaseActivity {
                     //加载广告
                     dialog.loadAd();
                 }
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.gravity = Gravity.CENTER;
                 dialog.setLayoutParams(layoutParams);
@@ -254,7 +255,6 @@ public class PermissionAlarmPopActivity extends BaseActivity {
         //刷新已经请求过广告标示 将可以再一次请求广告
         isAlreadyRequestAd = false;
         TheApplication.getGlobalEventBus().unregister(mPermissionViewDismissEvtSubscriber);
-        SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitInt(IPreferencesIds.KEY_PERMISSION_DLG_SHOW_TIMES, mCurShowTimes);
         super.onDestroy();
     }
 }

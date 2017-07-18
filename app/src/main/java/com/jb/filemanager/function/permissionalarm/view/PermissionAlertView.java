@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -35,7 +34,6 @@ import java.util.List;
  * @date: 2017-2-10 11:34
  */
 public class PermissionAlertView extends BasePermissionView {
-    private RelativeLayout mRoot;
     private TextView mTvTitle, mTvDesc;
 
     private String mPackageName;
@@ -44,7 +42,7 @@ public class PermissionAlertView extends BasePermissionView {
     private PermissionHelper mPermissionHelper;
     private ImageView mSetting;
     private ImageView mClose;
-    private TextView mStop;
+    private View mStop;
 
     public PermissionAlertView(Context context) {
         super(context);
@@ -68,13 +66,12 @@ public class PermissionAlertView extends BasePermissionView {
         inflate(getContext(), R.layout.view_permission_alert, this);
         mPermissionHelper = new PermissionHelper();
         TextView tvDetail = (TextView) this.findViewById(R.id.tv_permission_alarm_details);
-        mRoot = (RelativeLayout) this.findViewById(R.id.activity_permission_alarm_dialog_root);
+        setBackgroundColor(Color.WHITE);
         mTvTitle = (TextView) this.findViewById(R.id.tv_permission_alarm_title);
         mClose = (ImageView) this.findViewById(R.id.view_permission_alert_close);
         mTvDesc = (TextView) this.findViewById(R.id.tv_permission_alarm_description);
         mSetting = (ImageView) this.findViewById(R.id.view_permission_alert_setting);
-        mStop = (TextView) this.findViewById(R.id.dialog_stop_stop);
-        mSetting.setColorFilter(0x00000000, PorterDuff.Mode.SRC_ATOP);
+        mStop = this.findViewById(R.id.dialog_stop_stop);
         tvDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,7 +199,7 @@ public class PermissionAlertView extends BasePermissionView {
                 int indexEnd = title.indexOf(endString) + endString.length();
 
                 SpannableStringBuilder ssb = new SpannableStringBuilder(titleView.getText().toString());
-                ssb.setSpan(new ForegroundColorSpan(Color.RED), indexStart, indexEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ssb.setSpan(new ForegroundColorSpan(0xFFFF3737), indexStart, indexEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 titleView.setText(ssb);
             } catch (Exception e) {
                 e.printStackTrace();
