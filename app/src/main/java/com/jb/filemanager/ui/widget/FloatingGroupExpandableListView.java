@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-
 import com.jb.filemanager.R;
 
 public class FloatingGroupExpandableListView extends ExpandableListView {

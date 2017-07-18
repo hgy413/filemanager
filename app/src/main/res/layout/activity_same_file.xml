@@ -4,12 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="#347865">
+    >
 
-    <include
-        layout="@layout/common_action_bar_with_search"
-        android:radius="4dp"
+    <!--<include-->
+        <!--layout="@layout/common_action_bar_with_search"-->
+        <!--android:radius="4dp"-->
+        <!--/>-->
+    <com.jb.filemanager.ui.view.SearchTitleView
+        android:id="@+id/search_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
         />
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/main_shadow"/>
+
     <FrameLayout
         android:id="@+id/fl_file_list_container"
         android:layout_width="match_parent"

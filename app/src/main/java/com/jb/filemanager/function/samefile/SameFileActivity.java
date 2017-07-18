@@ -8,14 +8,20 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.search.view.SearchActivity;
+import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
+
 import java.io.File;
 import java.util.ArrayList;
+
+import static com.jb.filemanager.R.id.search_title;
 
 /**
  * Created by bool on 17-6-30.
@@ -47,32 +53,40 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void initView(final int fileType) {
-        TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
-        back.getPaint().setAntiAlias(true);
+        SearchTitleView searchTitle = (SearchTitleView) findViewById(search_title);
+        searchTitle.setOnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        searchTitle.setOnSearchClickListener(this);
+//        TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
+//        back.getPaint().setAntiAlias(true);
         switch (fileType) {
             case Const.FILE_TYPE_MUSIC:
-                back.setText(R.string.music_title);
+                searchTitle.setTitleName("Music");// .setText(R.string.music_title);
                 break;
             case Const.FILE_TYPE_VIDEO:
-                back.setText(R.string.video_title);
+                searchTitle.setTitleName("Video"); // .setText(R.string.video_title);
                 break;
             case Const.FILE_TYPE_DOWNLOAD:
-                back.setText(R.string.download_title);
+                searchTitle.setTitleName("Download"); // back.setText(R.string.download_title);
                 break;
             default:
-                back.setText("Transfer unknow type");
+                searchTitle.setTitleName("Transfer unknow type"); // back.setText("Transfer unknow type");
         }
-        back.setOnClickListener(this);
+//        back.setOnClickListener(this);
         mElvFilelist = (ExpandableListView) findViewById(R.id.elv_same_file_list);
-        mFileExpandableListAdapter = new FileExpandableListAdapter( SameFileActivity.this,
-                new FileExpandableListAdapter.ItemChooseChangeListener(){
+        mFileExpandableListAdapter = new FileExpandableListAdapter(SameFileActivity.this,
+                new FileExpandableListAdapter.ItemChooseChangeListener() {
                     @Override
                     public void onChooseNumChanged(int num) {
-                       if (num > 0) {
-                           mBottomOperateContainer.setVisibility(View.VISIBLE);
-                       } else {
-                           mBottomOperateContainer.setVisibility(View.GONE);
-                       }
+                        if (num > 0) {
+                            mBottomOperateContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            mBottomOperateContainer.setVisibility(View.GONE);
+                        }
                     }
                 });
         mElvFilelist.setAdapter(mFileExpandableListAdapter);
@@ -110,7 +124,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             }
         });
 
-        mLlNoFileView = (LinearLayout)findViewById(R.id.ll_no_file);
+        mLlNoFileView = (LinearLayout) findViewById(R.id.ll_no_file);
     }
 
     @Override
@@ -177,8 +191,9 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                     mPresenter.onClickBackButton(false);
                 }
                 break;
-            case R.id.iv_common_action_bar_with_search_search:
+            case R.id.search_title_search_icon:
                 // TODO
+                SearchActivity.showSearchResult(getApplicationContext());
                 break;
             default:
                 break;
@@ -201,7 +216,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     }
 
     @Override
-    public void onNoFileFindShow () {
+    public void onNoFileFindShow() {
         mLlNoFileView.setVisibility(View.VISIBLE);
     }
 }
