@@ -125,6 +125,11 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
             }
         });
         mListView.setAdapter(mAdapter);
+        // 展开所有分组
+        int count = mListView.getCount();
+        for (int i = 0; i < count; i++) {
+            mListView.expandGroup(i);
+        }
     }
 
     @Override
