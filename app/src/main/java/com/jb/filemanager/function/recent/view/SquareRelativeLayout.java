@@ -1,4 +1,4 @@
-package com.jb.filemanager.function.recent;
+package com.jb.filemanager.function.recent.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

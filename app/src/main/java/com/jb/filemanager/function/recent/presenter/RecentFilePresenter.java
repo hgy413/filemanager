@@ -24,7 +24,7 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
         mBlockList = RecentFileManager.getInstance().getRecentFiles();
         mView.setListViewData(mBlockList);
         RecentFileManager.getInstance().setFlushDataCallbackListener(this);
-        //RecentFileManager.getInstance().scanAllFile();
+        RecentFileManager.getInstance().scanAllFile();
     }
 
     @Override
@@ -34,8 +34,6 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
 
     @Override
     public void onDataFlushComplete(List<BlockBean> data) {
-        mBlockList.clear();
-        mBlockList.addAll(data);
         mView.notifyListDataChanged();
     }
 }

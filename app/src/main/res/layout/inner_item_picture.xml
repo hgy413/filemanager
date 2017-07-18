@@ -10,12 +10,12 @@
               android:paddingRight="8dp"
               android:paddingStart="8dp">
 
-    <com.jb.filemanager.function.recent.SquareRelativeLayout
+    <com.jb.filemanager.function.recent.view.SquareRelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <com.jb.filemanager.function.recent.SquareImageView
+        <com.jb.filemanager.function.recent.view.SquareImageView
             android:id="@+id/inner_item_pic1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,9 +32,9 @@
             android:contentDescription="@null"
             android:padding="8dp"/>
 
-    </com.jb.filemanager.function.recent.SquareRelativeLayout>
+    </com.jb.filemanager.function.recent.view.SquareRelativeLayout>
 
-    <com.jb.filemanager.function.recent.SquareRelativeLayout
+    <com.jb.filemanager.function.recent.view.SquareRelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="2dp"
@@ -43,7 +43,7 @@
         android:layout_marginStart="2dp"
         android:layout_weight="1">
 
-        <com.jb.filemanager.function.recent.SquareImageView
+        <com.jb.filemanager.function.recent.view.SquareImageView
             android:id="@+id/inner_item_pic2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,14 +60,14 @@
             android:contentDescription="@null"
             android:padding="8dp"/>
 
-    </com.jb.filemanager.function.recent.SquareRelativeLayout>
+    </com.jb.filemanager.function.recent.view.SquareRelativeLayout>
 
-    <com.jb.filemanager.function.recent.SquareRelativeLayout
+    <com.jb.filemanager.function.recent.view.SquareRelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <com.jb.filemanager.function.recent.SquareImageView
+        <com.jb.filemanager.function.recent.view.SquareImageView
             android:id="@+id/inner_item_pic3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -84,7 +84,7 @@
             android:contentDescription="@null"
             android:padding="8dp"/>
 
-        <com.jb.filemanager.function.recent.SquareTextView
+        <com.jb.filemanager.function.recent.view.SquareTextView
             android:id="@+id/inner_item_pic_mask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -94,5 +94,5 @@
             android:textColor="@android:color/white"
             android:textSize="16dp"
             android:visibility="gone"/>
-    </com.jb.filemanager.function.recent.SquareRelativeLayout>
+    </com.jb.filemanager.function.recent.view.SquareRelativeLayout>
 </LinearLayout>

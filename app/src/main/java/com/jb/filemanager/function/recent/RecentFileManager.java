@@ -84,7 +84,6 @@ public final class RecentFileManager implements RecentFileScanTaskListener {
 
     @Override
     public void onPostScan(List<BlockBean> result) {
-        Log.e("recent", "完成扫描");
         mBlockList.clear();
         mBlockList.addAll(result);
         mIsScanning = false;
