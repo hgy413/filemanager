@@ -1,7 +1,6 @@
 package com.jb.filemanager.home;
 
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,10 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.Const;
@@ -40,7 +36,6 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
-import com.jb.filemanager.home.bean.CategoryBean;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.view.UsageAnalysis;
 import com.jb.filemanager.util.APIUtil;
@@ -49,7 +44,6 @@ import com.jb.filemanager.util.ConvertUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,7 +83,6 @@ public class CategoryFragment extends Fragment {
     private long mTotalSize;
     private long mUsedSize;
 
-    private GridView mCategoryView;
     private TextView mTvStorageTitle;
     private TextView mTvStorageUsed;
     private TextView mTvStorageUnused;
@@ -125,77 +118,142 @@ public class CategoryFragment extends Fragment {
         // properly.
         View rootView = inflater.inflate(R.layout.fragment_main_category, container, false);
 
-        CategoryBean bean1 = new CategoryBean(R.drawable.ic_main_category_photo, getString(R.string.main_category_item_photo));
-        CategoryBean bean2 = new CategoryBean(R.drawable.ic_main_category_video, getString(R.string.main_category_item_video));//temp for video
-        CategoryBean bean3 = new CategoryBean(R.drawable.ic_main_category_app, getString(R.string.main_category_item_apps));
-        CategoryBean bean4 = new CategoryBean(R.drawable.ic_main_category_music, getString(R.string.main_category_item_music));// temp for music
-        CategoryBean bean5 = new CategoryBean(R.drawable.ic_main_category_doc, getString(R.string.main_category_item_doc));//temp for doc
-        CategoryBean bean6 = new CategoryBean(R.drawable.ic_main_category_zip, getString(R.string.main_category_item_zip));//temp for apk
-        CategoryBean bean7 = new CategoryBean(R.drawable.ic_main_category_download, getString(R.string.main_category_item_download));// temp for download
-        CategoryBean bean8 = new CategoryBean(R.drawable.ic_main_category_recent, getString(R.string.main_category_item_recent));
-        CategoryBean bean9 = new CategoryBean(R.drawable.ic_main_category_ad, getString(R.string.main_category_item_ad));
+        FrameLayout flPhoto = (FrameLayout) rootView.findViewById(R.id.fl_main_category_photo);
+        if (flPhoto != null) {
+            TextView tvPhoto = (TextView) flPhoto.findViewById(R.id.tv_main_category_photo);
+            if (tvPhoto != null) {
+                tvPhoto.getPaint().setAntiAlias(true);
+            }
+            flPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 图片管理
+                    startActivity(new Intent(getContext(), ImageActivity.class));
+                }
+            });
+        }
 
-        ArrayList<CategoryBean> arrayList = new ArrayList<>();
-        arrayList.add(bean1);
-        arrayList.add(bean2);
-        arrayList.add(bean3);
-        arrayList.add(bean4);
-        arrayList.add(bean5);
-        arrayList.add(bean6);
-        arrayList.add(bean7);
-        arrayList.add(bean8);
-        arrayList.add(bean9);
+        FrameLayout flVideo = (FrameLayout) rootView.findViewById(R.id.fl_main_category_video);
+        if (flVideo != null) {
+            TextView tvVideo = (TextView) flVideo.findViewById(R.id.tv_main_category_video);
+            if (tvVideo != null) {
+                tvVideo.getPaint().setAntiAlias(true);
+            }
+            flVideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 视频管理
+                    Intent intent = new Intent(getContext(), SameFileActivity.class);
+                    intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_VIDEO);
+                    startActivity(intent);
+                }
+            });
+        }
 
-        CategoryAdapter adapter = new CategoryAdapter();
-        adapter.setData(arrayList);
+        FrameLayout flApp = (FrameLayout) rootView.findViewById(R.id.fl_main_category_app);
+        if (flApp != null) {
+            TextView tvApp = (TextView) flApp.findViewById(R.id.tv_main_category_app);
+            if (tvApp != null) {
+                tvApp.getPaint().setAntiAlias(true);
+            }
+            flApp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // apk管理
+                    startActivity(new Intent(getContext(), AppManagerActivity.class));
+                }
+            });
+        }
 
-        mCategoryView = (GridView) rootView.findViewById(R.id.gv_main_category);
-        if (mCategoryView != null) {
-            mCategoryView.setAdapter(adapter);
-            mCategoryView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    switch (position) {
-                        case 0:
-                            // 图片管理
-                            startActivity(new Intent(getContext(), ImageActivity.class));
-                            break;
-                        case 1:
-                            // 视频管理
-                            Intent intent = new Intent(getContext(), SameFileActivity.class);
-                            intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_VIDEO);
-                            startActivity(intent);
-                            break;
-                        case 2:
-                            // apk管理
-                            startActivity(new Intent(getContext(), AppManagerActivity.class));
-                            break;
-                        case 4:
-                            // 文档管理
-                            startActivity(new Intent(getContext(), DocManagerActivity.class));
-                            break;
-                        case 3:
-                            // 音乐管理
-                            intent = new Intent(getContext(), SameFileActivity.class);
-                            intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_MUSIC);
-                            startActivity(intent);
-                            break;
-                        case 5:
-                            // zip
-                            startActivity(new Intent(getContext(), ZipFileActivity.class));
-                            break;
-                        case 6:
-                            // 下载管理
-                            intent = new Intent(getContext(), SameFileActivity.class);
-                            intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_DOWNLOAD);
-                            startActivity(intent);
-                            break;
-                        case 7:
-                            // 最近文件
-                            startActivity(new Intent(getContext(), RecentFileActivity.class));
-                            break;
-                        default:
-                            break;
-                    }
+        FrameLayout flMusic = (FrameLayout) rootView.findViewById(R.id.fl_main_category_music);
+        if (flMusic != null) {
+            TextView tvMusic = (TextView) flMusic.findViewById(R.id.tv_main_category_music);
+            if (tvMusic != null) {
+                tvMusic.getPaint().setAntiAlias(true);
+            }
+            flMusic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 音乐管理
+                    Intent intent = new Intent(getContext(), SameFileActivity.class);
+                    intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_MUSIC);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        FrameLayout flDoc = (FrameLayout) rootView.findViewById(R.id.fl_main_category_doc);
+        if (flDoc != null) {
+            TextView tvDoc = (TextView) flDoc.findViewById(R.id.tv_main_category_doc);
+            if (tvDoc != null) {
+                tvDoc.getPaint().setAntiAlias(true);
+            }
+            flDoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 文档管理
+                    startActivity(new Intent(getContext(), DocManagerActivity.class));
+                }
+            });
+        }
+
+        FrameLayout flZip = (FrameLayout) rootView.findViewById(R.id.fl_main_category_zip);
+        if (flZip != null) {
+            TextView tvZip = (TextView) flZip.findViewById(R.id.tv_main_category_zip);
+            if (tvZip != null) {
+                tvZip.getPaint().setAntiAlias(true);
+            }
+            flZip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // zip
+                    startActivity(new Intent(getContext(), ZipFileActivity.class));
+                }
+            });
+        }
+
+        FrameLayout flDownload = (FrameLayout) rootView.findViewById(R.id.fl_main_category_download);
+        if (flDownload != null) {
+            TextView tvDownload = (TextView) flDownload.findViewById(R.id.tv_main_category_download);
+            if (tvDownload != null) {
+                tvDownload.getPaint().setAntiAlias(true);
+            }
+            flDownload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 下载管理
+                    Intent intent = new Intent(getContext(), SameFileActivity.class);
+                    intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_DOWNLOAD);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        FrameLayout flRecent = (FrameLayout) rootView.findViewById(R.id.fl_main_category_recent);
+        if (flRecent != null) {
+            TextView tvRecent = (TextView) flRecent.findViewById(R.id.tv_main_category_recent);
+            if (tvRecent != null) {
+                tvRecent.getPaint().setAntiAlias(true);
+            }
+            flRecent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 最近文件
+                    startActivity(new Intent(getContext(), RecentFileActivity.class));
+                }
+            });
+        }
+
+        FrameLayout flAd = (FrameLayout) rootView.findViewById(R.id.fl_main_category_ad);
+        if (flAd != null) {
+            TextView tvAd = (TextView) flAd.findViewById(R.id.tv_main_category_ad);
+            if (tvAd != null) {
+                tvAd.getPaint().setAntiAlias(true);
+            }
+            flAd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO 点击广告
                 }
             });
         }
@@ -612,76 +670,5 @@ public class CategoryFragment extends Fragment {
         getLoaderManager().restartLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
         getLoaderManager().restartLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
         getLoaderManager().restartLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
-    }
-
-    private static class CategoryAdapter extends BaseAdapter {
-
-        private ArrayList<CategoryBean> mData;
-
-        public void setData(ArrayList<CategoryBean> data) {
-            mData = data;
-        }
-
-        @Override
-        public int getCount() {
-            int result = 0;
-            if (mData != null && mData.size() > 0) {
-                result = mData.size();
-            }
-            return result;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            Object result = null;
-            if (mData != null && mData.size() > position) {
-                result = mData.get(position);
-            }
-            return result;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            Context context = parent.getContext();
-            if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_main_category,
-                        parent, false);
-                holder = new ViewHolder();
-                holder.mIvIcon = (ImageView) convertView.findViewById(R.id.iv_main_category_icon);
-
-                holder.mTvName = (TextView) convertView.findViewById(R.id.tv_main_category_name);
-                if (holder.mTvName != null) {
-                    holder.mTvName.getPaint().setAntiAlias(true);
-                }
-
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            if (mData != null && mData.size() > position) {
-                CategoryBean bean = mData.get(position);
-
-                if (holder.mIvIcon != null) {
-                    holder.mIvIcon.setImageResource(bean.getCategoryIconResId());
-                }
-
-                if (holder.mTvName != null) {
-                    holder.mTvName.setText(bean.getCategoryName());
-                }
-            }
-            return convertView;
-        }
-
-        private static class ViewHolder {
-            ImageView mIvIcon;
-            TextView mTvName;
-        }
     }
 }
