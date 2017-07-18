@@ -28,7 +28,6 @@ public class SearchPresenter implements SearchContract.Presenter {
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchFinishEvent event) {
             if (mView != null) {
-                mView.dismissLoading();
                 mView.showResult(event.mFileInfoList);
             }
         }

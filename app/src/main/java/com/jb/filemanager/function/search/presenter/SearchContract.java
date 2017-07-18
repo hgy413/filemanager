@@ -16,7 +16,6 @@ public interface SearchContract {
 
     interface View {
         void showLoading();
-        void dismissLoading();
         void showResult(ArrayList<FileInfo> fileInfoList);
         void tipInputEmpty();
 
