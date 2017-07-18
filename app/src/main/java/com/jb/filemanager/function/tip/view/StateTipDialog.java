@@ -15,6 +15,8 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.tip.event.LayerCloseEvent;
+import com.jb.filemanager.function.tip.manager.StorageTipManager;
+import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -36,17 +38,30 @@ public class StateTipDialog extends BaseActivity {
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(LayerCloseEvent event) {
             int count = mRoot.getChildCount();
+            boolean isWindowsClosed = false;
             if (count == 1) {
                 if (!isFinishing()) {
+                    isWindowsClosed = true;
                     finish();
                 }
             } else {
                 for (int i = 0; i < mRoot.getChildCount(); i++) {
                     TipLayer tipLayer = (TipLayer) mRoot.getChildAt(i);
                     if (tipLayer.getLayerType() == event.mLayerType) {
+                        isWindowsClosed = true;
                         tipLayer.removeView2Root(mRoot);
                         break;
                     }
+                }
+            }
+            if (isWindowsClosed && event.isEffect) {
+                switch (event.mLayerType) {
+                    case TipLayer.USB_STATE_TIP_LAYER:
+                        UsbStateManager.getInstance().changerSwitch();
+                        break;
+                    case TipLayer.FREE_SPACE_TIP_LAYER:
+                        StorageTipManager.getInstance().changerSwitch();
+                        break;
                 }
             }
         }
@@ -129,6 +144,11 @@ public class StateTipDialog extends BaseActivity {
     public void onBackPressed() {
         Logger.w(TAG, "onBackPressed");
         int count = mRoot.getChildCount();
+        TipLayer tipLayer = (TipLayer) mRoot.getChildAt(count - 1);
+        if (tipLayer.onTouchOutSide()) {
+            //如果被消耗了事件 则退出
+            return;
+        }
         if (count == 1) {
             super.onBackPressed();
             return;

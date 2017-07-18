@@ -372,7 +372,7 @@ public class CategoryFragment extends Fragment {
     public void onEventMainThread(CleanScanFileSizeEvent event) {
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CleanScanDoneEvent event) {
         boolean allDone = CleanScanDoneEvent.isAllDone();
 //        Logger.e("Main", isNeedShowAnim() + "接收到CleanScanDoneEvent事件: " + allDone + event.name());

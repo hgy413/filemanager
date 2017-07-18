@@ -42,6 +42,8 @@ public class TipLayer extends BaseLayer implements View.OnClickListener {
     protected TextView mTxt;
     protected TextView mBtu;
     protected ImageView mClose;
+    protected View mSetting;
+    protected View mStop;
 
     protected static SparseArrayCompat<Boolean> mExitTipLayerMap = new SparseArrayCompat<>(2);
 
@@ -50,7 +52,7 @@ public class TipLayer extends BaseLayer implements View.OnClickListener {
         this.mLayerType = layerType;
         setBackgroundColor(Color.WHITE);
         //强制当前视图吃掉事件
-        setClickable(true);
+        this.setOnClickListener(this);
     }
 
     @Override
@@ -60,7 +62,11 @@ public class TipLayer extends BaseLayer implements View.OnClickListener {
         mTxt = findView(R.id.view_tip_txt);
         mBtu = findView(R.id.view_tip_btu);
         mClose = findView(R.id.view_tip_close);
+        mSetting = findView(R.id.view_tip_setting);
+        mStop = findView(R.id.dialog_stop_stop);
         mClose.setOnClickListener(this);
+        mSetting.setOnClickListener(this);
+        mStop.setOnClickListener(this);
     }
 
     @Override
@@ -113,7 +119,35 @@ public class TipLayer extends BaseLayer implements View.OnClickListener {
     public void onClick(View v) {
         if (v == mClose) {
             postEvent(new LayerCloseEvent(mLayerType));
+        } else if (v == mStop) {
+            postEvent(new LayerCloseEvent(mLayerType, true));
+        } else if (v == mSetting) {
+            if (mStop.getVisibility() == View.VISIBLE) {
+                mStop.setVisibility(View.GONE);
+            } else {
+                mStop.setVisibility(View.VISIBLE);
+            }
+        } else if (v == this) {
+            if (mStop.getVisibility() == View.VISIBLE) {
+                mStop.setVisibility(View.GONE);
+            }
         }
+    }
+
+    /**
+     * 点击外部
+     * @return
+     * <ol>
+     *     <li><b>true</b>消耗事件</li>
+     *     <li><b>false</b>不消耗事件</li>
+     * </ol>
+     * */
+    public boolean onTouchOutSide() {
+        if (mStop.getVisibility() == View.VISIBLE) {
+            mStop.setVisibility(View.GONE);
+            return true;
+        }
+        return false;
     }
 
     protected void close() {
