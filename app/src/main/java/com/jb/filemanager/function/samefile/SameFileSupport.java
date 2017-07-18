@@ -163,41 +163,44 @@ public class SameFileSupport implements SameFileContract.Support {
     }
 
     protected GroupList<String, FileInfo> getMediaInfo(final Uri uri, final String[] mediaProperties) {
-        Cursor cursor = mResolver.query(uri,
+        GroupList<String, FileInfo> list;
+        try (Cursor cursor = mResolver.query(uri,
                 mediaProperties,
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
                 mediaProperties[4]
-        );
-        GroupList<String, FileInfo> list = new GroupList<>();
-        long lastModify = 0L;
-        long modify = 0l;
-        String date = "";
-        FileInfo info = null;
-        ArrayList<FileInfo> infoList;
+        )) {
+            list = new GroupList<>();
+            long lastModify = 0L;
+            long modify = 0l;
+            String date = "";
+            FileInfo info = null;
+            ArrayList<FileInfo> infoList;
 
-        while(cursor.moveToNext()) {
-            if (null != (info = cursorToFileInfo(cursor))) {
-                modify = info.mModified;
-                if (uri == NUSIC_URI) {
-                    info.mFileType = Const.FILE_TYPE.MUSIC;
-                } else if (uri == VIDEO_URI) {
-                    info.mFileType = Const.FILE_TYPE.VIDEO;
-                }
-                boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
-                if (!isSameDay) {
-                    lastModify = modify;
-                    date = TimeUtil.getYandMandD(new Date(info.mModified));
-                    infoList = new ArrayList<>();
-                    list.put(date, infoList);
-                } else {
-                    date = TimeUtil.getYandMandD(new Date(info.mModified));
-                    infoList = list.get(date);
-                }
-                if (infoList != null) {
-                    infoList.add(info);
+            while (cursor.moveToNext()) {
+                if (null != (info = cursorToFileInfo(cursor))) {
+                    modify = info.mModified;
+                    if (uri == NUSIC_URI) {
+                        info.mFileType = Const.FILE_TYPE.MUSIC;
+                    } else if (uri == VIDEO_URI) {
+                        info.mFileType = Const.FILE_TYPE.VIDEO;
+                    }
+                    boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
+                    if (!isSameDay) {
+                        lastModify = modify;
+                        date = TimeUtil.getYandMandD(new Date(info.mModified));
+                        infoList = new ArrayList<>();
+                        list.put(date, infoList);
+                    } else {
+                        date = TimeUtil.getYandMandD(new Date(info.mModified));
+                        infoList = list.get(date);
+                    }
+                    if (infoList != null) {
+                        infoList.add(info);
+                    }
                 }
             }
+            cursor.close();
         }
         return list;
     }
