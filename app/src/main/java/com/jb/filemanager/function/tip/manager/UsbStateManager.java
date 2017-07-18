@@ -1,15 +1,14 @@
-package com.jb.filemanager.function.usbstatemanager;
+package com.jb.filemanager.function.tip.manager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.Toast;
 
-import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.tip.view.StateTipDialog;
+import com.jb.filemanager.function.tip.view.TipLayer;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.util.Logger;
@@ -25,9 +24,10 @@ public class UsbStateManager {
 
     private static UsbStateManager sInstance;
 
-    private UsbStateManager() {}
+    private UsbStateManager() {
+    }
 
-    public UsbStateManager getInstance() {
+    public static UsbStateManager getInstance() {
         if (sInstance == null) {
             sInstance = new UsbStateManager();
         }
@@ -43,14 +43,6 @@ public class UsbStateManager {
             if (bundle != null) {
                 boolean isConnected = bundle.getBoolean("connected");
                 boolean isHostConnected = bundle.getBoolean("host_connected");
-                boolean isAudioSource = bundle.getBoolean("audio_source");
-                boolean isAdb = bundle.getBoolean("adb");
-                boolean isMidi = bundle.getBoolean("midi");
-                Toast.makeText(context, "是否已经连接 >> " + isConnected, Toast.LENGTH_LONG).show();
-                Toast.makeText(context, "是否作为主机连接 >> " + isHostConnected, Toast.LENGTH_LONG).show();
-                Toast.makeText(context, "是否adb开启 >> " + isAdb, Toast.LENGTH_LONG).show();
-                Toast.makeText(context, "是否媒体资源开启 >> " + isAudioSource, Toast.LENGTH_LONG).show();
-                Toast.makeText(context, "是否midi >> " + isMidi, Toast.LENGTH_LONG).show();
                 if (isConnected && !isHostConnected) {
                     //当USB连接上 并且 设备不是充当主设备 (也就是代表着usb连接电脑设备)
                     tryShowTipWindow();
@@ -61,15 +53,14 @@ public class UsbStateManager {
 
     /**
      * 尝试展示提示对话框
-     * */
+     */
     private void tryShowTipWindow() {
-        if (!UsbStateTipDialog.isWindowIsTip) {
-            UsbStateTipDialog.show();
-        }
+        StateTipDialog.show(TheApplication.getAppContext(), TipLayer.USB_STATE_TIP_LAYER);
     }
 
     /**
      * 查看开关是否开启
+     *
      * @return 开启状态
      */
     public boolean isSwitchEnable() {
@@ -78,6 +69,7 @@ public class UsbStateManager {
 
     /**
      * 改变功能开关 详情：如果之前功能是关闭的，则执行则将开启功能.
+     *
      * @return 切换后的状态
      */
     public boolean changerSwitch() {
@@ -99,30 +91,32 @@ public class UsbStateManager {
 
     /**
      * 准备
-     * */
-    public void ready() {
-        if(isSwitchEnable()) {
+     */
+    public void toReady() {
+        if (isSwitchEnable()) {
             startMonitor();
         }
     }
 
     /**
      * 注册usb状态监听器
-     * */
+     */
     private void startMonitor() {
         try {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.hardware.usb.action.USB_STATE");
             TheApplication.getAppContext().registerReceiver(mUsbStateReceiver, intentFilter);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     /**
      * 停止usb状态监听
-     * */
+     */
     private void stopMonitor() {
         try {
             TheApplication.getAppContext().unregisterReceiver(mUsbStateReceiver);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

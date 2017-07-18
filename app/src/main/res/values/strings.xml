@@ -376,4 +376,8 @@
     <string name="search_result_empty_tips">No items</string>
 
     <string name="no_file_hint">No items</string>
+    <!--外部提示框-->
+    <string name="tip_free_space_content">Your Unused Storage Usage has less than 10%，Maybe you need to manage your Files</string>
+    <string name="tip_usb_state_content">USB Has Already Connected.</string>
+    <string name="tip_usb_state_btu">Manage Your Files</string>
 </resources>

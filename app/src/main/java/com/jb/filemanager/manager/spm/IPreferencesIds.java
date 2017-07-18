@@ -81,7 +81,6 @@ public class IPreferencesIds {
     //是否监听usb
     public static final String KEY_USB_CONNECTED_TIP_ENABLE = "key_usb_connected_tip_enable";
 
-
     // Low Space Warning开关
     public static final String KEY_LOW_SPACE_WARNING_ENABLE = "key_low_space_warning_enable";
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.os.UserManager;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -31,6 +32,8 @@ import com.jb.filemanager.function.scanframe.clean.event.GlobalDataLoadingDoneEv
 import com.jb.filemanager.function.scanframe.manager.ad.AdTrashManager;
 import com.jb.filemanager.function.scanframe.manager.residue.ResidualFileManager;
 import com.jb.filemanager.function.search.SearchManager;
+import com.jb.filemanager.function.tip.manager.StorageTipManager;
+import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.global.TheUncaughtExceptionHandler;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
@@ -180,20 +183,20 @@ public class TheApplication extends Application {
      * 将主进程的主线程设置成严苛模式 包括线程耗时以及内存泄露部分
      */
     private void initStrictMode() {
-//        if (BuildConfig.DEBUG) {
-//            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-//                    .detectCustomSlowCalls() //API等级11，使用StrictMode.noteSlowCode
-//                    .detectAll()
-//                    .penaltyLog() //在Logcat 中打印违规异常信息
-//                    .build());
-//
-//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-//                    .detectLeakedSqlLiteObjects()
-//                    .detectLeakedClosableObjects() //API等级11
-//                    .detectActivityLeaks()
-//                    .penaltyLog() //在Logcat 中打印违规异常信息
-//                    .build());
-//        }
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectCustomSlowCalls() //API等级11，使用StrictMode.noteSlowCode
+                    .detectAll()
+                    .penaltyLog() //在Logcat 中打印违规异常信息
+                    .build());
+
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects() //API等级11
+                    .detectActivityLeaks()
+                    .penaltyLog() //在Logcat 中打印违规异常信息
+                    .build());
+        }
     }
 
     private void onCreateForMainProcess() {
@@ -226,6 +229,8 @@ public class TheApplication extends Application {
         AppLockerCenter.getInstance();
         //权限警报管理器准备工作
         PermissionAlarmManager.getInstance().toReady();
+        UsbStateManager.getInstance().toReady();
+        StorageTipManager.getInstance().toReady();
         //搜索管家启动
         SearchManager.getInstance().toReady();
         RecentFileManager.getInstance().scanAllFile();
