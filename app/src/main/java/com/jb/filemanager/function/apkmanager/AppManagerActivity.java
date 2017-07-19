@@ -2,9 +2,7 @@ package com.jb.filemanager.function.apkmanager;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -16,10 +14,17 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
+import com.jb.filemanager.function.scanframe.clean.event.AppInstallEvent;
+import com.jb.filemanager.function.scanframe.clean.event.AppUninstallEvent;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.imageloader.IconLoader;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -87,7 +92,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
 
     @Override
     public void initBroadcastReceiver() {
-        //监听应用的安装卸载广播   刷系列表
+        /*//监听应用的安装卸载广播   刷系列表
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -100,16 +105,39 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addDataScheme("package");
-        registerReceiver(mReceiver, intentFilter);
+        registerReceiver(mReceiver, intentFilter);*/
+
+        EventBus globalEventBus = TheApplication.getGlobalEventBus();
+        if (!globalEventBus.isRegistered(this)) {
+            globalEventBus.register(this);
+        }
     }
 
     @Override
     public void releaseBroadcastReceiver() {
-        unregisterReceiver(mReceiver);
+//        unregisterReceiver(mReceiver);
+        EventBus globalEventBus = TheApplication.getGlobalEventBus();
+        if (globalEventBus.isRegistered(this)) {
+            globalEventBus.unregister(this);
+        }
     }
+
+    //监听APP卸载
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(AppUninstallEvent event) {
+        mPresenter.refreshData();
+    }
+
+    //监听app安装
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(AppInstallEvent event) {
+//        mPresenter.refreshData();
+    }
+
 
     @Override
     public void refreshList() {
+        mTvBottomDelete.setVisibility(View.GONE);
         mAdapter.setListData(mPresenter.getAppInfo());
     }
 

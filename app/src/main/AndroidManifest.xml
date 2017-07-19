@@ -414,6 +414,13 @@
             android:exported="false"/>
         <!-- "买量SDK相关声明 end" -->
 
+        <receiver android:name=".function.apkmanager.AppChangeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
     </application>
     <!-- 杀进程	内存查杀 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
