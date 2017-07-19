@@ -2,6 +2,8 @@ package com.jb.filemanager.function.recent.presenter;
 
 import com.jb.filemanager.function.recent.bean.BlockBean;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,5 +24,10 @@ public interface RecentFileContract {
         void onItemCheckChanged();
         void onTitleCancelBtnClick();
         void onTitleSelectBtnClick();
+        ArrayList<File> getCurrentSelectFile();
+        void afterCopy();
+        void afterCut();
+        void afterRename();
+        void afterDelete();
     }
 }

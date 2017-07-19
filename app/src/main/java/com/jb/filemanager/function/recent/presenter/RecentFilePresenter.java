@@ -5,6 +5,8 @@ import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
 import com.jb.filemanager.function.recent.listener.RecentFileInnerListener;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +17,7 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
 
     private RecentFileContract.View mView;
     private List<BlockBean> mBlockList;
+    private ArrayList<File> mCurrentSelect = new ArrayList<>();
 
     public RecentFilePresenter(RecentFileContract.View view) {
         mView = view;
@@ -35,21 +38,21 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
 
     @Override
     public void onItemCheckChanged() {
-        int selectCount = 0;
         int totalCount = 0;
+        mCurrentSelect.clear();
         for (BlockBean blockBean : mBlockList) {
             List<BlockItemFileBean> itemFiles = blockBean.getItemFiles();
             for (BlockItemFileBean itemFile : itemFiles) {
                 totalCount ++;
                 if (itemFile.isSelected()) {
-                    selectCount ++;
+                    mCurrentSelect.add(new File(itemFile.getFilePath()));
                 }
             }
         }
-        if (selectCount > 0) {
+        if (mCurrentSelect.size() > 0) {
             mView.switchSelectMode(true);
-            mView.setSearchTitleSelectBtnState(selectCount == totalCount ? 2 : 1);
-            mView.setSearchTitleSelectCount(selectCount);
+            mView.setSearchTitleSelectBtnState(mCurrentSelect.size() == totalCount ? 2 : 1);
+            mView.setSearchTitleSelectCount(mCurrentSelect.size());
         } else {
             mView.switchSelectMode(false);
         }
@@ -90,11 +93,41 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
         mView.notifyListDataChanged();
     }
 
+    @Override
+    public ArrayList<File> getCurrentSelectFile() {
+        return mCurrentSelect;
+    }
+
+    @Override
+    public void afterCopy() {
+        onTitleCancelBtnClick();
+    }
+
+    @Override
+    public void afterCut() {
+        onTitleCancelBtnClick();
+        RecentFileManager.getInstance().scanAllFile();
+    }
+
+    @Override
+    public void afterRename() {
+        RecentFileManager.getInstance().scanAllFile();
+    }
+
+    @Override
+    public void afterDelete() {
+        RecentFileManager.getInstance().scanAllFile();
+    }
+
     private void changeAllItemState(boolean isSelect) {
+        mCurrentSelect.clear();
         for (BlockBean blockBean : mBlockList) {
             List<BlockItemFileBean> itemFiles = blockBean.getItemFiles();
             for (BlockItemFileBean itemFile : itemFiles) {
                 itemFile.setSelected(isSelect);
+                if (isSelect) {
+                    mCurrentSelect.add(new File(itemFile.getFilePath()));
+                }
             }
         }
     }

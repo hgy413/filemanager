@@ -1,6 +1,9 @@
 package com.jb.filemanager.function.recent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import com.jb.filemanager.BaseActivity;
@@ -10,9 +13,13 @@ import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.presenter.RecentFileContract;
 import com.jb.filemanager.function.recent.presenter.RecentFilePresenter;
+import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
+import com.jb.filemanager.ui.widget.BottomOperateBar;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +32,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     private ListView mListView;
     private RecentFileAdapter mAdapter;
     private SearchTitleView mSearchTitle;
+    private BottomOperateBar mOperateBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,44 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
             }
         });
         mListView = (ListView) findViewById(R.id.recent_expand_lv);
+        mOperateBar = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
+        mOperateBar.setListener(new BottomOperateBar.Listener() {
+            @Override
+            public ArrayList<File> getCurrentSelectedFiles() {
+                return mPresenter.getCurrentSelectFile();
+            }
+
+            @Override
+            public Activity getActivity() {
+                return RecentFileActivity.this;
+            }
+
+            @Override
+            public void afterCopy() {
+                Intent intent = new Intent(RecentFileActivity.this, MainActivity.class);
+                intent.putExtra("HAVE_PAST_DATE", true);
+                startActivity(intent);
+                mPresenter.afterCopy();
+            }
+
+            @Override
+            public void afterCut() {
+                Intent intent = new Intent(RecentFileActivity.this, MainActivity.class);
+                intent.putExtra("HAVE_PAST_DATE", true);
+                startActivity(intent);
+                mPresenter.afterCut();
+            }
+
+            @Override
+            public void afterRename() {
+                mPresenter.afterRename();
+            }
+
+            @Override
+            public void afterDelete() {
+                mPresenter.afterDelete();
+            }
+        });
     }
 
     @Override
@@ -82,6 +128,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     @Override
     public void switchSelectMode(boolean isToSelectMode) {
         mSearchTitle.switchTitleMode(isToSelectMode);
+        mOperateBar.setVisibility(isToSelectMode ? View.VISIBLE : View.GONE);
     }
 
     @Override
