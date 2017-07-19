@@ -9,6 +9,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.jb.filemanager.Const;
+import com.jb.filemanager.function.search.view.SearchActivity;
+import com.jb.filemanager.function.search.view.SearchFragment;
 import com.jb.filemanager.home.MainActivity;
 
 import java.io.File;
@@ -28,6 +30,9 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     private final LoaderManager mLoaderManager;
     private AsyncTaskLoader mFileLoader;
     private GroupList<String, FileInfo> mFileGroupList;
+
+    private int mCategoryType = Const.CategoryType.CATEGORY_TYPE_ALL;
+
     public SameFilePresenter(@NonNull SameFileActivity view, @NonNull SameFileContract.Support support,
                              @NonNull LoaderManager manager){
         mView = view;
@@ -59,6 +64,31 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     public void onCreate(Intent intent) {
         if (intent != null) {
             int fileType = intent.getIntExtra(Const.CLASSIFY_TYPE, -1);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
+
+            switch (fileType) {
+                case Const.FILE_TYPE_IMAGE:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_PHOTO;
+                    break;
+                case Const.FILE_TYPE_VIDEO:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_VIDEO;
+                    break;
+                case Const.FILE_TYPE_APPLICATION:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_APP;
+                    break;
+                case Const.FILE_TYPE_MUSIC:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_MUSIC;
+                    break;
+                case Const.FILE_TYPE_DOCUMENT:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_DOC;
+                    break;
+                case Const.FILE_TYPE_ZIP:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_ZIP;
+                    break;
+                case Const.FILE_TYPE_DOWNLOAD:
+                    mCategoryType = Const.CategoryType.CATEGORY_TYPE_DOWNLOAD;
+                    break;
+            }
+            mCategoryType = fileType;
             mView.initView(fileType);
             this.start(fileType);
         }
@@ -72,6 +102,13 @@ public class SameFilePresenter implements SameFileContract.Presenter,
             } else {
                 ((AppCompatActivity)mView).finish();
             }
+        }
+    }
+
+    @Override
+    public void onClickSearchButton() {
+        if (mView != null) {
+            SearchActivity.showSearchResult(mSupport.getContext(), mCategoryType);
         }
     }
 

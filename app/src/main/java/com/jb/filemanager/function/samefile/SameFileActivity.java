@@ -193,7 +193,9 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 break;
             case R.id.search_title_search_icon:
                 // TODO
-                SearchActivity.showSearchResult(getApplicationContext());
+                if (mPresenter != null) {
+                    mPresenter.onClickSearchButton();
+                }
                 break;
             default:
                 break;

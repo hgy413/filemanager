@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
@@ -428,8 +429,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void goToSearchActivity() {
-        // TODO @wangzq
-        startActivity(new Intent(this, SearchActivity.class));
+        SearchActivity.showSearchResult(this, Const.CategoryType.CATEGORY_TYPE_ALL);
     }
 
     // implements View.OnClickListener

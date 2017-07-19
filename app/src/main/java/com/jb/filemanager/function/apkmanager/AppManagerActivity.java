@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
@@ -221,8 +222,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
                 }
                 break;
             case R.id.iv_common_action_bar_search:
-                startActivity(new Intent(this, SearchActivity.class));
-//                handleSearchButtonClick(mIsSearchInput);
+                SearchActivity.showSearchResult(this, Const.CategoryType.CATEGORY_TYPE_APP);
                 break;
             default:
                 break;

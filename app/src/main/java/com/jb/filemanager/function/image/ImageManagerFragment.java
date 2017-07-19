@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
 import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
@@ -168,5 +169,10 @@ public class ImageManagerFragment extends BaseFragmentWithImmersiveStatusBar imp
         if (mPresenter != null) {
             mPresenter.handleCancel();
         }
+    }
+
+    @Override
+    public int getCategoryType() {
+        return Const.CategoryType.CATEGORY_TYPE_PHOTO;
     }
 }

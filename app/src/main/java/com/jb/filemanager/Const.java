@@ -83,4 +83,17 @@ public interface Const {
     enum FILE_TYPE {
         APP, DOC, PDF, TXT, MUSIC, VIDEO, PICTURE, ZIP, OTHER
     }
+
+    public class CategoryType {
+        public static final int CATEGORY_TYPE_ALL = 0;
+        public static final int CATEGORY_TYPE_PHOTO = 1;
+        public static final int CATEGORY_TYPE_VIDEO = 2;
+        public static final int CATEGORY_TYPE_APP = 3;
+        public static final int CATEGORY_TYPE_MUSIC = 4;
+        public static final int CATEGORY_TYPE_DOC = 5;
+        public static final int CATEGORY_TYPE_ZIP = 6;
+        public static final int CATEGORY_TYPE_DOWNLOAD = 7;
+        public static final int CATEGORY_TYPE_RECENT = 8;
+        public static final int CATEGORY_TYPE_AD = 0;
+    }
 }

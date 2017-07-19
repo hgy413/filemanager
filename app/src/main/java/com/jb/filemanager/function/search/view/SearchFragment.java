@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.BaseFragment;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.search.modle.FileInfo;
 import com.jb.filemanager.function.search.presenter.SearchContract;
@@ -36,6 +37,9 @@ import java.util.ArrayList;
 public class SearchFragment extends BaseFragment implements SearchContract.View, View.OnClickListener {
 
     private static final int ANIM_SLOW_PLAY_RATE = 1;
+    public static final String PARAM_CATEGORY_TYPE = "param_category_type";
+
+    private int mCategoryType;
     //搜索输入框
     private TextView mTvTitle;
     private RelativeLayout mRlSearchContainer;
@@ -55,6 +59,15 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
     private ArrayList<FileInfo> mSearchResult;
     private boolean mSearchFinished;
     private boolean mAnimPlayOnce;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mCategoryType = bundle.getInt(PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_ALL);
+        }
+    }
 
     @Nullable
     @Override

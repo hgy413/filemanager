@@ -110,7 +110,7 @@ public class CommonTitleBar extends LinearLayout {
         mSearch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchActivity.showSearchResult(TheApplication.getAppContext());
+                SearchActivity.showSearchResult(TheApplication.getAppContext(), mOnActionListener.getCategoryType());
             }
         });
         chgBarState(false);
@@ -214,5 +214,6 @@ public class CommonTitleBar extends LinearLayout {
         void onCheckAction(boolean isCheck);
         void onBackAction();
         void onCancelAction();
+        int getCategoryType();
     }
 }

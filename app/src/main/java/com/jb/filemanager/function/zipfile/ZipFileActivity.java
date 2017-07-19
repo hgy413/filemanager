@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.search.view.SearchActivity;
@@ -90,7 +91,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
             @Override
             public void onSearchClick() {
-                SearchActivity.showSearchResult(getApplicationContext());
+                SearchActivity.showSearchResult(getApplicationContext(), Const.CategoryType.CATEGORY_TYPE_ZIP);
             }
 
             @Override

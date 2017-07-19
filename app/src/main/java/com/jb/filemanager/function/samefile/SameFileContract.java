@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.samefile;
 
+import android.content.Context;
 import android.content.Intent;
 
 import java.io.File;
@@ -24,6 +25,8 @@ public interface SameFileContract {
 
         void onClickBackButton(boolean b);
 
+        void onClickSearchButton();
+
         void start(final int fileType);
 
         ArrayList<File> getSelectFile();
@@ -32,6 +35,9 @@ public interface SameFileContract {
     }
 
     interface Support {
+
+        Context getContext();
+
         Map<String, ArrayList<FileInfo>> getAllMusicInfo();
 
         int getMuscisNum();

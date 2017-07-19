@@ -60,6 +60,11 @@ public class SameFileSupport implements SameFileContract.Support {
     }
 
     @Override
+    public Context getContext() {
+        return mContext;
+    }
+
+    @Override
     public GroupList<String, FileInfo> getAllMusicInfo() {
         return getMediaInfo(NUSIC_URI, MUSIC_PROPERTIES);
     }

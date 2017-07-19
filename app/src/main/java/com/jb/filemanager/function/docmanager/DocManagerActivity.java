@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
@@ -415,7 +416,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 if (mIsSelectMode) {
                     handleTitleSelect(mIsAllSelect);
                 } else {
-                    startActivity(new Intent(this, SearchActivity.class));
+                    SearchActivity.showSearchResult(this, Const.CategoryType.CATEGORY_TYPE_DOC);
                 }
                 break;
             default:
