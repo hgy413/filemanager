@@ -29,6 +29,9 @@ import com.jb.filemanager.util.APIUtil;
 
 import java.util.List;
 
+import static com.jb.filemanager.home.MainPresenter.EXTRA_FOCUS_FILE;
+import static com.jb.filemanager.home.MainPresenter.FILE_EXPLORER;
+
 /**
  * Created by xiaoyu on 2017/7/6 10:38.<p>
  * 解压缩管理
@@ -374,6 +377,9 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(FILE_EXPLORER, true);
+                intent.putExtra(EXTRA_FOCUS_FILE, savePath);
+                
                 notification.contentIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
