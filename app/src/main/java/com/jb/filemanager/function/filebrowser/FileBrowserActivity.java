@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
-import com.jb.filemanager.Const;
-import com.jb.filemanager.function.image.app.BaseFragmentActivity;
-import com.jb.filemanager.function.search.view.SearchActivity;
-import com.jb.filemanager.function.search.view.SearchFragment;
+import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.R;
 import com.jb.filemanager.home.fragment.storage.StorageFragment;
 
 /**
@@ -17,13 +20,27 @@ import com.jb.filemanager.home.fragment.storage.StorageFragment;
  *
  */
 
-public class FileBrowserActivity extends BaseFragmentActivity {
+public class FileBrowserActivity extends BaseActivity {
 
     private static final String PARAM_PATH = "param_path";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_file_browser);
+
+        TextView tvTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
+        if (tvTitle != null) {
+            tvTitle.getPaint().setAntiAlias(true);
+            tvTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            tvTitle.setText(R.string.file_browser_title);
+        }
 
         String path = "";
         Intent intent = getIntent();
@@ -37,7 +54,11 @@ public class FileBrowserActivity extends BaseFragmentActivity {
         //设置默认视图
         StorageFragment fragment = new StorageFragment();
         fragment.setArguments(fragmentParam);
-        setDefaultFragment(fragment);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fl_file_browser_content, fragment);
+        transaction.commit();
     }
 
     /**

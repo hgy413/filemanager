@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SpUsage"
+    android:id="@+id/ll_title"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_common_action_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@drawable/action_bar_back_drawable_selector_blue"
+        android:drawableStart="@drawable/action_bar_back_drawable_selector_blue"
+        android:text="@string/common_action_bar_title"
+        android:textColor="#B2000000"
+        android:textSize="20dp" />
+
+</LinearLayout>

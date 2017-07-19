@@ -377,6 +377,10 @@
     <string name="search_result_title">P(%1$d Items)</string>
     <string name="search_result_empty_tips">No items</string>
 
+    <!-- 通用路径文件浏览器 -->
+    <string name="file_browser_title">File Browser</string>
+
+
     <string name="no_file_hint">No items</string>
     <!--外部提示框-->
     <string name="tip_free_space_content">Your Unused Storage Usage has less than 10%，Maybe you need to manage your Files</string>
