@@ -178,8 +178,8 @@
     <string name="app_lock_setting_passcode_change_passcode">Change Passcode</string>
     <string name="app_lock_app_lock_tip">Locked %1$s</string>
     <string name="app_lock_app_unlock_tip">Unlocked %1$s</string>
-    <string name="applock_pre_header_last_step_text1">On Android 5.0+,AppLock feature is not available by default</string>
-    <string name="applock_pre_header_last_step_text2">You need to read and agree to the permission to enable this feature</string>
+    <string name="applock_pre_header_last_step_text1">On Android 5.0+, AppLock feature is not available by default</string>
+    <string name="applock_pre_header_last_step_text2">You need to read and agree to the \n permission to enable this feature</string>
     <string name="applock_intruder_guide_btu_tip">Check</string>
     <string name="applock_float_view_forget_psd">Forget Password</string>
     <string name="applock_float_view_dont_lock_this_app">Don\'t Lock This App</string>

@@ -16,6 +16,8 @@
         android:text="@string/applock_pre_header_last_step_text1"
         android:textColor="@color/white"
         android:textSize="@dimen/h1_20"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:textStyle="bold"/>
 
     <TextView
@@ -54,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:text="@string/common_continue"
         android:textColor="@color/white"
         android:drawableTop="@drawable/applock_lock_continue_icon"
