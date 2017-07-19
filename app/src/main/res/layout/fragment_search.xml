@@ -59,7 +59,9 @@
                 android:textColorHint="@color/black_20"
                 android:textCursorDrawable="@drawable/common_action_bar_search_cursor"
                 android:textSize="18dp"
-                android:inputType="text" />
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:maxLines="1"/>
 
             <ImageView
                 android:id="@+id/iv_action_bar_clear_input"

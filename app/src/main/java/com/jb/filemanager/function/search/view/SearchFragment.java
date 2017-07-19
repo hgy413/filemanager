@@ -107,13 +107,14 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
                     }
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                         if (mPresenter != null) {
-                            mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
+                            mPresenter.search(mEtSearchInput.getText().toString(), mEtSearchInput);
                         }
                         return true;
                     }
                     return false;
                 }
             });
+            mEtSearchInput.requestFocus();
         }
 
         mIvSearchDelete = (ImageView) view.findViewById(R.id.iv_action_bar_clear_input);
@@ -133,7 +134,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
         mViewAnim3 = view.findViewById(R.id.view_fragment_search_anim_3);
 
         mPresenter = new SearchPresenter(this, new SearchSupport());
-        mPresenter.onViewCreated(mEtSearchInput);
+        mPresenter.onViewCreated();
     }
 
     @Override
@@ -302,7 +303,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
                 break;
             case R.id.iv_action_bar_search:
                 if (mPresenter != null) {
-                    mPresenter.search(mEtSearchInput.getText().toString(), getActivity());
+                    mPresenter.search(mEtSearchInput.getText().toString(), mEtSearchInput);
                 }
                 break;
             case R.id.iv_action_bar_clear_input:

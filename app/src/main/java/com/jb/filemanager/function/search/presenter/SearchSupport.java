@@ -2,35 +2,29 @@ package com.jb.filemanager.function.search.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.ga0.commerce.util.topApp.TopHelper;
 
 /**
  * Created by nieyh on 17-7-6.
+ *
  */
 
 public class SearchSupport implements SearchContract.Support {
 
     @Override
-    public void showSoftInput(EditText editText) {
-        if (editText == null) {
-            return;
-        }
-        InputMethodManager imm = (InputMethodManager) TheApplication.getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    @Override
-    public void hideSoftInput(Activity activity) {
+    public void hideSoftInput(View view) {
         //隐藏键盘
-        if (activity == null) {
+        if (view == null) {
             return;
         }
-        if (null != activity.getCurrentFocus() && null != activity.getCurrentFocus().getWindowToken()) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (null != view.getWindowToken()) {
+            InputMethodManager imm = (InputMethodManager) TheApplication.getInstance().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 

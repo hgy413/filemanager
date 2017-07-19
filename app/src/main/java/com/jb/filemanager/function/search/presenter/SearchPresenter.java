@@ -2,6 +2,7 @@ package com.jb.filemanager.function.search.presenter;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 
 import com.jb.filemanager.TheApplication;
@@ -39,14 +40,12 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     @Override
-    public void onViewCreated(EditText editText) {
-        if (mSupport != null) {
-            mSupport.showSoftInput(editText);
-        }
+    public void onViewCreated() {
+
     }
 
     @Override
-    public void search(String input, Activity activity) {
+    public void search(String input, View editor) {
         if (TextUtils.isEmpty(input)) {
             if (mView != null) {
                 mView.tipInputEmpty();
@@ -58,7 +57,7 @@ public class SearchPresenter implements SearchContract.Presenter {
             mView.showLoading();
         }
         if (mSupport != null) {
-            mSupport.hideSoftInput(activity);
+            mSupport.hideSoftInput(editor);
         }
         if (!TheApplication.getGlobalEventBus().isRegistered(mSearchFinishMainThreadSubscriber)) {
             TheApplication.getGlobalEventBus().register(mSearchFinishMainThreadSubscriber);

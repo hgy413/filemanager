@@ -216,7 +216,8 @@
         <activity
             android:name=".function.search.view.SearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysVisible"/>
 
         <!--清理结果页-->
         <activity

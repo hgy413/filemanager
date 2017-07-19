@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.search.presenter;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.EditText;
 
 import com.jb.filemanager.function.search.modle.FileInfo;
@@ -24,8 +25,8 @@ public interface SearchContract {
     }
 
     interface Presenter {
-        void onViewCreated(EditText editText);
-        void search(String input, Activity activity);
+        void onViewCreated();
+        void search(String input, android.view.View editor);
         void release();
 
         void onClickBackButton(boolean systemBack);
@@ -33,8 +34,7 @@ public interface SearchContract {
     }
 
     interface Support {
-        void showSoftInput(EditText editText);
-        void hideSoftInput(Activity activity);
+        void hideSoftInput(android.view.View activity);
         void releaseView();
     }
 }
