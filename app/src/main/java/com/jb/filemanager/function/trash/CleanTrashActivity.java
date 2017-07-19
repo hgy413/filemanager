@@ -1,6 +1,5 @@
 package com.jb.filemanager.function.trash;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,22 +51,17 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private static final String TAG = CleanTrashActivity.class.getSimpleName();
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
     private RelativeLayout mRlRoot;
-    private View mVTitleShadow;
     private TextView mTvCommonActionBarTitle;
     private TextView mTvTrashSizeNumber;
     private TextView mTvTrashSizeUnit;
     private ProgressBar mPbScanProgress;
-    private LinearLayout mLlContent;
     private TextView mTvTrashPath;
     private FloatingGroupExpandableListView mCleanTrashExpandableListView;
     private RecyclerView mRvTrashGroupList;
     private ImageView mIvCleanButton;
     private CleanListAdapter mAdapter;
-    private ValueAnimator mAnimator;
     private String[] mSelectedStorageSize;
-    private RelativeLayout mRlTitle;
     private ImageView mIvCommonActionBarMore;
-    private RelativeLayout mRlTopContainer;
     private CleanManager mCleanManager;
     private boolean mIsDeleting;
 
@@ -87,10 +80,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private void initView() {
         mRlRoot = (RelativeLayout) findViewById(R.id.rl_root);
-        mVTitleShadow = (View) findViewById(R.id.v_title_shadow);
-        mLlContent = (LinearLayout) findViewById(R.id.ll_content);
-        mRlTitle = (RelativeLayout) findViewById(R.id.rl_title);
-        mRlTopContainer = (RelativeLayout) findViewById(R.id.rl_top_container);
+        View VTitleShadow = (View) findViewById(R.id.v_title_shadow);
         mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_more);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);
@@ -109,7 +99,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 mIvCleanButton.setVisibility(View.GONE);
             }
         });
-        mVTitleShadow.setVisibility(View.INVISIBLE);
+        VTitleShadow.setVisibility(View.INVISIBLE);
         mAdapter = new CleanListAdapter(mPresenter.getDataGroup(), this);
         mCleanTrashExpandableListView.setAdapter(new WrapperExpandableListAdapter(mAdapter));
 
