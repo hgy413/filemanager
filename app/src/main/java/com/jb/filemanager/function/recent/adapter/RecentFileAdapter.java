@@ -2,6 +2,7 @@ package com.jb.filemanager.function.recent.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,12 +11,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.util.RecentFileUtil;
+import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.util.DrawUtils;
 
 import java.util.List;
+
+import static com.jb.filemanager.home.MainPresenter.EXTRA_FOCUS_FILE;
+import static com.jb.filemanager.home.MainPresenter.FILE_EXPLORER;
 
 /**
  * Created by xiaoyu on 2017/7/17 14:49.
@@ -65,7 +71,7 @@ public class RecentFileAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag(R.layout.item_recent_file_block);
         }
 
-        BlockBean item = getItem(position);
+        final BlockBean item = getItem(position);
         holder.dirName.setText(item.getBlockDirName());
         holder.withinTime.setText(RecentFileUtil.formatWithinTime(context, item.getWithinTime()));
         if (item.isPictureType()) {
@@ -83,6 +89,28 @@ public class RecentFileAdapter extends BaseAdapter {
         }
         holder.tvMoreBtn.setVisibility(!item.isPictureType() && item.isHaveMore() ? View.VISIBLE : View.GONE);
 
+        holder.titleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TheApplication.getAppContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(FILE_EXPLORER, true);
+                intent.putExtra(EXTRA_FOCUS_FILE, item.getBlockDirPath());
+                TheApplication.getAppContext().startActivity(intent);
+            }
+        });
+        holder.tvMoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TheApplication.getAppContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(FILE_EXPLORER, true);
+                intent.putExtra(EXTRA_FOCUS_FILE, item.getBlockDirPath());
+                TheApplication.getAppContext().startActivity(intent);
+            }
+        });
         return convertView;
     }
 

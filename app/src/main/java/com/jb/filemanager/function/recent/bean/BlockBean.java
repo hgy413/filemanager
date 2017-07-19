@@ -13,6 +13,7 @@ import java.util.List;
 public class BlockBean {
 
     private String mBlockDirName;
+    private String mBlockDirPath;
     // 修改的时间 单位:分钟
     private int mWithinTime;
     // Block类型只有两种,所以用布尔值表示, 决定ListView的样式
@@ -26,6 +27,7 @@ public class BlockBean {
 
     public BlockBean(File file) {
         mBlockDirName = file.getParentFile().getName();
+        mBlockDirPath = file.getPath();
         mWithinTime = RecentFileUtil.calculateWithinMinute(System.currentTimeMillis() - file.lastModified());
         mIsPictureType = RecentFileUtil.isPictureType(file.getName());
         mItemFiles = new ArrayList<>();
@@ -70,5 +72,13 @@ public class BlockBean {
             mChildCount = 0;
         }
         return mChildCount;
+    }
+
+    public String getBlockDirPath() {
+        return mBlockDirPath;
+    }
+
+    public void setBlockDirPath(String blockDirPath) {
+        mBlockDirPath = blockDirPath;
     }
 }
