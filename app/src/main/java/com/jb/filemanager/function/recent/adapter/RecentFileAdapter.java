@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.recent.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +24,10 @@ import java.util.List;
 public class RecentFileAdapter extends BaseAdapter {
 
     private List<BlockBean> mBlockList;
+    private Activity mActivity;
 
-    public RecentFileAdapter(List<BlockBean> data) {
+    public RecentFileAdapter(Activity activity, List<BlockBean> data) {
+        mActivity = activity;
         mBlockList = data;
     }
 
@@ -75,7 +78,7 @@ public class RecentFileAdapter extends BaseAdapter {
             holder.listView.setLayoutParams(params);
         } else {
             // 设置文件类型适配器
-            holder.listView.setAdapter(new RecentInnerFileAdapter(item));
+            holder.listView.setAdapter(new RecentInnerFileAdapter(mActivity, item));
             setListViewHeightBasedOnChildren(holder.listView);
         }
         holder.tvMoreBtn.setVisibility(!item.isPictureType() && item.isHaveMore() ? View.VISIBLE : View.GONE);

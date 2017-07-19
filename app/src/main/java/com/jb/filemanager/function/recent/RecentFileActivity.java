@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.recent;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
 import com.jb.filemanager.BaseActivity;
@@ -11,6 +10,7 @@ import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.presenter.RecentFileContract;
 import com.jb.filemanager.function.recent.presenter.RecentFilePresenter;
 import com.jb.filemanager.ui.view.SearchTitleView;
+import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 
 import java.util.List;
 
@@ -23,6 +23,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     private RecentFilePresenter mPresenter = new RecentFilePresenter(this);
     private ListView mListView;
     private RecentFileAdapter mAdapter;
+    private SearchTitleView mSearchTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +35,23 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     }
 
     private void initViews() {
-        SearchTitleView searchTitleView = (SearchTitleView) findViewById(R.id.search_title);
-        searchTitleView.setSearchIconVisibility(false);
-        searchTitleView.setTitleName(getString(R.string.recent));
-        searchTitleView.setOnBackClickListener(new View.OnClickListener() {
+        mSearchTitle = (SearchTitleView) findViewById(R.id.search_title);
+        mSearchTitle.setSearchIconVisibility(false);
+        mSearchTitle.setTitleName(getString(R.string.recent));
+        mSearchTitle.setClickCallBack(new SearchTitleViewCallback() {
             @Override
-            public void onClick(View v) {
+            public void onIvBackClick() {
                 finish();
+            }
+
+            @Override
+            public void onIvCancelSelectClick() {
+                mPresenter.onTitleCancelBtnClick();
+            }
+
+            @Override
+            public void onSelectBtnClick() {
+                mPresenter.onTitleSelectBtnClick();
             }
         });
         mListView = (ListView) findViewById(R.id.recent_expand_lv);
@@ -49,7 +60,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     @Override
     public void setListViewData(List<BlockBean> data) {
         if (mAdapter == null) {
-            mAdapter = new RecentFileAdapter(data);
+            mAdapter = new RecentFileAdapter(this, data);
         }
         mListView.setAdapter(mAdapter);
     }
@@ -59,6 +70,21 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void switchSelectMode(boolean isToSelectMode) {
+        mSearchTitle.switchTitleMode(isToSelectMode);
+    }
+
+    @Override
+    public void setSearchTitleSelectBtnState(int state) {
+        mSearchTitle.setSelectBtnResId(state);
+    }
+
+    @Override
+    public void setSearchTitleSelectCount(int count) {
+        mSearchTitle.setSelectedCount(count);
     }
 
     @Override

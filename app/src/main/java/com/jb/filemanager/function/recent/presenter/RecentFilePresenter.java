@@ -33,6 +33,16 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
     }
 
     @Override
+    public void onTitleCancelBtnClick() {
+
+    }
+
+    @Override
+    public void onTitleSelectBtnClick() {
+
+    }
+
+    @Override
     public void onDataFlushComplete(List<BlockBean> data) {
         mView.notifyListDataChanged();
     }

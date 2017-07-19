@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.recent.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
 import com.jb.filemanager.function.recent.util.RecentFileUtil;
+import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
+import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
+import com.jb.filemanager.function.zipfile.util.ZipUtils;
 
 import java.io.File;
 import java.util.List;
@@ -22,8 +26,10 @@ import java.util.List;
 public class RecentInnerFileAdapter extends BaseAdapter {
 
     private final List<BlockItemFileBean> mItemFiles;
+    private Activity mActivity;
 
-    public RecentInnerFileAdapter(BlockBean bean) {
+    public RecentInnerFileAdapter(Activity activity, BlockBean bean) {
+        mActivity = activity;
         mItemFiles = bean.getItemFiles();
     }
 
@@ -80,7 +86,14 @@ public class RecentInnerFileAdapter extends BaseAdapter {
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RecentFileUtil.openFile(context, new File(item.getFilePath()));
+                if (ZipUtils.isZipFormatFile(new File(item.getFilePath()))
+                        || ZipUtils.isRarFormatFile(new File(item.getFilePath()))) {
+                    ZipFileOperationDialog zipFileOperationDialog = new ZipFileOperationDialog(mActivity,
+                            new ZipFileItemBean(new File(item.getFilePath())));
+                    zipFileOperationDialog.show();
+                } else {
+                    RecentFileUtil.openFile(context, new File(item.getFilePath()));
+                }
             }
         });
         return convertView;

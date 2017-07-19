@@ -12,9 +12,14 @@ public interface RecentFileContract {
     interface View {
         void setListViewData(List<BlockBean> data);
         void notifyListDataChanged();
+        void switchSelectMode(boolean isToSelectMode);
+        void setSearchTitleSelectBtnState(int state);
+        void setSearchTitleSelectCount(int count);
     }
     interface Presenter {
         void onCreate();
         void onDestroy();
+        void onTitleCancelBtnClick();
+        void onTitleSelectBtnClick();
     }
 }
