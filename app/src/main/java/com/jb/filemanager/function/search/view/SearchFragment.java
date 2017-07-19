@@ -4,12 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -338,10 +340,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
     }
 
     private void showSoftInput() {
-        if (mEtSearchInput != null) {
-            InputMethodManager imm = (InputMethodManager) TheApplication.getInstance().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(mEtSearchInput, InputMethodManager.SHOW_IMPLICIT);
-        }
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     private void hideSoftInput() {
@@ -350,5 +349,6 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
             InputMethodManager imm = (InputMethodManager) TheApplication.getInstance().getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mEtSearchInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }
