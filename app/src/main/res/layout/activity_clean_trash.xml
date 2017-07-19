@@ -40,27 +40,31 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/white"
-                android:textSize="48dp"
+                android:textSize="60sp"
                 android:text="0"
                 tools:text="328"/>
 
             <TextView
                 android:id="@+id/tv_trash_size_unit"
+                android:layout_marginLeft="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="115dp"
-                android:layout_marginStart="115dp"
+                android:layout_marginStart="15dp"
+                android:layout_toRightOf="@+id/tv_trash_size_number"
                 android:layout_marginTop="40dp"
+                android:textSize="16sp"
                 android:text="MB"
                 android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/tv_trash_suggest"
+                android:layout_marginLeft="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_trash_size_unit"
-                android:layout_marginLeft="115dp"
-                android:layout_marginStart="115dp"
+                android:layout_marginStart="15dp"
+                android:layout_toRightOf="@+id/tv_trash_size_number"
+                android:textSize="16sp"
                 android:text="Suggest"
                 android:textColor="@color/white"/>
 
