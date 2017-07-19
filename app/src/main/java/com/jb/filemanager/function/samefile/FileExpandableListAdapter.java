@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
@@ -42,7 +45,6 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         int mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
         mImageFetcher = ImageUtils.createImageFetcher((SameFileActivity)context, mImageSize, R.drawable.img_picture);
-
     }
 
     @Override
@@ -109,17 +111,17 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             holder = (ItemViewHolder) convertView.getTag();
         }
         if (0 == childPosition) {
-            holder.mLlItemContainer.setBackgroundResource(R.drawable.bg_item_samefile_list_group_style);
+            holder.mLlItemContainer.setBackgroundResource(R.drawable.bg_selector_samefile_list_item_with_top_line);
         } else {
-            holder.mLlItemContainer.setBackgroundColor(Color.WHITE);
+            holder.mLlItemContainer.setBackgroundResource(R.drawable.bg_selector_samefile_list_item);
         }
         // Set divide line and group divide space
         if (getChildrenCount(groupPosition) -1 == childPosition) {
-            holder.mLlItemDivideLine .setBackgroundColor(Color.WHITE);
-            holder.mTvGroupDivideSpace.setVisibility(View.VISIBLE);
+            holder.mViewChildDebideLine.setVisibility(View.GONE);
+            holder.mViewGroupDevideSpace.setVisibility(View.VISIBLE);
         } else {
-            holder.mLlItemDivideLine.setBackgroundResource(R.drawable.bg_item_main_storage_list_style);
-            holder.mTvGroupDivideSpace.setVisibility(View.GONE);
+            holder.mViewChildDebideLine.setVisibility(View.VISIBLE);
+            holder.mViewGroupDevideSpace.setVisibility(View.GONE);
         }
         FileInfo fileInfo = mGroupList.valueAt(groupPosition).get(childPosition);
         Const.FILE_TYPE fileType = mGroupList.valueAt(groupPosition).get(childPosition).mFileType;
@@ -199,6 +201,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 break;
             case R.id.ll_file_item_container:
                 // Todo handle file by Type
+                Toast.makeText(mContext, "dsfasd", Toast.LENGTH_LONG);
 
                 break;
             case R.id.iv_music_child_item_select:
@@ -237,21 +240,22 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
      * Child Item View
      */
     private class ItemViewHolder {
-        LinearLayout mLlItemContainer; // Have set tag for ItemViewHolder, can't set tag fot other.
-        LinearLayout mLlItemDivideLine;
+        RelativeLayout mLlItemContainer; // Have set tag for ItemViewHolder, can't set tag fot other.
+        //LinearLayout mLlItemDivideLine;
         ImageView mIvIcon;
         TextView mTvName;
         TextView mTvInfo;
         ImageView mIvSelect;
-        TextView mTvGroupDivideSpace;
+        View mViewChildDebideLine;
+        View mViewGroupDevideSpace;
         public ItemViewHolder(View itemView) {
-            mLlItemContainer = (LinearLayout)itemView.findViewById(R.id.ll_file_item_container);
-            mLlItemDivideLine = (LinearLayout)itemView.findViewById(R.id.ll_item_view_with_divide_line);
+            mLlItemContainer = (RelativeLayout)itemView.findViewById(R.id.ll_file_item_container);
             mIvIcon = (ImageView) itemView.findViewById(R.id.iv_music_child_item_cover);
             mTvName = (TextView) itemView.findViewById(R.id.tv_music_child_item_name);
             mTvInfo = (TextView) itemView.findViewById(R.id.tv_music_child_item_info);
             mIvSelect = (ImageView) itemView.findViewById(R.id.iv_music_child_item_select);
-            mTvGroupDivideSpace = (TextView)itemView.findViewById(R.id.tv_group_divide_space);
+            mViewChildDebideLine = (View) itemView.findViewById(R.id.view_child_divide_line);
+            mViewGroupDevideSpace = (View) itemView.findViewById(R.id.view_group_divide_space);
             mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
             mLlItemContainer.setOnClickListener(FileExpandableListAdapter.this);
         }

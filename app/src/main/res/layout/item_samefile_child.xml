@@ -1,72 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_file_item_container"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/list_item_bg_selector"
-        android:clickable="true">
+        >
         <ImageView
             android:id="@+id/iv_music_child_item_cover"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_margin="16dp"
-            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             />
-        <LinearLayout
-            android:id="@+id/ll_item_view_with_divide_line"
+        <ImageView
+            android:id="@+id/iv_music_child_item_select"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/choose_none"
+            />
+        <TextView
+            android:id="@+id/tv_music_child_item_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal"
-            >
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textColor="#4f4b4c"
+            android:textSize="14dp"
+            android:layout_marginTop="16dp"
+            android:layout_alignLeft="@+id/tv_music_child_item_info"
+            android:layout_alignStart="@+id/tv_music_child_item_info"
+            android:layout_toLeftOf="@+id/iv_music_child_item_select"
+            android:layout_toStartOf="@+id/iv_music_child_item_select"/>
+        <TextView
+            android:id="@+id/tv_music_child_item_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_toEndOf="@+id/iv_music_child_item_cover"
+            android:layout_toRightOf="@+id/iv_music_child_item_cover"
+            android:layout_toLeftOf="@+id/iv_music_child_item_select"
+            android:layout_toStartOf="@+id/iv_music_child_item_select"
+            android:layout_below="@+id/tv_music_child_item_name"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textColor="#979797"
+            android:textSize="10dp"/>
 
-                <TextView
-                    android:id="@+id/tv_music_child_item_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:ellipsize="marquee"
-                    android:textColor="#4f4b4c"
-                    android:textSize="14dp" />
+        <View
+            android:id="@+id/view_child_divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_category_item_bg_mask"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/iv_music_child_item_cover"
+            android:layout_toEndOf="@+id/iv_music_child_item_cover"/>
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_music_child_item_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:textColor="#979797"
-                    android:textSize="10dp" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/iv_music_child_item_select"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:padding="16dp"
-                android:src="@drawable/choose_none" />
-        </LinearLayout>
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_group_divide_space"
+    <View
+        android:id="@+id/view_group_divide_space"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/list_divider_line_color_f5f6ff"
