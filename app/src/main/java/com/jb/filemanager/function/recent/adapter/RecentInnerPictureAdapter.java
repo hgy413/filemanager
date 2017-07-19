@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
+import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.util.RecentFileUtil;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class RecentInnerPictureAdapter extends BaseAdapter {
 
     private final List<BlockItemFileBean> mItemFiles;
+    private RecentItemCheckChangedListener mListener;
 
     public RecentInnerPictureAdapter(BlockBean blockBean) {
         mItemFiles = blockBean.getItemFiles();
@@ -83,6 +85,9 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         bean.setSelected(!bean.isSelected());
+                        if (mListener != null) {
+                            mListener.onItemCheckChanged();
+                        }
                         notifyDataSetChanged();
                     }
                 });
@@ -102,5 +107,9 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
         ImageView[] images = new ImageView[3];
         ImageView[] btns = new ImageView[3];
         TextView moreMask;
+    }
+
+    public void setCheckListener(RecentItemCheckChangedListener l) {
+        mListener = l;
     }
 }

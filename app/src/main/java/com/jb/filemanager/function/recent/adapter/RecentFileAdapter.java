@@ -2,7 +2,6 @@ package com.jb.filemanager.function.recent.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.recent.bean.BlockBean;
+import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.util.RecentFileUtil;
 import com.jb.filemanager.util.DrawUtils;
 
@@ -25,6 +25,7 @@ public class RecentFileAdapter extends BaseAdapter {
 
     private List<BlockBean> mBlockList;
     private Activity mActivity;
+    private RecentItemCheckChangedListener mListener;
 
     public RecentFileAdapter(Activity activity, List<BlockBean> data) {
         mActivity = activity;
@@ -69,16 +70,15 @@ public class RecentFileAdapter extends BaseAdapter {
         holder.withinTime.setText(RecentFileUtil.formatWithinTime(context, item.getWithinTime()));
         if (item.isPictureType()) {
             // 设置图片类型适配器
-            holder.listView.setAdapter(new RecentInnerPictureAdapter(item));
-            // 图片高度 + divider 2dp
-            int height = DrawUtils.dip2px(2) + (context.getResources().getDisplayMetrics().widthPixels - DrawUtils.dip2px(30)) / 3;
-            int totalHeight = holder.listView.getAdapter().getCount() * height;
-            ViewGroup.LayoutParams params = holder.listView.getLayoutParams();
-            params.height = totalHeight;
-            holder.listView.setLayoutParams(params);
+            RecentInnerPictureAdapter adapter = new RecentInnerPictureAdapter(item);
+            holder.listView.setAdapter(adapter);
+            adapter.setCheckListener(mListener);
+            setPictureListViewHeight(context, holder.listView);
         } else {
             // 设置文件类型适配器
-            holder.listView.setAdapter(new RecentInnerFileAdapter(mActivity, item));
+            RecentInnerFileAdapter adapter = new RecentInnerFileAdapter(mActivity, item);
+            holder.listView.setAdapter(adapter);
+            adapter.setCheckListener(mListener);
             setListViewHeightBasedOnChildren(holder.listView);
         }
         holder.tvMoreBtn.setVisibility(!item.isPictureType() && item.isHaveMore() ? View.VISIBLE : View.GONE);
@@ -112,21 +112,16 @@ public class RecentFileAdapter extends BaseAdapter {
         listView.setLayoutParams(params);
     }
 
-    private void setPicListViewHeight(ListView listView) {
-        ListAdapter adapter = listView.getAdapter();
-        if (adapter == null) {
-            return;
-        }
-        int totalHeight = 0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            View view = adapter.getView(i, null, listView);
-            view.measure(0, 0);
-            totalHeight += view.getMeasuredHeight();
-            Log.e("picAdapter", "height = " + view.getHeight());
-        }
+    private void setPictureListViewHeight(Context context, ListView listView) {
+        // 图片高度 + divider 2dp
+        int height = DrawUtils.dip2px(2) + (context.getResources().getDisplayMetrics().widthPixels - DrawUtils.dip2px(30)) / 3;
+        int totalHeight = listView.getAdapter().getCount() * height;
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight
-                + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        params.height = totalHeight;
         listView.setLayoutParams(params);
+    }
+
+    public void setCheckChangedListener(RecentItemCheckChangedListener l) {
+        mListener = l;
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
+import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.util.RecentFileUtil;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
@@ -27,6 +28,7 @@ public class RecentInnerFileAdapter extends BaseAdapter {
 
     private final List<BlockItemFileBean> mItemFiles;
     private Activity mActivity;
+    private RecentItemCheckChangedListener mListener;
 
     public RecentInnerFileAdapter(Activity activity, BlockBean bean) {
         mActivity = activity;
@@ -69,6 +71,7 @@ public class RecentInnerFileAdapter extends BaseAdapter {
         holder.icon.setImageResource(R.drawable.img_file);
         holder.name.setText(item.getFileName());
         holder.selectBtn.setImageResource(item.isSelected() ? R.drawable.select_all : R.drawable.select_none);
+        // divider问题
         if (mItemFiles.size() > 3) {
             // 有More按钮
             holder.divider.setVisibility(View.VISIBLE);
@@ -80,6 +83,9 @@ public class RecentInnerFileAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 item.setSelected(!item.isSelected());
+                if (mListener != null) {
+                    mListener.onItemCheckChanged();
+                }
                 notifyDataSetChanged();
             }
         });
@@ -105,5 +111,9 @@ public class RecentInnerFileAdapter extends BaseAdapter {
         TextView name;
         ImageView selectBtn;
         View divider;
+    }
+
+    public void setCheckListener(RecentItemCheckChangedListener l) {
+        mListener = l;
     }
 }

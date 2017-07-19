@@ -7,6 +7,7 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.recent.adapter.RecentFileAdapter;
 import com.jb.filemanager.function.recent.bean.BlockBean;
+import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.presenter.RecentFileContract;
 import com.jb.filemanager.function.recent.presenter.RecentFilePresenter;
 import com.jb.filemanager.ui.view.SearchTitleView;
@@ -61,6 +62,12 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     public void setListViewData(List<BlockBean> data) {
         if (mAdapter == null) {
             mAdapter = new RecentFileAdapter(this, data);
+            mAdapter.setCheckChangedListener(new RecentItemCheckChangedListener() {
+                @Override
+                public void onItemCheckChanged() {
+                    mPresenter.onItemCheckChanged();
+                }
+            });
         }
         mListView.setAdapter(mAdapter);
     }
