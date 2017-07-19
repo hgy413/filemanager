@@ -19,6 +19,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
+import com.jb.filemanager.function.zipfile.dialog.ExtractSnackBar;
 import com.jb.filemanager.function.zipfile.listener.ExtractingFilesListener;
 import com.jb.filemanager.function.zipfile.receiver.NotificationClickReceiver;
 import com.jb.filemanager.function.zipfile.task.ExtractFilesTask;
@@ -189,7 +190,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     public void onPostExtractFiles(String savePath) {
         showMessage("解压完成");
         sendExtractAccomplishNotification(savePath);
-        Toast.makeText(mContext, mContext.getString(R.string.extract_to, savePath), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(mContext, mContext.getString(R.string.extract_to, savePath), Toast.LENGTH_SHORT).show();
         onTaskOverState();
     }
 
@@ -361,6 +362,8 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 if (mContext == null) {
                     mContext = TheApplication.getAppContext();
                 }
+
+                ExtractSnackBar.showSnackBar(mContext, savePath);
 
                 RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_extract_finish);
                 remoteViews.setTextViewText(R.id.extract_noti_finish_dest_path, mContext.getString(R.string.extract_to, savePath));

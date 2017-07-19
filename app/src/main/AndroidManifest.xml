@@ -125,6 +125,10 @@
             android:name=".function.zipfile.ZipFilePreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+        <activity
+            android:name=".function.zipfile.dialog.ExtractSnackBar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
         <!-- 最近文件页 -->
         <activity
@@ -424,6 +428,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
