@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/scroll_view_root"
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            tools:background="@color/colorAccent">
+
+    <RelativeLayout
+        android:id="@+id/scroll_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="97dp"
+        android:minHeight="97dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/scroll_view_size_fake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="9dp"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="60dp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/scroll_view_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/scroll_view_size_fake"
+            android:layout_marginLeft="16dp"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="60dp"/>
+
+        <TextView
+            android:id="@+id/scroll_view_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/scroll_view_size_fake"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/scroll_view_size_fake"
+            android:text="B"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/scroll_view_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/scroll_view_size_fake"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/scroll_view_size_fake"
+            android:text="@string/trash_aty_top_suggest"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"/>
+
+        <!-- Scan Progress Bar -->
+        <ProgressBar
+            android:id="@+id/trash_aty_rubbish_pro"
+            style="@style/StyleProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@id/scroll_view_size_fake"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/clean_trash_total_top_path"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:text="  "
+            android:textColor="@color/white_70"
+            android:textSize="8dp"
+            android:visibility="visible"
+            tools:text="scan path"/>
+    </RelativeLayout>
+</ScrollView>

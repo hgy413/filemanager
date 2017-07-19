@@ -388,4 +388,5 @@
     <string name="within_days">Within %1$d days</string>
     <string name="early">Early</string>
     <string name="file_selected">%1$dfile(s) selected</string>
+    <string name="trash_aty_top_suggest">Suggest</string>
 </resources>
