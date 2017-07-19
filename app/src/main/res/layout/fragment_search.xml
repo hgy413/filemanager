@@ -4,9 +4,13 @@
     tools:ignore="SpUsage,ContentDescription"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#7f000000"
-    android:orientation="vertical">
+    android:layout_height="match_parent" >
+
+    <View
+        android:id="@+id/view_fragment_search_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7f000000" />
 
     <LinearLayout
         android:layout_width="match_parent"

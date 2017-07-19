@@ -66,6 +66,11 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        View mask = view.findViewById(R.id.view_fragment_search_mask);
+        if (mask != null) {
+            mask.setOnClickListener(this);
+        }
+
         ImageView ivBack = (ImageView) view.findViewById(R.id.iv_common_action_bar_back);
         if (ivBack != null) {
             ivBack.setOnClickListener(this);
@@ -276,6 +281,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.view_fragment_search_mask:
             case R.id.iv_common_action_bar_back:
                 if (mPresenter != null) {
                     mPresenter.onClickBackButton(false);
