@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -97,6 +98,25 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 mPbScanProgress.setVisibility(View.GONE);
                 mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
                 mIvCleanButton.setVisibility(View.GONE);
+            }
+        });
+        mIvCleanButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setScaleX(0.9f);
+                        view.setScaleY(0.9f);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        view.setScaleX(1);
+                        view.setScaleY(1);
+                        break;
+                    default:
+                        break;
+                }
+                return false;
             }
         });
         VTitleShadow.setVisibility(View.INVISIBLE);

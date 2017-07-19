@@ -13,8 +13,7 @@
         android:layout_gravity="center_vertical"
         android:clickable="false"
         android:contentDescription="@null"
-        android:rotation="-90"
-        android:src="@drawable/down"/>
+        android:src="@drawable/ic_path_separate"/>
 
     <TextView
         android:id="@+id/item"

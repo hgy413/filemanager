@@ -487,6 +487,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     private void handleDataDelete() {
+        mPresenter.handleFileDelete(mChosenFiles);//处理数据库的删除
+        mPresenter.refreshData(false);
         refreshTile();
         //隐藏底部栏
         mBobBottomOperator.setVisibility(View.GONE);
