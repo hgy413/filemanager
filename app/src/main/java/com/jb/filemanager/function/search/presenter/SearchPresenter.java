@@ -55,9 +55,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         if (mView != null) {
             mView.showLoading();
         }
-        if (mSupport != null) {
-            mSupport.hideSoftInput(editor);
-        }
+
         if (!TheApplication.getGlobalEventBus().isRegistered(mSearchFinishMainThreadSubscriber)) {
             TheApplication.getGlobalEventBus().register(mSearchFinishMainThreadSubscriber);
         }

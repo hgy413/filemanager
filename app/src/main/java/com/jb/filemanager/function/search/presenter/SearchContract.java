@@ -34,7 +34,6 @@ public interface SearchContract {
     }
 
     interface Support {
-        void hideSoftInput(android.view.View activity);
         void releaseView();
     }
 }

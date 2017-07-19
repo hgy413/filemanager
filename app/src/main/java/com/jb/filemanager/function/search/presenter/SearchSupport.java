@@ -14,18 +14,6 @@ import com.jb.filemanager.TheApplication;
 public class SearchSupport implements SearchContract.Support {
 
     @Override
-    public void hideSoftInput(View editor) {
-        //隐藏键盘
-        if (editor == null) {
-            return;
-        }
-        if (null != editor.getWindowToken()) {
-            InputMethodManager imm = (InputMethodManager) TheApplication.getInstance().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(editor.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
-    @Override
     public void releaseView() {
         //释放视图
         // TODO: 17-7-6 防止内存泄露

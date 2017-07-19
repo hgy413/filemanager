@@ -217,7 +217,7 @@
             android:name=".function.search.view.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysVisible"/>
+            android:windowSoftInputMode="adjustNothing"/>
 
         <activity
             android:name=".function.filebrowser.FileBrowserActivity"

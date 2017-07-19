@@ -3,6 +3,7 @@ package com.jb.filemanager.function.search.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.search.modle.FileInfo;
 import com.jb.filemanager.function.search.presenter.SearchContract;
 import com.jb.filemanager.function.search.presenter.SearchPresenter;
@@ -105,6 +108,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
                         return false;
                     }
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        hideSoftInput();
                         if (mPresenter != null) {
                             mPresenter.search(mEtSearchInput.getText().toString(), mEtSearchInput);
                         }
@@ -114,6 +118,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
                 }
             });
             mEtSearchInput.requestFocus();
+            showSoftInput();
         }
 
         mIvSearchDelete = (ImageView) view.findViewById(R.id.iv_action_bar_clear_input);
@@ -301,6 +306,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
                 }
                 break;
             case R.id.iv_action_bar_search:
+                hideSoftInput();
                 if (mPresenter != null) {
                     mPresenter.search(mEtSearchInput.getText().toString(), mEtSearchInput);
                 }
@@ -329,5 +335,20 @@ public class SearchFragment extends BaseFragment implements SearchContract.View,
         bundle.putParcelableArrayList(SearchResultFragment.ARG, fileInfoList);
         searchResultFragment.setArguments(bundle);
         replaceFragment(searchResultFragment);
+    }
+
+    private void showSoftInput() {
+        if (mEtSearchInput != null) {
+            InputMethodManager imm = (InputMethodManager) TheApplication.getInstance().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mEtSearchInput, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    private void hideSoftInput() {
+        //隐藏键盘
+        if (mEtSearchInput != null && mEtSearchInput.getWindowToken() != null) {
+            InputMethodManager imm = (InputMethodManager) TheApplication.getInstance().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEtSearchInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }
