@@ -703,7 +703,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         });
 
         if (subItem.isSysCache()) {
-            holder.mCheckBox.setVisibility(View.GONE);
+            holder.mCheckBox.setVisibility(View.INVISIBLE);
             SubSysCacheBean sysBean = (SubSysCacheBean) subItem;
             ImageLoader.getInstance(mContext).cancelShowImage(holder.mIcon);
             IconLoader.getInstance().displayImage(sysBean.getPackageName(),

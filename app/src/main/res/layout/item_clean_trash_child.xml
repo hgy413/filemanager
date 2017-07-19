@@ -13,6 +13,60 @@
         android:layout_weight="1"
         android:background="@color/white">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/item_child_iv"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:contentDescription="@null"
+                android:scaleType="fitXY"
+                tools:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/item_child_name"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="middle"
+                android:ems="10"
+                android:singleLine="true"
+                android:textColor="@color/black_70"
+                android:textSize="14dp"
+                tools:text="@string/app_name"/>
+
+            <TextView
+                android:id="@+id/item_child_size"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:textColor="@color/black_40"
+                android:textSize="14dp"
+                tools:text="@string/app_name"/>
+
+            <com.jb.filemanager.commomview.GroupSelectBox
+                android:id="@+id/item_child_select_button"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@null"
+                android:paddingBottom="22dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:paddingTop="22dp"
+                android:src="@drawable/choose_part"/>
+        </LinearLayout>
         <ImageView
             android:id="@+id/item_child_indivator"
             android:layout_width="14dp"
@@ -22,56 +76,6 @@
             android:layout_alignParentBottom="true"
             android:visibility="gone"
             android:layout_height="14dp"/>
-
-        <ImageView
-            android:id="@+id/item_child_iv"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:scaleType="fitXY"
-            tools:src="@mipmap/ic_launcher"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:contentDescription="@null"/>
-
-        <TextView
-            android:id="@+id/item_child_name"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginLeft="68dp"
-            android:ellipsize="middle"
-            android:ems="10"
-            tools:text="@string/app_name"
-            android:singleLine="true"
-            android:textColor="@color/black_70"
-            android:textSize="14dp"/>
-
-        <TextView
-            android:id="@+id/item_child_size"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginLeft="68dp"
-            android:ellipsize="middle"
-            android:ems="10"
-            tools:text="@string/app_name"
-            android:singleLine="true"
-            android:textColor="@color/black_40"
-            android:textSize="14dp"/>
-
-        <com.jb.filemanager.commomview.GroupSelectBox
-            android:id="@+id/item_child_select_button"
-            android:layout_width="44dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@null"
-            android:paddingLeft="16dp"
-            android:paddingRight="12dp"
-            android:paddingTop="22dp"
-            android:paddingBottom="22dp"
-            android:src="@drawable/choose_part"/>
 
     </RelativeLayout>
 

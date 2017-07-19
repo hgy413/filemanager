@@ -4,15 +4,15 @@
     xmlns:wheel="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="41dp"
-    android:minHeight="41dp"
+    android:layout_height="46dp"
+    android:minHeight="46dp"
     tools:background="@color/colorAccent"
     android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:orientation="horizontal">
 
         <TextView
@@ -39,8 +39,8 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textColor="@color/clean_trash_bg_red"
-            android:textSize="12dp"
+            android:textColor="@color/black_70"
+            android:textSize="14dp"
             tools:text="(234MB)"/>
 
         <com.jb.filemanager.commomview.ProgressWheel
