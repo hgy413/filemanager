@@ -146,7 +146,7 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
             }
             loadFiles();
         } else {
-            mView.showToast("click file");
+           // mView.showToast("click file");
         }
     }
 

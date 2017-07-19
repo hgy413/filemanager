@@ -3,6 +3,8 @@ package com.jb.filemanager.function.zipfile.presenter;
 import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +17,6 @@ public interface ZipActivityContract {
         void setListData(List<ZipFileGroupBean> data);
         void notifyDataSetChanged();
         void showOperationDialog(ZipFileItemBean fileItem);
-        void hideMoreOperator();
-        void showMoreOperator(int count);
         void switchSelectMode(boolean isToSelectMode);
         void setSearchTitleSelectBtnState(int state);
         void setSearchTitleSelectCount(int count);
@@ -28,5 +28,10 @@ public interface ZipActivityContract {
         void onDestroy();
         void onTitleCancelBtnClick();
         void onTitleSelectBtnClick();
+        ArrayList<File> getCurrentSelectFile();
+        void afterCopy();
+        void afterCut();
+        void afterRename();
+        void afterDelete();
     }
 }

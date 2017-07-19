@@ -24,6 +24,7 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
 
     private ZipActivityContract.View mView;
     private List<ZipFileGroupBean> mGroupList = new ArrayList<>();
+    private ArrayList<File> mCurrentSelect = new ArrayList<>();
 
     public ZipFileActivityPresenter(ZipActivityContract.View view) {
         mView = view;
@@ -46,24 +47,22 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
 
     @Override
     public void onItemStateChange() {
-        int selectCount = 0;
         int totalCount = 0;
+        mCurrentSelect.clear();
         for (ZipFileGroupBean groupBean : mGroupList) {
             List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
             for (ZipFileItemBean itemBean : zipFileList) {
-                totalCount ++;
+                totalCount++;
                 if (itemBean.isSelected()) {
-                    selectCount ++;
+                    mCurrentSelect.add(itemBean.getFile());
                 }
             }
         }
-        if (selectCount > 0) {
-            mView.showMoreOperator(selectCount);
+        if (mCurrentSelect.size() > 0) {
             mView.switchSelectMode(true);
-            mView.setSearchTitleSelectBtnState(selectCount == totalCount ? 2 : 1);
-            mView.setSearchTitleSelectCount(selectCount);
+            mView.setSearchTitleSelectBtnState(mCurrentSelect.size() == totalCount ? 2 : 1);
+            mView.setSearchTitleSelectCount(mCurrentSelect.size());
         } else {
-            mView.hideMoreOperator();
             mView.switchSelectMode(false);
         }
     }
@@ -87,9 +86,9 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
         for (ZipFileGroupBean groupBean : mGroupList) {
             List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
             for (ZipFileItemBean itemBean : zipFileList) {
-                totalCount ++;
+                totalCount++;
                 if (itemBean.isSelected()) {
-                    selectCount ++;
+                    selectCount++;
                 }
             }
         }
@@ -108,11 +107,48 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
         mView.notifyDataSetChanged();
     }
 
+    @Override
+    public ArrayList<File> getCurrentSelectFile() {
+        return mCurrentSelect;
+    }
+
+    @Override
+    public void afterCopy() {
+        onTitleCancelBtnClick();
+
+    }
+
+    @Override
+    public void afterCut() {
+        onTitleCancelBtnClick();
+        onCreate();
+    }
+
+    @Override
+    public void afterRename() {
+        mView.setSearchTitleSelectBtnState(0);
+        mView.setSearchTitleSelectCount(0);
+        mView.switchSelectMode(false);
+        onCreate();
+    }
+
+    @Override
+    public void afterDelete() {
+        mView.setSearchTitleSelectBtnState(0);
+        mView.setSearchTitleSelectCount(0);
+        mView.switchSelectMode(false);
+        onCreate();
+    }
+
     private void changeAllItemState(boolean isSelect) {
+        mCurrentSelect.clear();
         for (ZipFileGroupBean groupBean : mGroupList) {
             List<ZipFileItemBean> zipFileList = groupBean.getZipFileList();
             for (ZipFileItemBean itemBean : zipFileList) {
                 itemBean.setSelected(isSelect);
+                if (isSelect) {
+                    mCurrentSelect.add(itemBean.getFile());
+                }
             }
         }
     }
@@ -148,12 +184,12 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
             if (!dir.exists() || !dir.isDirectory()) return;
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
-                    scanPath(file, depth++);
+                    scanPath(file, depth + 1);
                 } else {
                     String extension = FileUtil.getExtension(file.getName());
                     if (!TextUtils.isEmpty(extension) && (extension.equalsIgnoreCase("zip")
                             || extension.equalsIgnoreCase("rar")
-                            || extension.equalsIgnoreCase("7z"))) {
+                           /* || extension.equalsIgnoreCase("7z")*/)) {
 //                    if (ZipUtils.isValidPackFile(file)) { // 很耗时
                         boolean exist = false;
                         for (ZipFileGroupBean group : mGroupList) {

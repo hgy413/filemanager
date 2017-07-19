@@ -1,11 +1,10 @@
 package com.jb.filemanager.function.zipfile;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
@@ -19,9 +18,13 @@ import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
 import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.presenter.ZipActivityContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
+import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
+import com.jb.filemanager.ui.widget.BottomOperateBar;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.jb.filemanager.R.id.search_title;
@@ -30,25 +33,15 @@ import static com.jb.filemanager.R.id.search_title;
  * Created by xiaoyu on 2017/6/29 17:01.
  */
 
-public class ZipFileActivity extends BaseActivity implements ZipActivityContract.View, View.OnClickListener {
+public class ZipFileActivity extends BaseActivity implements ZipActivityContract.View {
 
     private ZipFileActivityPresenter mPresenter = new ZipFileActivityPresenter(this);
     private ProgressWheel mProgress;
     private ExpandableListView mListView;
     private ZipListAdapter mAdapter;
     private ZipFileOperationDialog mOperationDialog;
-    private RelativeLayout mRlCommonOperateBarContainer;
-    private LinearLayout mLlOperateBar;
-    private TextView mTvCommonOperateBarCut;
-    private TextView mTvCommonOperateBarCopy;
-    private TextView mTvCommonOperateBarDelete;
-    private TextView mTvCommonOperateBarMore;
-    private LinearLayout mLlMoreOperateContainer;
-    private TextView mTvBottomDetail;
-    private TextView mTvBottomOpen;
-    private TextView mTvBottomShowInFolder;
-    private boolean mIsMoreOperatorShown;
     private SearchTitleView mSearchTitle;
+    private BottomOperateBar mOperateBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +60,6 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
                 return true;
             }
         });
-        mRlCommonOperateBarContainer = (RelativeLayout) findViewById(R.id.rl_common_operate_bar_container);
-        mLlOperateBar = (LinearLayout) findViewById(R.id.ll_operate_bar);
-        mTvCommonOperateBarCut = (TextView) findViewById(R.id.tv_common_operate_bar_cut);
-        mTvCommonOperateBarCopy = (TextView) findViewById(R.id.tv_common_operate_bar_copy);
-        mTvCommonOperateBarDelete = (TextView) findViewById(R.id.tv_common_operate_bar_delete);
-        mTvCommonOperateBarMore = (TextView) findViewById(R.id.tv_common_operate_bar_more);
-        mLlMoreOperateContainer = (LinearLayout) findViewById(R.id.ll_more_operate_container);
-        mTvBottomDetail = (TextView) findViewById(R.id.tv_bottom_detail);
-        mTvBottomOpen = (TextView) findViewById(R.id.tv_bottom_open);
-        mTvBottomShowInFolder = (TextView) findViewById(R.id.tv_bottom_rename);
-
-        mTvCommonOperateBarCut.setOnClickListener(this);
-        mTvCommonOperateBarCopy.setOnClickListener(this);
-        mTvCommonOperateBarDelete.setOnClickListener(this);
-        mTvCommonOperateBarMore.setOnClickListener(this);
-        mTvBottomDetail.setOnClickListener(this);
-        mTvBottomOpen.setOnClickListener(this);
-        mTvBottomShowInFolder.setOnClickListener(this);
-
 
         mSearchTitle = (SearchTitleView) findViewById(search_title);
         mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
@@ -109,7 +83,44 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
                 mPresenter.onTitleSelectBtnClick();
             }
         });
+        mOperateBar = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
+        mOperateBar.setListener(new BottomOperateBar.Listener() {
+            @Override
+            public ArrayList<File> getCurrentSelectedFiles() {
+                return mPresenter.getCurrentSelectFile();
+            }
 
+            @Override
+            public Activity getActivity() {
+                return ZipFileActivity.this;
+            }
+
+            @Override
+            public void afterCopy() {
+                Intent intent = new Intent(ZipFileActivity.this, MainActivity.class);
+                intent.putExtra("HAVE_PAST_DATE", true);
+                startActivity(intent);
+                mPresenter.afterCopy();
+            }
+
+            @Override
+            public void afterCut() {
+                Intent intent = new Intent(ZipFileActivity.this, MainActivity.class);
+                intent.putExtra("HAVE_PAST_DATE", true);
+                startActivity(intent);
+                mPresenter.afterCut();
+            }
+
+            @Override
+            public void afterRename() {
+                mPresenter.afterRename();
+            }
+
+            @Override
+            public void afterDelete() {
+                mPresenter.afterDelete();
+            }
+        });
         mPresenter.onCreate();
     }
 
@@ -171,64 +182,9 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rl_common_operate_bar_container:
-                break;
-            case R.id.iv_common_action_bar_with_search_search:
-                break;
-            case R.id.tv_common_operate_bar_copy:
-//                handleDataCopy();
-                break;
-            case R.id.tv_common_operate_bar_cut:
-//                handleDataCut();
-                break;
-            case R.id.tv_common_operate_bar_delete:
-//                handleDataDelete();
-                break;
-            case R.id.tv_common_operate_bar_more:
-//                Toast.makeText(DocManagerActivity.this, "more", Toast.LENGTH_SHORT).show();
-                if (mIsMoreOperatorShown) {
-                    hideMoreOperator();
-                } else {
-                    showMoreOperator(1);
-                }
-                break;
-            case R.id.tv_bottom_detail:
-//                showDocDetail(getCheckedDoc());
-                hideMoreOperator();
-                break;
-            case R.id.tv_bottom_rename:
-//                showInFolder(getCheckedDoc());
-                hideMoreOperator();
-                break;
-            case R.id.tv_bottom_open:
-//                openWith(getCheckedDoc());
-                hideMoreOperator();
-                break;
-            default:
-                break;
-        }
-    }
-
-    //显示more的内容
-    @Override
-    public void showMoreOperator(int chosenCount) {
-        mIsMoreOperatorShown = true;
-        if (chosenCount == 1) {
-            mLlMoreOperateContainer.setVisibility(View.VISIBLE);
-            mTvBottomOpen.setVisibility(View.VISIBLE);
-            mTvBottomShowInFolder.setVisibility(View.VISIBLE);
-        } else {
-            mLlMoreOperateContainer.setVisibility(View.VISIBLE);
-            mTvBottomOpen.setVisibility(View.GONE);
-            mTvBottomShowInFolder.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
     public void switchSelectMode(boolean isToSelectMode) {
         mSearchTitle.switchTitleMode(isToSelectMode);
+        mOperateBar.setVisibility(isToSelectMode ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -239,13 +195,6 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     @Override
     public void setSearchTitleSelectCount(int count) {
         mSearchTitle.setSelectedCount(count);
-    }
-
-    //隐藏more的内容
-    @Override
-    public void hideMoreOperator() {
-        mIsMoreOperatorShown = false;
-        mLlMoreOperateContainer.setVisibility(View.GONE);
     }
 
 }

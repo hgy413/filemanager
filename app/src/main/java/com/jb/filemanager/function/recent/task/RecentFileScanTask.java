@@ -68,7 +68,7 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
         for (File file : dir.listFiles()) {
             if (isCancelled()) return;
             if (file.isDirectory()) {
-                scanPath(file, depth++);
+                scanPath(file, depth + 1);
             } else {
                 long deltaTime = mFlagTime - file.lastModified();
                 // 将deltaTime转化, 小于最长时间值进行操作
