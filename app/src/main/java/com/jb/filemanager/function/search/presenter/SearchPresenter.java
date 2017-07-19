@@ -1,9 +1,7 @@
 package com.jb.filemanager.function.search.presenter;
 
-import android.app.Activity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
@@ -15,6 +13,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by nieyh on 17-7-6.
+ *
  */
 
 public class SearchPresenter implements SearchContract.Presenter {
