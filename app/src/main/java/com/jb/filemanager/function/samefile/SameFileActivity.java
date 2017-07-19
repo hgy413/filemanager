@@ -31,6 +31,8 @@ import static com.jb.filemanager.R.id.search_title;
 public class SameFileActivity extends BaseActivity implements SameFileContract.View,
         View.OnClickListener {
 
+    public static final String PARAM_CATEGORY_TYPE = "param_category_type";
+
     private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
     private ExpandableListView mElvFilelist;
@@ -64,13 +66,13 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 //        TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
 //        back.getPaint().setAntiAlias(true);
         switch (fileType) {
-            case Const.FILE_TYPE_MUSIC:
+            case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 searchTitle.setTitleName("Music");// .setText(R.string.music_title);
                 break;
-            case Const.FILE_TYPE_VIDEO:
+            case Const.CategoryType.CATEGORY_TYPE_VIDEO:
                 searchTitle.setTitleName("Video"); // .setText(R.string.video_title);
                 break;
-            case Const.FILE_TYPE_DOWNLOAD:
+            case Const.CategoryType.CATEGORY_TYPE_DOWNLOAD:
                 searchTitle.setTitleName("Download"); // back.setText(R.string.download_title);
                 break;
             default:

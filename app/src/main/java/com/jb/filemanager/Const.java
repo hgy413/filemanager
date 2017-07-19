@@ -62,23 +62,6 @@ public interface Const {
     public static final String FACEBOOK_AD_CHOICE_URL = "https://m.facebook.com/ads/ad_choices";
     public static final String ADMOB_AD_CONTENT_URL = "http://goappdl.goforandroid.com/soft/promote/com.jb.security.html";
 
-
-    // Operation
-    String BOTTOM_OPERATE = "operate";
-    String BOTTOM_OPERATE_BAR_CUT = "cut";
-    String BOTTOM_OPERATE_BAR_COPY = "copy";
-    String BOTTOM_OPERATE_DATA = "data";
-
-    // Classification Type
-    String CLASSIFY_TYPE = "file_type";
-    int FILE_TYPE_MUSIC = 1;
-    int FILE_TYPE_IMAGE = 2;
-    int FILE_TYPE_VIDEO = 3;
-    int FILE_TYPE_APPLICATION = 4;
-    int FILE_TYPE_DOWNLOAD = 5;
-    int FILE_TYPE_DOCUMENT = 6;
-    int FILE_TYPE_ZIP = 8;
-
     // File Type
     enum FILE_TYPE {
         APP, DOC, PDF, TXT, MUSIC, VIDEO, PICTURE, ZIP, OTHER

@@ -144,7 +144,7 @@ public class CategoryFragment extends Fragment {
                 public void onClick(View v) {
                     // 视频管理
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
-                    intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_VIDEO);
+                    intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_VIDEO);
                     startActivity(intent);
                 }
             });
@@ -176,7 +176,7 @@ public class CategoryFragment extends Fragment {
                 public void onClick(View v) {
                     // 音乐管理
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
-                    intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_MUSIC);
+                    intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_MUSIC);
                     startActivity(intent);
                 }
             });
@@ -223,7 +223,7 @@ public class CategoryFragment extends Fragment {
                 public void onClick(View v) {
                     // 下载管理
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
-                    intent.putExtra(Const.CLASSIFY_TYPE, Const.FILE_TYPE_DOWNLOAD);
+                    intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_DOWNLOAD);
                     startActivity(intent);
                 }
             });
