@@ -219,6 +219,11 @@
             android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"
             android:windowSoftInputMode="adjustNothing|stateAlwaysVisible"/>
 
+        <activity
+            android:name=".function.filebrowser.FileBrowserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
+
         <!--清理结果页-->
         <activity
             android:name=".function.trash.CleanResultActivity"

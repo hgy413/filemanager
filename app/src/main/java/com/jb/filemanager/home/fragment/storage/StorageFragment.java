@@ -22,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jb.filemanager.BaseFragment;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileManager;
@@ -44,8 +46,10 @@ import java.util.List;
  *
  */
 
-public class StorageFragment extends Fragment implements View.OnKeyListener,
+public class StorageFragment extends BaseFragment implements View.OnKeyListener,
         StorageContract.View {
+
+    public static final String PARAM_PATH = "param_path";
 
     private ImageView mIvStorageDisk;
     private HorizontalListView mHLvDirs;
@@ -68,7 +72,7 @@ public class StorageFragment extends Fragment implements View.OnKeyListener,
         super.onCreate(savedInstanceState);
 
         mPresenter = new StoragePresenter(this, new StorageSupport(this));
-        mPresenter.onCreate();
+        mPresenter.onCreate(getArguments());
 
         mListAdapter = new FileListAdapter(getActivity(), mPresenter);
         mGridAdapter = new FileGridAdapter(getActivity(), mPresenter);

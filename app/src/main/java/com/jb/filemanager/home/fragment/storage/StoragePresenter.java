@@ -61,10 +61,16 @@ class StoragePresenter implements StorageContract.Presenter,
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate(Bundle args) {
         mPathStack = new Stack<>();
         mStorageList = new ArrayList<>();
-        initStoragePath();
+
+        String path = "";
+        if (args != null) {
+            path = args.getString(StorageFragment.PARAM_PATH);
+        }
+
+        initStoragePath(path);
 
         EventBus.getDefault().register(mSortChangeEvent);
     }
@@ -379,7 +385,7 @@ class StoragePresenter implements StorageContract.Presenter,
 
 
     // ************************* private start *************************
-    private void initStoragePath() {
+    private void initStoragePath(String targetPath) {
         if (mSupport != null) {
             String[] paths = FileUtil.getVolumePaths(mSupport.getContext());
             if (paths != null && paths.length > 0) {
@@ -387,8 +393,22 @@ class StoragePresenter implements StorageContract.Presenter,
                     File file = new File(path);
                     mStorageList.add(file);
                 }
-                if (paths.length == 1) {
-                    mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
+
+                boolean needDefault = true;
+                if (!TextUtils.isEmpty(targetPath)) {
+                    File target = new File(targetPath);
+                    if (target.exists()) {
+                        addTargetToStack(target);
+                        mPathStack.push(target);
+                        mCurrentPath = targetPath;
+                        needDefault = false;
+                    }
+                }
+
+                if (needDefault) {
+                    if (paths.length == 1) {
+                        mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
+                    }
                 }
             }
         }
@@ -420,5 +440,19 @@ class StoragePresenter implements StorageContract.Presenter,
             }
         }
         return false;
+    }
+
+    private void addTargetToStack(File file) {
+        if (file != null && file.exists()) {
+            File parent = file.getParentFile();
+            if (parent != null) {
+                if (isRootDir(parent.getAbsolutePath())) {
+                    mPathStack.push(parent);
+                } else {
+                    addTargetToStack(parent);
+                    mPathStack.push(parent);
+                }
+            }
+        }
     }
 }

@@ -1,9 +1,11 @@
 package com.jb.filemanager.function.search.view;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +14,15 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
+import com.jb.filemanager.function.fileexplorer.NewListItemDialog;
+import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.function.search.modle.FileInfo;
-import com.jb.filemanager.util.AppUtils;
+import com.jb.filemanager.util.FileTypeUtil;
+import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.IntentUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -66,8 +74,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         @Override
                         public void onClick(View v) {
                             FileInfo fileInfo = (FileInfo)v.getTag();
-                            AppUtils.showToast(getContext(), fileInfo.mFileName);
-                            // TODO @wangzq 点击处理
+                            File clickedFile = new File(fileInfo.mFileAbsolutePath);
+                            if (clickedFile.exists()) {
+                                if (clickedFile.isDirectory()) {
+                                    FileBrowserActivity.startBrowser(getActivity(), fileInfo.mFileAbsolutePath);
+                                } else {
+                                    FileUtil.openFile(getActivity(), clickedFile);
+                                }
+                            }
                         }
                     });
                     resultView.setLayoutManager(new LinearLayoutManager(getContext()));

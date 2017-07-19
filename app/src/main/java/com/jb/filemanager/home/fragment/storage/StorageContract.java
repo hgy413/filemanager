@@ -2,6 +2,7 @@ package com.jb.filemanager.home.fragment.storage;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class StorageContract {
     }
 
     interface Presenter {
-        void onCreate();
+        void onCreate(Bundle args);
         void onActivityCreated();
         void onResume();
         void onPause();

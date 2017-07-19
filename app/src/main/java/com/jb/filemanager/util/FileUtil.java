@@ -1,5 +1,6 @@
 package com.jb.filemanager.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.jb.filemanager.function.fileexplorer.NewListItemDialog;
+import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.manager.file.FileManager;
 
 import java.io.File;
@@ -863,5 +866,53 @@ public class FileUtil {
         Uri uri = Uri.fromFile(new File(param));
         intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
         return intent;
+    }
+
+    /**
+     * 打开文件
+     *
+     * @param file file
+     */
+    public static void openFile(Activity activity, File file) {
+        if (activity != null && file != null && file.exists() && file.isFile()) {
+            boolean isOpen = false;
+            String ext = FileUtil.getExtension(file.getAbsolutePath());
+            if (!TextUtils.isEmpty(ext)) {
+                isOpen = IntentUtil.openFileWithIntent(activity, FileTypeUtil.getFileTypeFromPostfix(ext), file.getAbsolutePath());
+            }
+
+            if (!isOpen) {
+                showOpenWithDialog(activity, file.getAbsolutePath());
+            }
+        }
+    }
+
+    /**
+     * 显示打开方式对话框
+     */
+    private static void showOpenWithDialog(final Activity activity, final String path) {
+        NewListItemDialog dialog = new NewListItemDialog(activity, true);
+        dialog.setFileTypeClickListener(new NewListItemDialog.OnFileTypeClickListener() {
+            @Override
+            public void onTypeTextClick() {
+                IntentUtil.openFileWithIntent(activity, FileType.DOCUMENT, path);
+            }
+
+            @Override
+            public void onTypeAudioClick() {
+                IntentUtil.openFileWithIntent(activity, FileType.MUSIC, path);
+            }
+
+            @Override
+            public void onTypeVideoClick() {
+                IntentUtil.openFileWithIntent(activity, FileType.VIDEO, path);
+            }
+
+            @Override
+            public void onTypeImageClick() {
+                IntentUtil.openFileWithIntent(activity, FileType.IMAGE, path);
+            }
+        });
+        dialog.show();
     }
 }
