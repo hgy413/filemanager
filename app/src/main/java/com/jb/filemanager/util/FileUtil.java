@@ -1018,4 +1018,10 @@ public class FileUtil {
         intent.setDataAndType(uri, mime);
         return intent;
     }
+
+    public static ArrayList<String> getDownloadPathArray() {
+        ArrayList<String> result = new ArrayList<>();
+        result.add(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
+        return result;
+    }
 }

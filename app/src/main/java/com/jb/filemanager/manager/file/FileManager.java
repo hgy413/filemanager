@@ -62,6 +62,7 @@ public class FileManager {
     public static final int LOADER_AUDIO = 3;
     public static final int LOADER_DOC = 4;
     public static final int LOADER_FILES = 5;
+    public static final int LOADER_ZIP = 6;
 
     private static FileManager sInstance;
 

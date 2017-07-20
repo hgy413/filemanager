@@ -31,6 +31,8 @@ import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
 import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.function.recent.RecentFileActivity;
+import com.jb.filemanager.function.recent.RecentFileManager;
+import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.samefile.SameFileActivity;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
@@ -41,11 +43,14 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.view.UsageAnalysis;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,6 +72,9 @@ public class CategoryFragment extends Fragment {
     private static final String[] DOC_PROJECTION = new String[] {
             MediaStore.Files.FileColumns.SIZE};
 
+    private static final String[] ZIP_PROJECTION = new String[] {
+            MediaStore.Files.FileColumns.SIZE};
+
     private LoaderManager.LoaderCallbacks<Cursor> mPhotoLoaderCallback;
     private long mPhotoSize;
 
@@ -82,8 +90,25 @@ public class CategoryFragment extends Fragment {
     private LoaderManager.LoaderCallbacks<Cursor> mDocLoaderCallback;
     private long mDocsSize;
 
+    private LoaderManager.LoaderCallbacks<Cursor> mZipLoaderCallback;
+    private long mZipSize;
+
+    private long mDownloadSize;
+
+    private long mRecentSize;
+
     private long mTotalSize;
     private long mUsedSize;
+
+    private TextView mTvPhotoCount;
+    private TextView mTvVideoCount;
+    private TextView mTvAppCount;
+    private TextView mTvMusicCount;
+    private TextView mTvDocCount;
+    private TextView mTvZipCount;
+    private TextView mTvDownloadCount;
+    private TextView mTvRecentCount;
+    private TextView mTvAdCount;
 
     private TextView mTvStorageTitle;
     private TextView mTvStorageUsed;
@@ -116,6 +141,7 @@ public class CategoryFragment extends Fragment {
         mAppLoaderCallback = getAppLoaderCallback();
         mAudioLoaderCallback = getAudioLoaderCallback();
         mDocLoaderCallback = getDocLoaderCallback();
+        mZipLoaderCallback = getZipLoaderCallback();
 
         mHasExternalStorage = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
@@ -142,6 +168,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(new Intent(getContext(), ImageActivity.class));
                 }
             });
+
+            mTvPhotoCount = (TextView) flPhoto.findViewById(R.id.tv_main_category_photo_count);
+            if (mTvPhotoCount != null) {
+                mTvPhotoCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flVideo = (FrameLayout) rootView.findViewById(R.id.fl_main_category_video);
@@ -161,6 +192,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            mTvVideoCount = (TextView) flVideo.findViewById(R.id.tv_main_category_video_count);
+            if (mTvVideoCount != null) {
+                mTvVideoCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flApp = (FrameLayout) rootView.findViewById(R.id.fl_main_category_app);
@@ -178,6 +214,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(new Intent(getContext(), AppManagerActivity.class));
                 }
             });
+
+            mTvAppCount = (TextView) flApp.findViewById(R.id.tv_main_category_app_count);
+            if (mTvAppCount != null) {
+                mTvAppCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flMusic = (FrameLayout) rootView.findViewById(R.id.fl_main_category_music);
@@ -197,6 +238,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            mTvMusicCount = (TextView) flMusic.findViewById(R.id.tv_main_category_music_count);
+            if (mTvMusicCount != null) {
+                mTvMusicCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flDoc = (FrameLayout) rootView.findViewById(R.id.fl_main_category_doc);
@@ -214,6 +260,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(new Intent(getContext(), DocManagerActivity.class));
                 }
             });
+
+            mTvDocCount = (TextView) flDoc.findViewById(R.id.tv_main_category_doc_count);
+            if (mTvDocCount != null) {
+                mTvDocCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flZip = (FrameLayout) rootView.findViewById(R.id.fl_main_category_zip);
@@ -231,6 +282,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(new Intent(getContext(), ZipFileActivity.class));
                 }
             });
+
+            mTvZipCount = (TextView) flZip.findViewById(R.id.tv_main_category_zip_count);
+            if (mTvZipCount != null) {
+                mTvZipCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flDownload = (FrameLayout) rootView.findViewById(R.id.fl_main_category_download);
@@ -250,6 +306,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            mTvDownloadCount = (TextView) flDownload.findViewById(R.id.tv_main_category_download_count);
+            if (mTvDownloadCount != null) {
+                mTvDownloadCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flRecent = (FrameLayout) rootView.findViewById(R.id.fl_main_category_recent);
@@ -267,6 +328,11 @@ public class CategoryFragment extends Fragment {
                     startActivity(new Intent(getContext(), RecentFileActivity.class));
                 }
             });
+
+            mTvRecentCount = (TextView) flRecent.findViewById(R.id.tv_main_category_recent_count);
+            if (mTvRecentCount != null) {
+                mTvRecentCount.getPaint().setAntiAlias(true);
+            }
         }
 
         FrameLayout flAd = (FrameLayout) rootView.findViewById(R.id.fl_main_category_ad);
@@ -281,6 +347,11 @@ public class CategoryFragment extends Fragment {
                     // TODO 点击广告
                 }
             });
+
+            mTvAdCount = (TextView) flAd.findViewById(R.id.tv_main_category_ad_count);
+            if (mTvAdCount != null) {
+                mTvAdCount.getPaint().setAntiAlias(true);
+            }
         }
 
         mTvStorageTitle = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_title);
@@ -292,7 +363,6 @@ public class CategoryFragment extends Fragment {
                 mTvStorageTitle.setText(R.string.main_info_sdcard_storage);
             }
         }
-        
 
         mTvStorageUsed = (TextView) rootView.findViewById(R.id.tv_main_category_info_storage_used);
         if (mTvStorageUsed != null) {
@@ -369,6 +439,7 @@ public class CategoryFragment extends Fragment {
         getLoaderManager().initLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
         getLoaderManager().initLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
         getLoaderManager().initLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
+        getLoaderManager().initLoader(FileManager.LOADER_ZIP, null, mZipLoaderCallback);
     }
 
     @Override
@@ -423,6 +494,7 @@ public class CategoryFragment extends Fragment {
         mDocLoaderCallback = null;
         mPhotoLoaderCallback = null;
         mVideoLoaderCallback = null;
+        mZipLoaderCallback = null;
 
         if (mValueAnimator != null) {
             mValueAnimator.cancel();
@@ -518,6 +590,9 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mPhotoSize = size;
+                        if (mTvPhotoCount != null) {
+                            mTvPhotoCount.setText(String.valueOf(cursor.getCount()));
+                        }
                         mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_photo_color), size);
                     } finally {
                         cursor.close();
@@ -555,6 +630,9 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mVideoSize = size;
+                        if (mTvVideoCount != null) {
+                            mTvVideoCount.setText(String.valueOf(cursor.getCount()));
+                        }
                         mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_video_color), size);
                     } finally {
                         cursor.close();
@@ -592,6 +670,9 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mAudioSize = size;
+                        if (mTvMusicCount != null) {
+                            mTvMusicCount.setText(String.valueOf(cursor.getCount()));
+                        }
                         mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_music_color), size);
                     } finally {
                         cursor.close();
@@ -621,6 +702,9 @@ public class CategoryFragment extends Fragment {
                         size += appSize;
                     }
                     mAppsSize = size;
+                    if (mTvAppCount != null) {
+                        mTvAppCount.setText(String.valueOf(data.size()));
+                    }
                     mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_apps_color), size);
                 }
             }
@@ -667,6 +751,9 @@ public class CategoryFragment extends Fragment {
                             size += cursor.getLong(0);
                         }
                         mDocsSize = size;
+                        if (mTvDocCount != null) {
+                            mTvDocCount.setText(String.valueOf(cursor.getCount()));
+                        }
                         mUaStorage.addItem(APIUtil.getColor(getContext(), R.color.main_category_info_docs_color), size);
                     } finally {
                         cursor.close();
@@ -680,6 +767,86 @@ public class CategoryFragment extends Fragment {
             }
         };
     }
+
+    private LoaderManager.LoaderCallbacks<Cursor> getZipLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                Uri uri = mIsInternalStorage ? MediaStore.Files.getContentUri("internal") : MediaStore.Files.getContentUri("external");
+
+
+                String selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+                        + "or " + MediaStore.Files.FileColumns.MIME_TYPE + "=?";
+                String mimeTypePdf = MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip");
+                String mimeTypeTxt = MimeTypeMap.getSingleton().getMimeTypeFromExtension("rar");
+
+                String[] selectionArgs = new String[]{ mimeTypePdf, mimeTypeTxt };
+
+                return new CursorLoader(getActivity(),
+                        uri,
+                        ZIP_PROJECTION,
+                        selectionMimeType,
+                        selectionArgs,
+                        null);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null) {
+                    try {
+                        long size = 0L;
+                        while (cursor.moveToNext()) {
+                            size += cursor.getLong(0);
+                        }
+                        mZipSize = size;
+                        if (mTvZipCount != null) {
+                            mTvZipCount.setText(String.valueOf(cursor.getCount()));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        };
+    }
+
+    private void updateDownloadCount() {
+        int count = 0;
+
+        ArrayList<String> downloadPathList = FileUtil.getDownloadPathArray();
+        for (String path : downloadPathList) {
+            File file = new File(path);
+            if (file.exists()) {
+                int[] folderAndFile = FileUtil.countFolderAndFile(file);
+                if (folderAndFile != null && folderAndFile.length == 2) {
+                    count += folderAndFile[0] + folderAndFile[1];
+                }
+            }
+        }
+
+        if (mTvDownloadCount != null) {
+            mTvDownloadCount.setText(String.valueOf(count));
+        }
+    }
+
+    private void updateRecentCount() {
+        int count = 0;
+        List<BlockBean> blockBeanList = RecentFileManager.getInstance().getRecentFiles();
+        for (BlockBean blockBean : blockBeanList) {
+            count += blockBean.getChildCount();
+        }
+
+        if (mTvRecentCount != null) {
+            mTvRecentCount.setText(String.valueOf(count));
+        }
+    }
+
+
 
     private void handleSwitchPhoneSdCard() {
         if (mTvSwitchPhone != null) {
@@ -715,5 +882,8 @@ public class CategoryFragment extends Fragment {
         getLoaderManager().restartLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
         getLoaderManager().restartLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
         getLoaderManager().restartLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
+        getLoaderManager().restartLoader(FileManager.LOADER_ZIP, null, mZipLoaderCallback);
+        updateDownloadCount();
+        updateRecentCount();
     }
 }
