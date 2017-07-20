@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -39,6 +41,89 @@ import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileUtil {
+    public static ArrayMap<String, String> initArrayMap(@NonNull ArrayMap<String, String> map, @NonNull String[][] stringMap) {
+        if (map == null) {
+            new ArrayMap();
+        }
+        if (stringMap == null) return map;
+
+        for (String[] stringCuple : stringMap) {
+            map.put(stringCuple[0], stringCuple[1]);
+        }
+        return map;
+    }
+    private static final String[][] MIME_MapTable={
+            //{后缀名，MIME类型}
+            {".3gp", "video/3gpp"},
+            {".apk", "application/vnd.android.package-archive"},
+            {".asf", "video/x-ms-asf"},
+            {".avi", "video/x-msvideo"},
+            {".bin", "application/octet-stream"},
+            {".bmp", "image/bmp"},
+            {".c", "text/plain"},
+            {".class", "application/octet-stream"},
+            {".conf", "text/plain"},
+            {".cpp", "text/plain"},
+            {".doc", "application/msword"},
+            {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+            {".xls", "application/vnd.ms-excel"},
+            {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+            {".exe", "application/octet-stream"},
+            {".gif", "image/gif"},
+            {".gtar", "application/x-gtar"},
+            {".gz", "application/x-gzip"},
+            {".h", "text/plain"},
+            {".htm", "text/html"},
+            {".html", "text/html"},
+            {".jar", "application/java-archive"},
+            {".java", "text/plain"},
+            {".jpeg", "image/jpeg"},
+            {".jpg", "image/jpeg"},
+            {".js", "application/x-JavaScript"},
+            {".log", "text/plain"},
+            {".m3u", "audio/x-mpegurl"},
+            {".m4a", "audio/mp4a-latm"},
+            {".m4b", "audio/mp4a-latm"},
+            {".m4p", "audio/mp4a-latm"},
+            {".m4u", "video/vnd.mpegurl"},
+            {".m4v", "video/x-m4v"},
+            {".mov", "video/quicktime"},
+            {".mp2", "audio/x-mpeg"},
+            {".mp3", "audio/x-mpeg"},
+            {".acc", "audio/x-mpeg"},
+            {".mp4", "video/mp4"},
+            {".mpc", "application/vnd.mpohun.certificate"},
+            {".mpe", "video/mpeg"},
+            {".mpeg", "video/mpeg"},
+            {".mpg", "video/mpeg"},
+            {".mpg4", "video/mp4"},
+            {".mpga", "audio/mpeg"},
+            {".msg", "application/vnd.ms-outlook"},
+            {".ogg", "audio/ogg"},
+            {".pdf", "application/pdf"},
+            {".png", "image/png"},
+            {".pps", "application/vnd.ms-powerpoint"},
+            {".ppt", "application/vnd.ms-powerpoint"},
+            {".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},
+            {".prop", "text/plain"},
+            {".rc", "text/plain"},
+            {".rmvb", "audio/x-pn-realaudio"},
+            {".rtf", "application/rtf"},
+            {".sh", "text/plain"},
+            {".tar", "application/x-tar"},
+            {".tgz", "application/x-compressed"},
+            {".txt", "text/plain"},
+            {".wav", "audio/x-wav"},
+            {".wma", "audio/x-ms-wma"},
+            {".wmv", "audio/x-ms-wmv"},
+            {".wps", "application/vnd.ms-works"},
+            {".xml", "text/plain"},
+            {".z", "application/x-compress"},
+            {".zip", "application/x-zip-compressed"},
+            {"", "*/*"}
+    };
+    public static final ArrayMap<String, String> MIME_MAP = initArrayMap(new ArrayMap<String, String>(), MIME_MapTable);
+
     public static final String FILE_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,19}[.][a-zA-Z0-9]{1,10}$";
     public static final String FOLDER_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
 
@@ -517,7 +602,6 @@ public class FileUtil {
     // private end
 
     /**
-<<<<<<< cd68d768d714c4a084b3d42ddf7b3879c9218a09
      * 统一获取raw文件流中数据:全部数据
      */
     public static String getAllStrDataFromRaw(Context context, int rawId) {
@@ -667,8 +751,6 @@ public class FileUtil {
     }
 
     /**
-=======
->>>>>>> 添加打开弹窗
      * Gets the extension of a filename.
      * <p>
      * This method returns the textual part of the filename after the last dot.
@@ -914,5 +996,26 @@ public class FileUtil {
             }
         });
         dialog.show();
+    }
+
+    /**
+     * Get a intent to open file
+     * @param fullPath File full path
+     * @return A Intent to open file, when filepath is null, file not exist or
+     * file path is a directory return null.
+     */
+    public static Intent getOpenFileIntent(@NonNull String fullPath) {
+        if (fullPath == null) return null;
+        File file = new File(fullPath);
+        if (!file.exists() || file.isDirectory()) return null;
+        String suffix = fullPath.substring(fullPath.lastIndexOf('.'));
+        String mime = MIME_MAP.get(suffix);
+        if (mime == null || mime.equals("")) {
+            mime = MIME_MAP.get(".txt"); // Unknow type open as txt
+        }
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, mime);
+        return intent;
     }
 }

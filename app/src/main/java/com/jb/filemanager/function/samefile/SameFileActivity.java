@@ -8,19 +8,25 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.docmanager.DocChildBean;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
+import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.jb.filemanager.R.id.cancel_action;
 import static com.jb.filemanager.R.id.search_title;
 
 /**
@@ -35,8 +41,8 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
-    private ExpandableListView mElvFilelist;
-    private GroupList<String, FileInfo> mMusicDataArrayMap;
+    private FloatingGroupExpandableListView mElvFilelist;
+    private GroupList<String, FileInfo> mFileGroupList;
     private FileExpandableListAdapter mFileExpandableListAdapter;
     private BottomOperateBar mBottomOperateContainer;
     private LinearLayout mLlNoFileView;
@@ -63,8 +69,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             }
         });
         searchTitle.setOnSearchClickListener(this);
-//        TextView back = (TextView) findViewById(R.id.tv_common_action_bar_with_search_title);
-//        back.getPaint().setAntiAlias(true);
         switch (fileType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 searchTitle.setTitleName("Music");// .setText(R.string.music_title);
@@ -78,8 +82,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             default:
                 searchTitle.setTitleName("Transfer unknow type"); // back.setText("Transfer unknow type");
         }
-//        back.setOnClickListener(this);
-        mElvFilelist = (ExpandableListView) findViewById(R.id.elv_same_file_list);
+        mElvFilelist = (FloatingGroupExpandableListView) findViewById(R.id.elv_same_file_list);
         mFileExpandableListAdapter = new FileExpandableListAdapter(SameFileActivity.this,
                 new FileExpandableListAdapter.ItemChooseChangeListener() {
                     @Override
@@ -91,7 +94,19 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                         }
                     }
                 });
-        mElvFilelist.setAdapter(mFileExpandableListAdapter);
+        mElvFilelist.setAdapter(new WrapperExpandableListAdapter(mFileExpandableListAdapter));
+        mElvFilelist.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition,
+                                        int childPosition, long id) {
+                FileInfo fileInfo = mFileGroupList.valueAt(groupPosition).get(childPosition);
+                Intent mFileIntent = FileUtil.getOpenFileIntent(fileInfo.mFullPath);
+                if (mFileIntent != null) {
+                    startActivity(mFileIntent);
+                }
+                return false;
+            }
+        });
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mBottomOperateContainer.setListener(new BottomOperateBar.Listener() {
@@ -206,14 +221,14 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void showFileList(GroupList<String, FileInfo> mMusicMaps) {
-        mMusicDataArrayMap = mMusicMaps;
+        mFileGroupList = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
         for (int i = 0; i < mItemSelected.length; i++) {
             mItemSelected[i] = false;
         }
         //mMusicListAdapter.notifyDataSetChanged();
         mFileExpandableListAdapter.reflaceDate(mMusicMaps);
-        int groupCount = mMusicDataArrayMap.size();
+        int groupCount = mFileGroupList.size();
         for (int i = 0; i < groupCount; i++) {
             mElvFilelist.expandGroup(i);
         }

@@ -125,7 +125,9 @@ public class SameFileSupport implements SameFileContract.Support {
                 list.add(info);
                 continue;
             }
-            if (info.mFullPath.endsWith("doc") || info.mFullPath.endsWith("docx")) {
+            if (info.mFullPath.endsWith("doc") || info.mFullPath.endsWith("docx")
+                    || info.mFullPath.endsWith("xls") || info.mFullPath.endsWith("xlsx")
+                    || info.mFullPath.endsWith("ppt")) {
                 info.mFileType = Const.FILE_TYPE.DOC;
                 list = infoGroupList.get("Document");
                 if (null == list) {
@@ -163,7 +165,6 @@ public class SameFileSupport implements SameFileContract.Support {
             }
             list.add(info);
         }
-        //infoGroupList.put("Download", infoList);
         return infoGroupList;
     }
 

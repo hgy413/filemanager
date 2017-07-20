@@ -8,7 +8,6 @@
     tools:ignore="SpUsage,ContentDescription">
 
     <LinearLayout
-        android:id="@+id/ll_music_item_container"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/list_item_bg_selector"

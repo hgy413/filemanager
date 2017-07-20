@@ -1,9 +1,7 @@
 package com.jb.filemanager.function.samefile;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -11,22 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
-import com.jb.filemanager.function.trash.presenter.Contract;
 import com.jb.filemanager.manager.PackageManagerLocker;
-import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-
 import java.util.ArrayList;
 
 /**
@@ -199,11 +192,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 }
                 notifyDataSetChanged();
                 break;
-            case R.id.ll_file_item_container:
-                // Todo handle file by Type
-                Toast.makeText(mContext, "dsfasd", Toast.LENGTH_LONG);
-
-                break;
+//            case R.id.ll_file_item_container:
+//                // Todo handle file by Type
+//                Toast.makeText(mContext, "dsfasd", Toast.LENGTH_LONG);
+//
+//                break;
             case R.id.iv_music_child_item_select:
                 Binder binder = (Binder) v.getTag();
                 if (binder.mFileInfo.isSelected) {
@@ -257,7 +250,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             mViewChildDebideLine = (View) itemView.findViewById(R.id.view_child_divide_line);
             mViewGroupDevideSpace = (View) itemView.findViewById(R.id.view_group_divide_space);
             mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
-            mLlItemContainer.setOnClickListener(FileExpandableListAdapter.this);
+            //mLlItemContainer.setOnClickListener(FileExpandableListAdapter.this);
         }
 
         void savePosition(int group, int child, FileInfo fileInfo) {
