@@ -5,96 +5,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/common_action_bar_bg"
+    android:background="@color/common_status_bar_green"
     android:orientation="vertical">
 
-    <include layout="@layout/common_action_bar"/>
+    <TextView
+        android:id="@+id/tv_common_action_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:drawableLeft="@drawable/action_bar_back_drawable_selector"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/action_bar_back_drawable_selector"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/drawer_help"
+        android:textColor="@color/white"
+        android:textSize="@dimen/h3_16"/>
 
     <ImageView
         android:id="@+id/iv_about_logo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="100dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_about_logo" />
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/tv_about_app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
-        android:textColor="#FFFFFF"
-        android:textSize="18dp" />
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:text="@string/app_name"
+        android:textSize="@dimen/h3_16" />
 
     <TextView
         android:id="@+id/tv_about_app_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="28dp"
-        android:textColor="#FFFFFF"
-        android:textSize="14dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="95dp"
+        android:textColor="@color/white_70"
+        tools:text="@string/about_app_version"
+        android:textSize="@dimen/h5_12" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f5f5f5"
+        android:background="@color/common_bg"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_about_update"
+            android:id="@+id/tv_about_contact_us"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:background="@drawable/about_item_selector"
-            android:drawableLeft="@drawable/ic_about_update"
-            android:drawableStart="@drawable/ic_about_update"
-            android:drawablePadding="9dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="@string/about_check_update"
+            android:text="@string/about_contact_us"
             android:textSize="16dp"
-            android:textColor="#888888"/>
+            android:drawableRight="@drawable/ic_about_arrow"
+            android:textColor="@color/black_70"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#eeeeee"/>
-
-        <TextView
-            android:id="@+id/tv_about_rate"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/about_item_selector"
-            android:drawableLeft="@drawable/ic_about_rate"
-            android:drawableStart="@drawable/ic_about_rate"
-            android:drawablePadding="9dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/about_rate"
-            android:textSize="16dp"
-            android:textColor="#888888"/>
+            android:layout_height="0.5dp"
+            android:background="@color/list_divider_line_color_e7e9f3"/>
 
         <TextView
             android:id="@+id/tv_about_policy"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:background="@drawable/about_item_selector"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/about_policy"
             android:textSize="16dp"
-            android:textColor="#888888"/>
+            android:drawableRight="@drawable/ic_about_arrow"
+            android:textColor="@color/black_70"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#eeeeee"/>
+            android:layout_height="0.5dp"
+            android:background="@color/list_divider_line_color_e7e9f3"/>
         
         <TextView
             android:id="@+id/tv_about_user_experience"
@@ -104,9 +102,10 @@
             android:background="@drawable/about_item_selector"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:drawableRight="@drawable/ic_about_arrow"
             android:text="@string/about_user_experience_program"
             android:textSize="16dp"
-            android:textColor="#888888"/>
+            android:textColor="@color/black_70"/>
 
     </LinearLayout>
 </LinearLayout>

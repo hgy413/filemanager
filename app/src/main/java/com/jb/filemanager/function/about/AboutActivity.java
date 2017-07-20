@@ -17,8 +17,7 @@ import com.jb.filemanager.util.AppUtils;
 
 public class AboutActivity extends BaseActivity {
 
-    private TextView mTvUpdate;
-    private TextView mTvRate;
+    private TextView mContactUs;
     private TextView mTvPolicy;
     private TextView mTvUserExperience;
     private TextView mTvCommonActionBarTitle;
@@ -50,6 +49,12 @@ public class AboutActivity extends BaseActivity {
             mTvUserExperience.setPaintFlags(mTvUserExperience.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         }
 
+        mContactUs = (TextView) findViewById(R.id.tv_about_contact_us);
+        if (mContactUs != null) {
+            mContactUs.getPaint().setAntiAlias(true);
+            mContactUs.setPaintFlags(mTvUserExperience.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
+
         TextView appName = (TextView) findViewById(R.id.tv_about_app_name);
         if (appName != null) {
             appName.getPaint().setAntiAlias(true);
@@ -60,16 +65,6 @@ public class AboutActivity extends BaseActivity {
         if (version != null) {
             version.getPaint().setAntiAlias(true);
             version.setText(String.format(getString(R.string.about_app_version), AppUtils.getVersionName(this)));
-        }
-
-        mTvRate = (TextView) findViewById(R.id.tv_about_rate);
-        if (mTvRate != null) {
-            mTvRate.getPaint().setAntiAlias(true);
-        }
-
-        mTvUpdate = (TextView) findViewById(R.id.tv_about_update);
-        if (mTvUpdate != null) {
-            mTvUpdate.getPaint().setAntiAlias(true);
         }
     }
 
@@ -103,23 +98,13 @@ public class AboutActivity extends BaseActivity {
             }
         });
 
-        mTvUpdate.setOnClickListener(new View.OnClickListener() {
+        mContactUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mQuickClickGuard.isQuickClick(v.getId())) {
                     return;
                 }
-                AppUtils.goToGooglePlay();
-            }
-        });
-
-        mTvRate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mQuickClickGuard.isQuickClick(v.getId())) {
-                    return;
-                }
-                AppUtils.goToGooglePlay();
+                AppUtils.goToContactUs();
             }
         });
     }

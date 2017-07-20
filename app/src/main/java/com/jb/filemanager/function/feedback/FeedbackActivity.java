@@ -1,14 +1,10 @@
 package com.jb.filemanager.function.feedback;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,7 +17,6 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.applock.dialog.ListDialog;
 import com.jb.filemanager.statistics.StatisticsTools;
-import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
 
 import java.util.Timer;
@@ -81,7 +76,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback_temp);
+        setContentView(R.layout.activity_feedback);
         init();
     }
 

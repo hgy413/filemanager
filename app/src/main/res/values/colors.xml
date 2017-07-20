@@ -20,6 +20,8 @@
     <color name="black_15">#26000000</color>
     <color name="black_20">#33000000</color>
     <color name="black_70">#B2000000</color>
+    <!--规范-->
+    <color name="common_bg">#F5F6FF</color>
 
     <!-- home -->
     <color name="main_tab_text_color_select">#B2000000</color>

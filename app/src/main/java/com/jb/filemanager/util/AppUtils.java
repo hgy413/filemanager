@@ -1512,4 +1512,15 @@ public class AppUtils {
     public static int getColor(int resId) {
         return TheApplication.getAppContext().getResources().getColor(resId);
     }
+
+    public static void goToContactUs() {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("message/rfc822");
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String tos = Const.FILEMANAGER_BUS_EMAIL;
+        Uri uri = Uri.parse("mailto:" + tos);
+        emailIntent.setAction(Intent.ACTION_SENDTO);
+        emailIntent.setData(uri);
+        TheApplication.getAppContext().startActivity(emailIntent);
+    }
 }
