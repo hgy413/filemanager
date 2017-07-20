@@ -28,6 +28,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         this.mFileInfoList = fileInfoList;
     }
 
+    public void setData(List<FileInfo> fileInfoList) {
+        mFileInfoList = fileInfoList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_result, parent, false));

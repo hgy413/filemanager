@@ -1,16 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <View
-        android:id="@+id/view_fragment_search_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#7f000000" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,8 +22,9 @@
 
         <TextView
             android:id="@+id/tv_fragment_search_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:textSize="18dp"
             android:textColor="@color/black_70"
@@ -84,56 +79,94 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_fragment_search_anim_container"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal"
-        android:background="#F5F6FF"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
         <View
-            android:layout_width="0dp"
+            android:id="@+id/view_fragment_search_mask"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:background="#7f000000" />
 
-        <View
-            android:id="@+id/view_fragment_search_anim_1"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginTop="160dp"
-            android:layout_marginRight="14dp"
-            android:layout_marginEnd="14dp"
-            android:background="#2ED6C1"/>
-
-        <View
-            android:id="@+id/view_fragment_search_anim_2"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginTop="160dp"
-            android:background="#2ED6C1"/>
-
-        <View
-            android:id="@+id/view_fragment_search_anim_3"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginTop="160dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginStart="14dp"
-            android:background="#2ED6C1"/>
-
-        <View
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/ll_fragment_search_anim_container"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:orientation="horizontal"
+            android:background="#F5F6FF"
+            android:visibility="gone">
 
-    </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/main_shadow"/>
+            <View
+                android:id="@+id/view_fragment_search_anim_1"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="160dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginEnd="14dp"
+                android:background="#2ED6C1"/>
 
-</FrameLayout>
+            <View
+                android:id="@+id/view_fragment_search_anim_2"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="160dp"
+                android:background="#2ED6C1"/>
+
+            <View
+                android:id="@+id/view_fragment_search_anim_3"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="160dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginStart="14dp"
+                android:background="#2ED6C1"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_search_result_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F5F6FF"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_search_result_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_search_result_empty_tips"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="160dp"
+            android:drawableTop="@drawable/ic_search_result_empty"
+            android:drawablePadding="15dp"
+            android:textSize="20dp"
+            android:textColor="@color/black_20"
+            android:text="@string/search_result_empty_tips"
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@drawable/main_shadow"/>
+
+    </FrameLayout>
+
+
+</LinearLayout>

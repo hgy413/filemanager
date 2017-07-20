@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.function.search.view.SearchActivity;
-import com.jb.filemanager.function.search.view.SearchFragment;
 import com.jb.filemanager.home.MainActivity;
 
 import java.io.File;
