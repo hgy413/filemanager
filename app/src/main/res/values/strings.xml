@@ -87,20 +87,28 @@
     <string name="about_user_experience_program">User Experience Program</string>
 
     <!-- 反馈页面 -->
-    <string name="feedback_common">Common Feedback</string>
-    <string name="feedback_suggestion">Suggestion I Got</string>
-    <string name="feedback_problem">Problem I Found</string>
     <string name="feedback_content">Below is system information needed to help locate the issues you encountered. We WILL NOT collect any of your personal information</string>
-    <string name="feedback_force_install">Forced/Tricked Installation</string>
     <string name="feedback_title">Feedback</string>
     <string name="feedback_tip_content">Tricked or forced to install %1$s?</string>
+    <string name="feedback_tip_content2">The deceptive ad you encountered is horrbile and intolerable. We will help you find it out and make it get punished</string>
     <string name="feedback_no_contain">Hi,say something?</string>
-    <string name="feedback_container_hint">Please write your comments here, provide as much detail as you can. We are always listening and improving.</string>
-    <string name="feedback_notice">Phone model and version will be collected for diagnosing your issue.We will never collect personal information without your permission.</string>
+    <string name="feedback_container_hint">Input your feedback</string>
+    <string name="feedback_notice">To better lovate the problem. device &amp; system info will be sent, We will NOT gather your personal info.</string>
     <string name="feedback_no_email">No Email APP found</string>
     <string name="feedback_check_network">Please check your network connection.</string>
     <string name="feedback_tip_send_report">Yes, Report!</string>
     <string name="feedback_tip_no">No</string>
+    <string name="feedback_title_common_problem">Common Problems</string>
+    <string name="feedback_problem_virus_install">Virus install</string>
+    <string name="feedback_problem_tricking_ad">Tricking ads</string>
+    <string name="feedback_details_virus_install">Why is there virus installing your app automatically? \n\n You might have tricked by malicious promotions! We are strongly against virus-forced installation. If you installed our app this way, please feedback to us immediately so that we could take action.</string>
+    <string name="feedback_details_tricking_ad">How come there are features on the adas that I can\'t find on the app?\n\nYou might have tricked by false ads! We are strongly against misleading installation by false ads. If you installed our app this way, please feedback to us immediately so that we could take action.</string>
+    <string-array name="feedback_common_question_list">
+        <item>Common Feedback</item>
+        <item>Suggestion I Got</item>
+        <item>Problem I Found</item>
+        <item>Forced/Tricked Installation</item>
+    </string-array>
 
     <string name="image_title">Image</string>
 

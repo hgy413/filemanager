@@ -62,6 +62,9 @@ public interface Const {
     public static final String FACEBOOK_AD_CHOICE_URL = "https://m.facebook.com/ads/ad_choices";
     public static final String ADMOB_AD_CONTENT_URL = "http://goappdl.goforandroid.com/soft/promote/com.jb.security.html";
 
+    //FileManager邮箱
+    String FILEMANAGER_BUS_EMAIL = "gofilemanager@gmail.com";
+
     // File Type
     enum FILE_TYPE {
         APP, DOC, PDF, TXT, MUSIC, VIDEO, PICTURE, ZIP, OTHER

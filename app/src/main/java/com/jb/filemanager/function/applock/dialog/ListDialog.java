@@ -30,11 +30,6 @@ public class ListDialog implements View.OnClickListener {
     private PopupWindow.OnDismissListener mOnDismissListener;
 
     public ListDialog(TextView responseTxtView, @ArrayRes int arrayResId) {
-        // TODO: 17-7-10 背景的阴影
-        /**
-         * 距离1dp
-         * 模糊值2dp 000
-         * */
         mResponseTxt = responseTxtView;
         mArrayRes = responseTxtView.getContext().getResources().getStringArray(arrayResId);
         mListTxts = new TextView[mArrayRes.length];

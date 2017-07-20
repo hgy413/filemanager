@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.applock.dialog.ListDialog;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
@@ -34,9 +37,6 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
     private EditText mContainer; //正文
     private ImageView imageView; //下拉框箭头
     private LinearLayout menu_common; //下拉框
-    private TextView problem; //下拉框文本
-    private TextView forceInstall; //下拉框文本
-    private TextView suggestion; //下拉框文本
     private TextView select; //下拉框文本
     private TextView mWarnTipContent;
     private View mWarnTipLayout;
@@ -44,26 +44,56 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
     private TextView mWarnTipNo;
     private TextView mTvCommonActionBarTitle;
     private ImageView mIvCommonActionBarMore;
+    private View mVirusInstallLl;
+    private View mVirusInstallTv;
+    private View mVirusInstallArrow;
+    private View mTrickingAdLl;
+    private View mTrickingAdTv;
+    private View mTrickingAdArrow;
 
     private FeedbackContract.Presenter mPresenter;
     private Timer mTimer;
+    private ListDialog mQuestionListDialog;
+    //文本输入监听器
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().equals("")) {
+                mIvCommonActionBarMore.setAlpha(0.3f);
+                mIvCommonActionBarMore.setEnabled(false);
+            } else {
+                mIvCommonActionBarMore.setAlpha(1.0f);
+                mIvCommonActionBarMore.setEnabled(true);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback);
+        setContentView(R.layout.activity_feedback_temp);
         init();
     }
+
 
     private void init() {
         mPresenter = new FeedbackPresenter(this, new FeedbackSupport());
 
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
-        mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_more);
+        mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_send);
 
-        mTvCommonActionBarTitle.setText(R.string.feedback_title);
-        mIvCommonActionBarMore.setVisibility(View.VISIBLE);
-        mIvCommonActionBarMore.setImageResource(R.drawable.ic_feedback_submit);
+        mIvCommonActionBarMore.setAlpha(0.3f);
+        mIvCommonActionBarMore.setEnabled(false);
 
         mContainer = (EditText) findViewById(R.id.container_setting_feedback);
         select = (TextView) findViewById(R.id.setting_feedback_menu_select);
@@ -74,12 +104,28 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         mWarnTipContent = (TextView) findViewById(R.id.activity_menu_feedback_tip_content);
         mWarnTipLayout = findViewById(R.id.activity_menu_feedback_tip_layout);
         mWarnTipReport = (TextView) findViewById(R.id.activity_menu_feedback_send);
+        mVirusInstallLl = findViewById(R.id.activity_menu_feedback_virus_install_ll);
+        mTrickingAdLl = findViewById(R.id.activity_menu_feedback_tricking_ad_ll);
+        mVirusInstallTv = findViewById(R.id.activity_menu_feedback_virus_install_tip);
+        mTrickingAdTv = findViewById(R.id.activity_menu_feedback_tricking_ad_tip);
+        mTrickingAdArrow = findViewById(R.id.activity_menu_feedback_tricking_ad_arrow);
+        mVirusInstallArrow = findViewById(R.id.activity_menu_feedback_virus_install_arrow);
         mWarnTipNo = (TextView) findViewById(R.id.activity_menu_feedback_close);
         mWarnTipContent.setText(getResources().getString(R.string.feedback_tip_content, getResources().getString(R.string.app_name)));
+        mQuestionListDialog = new ListDialog(select, R.array.feedback_common_question_list);
+        mQuestionListDialog.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                imageView.setRotation(0);
+            }
+        });
         mWarnTipNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWarnTipLayout.setVisibility(View.GONE);
+                if (mPresenter != null) {
+                    mPresenter.clickTipSecondBtu();
+                }
             }
         });
 
@@ -92,7 +138,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
                 if (mPresenter != null) {
                     mPresenter.sendWarnTip();
                 }
-                mWarnTipLayout.setVisibility(View.GONE);
+                showWarnTip2();
             }
         });
 
@@ -111,24 +157,12 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         menu_common.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                select.setText(getResources().getString(R.string.feedback_common));
-
-                imageView.setDrawingCacheEnabled(true);
-                Bitmap bMap = Bitmap.createBitmap(imageView.getDrawingCache());
-                Matrix matrix = new Matrix();
-                matrix.postRotate(180);
-                //   matrix.postScale(0.5f, 0.5f);
-                int newWidth = bMap.getWidth();
-                int newHeight = bMap.getHeight();
-                Bitmap bMapRotate = Bitmap.createBitmap(bMap, 0, 0, newWidth, newHeight, matrix, true);
-
-                //put rotated image in ImageView.
-                imageView.setImageBitmap(bMapRotate);
-
-                imageView.setDrawingCacheEnabled(false);
+                imageView.setRotation(180);
                 showPopupWindow(v);
             }
         });
+
+        mContainer.addTextChangedListener(mTextWatcher);
 
         mIvCommonActionBarMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +180,31 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
             }
         });
 
+        mVirusInstallLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mVirusInstallTv.getVisibility() == View.VISIBLE) {
+                    mVirusInstallTv.setVisibility(View.GONE);
+                    mVirusInstallArrow.setRotation(180);
+                } else {
+                    mVirusInstallTv.setVisibility(View.VISIBLE);
+                    mVirusInstallArrow.setRotation(0);
+                }
+            }
+        });
+
+        mTrickingAdLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTrickingAdTv.getVisibility() == View.VISIBLE) {
+                    mTrickingAdTv.setVisibility(View.GONE);
+                    mTrickingAdArrow.setRotation(180);
+                } else {
+                    mTrickingAdTv.setVisibility(View.VISIBLE);
+                    mTrickingAdArrow.setRotation(0);
+                }
+            }
+        });
 
         mContainer.setHint(R.string.feedback_container_hint);
         /* 自动弹出键盘 */
@@ -181,6 +240,10 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         if (mTimer != null) {
             mTimer.cancel();
         }
+        if (mTextWatcher != null) {
+            mContainer.removeTextChangedListener(mTextWatcher);
+        }
+        mTextWatcher = null;
         //InputMethodManager 释放当前Activity
         AppUtils.fixInputMethodManagerLeak(this);
         super.onDestroy();
@@ -190,61 +253,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
      * 获得pop window
      */
     private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = getLayoutInflater().inflate(R.layout.pop_feedback, null);
-        suggestion = (TextView) contentView.findViewById(R.id.setting_feedback_suggestion);
-        problem = (TextView) contentView.findViewById(R.id.setting_feedback_problem);
-        forceInstall = (TextView) contentView.findViewById(R.id.setting_feedback_force_install);
-
-
-        final PopupWindow popupWindow = new PopupWindow(contentView,
-                menu_common.getWidth() - 2, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
-        popupWindow.setTouchable(true);
-
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                imageView.setImageDrawable(APIUtil.getDrawable(FeedbackActivity.this, R.drawable.ic_arrow_07));
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(APIUtil.getDrawable(FeedbackActivity.this, R.color.white));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view, 1, -5);
-
-        suggestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                select.setText(suggestion.getText().toString());
-                imageView.setImageDrawable(APIUtil.getDrawable(FeedbackActivity.this, R.drawable.ic_arrow_07));
-                popupWindow.dismiss();
-            }
-        });
-        problem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                select.setText(problem.getText().toString());
-                imageView.setImageDrawable(APIUtil.getDrawable(FeedbackActivity.this, R.drawable.ic_arrow_07));
-                popupWindow.dismiss();
-            }
-        });
-        forceInstall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                select.setText(forceInstall.getText().toString());
-                imageView.setImageDrawable(APIUtil.getDrawable(FeedbackActivity.this, R.drawable.ic_arrow_07));
-                popupWindow.dismiss();
-            }
-        });
+        mQuestionListDialog.showUnderView(view);
     }
 
     private void sendFeedBack(final String detail, final String title) {
@@ -258,6 +267,25 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
     @Override
     public void showCheckNetWorkTip() {
         showToast(R.string.feedback_check_network);
+    }
+
+    @Override
+    public void showWarnTip1() {
+        mWarnTipContent.setText(getResources().getString(R.string.feedback_tip_content, getResources().getString(R.string.app_name)));
+        mWarnTipReport.setVisibility(View.VISIBLE);
+        mWarnTipReport.setText(R.string.feedback_tip_send_report);
+        mWarnTipNo.setText(R.string.feedback_tip_no);
+        String[] array = getResources().getStringArray(R.array.feedback_common_question_list);
+        select.setText(array[0]);
+    }
+
+    @Override
+    public void showWarnTip2() {
+        mWarnTipContent.setText(getResources().getString(R.string.feedback_tip_content2));
+        mWarnTipReport.setVisibility(View.GONE);
+        mWarnTipNo.setText(R.string.common_ok);
+        String[] array = getResources().getStringArray(R.array.feedback_common_question_list);
+        select.setText(array[3]);
     }
 
     @Override
@@ -275,6 +303,8 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         if (mWarnTipLayout != null) {
             mWarnTipLayout.setVisibility(View.GONE);
         }
+        String[] array = getResources().getStringArray(R.array.feedback_common_question_list);
+        select.setText(array[3]);
     }
 
     /**

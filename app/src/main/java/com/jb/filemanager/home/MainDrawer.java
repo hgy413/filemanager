@@ -312,7 +312,7 @@ public class MainDrawer implements View.OnClickListener {
                 // TODO @wangzq
                 break;
             case R.id.tv_drawer_help:
-                // TODO @wangzq
+                jumpToFeedBack();
                 break;
             case R.id.tv_drawer_about:
                 jumpToAbout();

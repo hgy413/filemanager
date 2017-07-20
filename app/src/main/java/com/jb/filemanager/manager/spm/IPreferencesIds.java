@@ -32,6 +32,7 @@ public class IPreferencesIds {
     // ======================= Feedback =========================//
     //是否反馈提示警报已经展示过
     public static final String KEY_FEEDBACK_WARN_TIP_SHOWED = "key_feedback_warn_tip_showed";
+    public static final String KEY_FEEDBACK_WARN_TIP2_SHOWED = "key_feedback_warn_tip2_showed";
 
     // ======================= 统计 =========================//
     // 是否是新用户
