@@ -27,7 +27,7 @@ public class BlockBean {
 
     public BlockBean(File file) {
         mBlockDirName = file.getParentFile().getName();
-        mBlockDirPath = file.getPath();
+        mBlockDirPath = file.getParentFile().getPath();
         mWithinTime = RecentFileUtil.calculateWithinMinute(System.currentTimeMillis() - file.lastModified());
         mIsPictureType = RecentFileUtil.isPictureType(file.getName());
         mItemFiles = new ArrayList<>();

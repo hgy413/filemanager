@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -66,6 +65,9 @@ public class FileBrowserActivity extends BaseActivity {
      * */
     public static void startBrowser(Context context, String targetPath) {
         Intent intent = new Intent(context, FileBrowserActivity.class);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         intent.putExtra(PARAM_PATH, targetPath);
         context.startActivity(intent);
     }

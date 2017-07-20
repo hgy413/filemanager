@@ -71,8 +71,8 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
                 scanPath(file, depth + 1);
             } else {
                 long deltaTime = mFlagTime - file.lastModified();
-                // 将deltaTime转化, 小于最长时间值进行操作
-                if (deltaTime <= RecentFileUtil.MAX_MODIFY_SCAN_TIME) {
+                // 将deltaTime转化, 小于最长时间值且大于0进行操作
+                if (deltaTime >= 0 && deltaTime <= RecentFileUtil.MAX_MODIFY_SCAN_TIME) {
                     // 可加入Block需符合三个条件
                     // 1. 同一文件夹下的文件
                     // 2. 同一修改时间的文件
