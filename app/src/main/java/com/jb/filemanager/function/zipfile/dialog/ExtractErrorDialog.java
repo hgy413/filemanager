@@ -18,6 +18,10 @@ public class ExtractErrorDialog extends BaseDialog implements View.OnClickListen
     private Context mContext;
     private Activity mActivity;
     private String mFileName;
+    private TextView mTvFileName;
+    private TextView mTvDialogTitle;
+    private TextView mTvRetryTxt;
+    private TextView mOkBtn;
 
     public ExtractErrorDialog(Activity act, String fileName) {
         super(act, true);
@@ -31,11 +35,12 @@ public class ExtractErrorDialog extends BaseDialog implements View.OnClickListen
         View rootView = View.inflate(mContext, R.layout.dialog_extract_error, null);
         setContentView(rootView, new ViewGroup.LayoutParams(
                 mContext.getResources().getDisplayMetrics().widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        TextView tvFileName = (TextView) rootView.findViewById(R.id.dialog_extract_error_file_path);
-        tvFileName.setText(mContext.getString(R.string.unable_to_extract, mFileName));
-        View okBtn = rootView.findViewById(R.id.dialog_extract_error_ok_btn);
-        okBtn.setOnClickListener(this);
+        mTvDialogTitle = (TextView) findViewById(R.id.tv_dialog_title);
+        mTvRetryTxt = (TextView) findViewById(R.id.tv_retry_txt);
+        mTvFileName = (TextView) rootView.findViewById(R.id.dialog_extract_error_file_path);
+        mTvFileName.setText(mContext.getString(R.string.unable_to_extract, mFileName));
+        mOkBtn = (TextView) rootView.findViewById(R.id.dialog_extract_error_ok_btn);
+        mOkBtn.setOnClickListener(this);
     }
 
     @Override
@@ -45,5 +50,21 @@ public class ExtractErrorDialog extends BaseDialog implements View.OnClickListen
                 dismiss();
                 break;
         }
+    }
+
+    public void setTvDialogTitle(String dialogTitle) {
+        mTvDialogTitle.setText(dialogTitle);
+    }
+
+    public void setTvFileName(String fileName) {
+        mTvFileName.setText(fileName);
+    }
+
+    public void setTvRetryTxt(String retryTxt) {
+        mTvRetryTxt.setText(retryTxt);
+    }
+
+    public void setOkBtn(String okBtn) {
+        mOkBtn.setText(okBtn);
     }
 }

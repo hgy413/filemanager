@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import static android.R.id.message;
 import static com.jb.ga0.commerce.util.topApp.TopHelper.sNotALauncher;
 import static com.jiubang.commerce.buychannel.buyChannel.utils.AppInfoUtils.GOOGLE_ADVERTING_DEFAULT_ID;
 import static com.jiubang.commerce.utils.AppUtils.getDefaultLauncher;
@@ -933,6 +934,16 @@ public class AppUtils {
      * @param message
      */
     public static void showToast(String message) {
+        if (toast == null) {
+            toast = Toast.makeText(TheApplication.getAppContext(), message, Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(message);
+        }
+        toast.show();
+    }
+
+    public static void showToast(int resId) {
+        String message = AppUtils.getString(resId);
         if (toast == null) {
             toast = Toast.makeText(TheApplication.getAppContext(), message, Toast.LENGTH_SHORT);
         } else {

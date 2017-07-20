@@ -274,6 +274,12 @@
             android:taskAffinity=":StateTipDialog"
             android:theme="@style/Pop.Activity.Theme"/>
 
+        <!-- txt预览 -->
+        <activity
+            android:name=".function.txtpreview.TxtPreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+
         <!-- 守护进程 start -->
         <!-- 后台监测应用流量使用的服务 -->
         <receiver android:name=".function.daemon.DaemonReceiver"/>

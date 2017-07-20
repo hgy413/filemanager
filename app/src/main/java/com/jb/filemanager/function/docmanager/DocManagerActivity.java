@@ -20,6 +20,7 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
+import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
@@ -189,9 +190,15 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                                         int childPosition, long id) {
                 Intent mFileIntent;
                 DocChildBean child = mAppInfo.get(groupPosition).getChild(childPosition);
-                if (groupPosition == 0) {//只针对txt提供预览
-                    mFileIntent = FileUtil.getTextFileIntent(child.mDocPath, false);
-                } else if (groupPosition == 1) {
+                if (child.mFileType == DocChildBean.TYPE_TXT) {//只针对txt提供预览
+                    long fileSize = Long.parseLong(child.mDocSize);
+                    if (fileSize > 1024 * 1024) {
+                        mFileIntent = FileUtil.getTextFileIntent(child.mDocPath, false);
+                    } else {//只提供1M以下的小文件的预览
+                        mFileIntent = new Intent(DocManagerActivity.this, TxtPreviewActivity.class);
+                        mFileIntent.putExtra(TxtPreviewActivity.TARGET_DOC_PATH, child.mDocPath);
+                    }
+                } else if (child.mFileType == DocChildBean.TYPE_DOC) {
                     mFileIntent = FileUtil.getWordFileIntent(child.mDocPath);
                 } else {
                     mFileIntent = FileUtil.getPdfFileIntent(child.mDocPath);

@@ -111,9 +111,15 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         DocGroupBean pdfGroupBean = new DocGroupBean(pdfFileInfo,"PDF", GroupSelectBox.SelectState.NONE_SELECTED,false);
 
         ArrayList<DocGroupBean> groups = new ArrayList<>();
-        groups.add(txtGroupBean);
-        groups.add(docGroupBean);
-        groups.add(pdfGroupBean);
+        if (textFileInfo.size() > 0) {
+            groups.add(txtGroupBean);
+        }
+        if (textFileInfo.size() > 0) {
+            groups.add(docGroupBean);
+        }
+        if (textFileInfo.size() > 0) {
+            groups.add(pdfGroupBean);
+        }
         return groups;
     }
 
