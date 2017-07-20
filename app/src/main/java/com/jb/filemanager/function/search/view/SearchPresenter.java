@@ -26,6 +26,7 @@ public class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.Support mSupport;
 
     private int mCategoryType;
+    private String mKeyword;
     private boolean mAnimPlayOnce;
     private boolean mSearchFinished;
     private ArrayList<FileInfo> mSearchResult;
@@ -71,6 +72,8 @@ public class SearchPresenter implements SearchContract.Presenter {
     public void onResume() {
         mAnimPlayOnce = false;
         // TODO research
+
+        doSearch(mKeyword);
     }
 
     @Override
@@ -132,7 +135,8 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     // private
     private void doSearch(String keyword) {
-        if (TextUtils.isEmpty(keyword)) {
+        mKeyword = keyword;
+        if (TextUtils.isEmpty(mKeyword)) {
             if (mView != null) {
                 mView.showInputEmptyTips();
                 return;
@@ -147,7 +151,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         if (!TheApplication.getGlobalEventBus().isRegistered(mSearchFinishMainThreadSubscriber)) {
             TheApplication.getGlobalEventBus().register(mSearchFinishMainThreadSubscriber);
         }
-        SearchManager.getInstance().requestSearch(keyword);
+        SearchManager.getInstance().requestSearch(mKeyword);
     }
 
     @Override

@@ -62,7 +62,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     private View mViewAnim2;
     private View mViewAnim3;
 
-    // resule
+    // result
     private View mViewSearchResultBg;
     private TextView mTvResultEmptyTips;
     private RecyclerView mRvResultList;
@@ -203,7 +203,22 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                         mViewSearchMask.setVisibility(View.GONE);
                     }
 
-                    mLlAnimContainer.setVisibility(View.VISIBLE);
+                    if (mLlAnimContainer != null) {
+                        mLlAnimContainer.setVisibility(View.VISIBLE);
+                    }
+
+                    if (mViewSearchResultBg != null) {
+                        mViewSearchResultBg.setVisibility(View.GONE);
+                    }
+
+                    if (mRvResultList != null) {
+                        mRvResultList.setVisibility(View.GONE);
+                    }
+
+                    if (mTvResultEmptyTips != null) {
+                        mTvResultEmptyTips.setVisibility(View.GONE);
+                    }
+
                     mViewAnim1.setScaleX(1.0f);
                     mViewAnim1.setScaleY(1.0f);
                     mViewAnim2.setScaleX(1.0f);
