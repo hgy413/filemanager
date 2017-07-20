@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.recent.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,14 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.util.RecentFileUtil;
+import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
 import java.io.File;
 import java.util.List;
+
+import static com.jb.filemanager.home.MainPresenter.EXTRA_FOCUS_FILE;
+import static com.jb.filemanager.home.MainPresenter.FILE_EXPLORER;
 
 /**
  * Created by xiaoyu on 2017/7/17 19:44.
@@ -74,6 +80,17 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
                 holder.btns[i].setImageResource(bean.isSelected() ? R.drawable.select_all : R.drawable.select_none_image);
                 if (index == 5) {
                     holder.moreMask.setVisibility(View.VISIBLE);
+                    holder.moreMask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(TheApplication.getAppContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(FILE_EXPLORER, true);
+                            intent.putExtra(EXTRA_FOCUS_FILE, bean.getFilePath());
+                            TheApplication.getAppContext().startActivity(intent);
+                        }
+                    });
                 }
                 holder.images[i].setOnClickListener(new View.OnClickListener() {
                     @Override
