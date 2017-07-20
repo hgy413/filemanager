@@ -18,6 +18,8 @@ public interface SameFileContract {
         void showFileList(GroupList<String, FileInfo> mMusicMaps);
 
         void onNoFileFindShow();
+
+        void fileSelectShow(int num);
     }
 
     interface Presenter {
@@ -32,6 +34,12 @@ public interface SameFileContract {
         ArrayList<File> getSelectFile();
 
         void jumpToStoragePage();
+
+        void refreshMediaData(ArrayList<File> selectFileList);
+
+        void selectAllFile();
+
+        void cleanSelect();
     }
 
     interface Support {

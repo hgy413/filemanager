@@ -7,26 +7,21 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
-import com.jb.filemanager.function.docmanager.DocChildBean;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
+import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.jb.filemanager.R.id.cancel_action;
 import static com.jb.filemanager.R.id.search_title;
 
 /**
@@ -34,8 +29,7 @@ import static com.jb.filemanager.R.id.search_title;
  * 显示音乐列表
  */
 
-public class SameFileActivity extends BaseActivity implements SameFileContract.View,
-        View.OnClickListener {
+public class SameFileActivity extends BaseActivity implements SameFileContract.View {
 
     public static final String PARAM_CATEGORY_TYPE = "param_category_type";
 
@@ -44,6 +38,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private FloatingGroupExpandableListView mElvFilelist;
     private GroupList<String, FileInfo> mFileGroupList;
     private FileExpandableListAdapter mFileExpandableListAdapter;
+    private SearchTitleView mSearchTitle;
     private BottomOperateBar mBottomOperateContainer;
     private LinearLayout mLlNoFileView;
     private boolean[] mItemSelected;
@@ -61,37 +56,52 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void initView(final int fileType) {
-        SearchTitleView searchTitle = (SearchTitleView) findViewById(search_title);
-        searchTitle.setOnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        searchTitle.setOnSearchClickListener(this);
+        mSearchTitle = (SearchTitleView) findViewById(search_title);
         switch (fileType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
-                searchTitle.setTitleName("Music");// .setText(R.string.music_title);
+                mSearchTitle.setTitleName("Music");// .setText(R.string.music_title);
                 break;
             case Const.CategoryType.CATEGORY_TYPE_VIDEO:
-                searchTitle.setTitleName("Video"); // .setText(R.string.video_title);
+                mSearchTitle.setTitleName("Video"); // .setText(R.string.video_title);
                 break;
             case Const.CategoryType.CATEGORY_TYPE_DOWNLOAD:
-                searchTitle.setTitleName("Download"); // back.setText(R.string.download_title);
+                mSearchTitle.setTitleName("Download"); // back.setText(R.string.download_title);
                 break;
             default:
-                searchTitle.setTitleName("Transfer unknow type"); // back.setText("Transfer unknow type");
+                mSearchTitle.setTitleName("Transfer unknow type"); // back.setText("Transfer unknow type");
         }
+        mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
+            @Override
+            public void onSearchClick() {
+                SearchActivity.showSearchResult(getApplicationContext(), Const.CategoryType.CATEGORY_TYPE_ZIP);
+            }
+
+            @Override
+            public void onIvCancelSelectClick() {
+                mPresenter.cleanSelect();
+            }
+
+            @Override
+            public void onIvBackClick() {
+                finish();
+            }
+
+            @Override
+            public void onSelectBtnClick() {
+                if (mFileExpandableListAdapter.getSelectCount() == mFileGroupList.itemSize()) {
+                    mPresenter.cleanSelect();
+                } else {
+                    mPresenter.selectAllFile();
+                }
+            }
+        });
+
         mElvFilelist = (FloatingGroupExpandableListView) findViewById(R.id.elv_same_file_list);
         mFileExpandableListAdapter = new FileExpandableListAdapter(SameFileActivity.this,
                 new FileExpandableListAdapter.ItemChooseChangeListener() {
                     @Override
                     public void onChooseNumChanged(int num) {
-                        if (num > 0) {
-                            mBottomOperateContainer.setVisibility(View.VISIBLE);
-                        } else {
-                            mBottomOperateContainer.setVisibility(View.GONE);
-                        }
+                        fileSelectShow(num);
                     }
                 });
         mElvFilelist.setAdapter(new WrapperExpandableListAdapter(mFileExpandableListAdapter));
@@ -110,9 +120,11 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mBottomOperateContainer.setListener(new BottomOperateBar.Listener() {
+            ArrayList selectFileList;
             @Override
             public ArrayList<File> getCurrentSelectedFiles() {
-                return mPresenter.getSelectFile();
+                selectFileList = mPresenter.getSelectFile();
+                return selectFileList;
             }
 
             @Override
@@ -132,12 +144,14 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void afterRename() {
-                mPresenter.onCreate(getIntent());
+                mPresenter.refreshMediaData(selectFileList);
+                mBottomOperateContainer.setVisibility(View.GONE);
             }
 
             @Override
             public void afterDelete() {
                 mPresenter.onCreate(getIntent());
+                mBottomOperateContainer.setVisibility(View.GONE);
             }
         });
 
@@ -201,32 +215,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_common_action_bar_with_search_title:
-                if (mPresenter != null) {
-                    mPresenter.onClickBackButton(false);
-                }
-                break;
-            case R.id.search_title_search_icon:
-                // TODO
-                if (mPresenter != null) {
-                    mPresenter.onClickSearchButton();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void showFileList(GroupList<String, FileInfo> mMusicMaps) {
         mFileGroupList = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
         for (int i = 0; i < mItemSelected.length; i++) {
             mItemSelected[i] = false;
         }
-        //mMusicListAdapter.notifyDataSetChanged();
         mFileExpandableListAdapter.reflaceDate(mMusicMaps);
         int groupCount = mFileGroupList.size();
         for (int i = 0; i < groupCount; i++) {
@@ -237,5 +231,21 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     @Override
     public void onNoFileFindShow() {
         mLlNoFileView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void fileSelectShow(int num) {
+        boolean isSlected = false;
+        if (num > 0) {
+            mSearchTitle.setSelectedCount(num);
+            if (num == mFileGroupList.getAllSize()) {
+                mSearchTitle.setSelectBtnResId(2); // Select all
+            } else {
+                mSearchTitle.setSelectBtnResId(1); // Select part
+            }
+            isSlected = true;
+        }
+        mSearchTitle.switchTitleMode(isSlected);
+        mBottomOperateContainer.setVisibility(isSlected ? View.VISIBLE : View.GONE);
     }
 }

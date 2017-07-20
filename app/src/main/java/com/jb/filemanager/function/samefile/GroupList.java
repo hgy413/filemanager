@@ -53,4 +53,12 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
         this.get(groupIndex).add(value);
     }
 
+    public int getAllSize() {
+        int size = 0;
+        for (int i = 0; i < size(); i++) {
+            size += valueAt(i).size();
+        }
+        return size;
+    }
+
 }

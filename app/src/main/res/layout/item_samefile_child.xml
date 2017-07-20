@@ -40,7 +40,7 @@
             android:lines="1"
             android:textColor="#4f4b4c"
             android:textSize="14dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             android:layout_alignLeft="@+id/tv_music_child_item_info"
             android:layout_alignStart="@+id/tv_music_child_item_info"
             android:layout_toLeftOf="@+id/iv_music_child_item_select"

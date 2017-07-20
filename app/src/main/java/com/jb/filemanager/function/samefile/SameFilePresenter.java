@@ -1,6 +1,8 @@
 package com.jb.filemanager.function.samefile;
 
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -62,7 +64,8 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     @Override
     public void onCreate(Intent intent) {
         if (intent != null) {
-            mCategoryType = intent.getIntExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_PHOTO);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
+            mCategoryType = intent.getIntExtra(SameFileActivity.PARAM_CATEGORY_TYPE,
+                    Const.CategoryType.CATEGORY_TYPE_PHOTO);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
             mView.initView(mCategoryType);
             this.start(mCategoryType);
         }
@@ -138,5 +141,49 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         Intent intent = new Intent(mView, MainActivity.class);
         intent.putExtra("HAVE_PAST_DATE", true);
         mView.startActivity(intent);
+    }
+
+    @Override
+    public void refreshMediaData(ArrayList<File> selectFileList) {
+        String[] filePath = new String[0];
+        if (selectFileList != null && selectFileList.size() != 0) {
+            filePath = new String[selectFileList.size()];
+            for (int i = 0; i < filePath.length; i++) {
+                filePath[i] = selectFileList.get(i).getParent();
+            }
+        }
+        MediaScannerConnection.scanFile(mView, filePath, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+                        onCreate(mView.getIntent());
+                    }
+                });
+    }
+
+    @Override
+    public void selectAllFile() {
+        if (mFileGroupList != null) {
+            for (int i = 0; i < mFileGroupList.size(); i++) {
+                for (FileInfo info : mFileGroupList.valueAt(i)) {
+                    info.isSelected = true;
+                }
+            }
+            mView.showFileList(mFileGroupList);
+            mView.fileSelectShow(mFileGroupList.getAllSize());
+        }
+    }
+
+    @Override
+    public void cleanSelect() {
+        if (mFileGroupList != null) {
+            for (int i = 0; i < mFileGroupList.size(); i++) {
+                for (FileInfo info : mFileGroupList.valueAt(i)) {
+                    info.isSelected = false;
+                }
+            }
+            mView.showFileList(mFileGroupList);
+            mView.fileSelectShow(0);
+        }
     }
 }
