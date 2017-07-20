@@ -603,8 +603,8 @@
     <TextView
         android:id="@+id/tv_main_category_clear_trash"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="9dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="6dp"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="9dp"
         android:layout_marginRight="9dp"
@@ -613,6 +613,6 @@
         android:text="@string/home_button_clean"
         android:gravity="center"
         android:textColor="#FFFFFF"
-        android:background="#2ED6C1"/>
+        android:background="@drawable/bg_main_category_clear_trash_selector"/>
 
 </LinearLayout>
