@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.zipfile;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
 import com.jb.filemanager.function.zipfile.dialog.ExtractSnackBar;
@@ -25,13 +27,11 @@ import com.jb.filemanager.function.zipfile.receiver.NotificationClickReceiver;
 import com.jb.filemanager.function.zipfile.task.ExtractFilesTask;
 import com.jb.filemanager.function.zipfile.task.ExtractPackFileTask;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
-import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.util.APIUtil;
 
 import java.util.List;
 
-import static com.jb.filemanager.home.MainPresenter.EXTRA_FOCUS_FILE;
-import static com.jb.filemanager.home.MainPresenter.FILE_EXPLORER;
+import static com.jb.filemanager.home.fragment.storage.StorageFragment.PARAM_PATH;
 
 /**
  * Created by xiaoyu on 2017/7/6 10:38.<p>
@@ -377,12 +377,11 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 notification.icon = R.drawable.zip_icon;
                 notification.contentView = remoteViews;
 
-                Intent intent = new Intent(mContext, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(FILE_EXPLORER, true);
-                intent.putExtra(EXTRA_FOCUS_FILE, savePath);
-                
+                Intent intent = new Intent(mContext, FileBrowserActivity.class);
+                if (!(mContext instanceof Activity)) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+                intent.putExtra(PARAM_PATH, savePath);
                 notification.contentIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);

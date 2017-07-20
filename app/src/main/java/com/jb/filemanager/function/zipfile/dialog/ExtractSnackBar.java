@@ -12,10 +12,10 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
-import com.jb.filemanager.home.MainActivity;
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 
-import static com.jb.filemanager.home.MainPresenter.EXTRA_FOCUS_FILE;
-import static com.jb.filemanager.home.MainPresenter.FILE_EXPLORER;
+import java.io.File;
 
 /**
  * Created by xiaoyu on 2017/7/19 19:08.
@@ -42,11 +42,14 @@ public class ExtractSnackBar extends BaseActivity {
             @Override
             public void onClick(View v) {
                 snackbar.dismiss();
-                Intent intent = new Intent(ExtractSnackBar.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(FILE_EXPLORER, true);
-                intent.putExtra(EXTRA_FOCUS_FILE, path);
-                startActivity(intent);
+                String parent;
+                File file = new File(path);
+                if (file.isFile()) {
+                    parent = file.getParentFile().getPath();
+                } else {
+                    parent = file.getPath();
+                }
+                FileBrowserActivity.startBrowser(TheApplication.getAppContext(), parent);
             }
         });
 
