@@ -41,6 +41,7 @@ import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.view.UsageAnalysis;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -98,6 +99,13 @@ public class CategoryFragment extends Fragment {
     private boolean mHasShowedNotice = false;
     private ValueAnimator mValueAnimator;
 
+    private Runnable mCheckUsageRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateUsageAnalysis();
+            startUsageCheckTimer();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -298,7 +306,6 @@ public class CategoryFragment extends Fragment {
 
         mUaStorage = (UsageAnalysis) rootView.findViewById(R.id.ua_main_category_info_usage_analysis);
         if (mUaStorage != null) {
-            mUaStorage.reload();
             mUaStorage.setTotal(mTotalSize);
             mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
         }
@@ -349,6 +356,7 @@ public class CategoryFragment extends Fragment {
         }
 
 
+
         return rootView;
     }
 
@@ -367,14 +375,6 @@ public class CategoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        StatFs stat = new StatFs(mIsInternalStorage ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
-        mTotalSize = APIUtil.getTotalBytes(stat);
-        mUsedSize = mTotalSize - APIUtil.getAvailableBytes(stat);
-        if (mUaStorage != null) {
-            mUaStorage.reload();
-            mUaStorage.setTotal(mTotalSize);
-            mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
-        }
         if (mTvStorageUsed != null) {
             String usedReadableString = ConvertUtils.getReadableSize(mUsedSize);
             String usedString = getString(R.string.main_info_phone_used, usedReadableString);
@@ -397,11 +397,17 @@ public class CategoryFragment extends Fragment {
             mTvStorageUnused.setText(ssb);
         }
 
-        getLoaderManager().restartLoader(FileManager.LOADER_IMAGE, null, mPhotoLoaderCallback);
-        getLoaderManager().restartLoader(FileManager.LOADER_VIDEO, null, mVideoLoaderCallback);
-        getLoaderManager().restartLoader(FileManager.LOADER_APP, null, mAppLoaderCallback);
-        getLoaderManager().restartLoader(FileManager.LOADER_AUDIO, null, mAudioLoaderCallback);
-        getLoaderManager().restartLoader(FileManager.LOADER_DOC, null, mDocLoaderCallback);
+        updateUsageAnalysis();
+
+        if (getUserVisibleHint()) {
+            startUsageCheckTimer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopUsageCheckTimer();
     }
 
     @Override
@@ -435,6 +441,16 @@ public class CategoryFragment extends Fragment {
             TheApplication.getGlobalEventBus().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            startUsageCheckTimer();
+        } else {
+            stopUsageCheckTimer();
         }
     }
 
@@ -673,11 +689,23 @@ public class CategoryFragment extends Fragment {
             mTvSwitchSdCard.setSelected(!mIsInternalStorage);
         }
 
+        updateUsageAnalysis();
+    }
+
+    private void startUsageCheckTimer() {
+        TheApplication.postRunOnUiThread(mCheckUsageRunnable, 30 * 1000);
+    }
+
+    private void stopUsageCheckTimer() {
+        TheApplication.removeFromUiThread(mCheckUsageRunnable);
+    }
+
+    private void updateUsageAnalysis() {
+        Logger.e("wangzq", "updateUsageAnalysis");
         StatFs stat = new StatFs(mIsInternalStorage ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
         mTotalSize = APIUtil.getTotalBytes(stat);
         mUsedSize = mTotalSize - APIUtil.getAvailableBytes(stat);
         if (mUaStorage != null) {
-            mUaStorage.reload();
             mUaStorage.setTotal(mTotalSize);
             mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
         }

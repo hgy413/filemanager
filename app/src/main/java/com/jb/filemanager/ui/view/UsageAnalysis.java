@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -47,7 +48,20 @@ public class UsageAnalysis extends View {
             bean.mColor = color;
             bean.mSize = size;
 
-            mItems.add(bean);
+            boolean update = false;
+            for (Bean bean2 : mItems) {
+                if (bean2.mColor == bean.mColor) {
+                    mItems.remove(bean2);
+                    mItems.add(bean);
+                    update = true;
+                    break;
+                }
+            }
+
+            if (!update) {
+                mItems.add(bean);
+            }
+
             mItemsForDraw.addAll(mItems);
 
             long otherSize = mUsedSize;
@@ -88,10 +102,6 @@ public class UsageAnalysis extends View {
                 canvas.drawRect(bean.mRect, mPaint);
             }
         }
-    }
-
-    public void reload() {
-        mItems.clear();
     }
 
     public void setTotal(long total) {
