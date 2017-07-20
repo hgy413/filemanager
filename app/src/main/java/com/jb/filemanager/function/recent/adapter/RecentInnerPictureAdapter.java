@@ -9,13 +9,14 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
+import com.jb.filemanager.function.image.modle.ImageModle;
+import com.jb.filemanager.function.recent.RecentImageActivity;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
-import com.jb.filemanager.function.recent.util.RecentFileUtil;
 import com.jb.filemanager.util.imageloader.ImageLoader;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,10 +28,16 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
     private final List<BlockItemFileBean> mItemFiles;
     private RecentItemCheckChangedListener mListener;
     private BlockBean mBlockBean;
+    private ArrayList<ImageModle> mImageModles = new ArrayList<>();
 
     public RecentInnerPictureAdapter(BlockBean blockBean) {
         mBlockBean = blockBean;
         mItemFiles = blockBean.getItemFiles();
+        mImageModles.clear();
+        for (BlockItemFileBean bean : mItemFiles) {
+            ImageModle modle = new ImageModle(bean.getFilePath(), 0, bean.isSelected(), 0L);
+            mImageModles.add(modle);
+        }
     }
 
     @Override
@@ -70,7 +77,7 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
         }
         int size = mItemFiles.size();
         for (int i = 0; i < 3; i++) {
-            int index = position * 3 + i;
+            final int index = position * 3 + i;
             if (index < size) {
                 final BlockItemFileBean bean = mItemFiles.get(index);
                 ImageLoader.getInstance(context).displayImage(bean.getFilePath(), holder.images[i], R.drawable.common_default_app_icon);
@@ -87,7 +94,8 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
                 holder.images[i].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        RecentFileUtil.openFile(context, new File(bean.getFilePath()));
+                        RecentImageActivity.startView(context, mImageModles, index);
+//                        RecentFileUtil.openFile(context, new File(bean.getFilePath()));
                     }
                 });
                 holder.btns[i].setOnClickListener(new View.OnClickListener() {

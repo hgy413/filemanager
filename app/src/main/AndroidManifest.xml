@@ -135,6 +135,10 @@
             android:name=".function.recent.RecentFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+        <activity
+            android:name=".function.recent.RecentImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
 
         <!-- 隐私页 -->
         <activity
