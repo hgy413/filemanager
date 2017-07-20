@@ -3,6 +3,8 @@ package com.jb.filemanager.function.txtpreview;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,6 +14,8 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
 import com.jb.filemanager.util.AppUtils;
+
+import java.util.ArrayList;
 
 /**
  * Desc:
@@ -28,9 +32,12 @@ public class TxtPreviewActivity extends BaseActivity {
     private ImageView mIvCommonActionBarMore;
     private View mVTitleShadow;
     private TextView mTvTxtContent;
+    private RecyclerView mRvTxtPreview;
     private String mDocPath;
     private ExtractErrorDialog mErrorDialog;
     private TxtDecodeManager mTxtDecodeManager;
+    private ArrayList<String> mTxtData;
+    private TxtPreviewAdapter mPreviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,11 @@ public class TxtPreviewActivity extends BaseActivity {
         mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_more);
         mVTitleShadow = (View) findViewById(R.id.v_title_shadow);
         mTvTxtContent = (TextView) findViewById(R.id.tv_txt_content);
+        mRvTxtPreview = (RecyclerView) findViewById(R.id.rv_txt_preview);
+
+        mTxtData = new ArrayList<>();
+        mRvTxtPreview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
     }
 
     public void initData() {
@@ -56,15 +68,25 @@ public class TxtPreviewActivity extends BaseActivity {
         mTxtDecodeManager.setTxtLoadListener(new TxtDecodeManager.OnTxtLoadListener() {
             @Override
             public void onLoadStart() {
-
                 AppUtils.showToast("这里有个你看不到的加载动画");
-
             }
 
             @Override
-            public void onLoadComplete(final String result) {
-                AppUtils.showToast("Duang Duang Duang 加载完成");
-                mTvTxtContent.setText(result);
+            public void onLoadComplete(final ArrayList<String> result) {
+                AppUtils.showToast("Duang Duang Duang 加载完成了");
+                /*StringBuilder stringBuilder = new StringBuilder();
+                if (result != null) {
+                    for (String txt : result) {
+                        stringBuilder.append(txt);
+                    }
+                    mTvTxtContent.setText(stringBuilder.toString());
+                }*/
+
+                mTxtData.clear();
+                mTxtData.addAll(result);
+                mPreviewAdapter = new TxtPreviewAdapter(mTxtData);
+                mRvTxtPreview.setAdapter(mPreviewAdapter);
+//                mPreviewAdapter.notify();
             }
 
             @Override
@@ -98,6 +120,5 @@ public class TxtPreviewActivity extends BaseActivity {
         if (mErrorDialog != null) {
             mErrorDialog.dismiss();
         }
-        mTxtDecodeManager.cancelTask();
     }
 }

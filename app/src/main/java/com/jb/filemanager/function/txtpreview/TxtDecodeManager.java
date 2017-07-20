@@ -42,19 +42,27 @@ class TxtDecodeManager {
 
             String mimeTypeLine;
 
+            int lineNumber = 0;
             while ((mimeTypeLine = br.readLine()) != null) {
                 stringBuilder.append(mimeTypeLine);
+                lineNumber++;
+                if (lineNumber % 10 == 0) {//每段10行
+                    resultList.add(stringBuilder.toString());
+                    stringBuilder = new StringBuilder();
+                }
             }
         } catch (final IOException e) {
             e.printStackTrace();
-            if (mTxtLoadListener != null) {
-                TheApplication.postRunOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+
+            TheApplication.postRunOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mTxtLoadListener != null) {
                         mTxtLoadListener.onLoadError(e.getMessage());
                     }
-                });
-            }
+                }
+            });
+
         } finally {
             if (isr != null) {
                 try {
@@ -96,14 +104,15 @@ class TxtDecodeManager {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (mTxtLoadListener != null) {
-                TheApplication.postRunOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+
+            TheApplication.postRunOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mTxtLoadListener != null) {
                         mTxtLoadListener.onLoadStart();
                     }
-                });
-            }
+                }
+            });
         }
 
         @Override
@@ -116,13 +125,9 @@ class TxtDecodeManager {
         protected void onPostExecute(final ArrayList<String> s) {
             super.onPostExecute(s);
             if (mTxtLoadListener != null) {
-                TheApplication.postRunOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
                         mTxtLoadListener.onLoadComplete(s);
                     }
-                });
-            }
+
         }
     }
 
