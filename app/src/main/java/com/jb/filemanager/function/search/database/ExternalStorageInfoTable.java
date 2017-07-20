@@ -28,8 +28,8 @@ public class ExternalStorageInfoTable {
         b.append("CREATE TABLE IF NOT EXISTS " + TABLE_NAME);
         b.append(" ("+ ID +" INTEGER PRIMARY KEY, ");
         b.append(FILE_NAME + " TEXT, ");
-        b.append(FILE_TYPE + " INGEGER, ");
-        b.append(FILE_MODIFY_TIME + " INGEGER, ");
+        b.append(FILE_TYPE + " INTEGER, ");
+        b.append(FILE_MODIFY_TIME + " INTEGER, ");
         b.append(ABSOLUTE_PATH + " TEXT)");
         CREATE_TABLE = b.toString();
     }

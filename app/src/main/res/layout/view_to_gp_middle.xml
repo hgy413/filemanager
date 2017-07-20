@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:background="@color/clean_trash_bg_red">
+
+    <LinearLayout
+        android:id="@+id/view_to_go_middle_star_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="70dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_rate_star"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_rate_star"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_rate_star"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_rate_star"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_rate_star"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="60dp"
+        android:layout_height="78dp"
+        android:translationX="40dp"
+        android:layout_alignTop="@id/view_to_go_middle_star_layout"
+        android:layout_alignRight="@id/view_to_go_middle_star_layout"
+        android:background="@drawable/permission_request_finger"/>
+    
+</merge>

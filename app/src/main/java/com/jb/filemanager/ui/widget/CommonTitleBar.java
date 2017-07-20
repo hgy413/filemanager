@@ -25,7 +25,7 @@ import com.jb.filemanager.util.QuickClickGuard;
  *     2. 当你需要通知顶部更新UI时可直接使用{@link #notifyChoose(int, int)} <br/>
  *     3. 当你需要监听选项按钮被选中时 则可以监听{@link #setOnActionListener(OnActionListener)} <br/>
  *     4. 当用户点击返回键的时候 需要调用{@link #onBackPressed()} 来标题栏做出反应 并且需要根据返回值来做出相应处理 例子：{@link ImageManagerFragment#onBackPressed()}<br/>
- *     5. 当用户需使用FrameLayout作为父布局时可以剔除掉阴影 自行实现. 需要调用{@link #removeShadow()} ()}
+ *     5. 当用户需使用FrameLayout作为父布局时可以剔除掉阴影 自行实现. 需要调用{@link #removeShadow()}
  * </p>
  */
 

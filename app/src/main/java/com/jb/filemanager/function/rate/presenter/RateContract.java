@@ -1,75 +1,53 @@
 package com.jb.filemanager.function.rate.presenter;
 
-import com.jb.filemanager.function.rate.dialog.RateDialog;
+import com.jb.filemanager.function.rate.dialog.AbsRateDialog;
 
 /**
  * Created by nieyh on 2016/9/7.
  */
 public interface RateContract {
 
-	interface View {
-		void showCheerDialog(RateDialog.OnPressListener onPressListener);
+    interface View {
+        void showCheerDialog(AbsRateDialog.OnPressListener onPressListener);
 
-		void showFeedBackDialog(RateDialog.OnPressListener onPressListener);
+        void showFeedBackDialog(AbsRateDialog.OnPressListener onPressListener);
 
-		void showLoveDialog(RateDialog.OnPressListener onPressListener);
+        void showLoveDialog(AbsRateDialog.OnPressListener onPressListener);
 
-		void dismissCheerDialog();
+        void dismissCheerDialog();
 
-		void dismissFeedBackDialog();
+        void dismissFeedBackDialog();
 
-		void dismissLoveDialog();
+        void dismissLoveDialog();
 
-		void gotoFeedBack();
+        void gotoFeedBack();
 
-		boolean gotoGp();
-	}
+        boolean gotoGp();
+    }
 
-	interface Support {
-		boolean isRateSuccess();
+    interface Support {
+        void setRateSuccess();
 
-		boolean isShortTimeExtGp();
+        boolean isCanShow();
+    }
 
-		void commitShortTimeExtGp(boolean is);
+    interface Presenter {
+        boolean rateShow();
 
-		void commitRateSuccess();
+        void clickRateCheerNo();
 
-		long getFirstInstallTime();
+        void clickRateCheerYes();
 
-		long getExtGpTime();
+        void clickRateFeedbackNo();
 
-		void setExtGpTime(long time);
+        void clickRateFeedbackYes();
 
-		boolean isClickDialogNo();
+        void clickRateLoveNo();
 
-		void commitClickDialogNo();
+        void clickRateLoveYes();
 
-		int getRateAppearTimes();
+        void pressToBack();
 
-		void commitRateAppearTimes(int times);
-
-		void release();
-	}
-
-	interface Presenter {
-		boolean rateShow();
-
-		void clickRateCheerNo();
-
-		void clickRateCheerYes();
-
-		void clickRateFeedbackNo();
-
-		void clickRateFeedbackYes();
-
-		void clickRateLoveNo();
-
-		void clickRateLoveYes();
-
-		void pressToBack();
-
-		void onResume(long time);
-
-		void release();
-	}
+        void release();
+    }
 }

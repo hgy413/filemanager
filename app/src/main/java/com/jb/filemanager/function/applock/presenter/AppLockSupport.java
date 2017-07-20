@@ -5,6 +5,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.applock.manager.LockerMonitorManager;
 import com.jb.filemanager.function.applock.model.AppLockerDataManager;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
+import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 
@@ -27,13 +28,6 @@ public class AppLockSupport implements AppLockContract.Support {
     }
 
     @Override
-    public void toAsynWork(Runnable work) {
-        if (work != null) {
-            TheApplication.postRunOnShortTaskThread(work);
-        }
-    }
-
-    @Override
     public void toUiWork(Runnable work, long delay) {
         if (work != null) {
             TheApplication.postRunOnUiThread(work, delay);
@@ -41,10 +35,8 @@ public class AppLockSupport implements AppLockContract.Support {
     }
 
     @Override
-    public void removeUiWork(Runnable work) {
-        if (work != null) {
-            TheApplication.removeFromUiThread(work);
-        }
+    public void addRateFactor() {
+        RateManager.getsInstance().collectTriggeringFactor(RateManager.APPLOCK_ENTER);
     }
 
     @Override

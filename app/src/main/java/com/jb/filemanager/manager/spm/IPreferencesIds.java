@@ -54,22 +54,6 @@ public class IPreferencesIds {
     //应用锁的锁模式
     public static final String KEY_APP_LOCK_IS_LOCK_FOR_LEAVE = "key_app_lock_is_lock_for_leave";
 
-    //评分引导新增
-    //短时间内离开gp
-    public static final String KEY_EXIT_GP_SHORT_TIME = "key_rate_stimeexit";
-    //上次dismiss时间
-    public static final String KEY_LAST_TIME = "key_rate_last";
-    //评价成功
-    public static final String KEY_RATE_SUCCESS = "key_rate_success";
-    //评分引导出现次数
-    public static final String KEY_APPEAR_TIMES = "key_rate_appeartimes";
-    //是否再次弹出 点击No之后
-    public static final String KEY_IS_POP = "key_rate_ispop";
-    //对话框是否已经展示过
-    public static final String KEY_IS_SHOW_DIALOG_ONE = "key_is_show_dialog_one";
-    public static final String KEY_IS_SHOW_DIALOG_TWO = "key_is_show_dialog_two";
-    public static final String KEY_IS_SHOW_DIALOG_THIRD = "key_is_show_dialog_third";
-
     //权限警报
     public static final String KEY_PERMISSION_ALARM_USER_HAS_CHANGE = "key_permission_alarm_user_has_change";
     //权限警报
@@ -84,5 +68,13 @@ public class IPreferencesIds {
 
     // Logger Notification开关
     public static final String KEY_LOGGER_NOTIFICATION_ENABLE = "key_logger_notification_enable";
+
+    /***********************评分引导*********************/
+    //上一次评论的时间
+    public static final String KEY_LAST_TIME = "key_rate_last";
+    //评价成功
+    public static final String KEY_RATE_SUCCESS = "key_rate_success";
+    //评分引导出现次数
+    public static final String KEY_RATE_GUIDE_TIMES = "key_rate_guidetimes";
 
 }

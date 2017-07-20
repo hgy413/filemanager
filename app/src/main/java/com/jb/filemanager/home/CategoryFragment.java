@@ -29,6 +29,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
+import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.function.recent.RecentFileActivity;
 import com.jb.filemanager.function.samefile.SameFileActivity;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
@@ -127,6 +128,8 @@ public class CategoryFragment extends Fragment {
             flPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 图片管理
                     startActivity(new Intent(getContext(), ImageActivity.class));
                 }
@@ -142,6 +145,8 @@ public class CategoryFragment extends Fragment {
             flVideo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 视频管理
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
                     intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_VIDEO);
@@ -159,6 +164,8 @@ public class CategoryFragment extends Fragment {
             flApp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // apk管理
                     startActivity(new Intent(getContext(), AppManagerActivity.class));
                 }
@@ -174,6 +181,8 @@ public class CategoryFragment extends Fragment {
             flMusic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 音乐管理
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
                     intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_MUSIC);
@@ -191,6 +200,8 @@ public class CategoryFragment extends Fragment {
             flDoc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 文档管理
                     startActivity(new Intent(getContext(), DocManagerActivity.class));
                 }
@@ -206,6 +217,8 @@ public class CategoryFragment extends Fragment {
             flZip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // zip
                     startActivity(new Intent(getContext(), ZipFileActivity.class));
                 }
@@ -221,6 +234,8 @@ public class CategoryFragment extends Fragment {
             flDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 下载管理
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
                     intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_DOWNLOAD);
@@ -238,6 +253,8 @@ public class CategoryFragment extends Fragment {
             flRecent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 收集评分引导的触发因素信息
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 最近文件
                     startActivity(new Intent(getContext(), RecentFileActivity.class));
                 }

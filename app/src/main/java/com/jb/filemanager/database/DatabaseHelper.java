@@ -10,6 +10,7 @@ import com.jb.filemanager.database.table.CacheTrashRecordTable;
 import com.jb.filemanager.database.table.CleanIgnoreTable;
 import com.jb.filemanager.database.table.CleanScanOvertimeTable;
 import com.jb.filemanager.database.table.IgnoreListTable;
+import com.jb.filemanager.database.table.RateTriggeringFactorTable;
 import com.jb.filemanager.database.upgrade.DatabaseUpgrade;
 
 
@@ -47,12 +48,12 @@ public class DatabaseHelper extends BaseDatabaseHelper {
         } catch (Exception e) {
             context.deleteDatabase(DATABASE_NAME);
         }
-        Cursor cursor = db.rawQuery("select name from sqlite_master where type='table';", null);
-        while(cursor.moveToNext()){
-            //遍历出表名
-            String name = cursor.getString(0);
-            Log.i("System.out", name);
-        }
+//        Cursor cursor = db.rawQuery("select name from sqlite_master where type='table';", null);
+//        while(cursor.moveToNext()){
+//            //遍历出表名
+//            String name = cursor.getString(0);
+//            Log.i("System.out", name);
+//        }
     }
 
     @Override
@@ -73,6 +74,8 @@ public class DatabaseHelper extends BaseDatabaseHelper {
 
             // 权限检测
             db.execSQL(AppPermissionsTable.CREATE_TABLE);
+            //评分引导触发因素表
+            db.execSQL(RateTriggeringFactorTable.CREATE_TABLE);
             mIsNewDB = true;
             db.setTransactionSuccessful();
         } catch (Exception e) {

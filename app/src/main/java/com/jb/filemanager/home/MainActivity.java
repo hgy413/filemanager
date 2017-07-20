@@ -22,7 +22,7 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.privacy.PrivacyGuardActivity;
-import com.jb.filemanager.function.rate.dialog.RateDialog;
+import com.jb.filemanager.function.rate.dialog.AbsRateDialog;
 import com.jb.filemanager.function.rate.dialog.RateFeedbackDialog;
 import com.jb.filemanager.function.rate.dialog.RateGuideDialog;
 import com.jb.filemanager.function.rate.dialog.RateToGpDialog;
@@ -89,6 +89,8 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 //        if (mAppUpdatePresenter != null) {
 //            mAppUpdatePresenter.onResume();
 //        }
+
+        mRatePresenter.rateShow();
     }
 
     @Override
@@ -561,12 +563,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     /******
      * 评分引导
      * */
-    private RateDialog mRateCheerDialog;
-    private RateDialog mRateFeedBackDialog;
-    private RateDialog mRateLoveDialog;
+    private AbsRateDialog mRateCheerDialog;
+    private AbsRateDialog mRateFeedBackDialog;
+    private AbsRateDialog mRateLoveDialog;
 
     @Override
-    public void showCheerDialog(RateDialog.OnPressListener onPressListener) {
+    public void showCheerDialog(AbsRateDialog.OnPressListener onPressListener) {
         if (mRateCheerDialog == null) {
             mRateCheerDialog = new RateGuideDialog(this);
             mRateCheerDialog.setOnPressListener(onPressListener);
@@ -575,7 +577,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
-    public void showFeedBackDialog(RateDialog.OnPressListener onPressListener) {
+    public void showFeedBackDialog(AbsRateDialog.OnPressListener onPressListener) {
         if (mRateFeedBackDialog == null) {
             mRateFeedBackDialog = new RateFeedbackDialog(this);
             mRateFeedBackDialog.setOnPressListener(onPressListener);
@@ -584,7 +586,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     }
 
     @Override
-    public void showLoveDialog(RateDialog.OnPressListener onPressListener) {
+    public void showLoveDialog(AbsRateDialog.OnPressListener onPressListener) {
         if (mRateLoveDialog == null) {
             mRateLoveDialog = new RateToGpDialog(this);
             mRateLoveDialog.setOnPressListener(onPressListener);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.rate.RateManager;
 
 public class CleanResultActivity extends BaseActivity implements View.OnClickListener {
     public static final String CLEAN_SIZE = "clean_size";
@@ -32,7 +33,8 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clean_result);
-
+        //add by nieyh 评分引导收集触发因素
+        RateManager.getsInstance().collectTriggeringFactor(RateManager.CLEAN_FINISH);
         initView();
         initData();
         initClick();

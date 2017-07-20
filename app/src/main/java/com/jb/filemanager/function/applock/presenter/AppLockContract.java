@@ -2,6 +2,7 @@ package com.jb.filemanager.function.applock.presenter;
 
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
+import com.jb.filemanager.function.rate.presenter.RateFactorSupport;
 
 import java.util.List;
 
@@ -24,11 +25,9 @@ public interface AppLockContract {
         void showLockAppsNum(int nums);
     }
 
-    interface Support {
+    interface Support extends RateFactorSupport {
         String[] getFloatListGroupTitle();
-        void toAsynWork(Runnable work);
         void toUiWork(Runnable work, long delay);
-        void removeUiWork(Runnable work);
         List<LockerItem> getAppLockAppDatas();
         List<LockerItem> getRecommedAppDatas();
         void saveLockerInfo(List<LockerItem> lockerItemList, List<LockerItem> unLockerItemList);

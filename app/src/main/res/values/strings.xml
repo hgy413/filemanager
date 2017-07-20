@@ -7,7 +7,9 @@
     <string name="common_view">View</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_sure">Sure</string>
-    <string name="common_ok">OK</string>
+    <string name="common_ok">Ok</string>
+    <string name="common_go">Go</string>
+    <string name="common_like">Like</string>
     <string name="common_stop">Stop</string>
     <string name="common_continue">Continue</string>
     <string name="common_skip">Skip</string>
@@ -216,18 +218,15 @@
     <string name="system_app">SystemApp</string>
 
     <!--评分引导-->
-    <string name="googleplay_dialog_love_titel">Love Ace Network</string>
+    <string name="googleplay_dialog_love_titel">Rate us at Google Play</string>
     <string name="googleplay_dialog_cheers_title">Cheers!</string>
     <string name="googleplay_dialog_feedback_title">Feedback</string>
     <string name="googleplay_dialog_feedback_tipword1">Would you mind giving us feedback?</string>
     <string name="googleplay_dialog_feedback_tipword2">Your every word is valuable to us.</string>
-    <string name="googleplay_dialog_cheer_tipword">How\'s Ace Network for you?</string>
+    <string name="googleplay_dialog_cheer_tipword">How\'s %1$s for you?</string>
     <string name="googleplay_dialog_love_tipword">How about a rating on Play Store, then?</string>
 
     <string name="googleplay_dialog_thanks_btn">NO, THANKS</string>
-    <string name="googleplay_dialog_great_btn">NOT GREAT</string>
-    <string name="googleplay_dialog_sure_btn">OK, SURE</string>
-    <string name="googleplay_dialog_love_btn">I LOVE IT!</string>
 
     <!-- 版本更新 -->
     <string name="update_notice">New Version</string>
