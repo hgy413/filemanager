@@ -37,6 +37,7 @@ import com.jb.filemanager.function.tip.manager.StorageTipManager;
 import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.global.TheUncaughtExceptionHandler;
+import com.jb.filemanager.manager.GlobalFileManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.receiver.ScreenStateReceiver;
@@ -161,6 +162,7 @@ public class TheApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         ExtractManager.getInstance().onAppDestroy();
+        GlobalFileManager.getInstance().onApplicationTerminate();
         unregisterActivityLifecycleListener();
     }
 
@@ -222,6 +224,7 @@ public class TheApplication extends Application {
         AdManager.initSingleton(this);
 
         initToolLocker();
+        GlobalFileManager.getInstance().onApplicationCreate();
 
         //异步调用方法
         ResidualFileManager.getInstance(getApplicationContext());
