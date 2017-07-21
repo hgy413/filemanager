@@ -404,7 +404,6 @@ class StoragePresenter implements StorageContract.Presenter,
                     File target = new File(targetPath);
                     if (target.exists()) {
                         addTargetToStack(target);
-                        mPathStack.push(target);
                         mCurrentPath = targetPath;
                         needDefault = false;
                     }
@@ -447,13 +446,17 @@ class StoragePresenter implements StorageContract.Presenter,
 
     private void addTargetToStack(File file) {
         if (file != null && file.exists()) {
-            File parent = file.getParentFile();
-            if (parent != null) {
-                if (isRootDir(parent.getAbsolutePath())) {
-                    mPathStack.push(parent);
-                } else {
-                    addTargetToStack(parent);
-                    mPathStack.push(parent);
+            if (isRootDir(file.getAbsolutePath())) {
+                mPathStack.push(file);
+            } else {
+                File parent = file.getParentFile();
+                if (parent != null) {
+                    if (isRootDir(parent.getAbsolutePath())) {
+                        mPathStack.push(parent);
+                    } else {
+                        addTargetToStack(parent);
+                        mPathStack.push(parent);
+                    }
                 }
             }
         }
