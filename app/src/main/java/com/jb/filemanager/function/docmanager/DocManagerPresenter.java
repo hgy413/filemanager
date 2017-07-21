@@ -150,8 +150,14 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     private void handleFileCopy(FileOperateEvent fileOperateEvent) {
-        mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
-        Logger.d(TAG, "copy   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
+        File newFile = fileOperateEvent.mNewFile;
+        if (Machine.HAS_SDK_KITKAT){
+            mSupport.handleFileCopy(fileOperateEvent.mOldFile.getAbsolutePath(),fileOperateEvent.mNewFile.getAbsolutePath());
+            refreshData(false);
+        }else {
+            mSupport.scanBroadcastReceiver(newFile.getParentFile());
+        }
+        Logger.d(TAG, "copy   " + newFile.getAbsolutePath() + "      " + newFile.getParent());
     }
 
     private void handleFileCut(FileOperateEvent fileOperateEvent) {

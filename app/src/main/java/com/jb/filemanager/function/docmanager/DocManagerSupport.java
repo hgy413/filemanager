@@ -125,28 +125,15 @@ public class DocManagerSupport implements DocManagerContract.Support {
     }
 
     @Override
-    public void handleFileCopy(DocChildBean file) {
+    public void handleFileCopy(String oldFile, String newFile) {
+        DocChildBean childBeen = handleQueryFile(oldFile);
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Files.FileColumns._ID, file.mDocId);
-        contentValues.put(MediaStore.Files.FileColumns.DATA, file.mDocDate);
-        contentValues.put(MediaStore.Files.FileColumns.SIZE, file.mDocSize);
-        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, file.mAddDate);
-        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, file.mModifyDate);
+        contentValues.put(MediaStore.Files.FileColumns.DATA, newFile);
+        contentValues.put(MediaStore.Files.FileColumns.SIZE, childBeen.mDocSize);
+        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, childBeen.mAddDate);
+        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, childBeen.mModifyDate);
         TheApplication.getAppContext().getContentResolver().insert(
                 Uri.parse("content://media/external/file"), contentValues);
-    }
-
-    @Override
-    public void handleFileCut(DocChildBean file) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Files.FileColumns._ID, file.mDocId);
-        contentValues.put(MediaStore.Files.FileColumns.DATA, file.mDocDate);
-        contentValues.put(MediaStore.Files.FileColumns.SIZE, file.mDocSize);
-        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, file.mAddDate);
-        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, file.mModifyDate);
-        TheApplication.getAppContext().getContentResolver().update(
-                Uri.parse("content://media/external/file"), contentValues,
-                MediaStore.Files.FileColumns._ID + " like ?", new String[]{file.mDocId});
     }
 
     @Override

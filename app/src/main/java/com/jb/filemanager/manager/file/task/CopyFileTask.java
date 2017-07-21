@@ -30,7 +30,7 @@ public class CopyFileTask {
     private boolean mIsStop = false;
     private boolean mIsApplyToAll = false;
 
-    public CopyFileTask(final ArrayList<File> source, String dest, Listener listener) {
+    public CopyFileTask(final ArrayList<File> source, final String dest, Listener listener) {
 
         mListener = listener;
         mSource = new ArrayList<> (source);
@@ -108,7 +108,7 @@ public class CopyFileTask {
                             if (!success) {
                                 mFailed.add(file);
                             } else {
-                                TheApplication.postEvent(new FileOperateEvent(null, file, FileOperateEvent.OperateType.COPY));//add by 李启发  告知页面copy完成
+                                TheApplication.postEvent(new FileOperateEvent(file, new File(dest, file.getName()), FileOperateEvent.OperateType.COPY));//add by 李启发  告知页面copy完成
                             }
                             result = result && success;
                         } else {

@@ -49,13 +49,9 @@ public class DocManagerContract {
         List<DocChildBean> getTextFileInfo();
         List<DocChildBean> getPdfFileInfo();
         void handleFileDelete(String docPath);
-        void handleFileCopy(DocChildBean file);
-        void handleFileCut(DocChildBean file);
-
+        void handleFileCopy(String oldFile, String newFile);
         void handleFileCut(String oldFile, String newFile);
-
         void handleFileRename(String oldFile, String newFile);
-
         void scanBroadcastReceiver(File file);
     }
 }
