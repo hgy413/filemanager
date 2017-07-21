@@ -29,6 +29,7 @@ import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.List;
 
 public class DocManagerActivity extends BaseActivity implements DocManagerContract.View, View.OnClickListener {
     //    public static final int UNINSTALL_APP_REQUEST_CODE = 101;
+    public static final String ACTION_MEDIA_SCANNER_SCAN_DIR = "android.intent.action.MEDIA_SCANNER_SCAN_DIR";
     public static final String TAG = "DocManagerActivity";
     public static final String SEARCH_RESULT = "search_result";
     public static final int SEARCH_RESULT_REQUEST_CODE = 102;
@@ -244,8 +246,24 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             final Uri contentUri = Uri.fromFile(Environment.getExternalStorageDirectory());
+            Logger.d(TAG,contentUri.toString());
             scanIntent.setData(contentUri);
             sendBroadcast(scanIntent);
+
+            /*String[] paths = {Environment.getExternalStorageDirectory().getAbsolutePath()};
+            String[] mimeTypes = {DocManagerSupport.DOC_MIME_TYPE,DocManagerSupport.DOCX_MIME_TYPE,DocManagerSupport.XLS_MIME_TYPE,DocManagerSupport.XLSX_MIME_TYPE,
+                    DocManagerSupport.PPT_MIME_TYPE,DocManagerSupport.PPTX_MIME_TYPE,DocManagerSupport.TXT_MIME_TYPE,DocManagerSupport.PDF_MIME_TYPE};
+            MediaScannerConnection.scanFile(TheApplication.getAppContext(), paths, null, new MediaScannerConnection.MediaScannerConnectionClient() {
+                @Override
+                public void onMediaScannerConnected() {
+                    mPresenter.scanStart();
+                }
+
+                @Override
+                public void onScanCompleted(String s, Uri uri) {
+                    mPresenter.scanFinished();
+                }
+            });*/
         } else {
             final Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory()));
             sendBroadcast(intent);

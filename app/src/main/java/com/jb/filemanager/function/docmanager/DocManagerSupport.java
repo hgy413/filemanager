@@ -27,8 +27,19 @@ public class DocManagerSupport implements DocManagerContract.Support {
     public static final String DOCX = "docx";
     public static final String TXT = "txt";
     public static final String PDF = "pdf";
-    public static final String EXCEL = "pdf";
-    public static final String PPT = "pdf";
+    public static final String XLS = "xls";
+    public static final String XLSX = "xlsx";
+    public static final String PPT = "ppt";
+    public static final String PPTX = "pptx";
+
+    public static final String DOC_MIME_TYPE = "application/msword";
+    public static final String DOCX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    public static final String XLS_MIME_TYPE = "application/vnd.ms-excel";
+    public static final String XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static final String PPT_MIME_TYPE = "application/vnd.ms-powerpoint";
+    public static final String PPTX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    public static final String TXT_MIME_TYPE = "text/plain";
+    public static final String PDF_MIME_TYPE = "application/pdf";
     private static final String TAG = "DocManagerSupport";
 
     @Override
