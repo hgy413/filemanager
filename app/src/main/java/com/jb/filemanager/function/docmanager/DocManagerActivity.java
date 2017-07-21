@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
@@ -86,20 +87,54 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void initData() {
-        mAppInfo = mPresenter.getDocInfo();
-        mAdapter = new DocManagerAdapter(mAppInfo);
-        mAdapter.setOnItemChosenListener(new DocManagerAdapter.OnItemChosenListener() {
+        mPresenter.setDocScanListener(new DocScanListener() {
             @Override
-            public void onItemChosen(int chosenCount) {
-                handleBottomDeleteShow(chosenCount);
-                handleTitleSelectChange(chosenCount);
+            public void onScanStart() {
+
+            }
+
+            @Override
+            public void onScanFinish(final ArrayList<DocGroupBean> arrayList, final boolean keepCheck) {
+                TheApplication.postRunOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (arrayList == null) {
+                            return;
+                        }
+                        mAppInfo = arrayList;
+                        if (mAdapter == null) {
+                            mAdapter = new DocManagerAdapter(mAppInfo);
+                            mAdapter.setOnItemChosenListener(new DocManagerAdapter.OnItemChosenListener() {
+                                @Override
+                                public void onItemChosen(int chosenCount) {
+                                    handleBottomDeleteShow(chosenCount);
+                                    handleTitleSelectChange(chosenCount);
+                                }
+                            });
+                            mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
+                            mAdapter.handleCheckedCount();
+                            for (int i = 0; i < mAppInfo.size(); i++) {
+                                mElvApk.expandGroup(i);
+                            }
+                        } else {
+                            mAdapter.setListData(mAppInfo, keepCheck);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onLoadError() {
+
+            }
+
+            @Override
+            public void onLoadProgress(int progress) {
+
             }
         });
-        mElvApk.setAdapter(new WrapperExpandableListAdapter(mAdapter));
-        mAdapter.handleCheckedCount();
-        for (int i = 0; i < mAppInfo.size(); i++) {
-            mElvApk.expandGroup(i);
-        }
+        mPresenter.getDocInfo(false);
     }
 
     /**
@@ -221,8 +256,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void refreshList(boolean keepUserCheck) {
-        List<DocGroupBean> docInfo = mPresenter.getDocInfo();//新获取到的数据
-        mAdapter.setListData(docInfo,keepUserCheck);
+        mPresenter.getDocInfo(keepUserCheck);//新获取到的数据
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.jb.filemanager.function.docmanager;
 import android.content.Intent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,14 +41,14 @@ public class DocManagerContract {
         void onPressHomeKey();
         void scanStart();
         void scanFinished();
-        List<DocGroupBean> getDocInfo();
+        void getDocInfo(boolean keepUserCheck);
         void handleFileDelete(List<File> docPathList);
     }
 
     interface Support {
-        List<DocChildBean> getDocFileInfo();
-        List<DocChildBean> getTextFileInfo();
-        List<DocChildBean> getPdfFileInfo();
+        ArrayList<DocChildBean> getDocFileInfo();
+        ArrayList<DocChildBean> getTextFileInfo();
+        ArrayList<DocChildBean> getPdfFileInfo();
         void handleFileDelete(String docPath);
         void handleFileCopy(String oldFile, String newFile);
         void handleFileCut(String oldFile, String newFile);

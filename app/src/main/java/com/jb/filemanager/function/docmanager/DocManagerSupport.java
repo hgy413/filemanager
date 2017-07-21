@@ -12,7 +12,6 @@ import com.jb.filemanager.util.device.Machine;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Desc:
@@ -43,26 +42,26 @@ public class DocManagerSupport implements DocManagerContract.Support {
     private static final String TAG = "DocManagerSupport";
 
     @Override
-    public List<DocChildBean> getDocFileInfo() {
+    public ArrayList<DocChildBean> getDocFileInfo() {
 //        return queryFiles("doc");
-        List<DocChildBean> doc = queryFiles(DOC);
-        List<DocChildBean> docX = queryFiles(DOCX);
+        ArrayList<DocChildBean> doc = queryFiles(DOC);
+        ArrayList<DocChildBean> docX = queryFiles(DOCX);
         doc.addAll(docX);
         return doc;
     }
 
     @Override
-    public List<DocChildBean> getTextFileInfo() {
+    public ArrayList<DocChildBean> getTextFileInfo() {
         return queryFiles(TXT);
     }
 
     @Override
-    public List<DocChildBean> getPdfFileInfo() {
+    public ArrayList<DocChildBean> getPdfFileInfo() {
         return queryFiles(PDF);
     }
 
-    private List<DocChildBean> queryFiles(String type) {
-        List<DocChildBean> childList = new ArrayList<>();
+    private ArrayList<DocChildBean> queryFiles(String type) {
+        ArrayList<DocChildBean> childList = new ArrayList<>();
         String[] projection = new String[]{MediaStore.Files.FileColumns._ID,
                 MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.SIZE,
@@ -262,4 +261,7 @@ public class DocManagerSupport implements DocManagerContract.Support {
                 Uri.parse("file://" + filename)));
         return uri;
     }
+
+
+
 }

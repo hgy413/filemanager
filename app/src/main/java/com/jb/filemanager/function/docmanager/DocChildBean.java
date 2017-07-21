@@ -15,6 +15,8 @@ public class DocChildBean implements Parcelable{
     public static final int TYPE_DOC = 0;
     public static final int TYPE_TXT = 1;
     public static final int TYPE_PDF = 2;
+    public static final int TYPE_XLS = 3;
+    public static final int TYPE_PPT = 4;
 
     public String mDocId;
     public int mFileType;
