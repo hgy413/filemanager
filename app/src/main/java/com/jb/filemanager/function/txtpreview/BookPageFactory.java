@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextUtils;
 
-import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.os.ZAsyncTask;
 import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.Logger;
@@ -104,14 +103,9 @@ public class BookPageFactory {
         protected void onPreExecute() {
             super.onPreExecute();
             mIsLoadDone = false;
-            TheApplication.postRunOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (mTxtLoadListener != null) {
-                        mTxtLoadListener.onLoadStart();
-                    }
-                }
-            });
+            if (mTxtLoadListener != null) {
+                mTxtLoadListener.onLoadStart();
+            }
         }
 
         @Override

@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -29,10 +28,8 @@ import java.util.ArrayList;
 public class TxtPreviewActivity extends BaseActivity {
 
     public static final String TARGET_DOC_PATH = "target_doc_path";
-    private RelativeLayout mRlTitle;
     private TextView mTvCommonActionBarTitle;
-    private ImageView mIvCommonActionBarMore;
-    private View mVTitleShadow;
+    private ImageView mIvCommonActionBarSearch;
     private RecyclerView mRvTxtPreview;
     private String mDocPath;
     private ExtractErrorDialog mErrorDialog;
@@ -50,12 +47,11 @@ public class TxtPreviewActivity extends BaseActivity {
     }
 
     private void initView() {
-        mRlTitle = (RelativeLayout) findViewById(R.id.rl_title);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
-        mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_more);
-        mVTitleShadow = (View) findViewById(R.id.v_title_shadow);
+        mIvCommonActionBarSearch = (ImageView) findViewById(R.id.iv_common_action_bar_search);
         mRvTxtPreview = (RecyclerView) findViewById(R.id.rv_txt_preview);
 
+        mIvCommonActionBarSearch.setVisibility(View.GONE);
         mTxtData = new ArrayList<>();
         mRvTxtPreview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mPreviewAdapter = new TxtPreviewAdapter(mTxtData);
@@ -76,7 +72,12 @@ public class TxtPreviewActivity extends BaseActivity {
             @Override
             public void onLoadComplete() {
                 AppUtils.showToast("Duang Duang Duang 加载完成了");
-                mRvTxtPreview.setEnabled(true);
+                TheApplication.postRunOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRvTxtPreview.setEnabled(true);
+                    }
+                });
             }
 
             @Override
@@ -106,7 +107,6 @@ public class TxtPreviewActivity extends BaseActivity {
                             return;
                         }
                         mTxtData.addAll(part);
-//                        mPreviewAdapter.notifyItemRangeInserted(mPreviewAdapter.getItemCount(), part.size());
                         mPreviewAdapter.notifyDataSetChanged();
                     }
                 });
@@ -139,7 +139,12 @@ public class TxtPreviewActivity extends BaseActivity {
     }
 
     private void initClick() {
-
+        mTvCommonActionBarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
