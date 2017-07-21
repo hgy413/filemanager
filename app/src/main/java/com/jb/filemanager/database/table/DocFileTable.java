@@ -34,9 +34,9 @@ public class DocFileTable {
         b.append(DOC_ID + " INTEGER, ");
         b.append(DOC_NAME + " TEXT, ");
         b.append(DOC_TYPE + " TEXT, ");
-        b.append(DOC_PATH + " TEXT)");
-        b.append(DOC_SIZE + " INTEGER)");
-        b.append(DOC_MODIFY_DATE + " TEXT)");
+        b.append(DOC_PATH + " TEXT, ");
+        b.append(DOC_SIZE + " INTEGER, ");
+        b.append(DOC_MODIFY_DATE + " TEXT, ");
         b.append(DOC_ADDED_DATE + " TEXT)");
         CREATE_TABLE = b.toString();
     }

@@ -120,7 +120,7 @@ public class DocFileProvider extends BaseDataProvider {
         if (cursor != null) {
             cursor.close();
         }
-        return null;
+        return childList;
     }
 
     public DocChildBean queryItem(String filePath) {
@@ -188,6 +188,9 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
         contentValues.put(DocFileTable.DOC_PATH, childBean.mDocPath);
         contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
+        int dot = childBean.mDocName.lastIndexOf(".");
+        String type = childBean.mDocName.substring(dot + 1);
+        contentValues.put(DocFileTable.DOC_TYPE, type);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         sContentResolver.insert(mUri, contentValues);
