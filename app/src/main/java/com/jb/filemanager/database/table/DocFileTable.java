@@ -19,6 +19,7 @@ public class DocFileTable {
 
     public static final String DOC_ID = "doc_id";
     public static final String DOC_NAME = "doc_name";
+    public static final String DOC_TYPE = "doc_type";
     public static final String DOC_PATH = "doc_path";
     public static final String DOC_SIZE = "doc_size";
     public static final String DOC_MODIFY_DATE = "doc_modify_date";
@@ -32,6 +33,7 @@ public class DocFileTable {
         b.append(" (_id INTEGER PRIMARY KEY, ");
         b.append(DOC_ID + " INTEGER, ");
         b.append(DOC_NAME + " TEXT, ");
+        b.append(DOC_TYPE + " TEXT, ");
         b.append(DOC_PATH + " TEXT)");
         b.append(DOC_SIZE + " INTEGER)");
         b.append(DOC_MODIFY_DATE + " TEXT)");

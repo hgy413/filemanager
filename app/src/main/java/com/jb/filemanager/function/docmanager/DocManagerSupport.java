@@ -82,6 +82,10 @@ public class DocManagerSupport implements DocManagerContract.Support {
             fileType = DocChildBean.TYPE_TXT;
         } else if (PDF.equals(type)) {
             fileType = DocChildBean.TYPE_PDF;
+        } else if (XLS.equals(type) || XLSX.equals(type)) {
+            fileType = DocChildBean.TYPE_XLS;
+        } else if (PPT.equals(type) || PPTX.equals(type)) {
+            fileType = DocChildBean.TYPE_PPT;
         }
 
         if (cursor != null) {
