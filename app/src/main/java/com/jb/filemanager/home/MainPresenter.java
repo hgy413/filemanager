@@ -5,8 +5,14 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
+import com.jb.filemanager.home.event.CurrentPathChangeEvent;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 
@@ -51,6 +57,15 @@ public class MainPresenter implements MainContract.Presenter {
     private String mRootDir;//要到达的路径
     private boolean mIsFileExplorer;
 
+    private IOnEventMainThreadSubscriber<CurrentPathChangeEvent> mPathChangeEvent = new IOnEventMainThreadSubscriber<CurrentPathChangeEvent>() {
+
+        @Override
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(CurrentPathChangeEvent event) {
+            mCurrentPath = event.mCurrentPath;
+        }
+    };
+
     MainPresenter(MainContract.View view, MainContract.Support support) {
         mView = view;
         mSupport = support;
@@ -58,8 +73,8 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onCreate(Intent intent) {
-
         handleTrashFiles(intent);
+        EventBus.getDefault().register(mPathChangeEvent);
     }
 
     @Override
@@ -79,6 +94,11 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onDestroy() {
+
+        if (EventBus.getDefault().isRegistered(mPathChangeEvent)) {
+            EventBus.getDefault().unregister(mPathChangeEvent);
+        }
+
         mView = null;
         mSupport = null;
     }

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
+import com.jb.filemanager.home.event.CurrentPathChangeEvent;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
@@ -144,6 +145,7 @@ class StoragePresenter implements StorageContract.Presenter,
                         mPathStack.pop();
                         mCurrentPath = null;
                         mView.updateCurrentPath(mStorageList, null);
+                        EventBus.getDefault().post(new CurrentPathChangeEvent(mCurrentPath));
                         return true;
                     }
                 }
@@ -204,6 +206,7 @@ class StoragePresenter implements StorageContract.Presenter,
                     mPathStack.clear();
                     mCurrentPath = null;
                     mView.updateCurrentPath(mStorageList, null);
+                    EventBus.getDefault().post(new CurrentPathChangeEvent(mCurrentPath));
                 }
             } else {
                 int index = currentDir.indexOf(clickDirectory);
@@ -370,6 +373,7 @@ class StoragePresenter implements StorageContract.Presenter,
         if (mView != null && data != null && mPathStack != null && !mPathStack.isEmpty()) {
             mCurrentPath = mPathStack.lastElement().getAbsolutePath();
             mView.updateCurrentPath(data, mPathStack.lastElement());
+            EventBus.getDefault().post(new CurrentPathChangeEvent(mCurrentPath));
         }
     }
 
@@ -378,6 +382,7 @@ class StoragePresenter implements StorageContract.Presenter,
         if (mView != null) {
             mCurrentPath = null;
             mView.updateCurrentPath(null, null);
+            EventBus.getDefault().post(new CurrentPathChangeEvent(mCurrentPath));
         }
     }
 

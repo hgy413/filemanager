@@ -452,7 +452,7 @@ public class FileUtil {
             String primaryPath = (String) volume.getClass().getMethod("getPath", (Class<?>[]) null).invoke(volume, (Object[]) null);
             String desc = (String) volume.getClass().getMethod("toString", (Class<?>[]) null).invoke(volume, (Object[]) null);
             Log.d("filemanager", "desc >>> " + desc);
-            if (path != null && path.equals(primaryPath)) {
+            if (path != null && path.startsWith(primaryPath)) {
                 return !isRemovable;
             }
         } catch (Exception e) {
