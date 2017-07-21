@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.Const;
@@ -115,6 +116,7 @@ public class CategoryFragment extends Fragment {
     private TextView mTvStorageUnused;
     private UsageAnalysis mUaStorage;
 
+    private LinearLayout mLlPhoneAndSdcardSwitcher;
     private TextView mTvSwitchPhone;
     private TextView mTvSwitchSdCard;
 
@@ -143,7 +145,10 @@ public class CategoryFragment extends Fragment {
         mDocLoaderCallback = getDocLoaderCallback();
         mZipLoaderCallback = getZipLoaderCallback();
 
-        mHasExternalStorage = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        String[] paths = FileUtil.getVolumePaths(getActivity());
+        if (paths.length > 1) {
+            mHasExternalStorage = true;
+        }
     }
 
     @Override
@@ -359,8 +364,10 @@ public class CategoryFragment extends Fragment {
             mTvStorageTitle.getPaint().setAntiAlias(true);
             if (mIsInternalStorage) {
                 mTvStorageTitle.setText(R.string.main_info_phone_storage);
+                mTvStorageTitle.setCompoundDrawablesWithIntrinsicBounds(APIUtil.getDrawable(getActivity(), R.drawable.img_phone_storage), null, null, null);
             } else {
                 mTvStorageTitle.setText(R.string.main_info_sdcard_storage);
+                mTvStorageTitle.setCompoundDrawablesWithIntrinsicBounds(APIUtil.getDrawable(getActivity(), R.drawable.img_sdcard_storage), null, null, null);
             }
         }
 
@@ -378,6 +385,11 @@ public class CategoryFragment extends Fragment {
         if (mUaStorage != null) {
             mUaStorage.setTotal(mTotalSize);
             mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
+        }
+
+        mLlPhoneAndSdcardSwitcher = (LinearLayout) rootView.findViewById(R.id.ll_main_category_phone_sdcard_switch);
+        if (mLlPhoneAndSdcardSwitcher != null) {
+            mLlPhoneAndSdcardSwitcher.setVisibility(mHasExternalStorage ? View.VISIBLE : View.GONE);
         }
 
         mTvSwitchPhone = (TextView) rootView.findViewById(R.id.tv_main_category_info_switch_phone);
@@ -459,7 +471,7 @@ public class CategoryFragment extends Fragment {
 
         if (mTvStorageUnused != null) {
             String unusedReadableString = ConvertUtils.getReadableSize(mTotalSize - mUsedSize);
-            String unusedString = getString(R.string.main_info_phone_used, unusedReadableString);
+            String unusedString = getString(R.string.main_info_phone_unused, unusedReadableString);
             SpannableStringBuilder ssb = new SpannableStringBuilder(unusedString);
             ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
                     unusedString.length() - unusedReadableString.length(),
@@ -571,7 +583,7 @@ public class CategoryFragment extends Fragment {
         return new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Uri uri = mIsInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
                 return new CursorLoader(getActivity(),
                         uri,
@@ -611,7 +623,7 @@ public class CategoryFragment extends Fragment {
         return new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Uri uri = mIsInternalStorage ? MediaStore.Video.Media.INTERNAL_CONTENT_URI : MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 
                 return new CursorLoader(getActivity(),
                         uri,
@@ -651,7 +663,7 @@ public class CategoryFragment extends Fragment {
         return new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Uri uri = mIsInternalStorage ? MediaStore.Audio.Media.INTERNAL_CONTENT_URI : MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
                 return new CursorLoader(getActivity(),
                         uri,
@@ -720,7 +732,7 @@ public class CategoryFragment extends Fragment {
         return new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Uri uri = mIsInternalStorage ? MediaStore.Files.getContentUri("internal") : MediaStore.Files.getContentUri("external");
+                Uri uri = MediaStore.Files.getContentUri("external");
 
 
                 String selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?"
@@ -772,7 +784,7 @@ public class CategoryFragment extends Fragment {
         return new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Uri uri = mIsInternalStorage ? MediaStore.Files.getContentUri("internal") : MediaStore.Files.getContentUri("external");
+                Uri uri = MediaStore.Files.getContentUri("external");
 
 
                 String selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?"
@@ -846,8 +858,6 @@ public class CategoryFragment extends Fragment {
         }
     }
 
-
-
     private void handleSwitchPhoneSdCard() {
         if (mTvSwitchPhone != null) {
             mTvSwitchPhone.setSelected(mIsInternalStorage);
@@ -869,7 +879,7 @@ public class CategoryFragment extends Fragment {
 
     private void updateUsageAnalysis() {
         Logger.e("wangzq", "updateUsageAnalysis");
-        StatFs stat = new StatFs(mIsInternalStorage ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
+        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         mTotalSize = APIUtil.getTotalBytes(stat);
         mUsedSize = mTotalSize - APIUtil.getAvailableBytes(stat);
         if (mUaStorage != null) {
