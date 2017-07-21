@@ -329,7 +329,8 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
             mGridAdapter.setListItems(data);
 
             if (currentPath == null) {
-                mHLvDirs.setVisibility(View.GONE);
+                mHLvDirs.setVisibility(View.INVISIBLE);
+                mIvStorageDisk.setVisibility(View.INVISIBLE);
             } else {
                 updateCurrentDir(currentPath);
             }
@@ -406,6 +407,15 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     mHLvDirs.scrollTo(Integer.MAX_VALUE);
                 }
             });
+
+            if (mIvStorageDisk.getVisibility() == View.INVISIBLE) {
+                // 已经是可见的情况下不存在更换 磁盘 图标的可能
+                mIvStorageDisk.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(currentPath)) {
+                    boolean isInternal = FileUtil.isInternalStoragePath(getActivity(), currentPath);
+                    mIvStorageDisk.setImageResource(isInternal ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
+                }
+            }
         }
     }
 

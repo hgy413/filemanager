@@ -406,9 +406,7 @@ class StoragePresenter implements StorageContract.Presenter,
                 }
 
                 if (needDefault) {
-                    if (paths.length == 1) {
-                        mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
-                    }
+                    mPathStack.push(new File(mStorageList.get(0).getAbsolutePath()));
                 }
             }
         }
