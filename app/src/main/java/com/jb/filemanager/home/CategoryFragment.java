@@ -581,7 +581,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
     // implements OnKeyListener start
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        return keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP && mShuffleAd.onBackPressed();
+        return keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP && mShuffleAd != null && mShuffleAd.onBackPressed();
     }
     // implements OnKeyListener end
 
