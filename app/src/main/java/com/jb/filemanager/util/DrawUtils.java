@@ -39,6 +39,24 @@ public class DrawUtils {
     }
 
     /**
+     * 获取屏幕宽度
+     *
+     * @return 屏幕宽度（像素）
+     */
+    public static int getScreenWidth() {
+        return TheApplication.getAppContext().getResources().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 获取屏幕高度
+     *
+     * @return 屏幕高度（像素）
+     */
+    public static int getScreenHeight() {
+        return TheApplication.getAppContext().getResources().getDisplayMetrics().heightPixels;
+    }
+
+    /**
      * Drawable转化为Bitmap
      *
      * @param drawable

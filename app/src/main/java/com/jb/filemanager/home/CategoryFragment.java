@@ -16,6 +16,7 @@ import android.support.v4.content.Loader;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.ad.bubble.ShuffleAdPresenter;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
@@ -59,7 +62,7 @@ import java.util.List;
  *
  */
 
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment implements View.OnKeyListener {
 
     private static final String[] PHOTO_PROJECTION = new String[] {
             MediaStore.Images.Media.SIZE };
@@ -126,6 +129,8 @@ public class CategoryFragment extends Fragment {
     private boolean mHasShowedNotice = false;
     private ValueAnimator mValueAnimator;
 
+    private ShuffleAdPresenter mShuffleAd;
+
     private Runnable mCheckUsageRunnable = new Runnable() {
         @Override
         public void run() {
@@ -157,6 +162,9 @@ public class CategoryFragment extends Fragment {
         // The last two arguments ensure LayoutParams are inflated
         // properly.
         View rootView = inflater.inflate(R.layout.fragment_main_category, container, false);
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(this);
 
         FrameLayout flPhoto = (FrameLayout) rootView.findViewById(R.id.fl_main_category_photo);
         if (flPhoto != null) {
@@ -350,6 +358,24 @@ public class CategoryFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // TODO 点击广告
+                    if (mShuffleAd == null) {
+                        mShuffleAd = new ShuffleAdPresenter((BaseActivity) getActivity(), new ShuffleAdPresenter.Listener() {
+                            @Override
+                            public void onBack(int result) {
+                                if (mShuffleAd != null) {
+                                    mShuffleAd.cancel();
+                                }
+                            }
+
+                            @Override
+                            public void onError() {
+                                if (mShuffleAd != null) {
+                                    mShuffleAd.cancel();
+                                }
+                            }
+                        });
+                    }
+                    mShuffleAd.bubble();
                 }
             });
 
@@ -491,6 +517,10 @@ public class CategoryFragment extends Fragment {
     public void onPause() {
         super.onPause();
         stopUsageCheckTimer();
+        if (mShuffleAd != null) {
+            mShuffleAd.cancel();
+            mShuffleAd = null;
+        }
     }
 
     @Override
@@ -515,6 +545,11 @@ public class CategoryFragment extends Fragment {
             mValueAnimator = null;
         }
 
+        if (mShuffleAd != null) {
+            mShuffleAd.cancel();
+            mShuffleAd = null;
+        }
+
         super.onDestroy();
     }
 
@@ -525,6 +560,11 @@ public class CategoryFragment extends Fragment {
             TheApplication.getGlobalEventBus().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (mShuffleAd != null) {
+            mShuffleAd.cancel();
+            mShuffleAd = null;
         }
     }
 
@@ -537,6 +577,13 @@ public class CategoryFragment extends Fragment {
             stopUsageCheckTimer();
         }
     }
+
+    // implements OnKeyListener start
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        return keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP && mShuffleAd.onBackPressed();
+    }
+    // implements OnKeyListener end
 
     /**
      * 扫描到的文件的大小
