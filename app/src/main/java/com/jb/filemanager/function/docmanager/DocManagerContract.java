@@ -51,6 +51,11 @@ public class DocManagerContract {
         void handleFileDelete(String docPath);
         void handleFileCopy(DocChildBean file);
         void handleFileCut(DocChildBean file);
+
+        void handleFileCut(String oldFile, String newFile);
+
+        void handleFileRename(String oldFile, String newFile);
+
         void scanBroadcastReceiver(File file);
     }
 }

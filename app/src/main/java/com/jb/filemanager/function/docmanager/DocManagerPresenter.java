@@ -7,6 +7,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.util.Logger;
+import com.jb.filemanager.util.device.Machine;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -154,8 +155,13 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     private void handleFileCut(FileOperateEvent fileOperateEvent) {
-        mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
-        mSupport.handleFileDelete(fileOperateEvent.mOldFile.getAbsolutePath());
+        if (Machine.HAS_SDK_KITKAT) {
+            mSupport.handleFileCut(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
+            refreshData(false);
+        }else {
+            mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
+            mSupport.handleFileDelete(fileOperateEvent.mOldFile.getAbsolutePath());
+        }
         Logger.d(TAG, "cut   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
@@ -165,7 +171,12 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     private void handleFileRename(FileOperateEvent fileOperateEvent) {
-        mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
+        if (Machine.HAS_SDK_KITKAT) {
+            mSupport.handleFileRename(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
+            refreshData(false);
+        } else {
+            mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile);
+        }
         Logger.d(TAG, "rename   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 

@@ -21,6 +21,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
+import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
@@ -163,11 +164,13 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             @Override
             public void afterCopy() {
+                startActivity(new Intent(DocManagerActivity.this, MainActivity.class));
                 handleDataCopy();
             }
 
             @Override
             public void afterCut() {
+                startActivity(new Intent(DocManagerActivity.this, MainActivity.class));
                 handleDataCut();
             }
 
