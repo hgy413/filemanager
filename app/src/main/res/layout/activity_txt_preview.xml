@@ -8,23 +8,10 @@
 
     <include layout="@layout/common_action_bar_without_search"/>
 
-    <ScrollView
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_txt_content"
-            android:textSize="14dp"
-            android:text="你看不到我"
-            android:textColor="@color/black_70"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </ScrollView>
-
     <android.support.v7.widget.RecyclerView
         android:visibility="visible"
         android:id="@+id/rv_txt_preview"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

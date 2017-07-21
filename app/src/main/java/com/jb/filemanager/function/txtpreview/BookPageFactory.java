@@ -24,11 +24,11 @@ import java.util.ArrayList;
  */
 public class BookPageFactory {
 
-    private static final String TAG = "BookPageFactory  ";
+    public static final String TAG = "BookPageFactory  ";
     private int mWidth;
     private int mHeight;
     private int mMarginWidth = 12; // 左右与边缘的距离
-    private int mMarginHeight = 20; // 上下与边缘的距离
+    private int mMarginHeight = 0; // 上下与边缘的距离
     private float mVisibleHeight; // 绘制内容的宽
     private float mVisibleWidth; // 绘制内容的宽
 
@@ -41,19 +41,21 @@ public class BookPageFactory {
     private int mLineWordCount = 0; // 每行可以显示的字数
 
     public volatile boolean isStillRead = true;
-    private final TxtLoadTask mTxtLoadTask;
+    private TxtLoadTask mTxtLoadTask;
     private OnTxtLoadListener mTxtLoadListener;
 
 
-    private int mLineCount1;
+    private int mLoadedLineCount;//已经加载的行数
+    private volatile boolean mIsLoadDone = true;//上次加载是否完成
+    private boolean mIsAllLoad;//是否全部加载完成
 
     public BookPageFactory(int lineHeight) {
-        mTxtLoadTask = new TxtLoadTask();
+
         mWidth = ScreenUtils.getScreenWidth();
         mHeight = ScreenUtils.getScreenHeight();
 
         mVisibleWidth = mWidth - DrawUtils.dip2px(mMarginWidth) * 2;
-        mVisibleHeight = mHeight - DrawUtils.dip2px(mMarginHeight) * 2 - ScreenUtils.getStatusBarHeight(TheApplication.getAppContext());
+        mVisibleHeight = mHeight - DrawUtils.dip2px(mMarginHeight) * 2;
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextAlign(Paint.Align.LEFT);
@@ -67,6 +69,11 @@ public class BookPageFactory {
     }
 
     public void LoadTxtPath(String path) {
+        if (!mIsLoadDone || mIsAllLoad) {
+            return;
+        }
+        Logger.d(TAG, "start load !");
+        mTxtLoadTask = new TxtLoadTask();
         mTxtLoadTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, path);
     }
 
@@ -77,7 +84,7 @@ public class BookPageFactory {
     public interface OnTxtLoadListener {
         void onLoadStart();
 
-        void onLoadComplete(ArrayList<String> result);
+        void onLoadComplete();
 
         void onLoadError(String msg);
 
@@ -89,13 +96,14 @@ public class BookPageFactory {
         @Override
         protected Void doInBackground(String... params) {
             String param = params[0];
-            readPage(param);
+            readTxt(param);
             return null;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mIsLoadDone = false;
             TheApplication.postRunOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -105,22 +113,21 @@ public class BookPageFactory {
                 }
             });
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (mTxtLoadListener != null) {
+                mTxtLoadListener.onLoadComplete();
+            }
+            mIsLoadDone = true;
+        }
     }
 
     public void cancelTask() {
         if (!mTxtLoadTask.isCancelled()) {
             mTxtLoadTask.cancel(true);
         }
-    }
-
-    /**
-     * 读取文章并进行分页处理。增加线程锁，避免同时对一篇文章进行分页
-     *
-     * @param path
-     * @return
-     */
-    public void readPage(String path) {
-        readTxt(path);
     }
 
     /**
@@ -134,28 +141,46 @@ public class BookPageFactory {
         InputStreamReader in1 = null;
         File txtFile = new File(basePath);
         String line;
+        Logger.d(TAG, "readTxt");
         try {
             in = new FileInputStream(txtFile);
             in1 = new InputStreamReader(in, "UTF-8");
             bufferedReader = new BufferedReader(in1);
             int count = 0;
+            Logger.d(TAG, "count :" + count + "count1:" + mLoadedLineCount);
             while ((line = bufferedReader.readLine()) != null && isStillRead) {
-                if (count < mLineCount1) {
+                count++;
+                if (count < mLoadedLineCount) {
                     continue;
                 }
                 temp.append(line).append("\n");
-                if (temp.length() > 1000) {
+                if (temp.length() > 3000) {
                     ArrayList<String> gbk = split(temp.toString(), mLineWordCount * 2, "GBK");
                     if (mTxtLoadListener != null) {
-                        Logger.d(TAG, "load part " + mLineCount1 + "    " + count);
-                        mLineCount1 += count;
+                        Logger.d(TAG, "load part " + mLoadedLineCount + "    " + count);
+                        mLoadedLineCount += count;
                         mTxtLoadListener.onLoadPart(gbk);
                         Logger.d(TAG, "load part");
                         break;
                     }
                 }
             }
+
+            if (temp.length() < 3000) {
+                //说明已经加载全部了
+                mIsAllLoad = true;
+                ArrayList<String> gbk = split(temp.toString(), mLineWordCount * 2, "GBK");
+                if (mTxtLoadListener != null) {
+                    Logger.d(TAG, "load part 2   " + mLoadedLineCount + "    " + count);
+                    mLoadedLineCount += count;
+                    mTxtLoadListener.onLoadPart(gbk);
+                    Logger.d(TAG, "load part2  ");
+                }
+            }
         } catch (IOException e) {
+            if (mTxtLoadListener != null) {
+                mTxtLoadListener.onLoadError(e.toString());
+            }
             e.printStackTrace();
         } finally {
             Logger.d(TAG, "finally run");
@@ -190,26 +215,26 @@ public class BookPageFactory {
         }
     }
 
-    public void releaseLocker() {
-    }
-
     /**
      * 分页处理
      *
-     * @param text
-     * @param length
-     * @param encoding
-     * @return
-     * @throws UnsupportedEncodingException
+     * @param text 需要分页的字符串
+     * @param length 长度
+     * @param encoding 编码
+     * @return 分行的结果
+     * @throws UnsupportedEncodingException 解码错误
      */
     public ArrayList<String> split(String text, int length, String encoding) throws UnsupportedEncodingException {
-        ArrayList<String> texts = new ArrayList();
+        ArrayList<String> texts = new ArrayList<>();
+        if (TextUtils.isEmpty(text)) {
+            return texts;
+        }
         String temp = "    ";
         String c;
         int lines = 0;
         int pos = 2;
         int startInd = 0;
-        for (int i = 0; text != null && i < text.length(); ) {
+        for (int i = 0; i < text.length(); ) {
             byte[] b = String.valueOf(text.charAt(i)).getBytes(encoding);
             pos += b.length;
             if (pos >= length) {

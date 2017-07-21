@@ -15,6 +15,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
 import com.jb.filemanager.util.AppUtils;
+import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,6 @@ public class TxtPreviewActivity extends BaseActivity {
     private TextView mTvCommonActionBarTitle;
     private ImageView mIvCommonActionBarMore;
     private View mVTitleShadow;
-    private TextView mTvTxtContent;
     private RecyclerView mRvTxtPreview;
     private String mDocPath;
     private ExtractErrorDialog mErrorDialog;
@@ -54,7 +54,6 @@ public class TxtPreviewActivity extends BaseActivity {
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_more);
         mVTitleShadow = (View) findViewById(R.id.v_title_shadow);
-        mTvTxtContent = (TextView) findViewById(R.id.tv_txt_content);
         mRvTxtPreview = (RecyclerView) findViewById(R.id.rv_txt_preview);
 
         mTxtData = new ArrayList<>();
@@ -71,29 +70,13 @@ public class TxtPreviewActivity extends BaseActivity {
             @Override
             public void onLoadStart() {
                 AppUtils.showToast("这里有个你看不到的加载动画");
+                mRvTxtPreview.setEnabled(false);
             }
 
             @Override
-            public void onLoadComplete(final ArrayList<String> result) {
+            public void onLoadComplete() {
                 AppUtils.showToast("Duang Duang Duang 加载完成了");
-                /*StringBuilder stringBuilder = new StringBuilder();
-                if (result != null) {
-                    for (String txt : result) {
-                        stringBuilder.append(txt);
-                    }
-                    mTvTxtContent.setText(stringBuilder.toString());
-                }*/
-
-                TheApplication.postRunOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTxtData.clear();
-                        mTxtData.addAll(result);
-                        mPreviewAdapter.notify();
-                    }
-                });
-
-//                mPreviewAdapter.notify();
+                mRvTxtPreview.setEnabled(true);
             }
 
             @Override
@@ -119,6 +102,9 @@ public class TxtPreviewActivity extends BaseActivity {
                 TheApplication.postRunOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (part.size() == 0) {
+                            return;
+                        }
                         mTxtData.addAll(part);
 //                        mPreviewAdapter.notifyItemRangeInserted(mPreviewAdapter.getItemCount(), part.size());
                         mPreviewAdapter.notifyDataSetChanged();
@@ -129,8 +115,6 @@ public class TxtPreviewActivity extends BaseActivity {
         });
         mTxtDecodeManager.LoadTxtPath(mDocPath);
         mRvTxtPreview.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            //用来标记是否正在向最后一个滑动
-            boolean isSlidingToLast = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -139,11 +123,13 @@ public class TxtPreviewActivity extends BaseActivity {
                 // 当不滚动时
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //获取最后一个完全显示的ItemPosition
-                    int lastVisibleItem = manager.findLastCompletelyVisibleItemPosition();
+                    int lastVisibleItem = manager.findLastVisibleItemPosition();
                     int totalItemCount = manager.getItemCount();
 
+                    Logger.d(BookPageFactory.TAG, "判断位置  目前位置: " + lastVisibleItem + " 总数目:" + totalItemCount);
                     // 判断是否滚动到底部，并且是最后滚动
                     if (lastVisibleItem == (totalItemCount - 1)) {
+                        Logger.d(BookPageFactory.TAG, "继续加载");
                         //加载更多功能的代码
                         mTxtDecodeManager.LoadTxtPath(mDocPath);
                     }
