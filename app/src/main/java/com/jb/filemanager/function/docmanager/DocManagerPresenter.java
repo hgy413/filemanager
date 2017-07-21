@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.database.provider.DocFileProvider;
 import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.os.ZAsyncTask;
 import com.jb.filemanager.util.Logger;
@@ -254,6 +255,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         private void scanPath(File dir, int depth) {
             if (depth > DEPTH_THRESHOLD) return;
             if (!dir.exists() || !dir.isDirectory()) return;
+            DocFileProvider docFileProvider = DocFileProvider.getInstance();
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     scanPath(file, depth + 1);
@@ -270,6 +272,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        docFileProvider.insertDocItem(childBean);
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(XLS) || extension.equalsIgnoreCase(XLSX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -279,6 +282,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        docFileProvider.insertDocItem(childBean);
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PPT) || extension.equalsIgnoreCase(PPTX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -288,6 +292,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        docFileProvider.insertDocItem(childBean);
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(TXT)) {
                         DocChildBean childBean = new DocChildBean();
@@ -297,6 +302,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        docFileProvider.insertDocItem(childBean);
                         mTxtList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PDF)) {
                         DocChildBean childBean = new DocChildBean();
@@ -306,6 +312,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        docFileProvider.insertDocItem(childBean);
                         mPdfList.add(childBean);
                     }
                 }

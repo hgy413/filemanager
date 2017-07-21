@@ -42,7 +42,7 @@ public class DocFileProvider extends BaseDataProvider {
         mDBHelper = new DatabaseHelper(context);
     }
 
-    public synchronized DocFileProvider getInstance() {
+    public static synchronized DocFileProvider getInstance() {
         if (sInstance == null) {
             sInstance = new DocFileProvider(TheApplication.getAppContext());
         }

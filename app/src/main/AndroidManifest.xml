@@ -70,6 +70,9 @@
     <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS"/>
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- TrafficContentProvider权限 -->
+    <uses-permission android:name="com.jb.filemanager.provider.permission"/>
     <!-- 辅助功能强杀服务的权限		辅助杀，辅助禁用模块所用（格式下同，？？代表暂不知哪个模块用到） -->
     <!-- <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/> -->
     <!-- 屏蔽HOME键需要的权限 -->
@@ -443,6 +446,13 @@
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
+
+        <!-- 防火墙阻止应用记录的ContentProvider -->
+        <provider
+            android:name=".database.contentprovider.DocFileContentProvider"
+            android:authorities="com.jb.filemanager.database.contentprovider.DocFileContentProvider"
+            android:multiprocess="true"
+            android:permission="com.jb.filemanager.provider.permission"/>
     </application>
     <!-- 杀进程	内存查杀 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
