@@ -145,20 +145,21 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void refreshMediaData(ArrayList<File> selectFileList) {
-        String[] filePath = new String[0];
-        if (selectFileList != null && selectFileList.size() != 0) {
-            filePath = new String[selectFileList.size()];
-            for (int i = 0; i < filePath.length; i++) {
-                filePath[i] = selectFileList.get(i).getParent();
-            }
-        }
-        MediaScannerConnection.scanFile(mView, filePath, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                        onCreate(mView.getIntent());
-                    }
-                });
+//        String[] filePath = new String[0];
+//        if (selectFileList != null && selectFileList.size() != 0) {
+//            filePath = new String[selectFileList.size()];
+//            for (int i = 0; i < filePath.length; i++) {
+//                filePath[i] = selectFileList.get(i).getParent();
+//            }
+//        }
+//        MediaScannerConnection.scanFile(mView, filePath, null,
+//                new MediaScannerConnection.OnScanCompletedListener() {
+//                    @Override
+//                    public void onScanCompleted(String path, Uri uri) {
+//                        onCreate(mView.getIntent());
+//                    }
+//                });
+        onCreate(mView.getIntent());
     }
 
     @Override
