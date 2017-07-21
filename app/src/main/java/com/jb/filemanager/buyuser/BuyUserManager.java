@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.flashlight.brightestflashlightpro.app.ToolLockerSdk;
 import com.jb.filemanager.BuildConfig;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
@@ -77,6 +78,11 @@ public class BuyUserManager {
                         checkIsFbChecker(BuyChannelApi.getReferrer(mContext));
                         // 发送通知
                         EventBus.getDefault().post(new BuyUserChannelEvent());
+
+                        // TODO @wangzq 工具锁初始化各种id配置之后打开这里
+//                        // 更新工具锁的买量设置
+//                        BuyChannelBean buyChannelBean =BuyChannelApi.getBuyChannelBean(mContext);
+//                        ToolLockerSdk.getInstance().setBuyChannel(buyChannel, buyChannelBean.isUserBuy());
                     }
                 }
         );

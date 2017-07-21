@@ -14,6 +14,7 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.flashlight.brightestflashlightpro.app.ToolLockerSdk;
 import com.gau.go.gostaticsdk.StatisticsManager;
 import com.jb.filemanager.abtest.ABTest;
 import com.jb.filemanager.ad.AdManager;
@@ -46,6 +47,8 @@ import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.device.Machine;
 import com.jiubang.commerce.ad.AdSdkApi;
 import com.jiubang.commerce.ad.params.ClientParams;
+import com.jiubang.commerce.buychannel.BuyChannelApi;
+import com.jiubang.commerce.buychannel.buyChannel.bean.BuyChannelBean;
 import com.jiubang.commerce.buychannel.buyChannel.utils.AppInfoUtils;
 import com.jiubang.commerce.daemon.DaemonClient;
 import com.jiubang.commerce.daemon.DaemonConfigurations;
@@ -218,6 +221,8 @@ public class TheApplication extends Application {
         //初始化广告SDK
         AdManager.initSingleton(this);
 
+        initToolLocker();
+
         //异步调用方法
         ResidualFileManager.getInstance(getApplicationContext());
         CacheManager.getInstance(getApplicationContext());
@@ -332,6 +337,38 @@ public class TheApplication extends Application {
             }
         }, "init");
         thread.start();
+    }
+
+    private void initToolLocker() {
+        // TODO @wangzq 工具锁广告配置
+//
+//        SharedPreferencesManager spm = SharedPreferencesManager.getInstance(this);
+//        long installDate = spm.getLong(IPreferencesIds.KEY_FIRST_INSTALL_TIME, System.currentTimeMillis());
+//        boolean isUpgrade = AppUtils.isInstallFromUpdate();
+//
+//
+//        ToolLockerSdk toolLockerSdk = ToolLockerSdk.getInstance();
+//        toolLockerSdk.enableLog(BuildConfig.DEBUG); //开关log
+//
+//        //初始化sdk，参数依次为：Context，AbtestCenterService.cid, AbtestCenterService.cid2, 101统计协议功能点id，应用首次安装时间，是否是升级用户，买量渠道，是否是买量用户
+//        BuyChannelBean buyChannelBean = BuyChannelApi.getBuyChannelBean(this);
+//        toolLockerSdk.init(this,
+//                getPackageName(),
+//                Integer.valueOf(GoBatteryUtil.getProductId(this)),
+//                FunctionIdConst.PRODUCT_ID_OF_19,
+//                FunctionIdConst.FUNCTION_ID_OF_PROTOCOL_101,
+//                installDate,
+//                isUpgrade,
+//                BuyUserManager.getInstance().getBuyUserChannel(),
+//                BuyUserManager.getInstance().isBuyUser());
+//
+//        toolLockerSdk.setAbTestServiceSid(186); //设置ab后台的业务id，sdk中默认是148，如果不是默认，请重新设置
+//
+//        toolLockerSdk.setAppIcon(R.mipmap.ic_launcher); //设置你的应用图标，用于工具锁顶部标识
+//        toolLockerSdk.setAppName(getResources().getString(R.string.app_name)); //设置你的应用名称，用于工具锁顶部标识
+//        toolLockerSdk.setAdLockScreenId(VirtualIdConstant.AD_VITRUAL_ID_TOOL_LOCKER_MAIN); //设置锁屏主界面广告的默认id
+//        toolLockerSdk.setAdCleanId(VirtualIdConstant.AD_VIRTUAL_ID_TOOL_LOCKER_CLEAN); //设置清理界面广告的默认id
+//        toolLockerSdk.setAdNotifyId(VirtualIdConstant.AD_VIRTUAL_ID_TOOL_LOCKER_NOTIFY); //设置工具锁第二屏通知管理广告的默认id
     }
 
     private DaemonConfigurations createDaemonConfigurations() {
