@@ -258,7 +258,8 @@ public class SameFileSupport implements SameFileContract.Support {
     public void delete(ArrayList<String> fullPathList) {
     }
 
-    protected List<File> getFiles(File file) {
+    @Override
+    public List<File> getFiles(File file) {
         List<File> list = new ArrayList<>();
         File[] fileArray = file.listFiles();
         for (File f : fileArray) {

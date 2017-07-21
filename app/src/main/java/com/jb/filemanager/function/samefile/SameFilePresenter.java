@@ -9,13 +9,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.home.MainActivity;
+import com.jb.filemanager.util.TimeUtil;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 
 
@@ -145,37 +148,9 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     }
 
     @Override
-    public void refreshMediaData(ArrayList<File> selectFileList) {
-//        String[] filePath = new String[0];
-//        if (selectFileList != null && selectFileList.size() != 0) {
-//            filePath = new String[selectFileList.size()];
-//            for (int i = 0; i < filePath.length; i++) {
-//                filePath[i] = selectFileList.get(i).getParent();
-//            }
-//        }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //版本号的判断  4.4为分水岭，发送广播更新媒体库
-//            MediaScannerConnection.scanFile(mView, filePath,
-//                    null, new MediaScannerConnection.OnScanCompletedListener() {
-//                public void onScanCompleted(String path, Uri uri) {
-//                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//                    mediaScanIntent.setData(uri);
-//                    mView.sendBroadcast(mediaScanIntent);
-//                    onCreate(mView.getIntent());
-//
-//                }
-//            });
-//        } else {
-//            mView.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.fromFile(selectFileList.get(0))));
-            onCreate(mView.getIntent());
-//        }
-//        MediaScannerConnection.scanFile(mView, filePath, null,
-//                new MediaScannerConnection.OnScanCompletedListener() {
-//                    @Override
-//                    public void onScanCompleted(String path, Uri uri) {
-//                        onCreate(mView.getIntent());
-//                    }
-//                });
-        //onCreate(mView.getIntent());
+    public void reloadData() {
+        mView.fileSelectShow(0);
+        onCreate(mView.getIntent());
     }
 
     @Override

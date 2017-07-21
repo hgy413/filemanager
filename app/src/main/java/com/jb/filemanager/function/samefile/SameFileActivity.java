@@ -120,7 +120,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mBottomOperateContainer.setListener(new BottomOperateBar.Listener() {
-            ArrayList selectFileList;
+            ArrayList<File> selectFileList;
             @Override
             public ArrayList<File> getCurrentSelectedFiles() {
                 selectFileList = mPresenter.getSelectFile();
@@ -144,7 +144,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void afterRename() {
-                mPresenter.refreshMediaData(selectFileList);
+                mPresenter.reloadData();
                 mBottomOperateContainer.setVisibility(View.GONE);
             }
 

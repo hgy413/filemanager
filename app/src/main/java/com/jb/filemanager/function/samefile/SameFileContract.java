@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,7 +36,7 @@ public interface SameFileContract {
 
         void jumpToStoragePage();
 
-        void refreshMediaData(ArrayList<File> selectFileList);
+        void reloadData();
 
         void selectAllFile();
 
@@ -55,5 +56,7 @@ public interface SameFileContract {
         GroupList<String,FileInfo> getAllDownloadInfo();
 
         GroupList<String,FileInfo> getAllVideoInfo();
+
+        List<File> getFiles(File file);
     }
 }
