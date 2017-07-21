@@ -3,6 +3,7 @@ package com.jb.filemanager.util.file;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -74,6 +75,8 @@ public class FileTypeUtil {
         return fileType;
     }
 
+    //ArrayList<String> musicSuffix = new ArrayList<>();
+
     /**
      * @author guoxk
      *
@@ -142,4 +145,6 @@ public class FileTypeUtil {
         final String fileType = getFileType("E:\\补贴名单.xls");
         System.out.println(fileType);
     }
+
+
 }

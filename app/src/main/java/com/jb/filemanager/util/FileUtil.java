@@ -1011,7 +1011,7 @@ public class FileUtil {
         String suffix = fullPath.substring(fullPath.lastIndexOf('.'));
         String mime = MIME_MAP.get(suffix);
         if (mime == null || mime.equals("")) {
-            mime = MIME_MAP.get(".txt"); // Unknow type open as txt
+            mime = "*/*"; // Unknow type
         }
         Uri uri = Uri.fromFile(file);
         Intent intent = new Intent(Intent.ACTION_VIEW);

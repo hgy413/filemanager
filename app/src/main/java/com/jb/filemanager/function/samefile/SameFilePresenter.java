@@ -3,6 +3,7 @@ package com.jb.filemanager.function.samefile;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -152,6 +153,21 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 //                filePath[i] = selectFileList.get(i).getParent();
 //            }
 //        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //版本号的判断  4.4为分水岭，发送广播更新媒体库
+//            MediaScannerConnection.scanFile(mView, filePath,
+//                    null, new MediaScannerConnection.OnScanCompletedListener() {
+//                public void onScanCompleted(String path, Uri uri) {
+//                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                    mediaScanIntent.setData(uri);
+//                    mView.sendBroadcast(mediaScanIntent);
+//                    onCreate(mView.getIntent());
+//
+//                }
+//            });
+//        } else {
+//            mView.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.fromFile(selectFileList.get(0))));
+            onCreate(mView.getIntent());
+//        }
 //        MediaScannerConnection.scanFile(mView, filePath, null,
 //                new MediaScannerConnection.OnScanCompletedListener() {
 //                    @Override
@@ -159,7 +175,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 //                        onCreate(mView.getIntent());
 //                    }
 //                });
-        onCreate(mView.getIntent());
+        //onCreate(mView.getIntent());
     }
 
     @Override

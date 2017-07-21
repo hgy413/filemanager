@@ -280,4 +280,76 @@ public class SameFileSupport implements SameFileContract.Support {
         // info.type = FileTypeUtil.getFileType(file); // get file type
         return info;
     }
+
+
+//
+//    private String getFileType(@NonNull String path) {
+//        ArrayList<String> mArrayList = new ArrayList<>();
+//        if (mArrayList.contains("mp3"))
+//        if (path.endsWith("zip") || path.endsWith("tar.jz") || path.endsWith("ZIP") ||
+//                path.endsWith("rar"))
+//            return "zip";
+//        if (path.endsWith("mp4"))
+//
+//        }
+//        if (info.mFullPath.endsWith("mp4") || info.mFullPath.endsWith("avi")) {
+//            info.mFileType = Const.FILE_TYPE.VIDEO;
+//            list = infoGroupList.get("Video");
+//            if (null == list) {
+//                list = new ArrayList();
+//                infoGroupList.put("Video", list);
+//            }
+//            list.add(info);
+//            continue;
+//        }
+//        if (info.mFullPath.endsWith("mp3") || info.mFullPath.endsWith("acc")) {
+//            info.mFileType = Const.FILE_TYPE.VIDEO;
+//            list = infoGroupList.get("Music");
+//            if (null == list) {
+//                list = new ArrayList();
+//                infoGroupList.put("Music", list);
+//            }
+//            list.add(info);
+//            continue;
+//        }
+//        if (info.mFullPath.endsWith("doc") || info.mFullPath.endsWith("docx")
+//                || info.mFullPath.endsWith("xls") || info.mFullPath.endsWith("xlsx")
+//                || info.mFullPath.endsWith("ppt")) {
+//            info.mFileType = Const.FILE_TYPE.DOC;
+//            list = infoGroupList.get("Document");
+//            if (null == list) {
+//                list = new ArrayList();
+//                infoGroupList.put("Document", list);
+//            }
+//            list.add(info);
+//            continue;
+//        }
+//        if (info.mFullPath.endsWith("txt") ) {
+//            info.mFileType = Const.FILE_TYPE.DOC;
+//            list = infoGroupList.get("Txt");
+//            if (null == list) {
+//                list = new ArrayList();
+//                infoGroupList.put("Txt", list);
+//            }
+//            list.add(info);
+//            continue;
+//        }
+//        if (info.mFullPath.endsWith("pdf")) {
+//            info.mFileType = Const.FILE_TYPE.DOC;
+//            list = infoGroupList.get("Pdf");
+//            if (null == list) {
+//                list = new ArrayList();
+//                infoGroupList.put("Pdf", list);
+//            }
+//            list.add(info);
+//            continue;
+//        }
+//        info.mFileType = Const.FILE_TYPE.OTHER;
+//        list = infoGroupList.get("Other");
+//        if (null == list) {
+//            list = new ArrayList();
+//            infoGroupList.put("Other", list);
+//        }
+//    }
+
 }
