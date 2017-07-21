@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
 import com.jb.filemanager.util.AppUtils;
 
@@ -35,7 +36,7 @@ public class TxtPreviewActivity extends BaseActivity {
     private RecyclerView mRvTxtPreview;
     private String mDocPath;
     private ExtractErrorDialog mErrorDialog;
-    private TxtDecodeManager mTxtDecodeManager;
+    private BookPageFactory mTxtDecodeManager;
     private ArrayList<String> mTxtData;
     private TxtPreviewAdapter mPreviewAdapter;
 
@@ -58,14 +59,15 @@ public class TxtPreviewActivity extends BaseActivity {
 
         mTxtData = new ArrayList<>();
         mRvTxtPreview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
+        mPreviewAdapter = new TxtPreviewAdapter(mTxtData);
+        mRvTxtPreview.setAdapter(mPreviewAdapter);
     }
 
     public void initData() {
         Intent intent = getIntent();
         mDocPath = intent.getStringExtra(TARGET_DOC_PATH);
-        mTxtDecodeManager = new TxtDecodeManager();
-        mTxtDecodeManager.setTxtLoadListener(new TxtDecodeManager.OnTxtLoadListener() {
+        mTxtDecodeManager = new BookPageFactory(13);
+        mTxtDecodeManager.setTxtLoadListener(new BookPageFactory.OnTxtLoadListener() {
             @Override
             public void onLoadStart() {
                 AppUtils.showToast("这里有个你看不到的加载动画");
@@ -82,10 +84,15 @@ public class TxtPreviewActivity extends BaseActivity {
                     mTvTxtContent.setText(stringBuilder.toString());
                 }*/
 
-                mTxtData.clear();
-                mTxtData.addAll(result);
-                mPreviewAdapter = new TxtPreviewAdapter(mTxtData);
-                mRvTxtPreview.setAdapter(mPreviewAdapter);
+                TheApplication.postRunOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTxtData.clear();
+                        mTxtData.addAll(result);
+                        mPreviewAdapter.notify();
+                    }
+                });
+
 //                mPreviewAdapter.notify();
             }
 
@@ -106,8 +113,43 @@ public class TxtPreviewActivity extends BaseActivity {
                 mErrorDialog.show();
 
             }
+
+            @Override
+            public void onLoadPart(final ArrayList<String> part) {
+                TheApplication.postRunOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTxtData.addAll(part);
+//                        mPreviewAdapter.notifyItemRangeInserted(mPreviewAdapter.getItemCount(), part.size());
+                        mPreviewAdapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
         });
         mTxtDecodeManager.LoadTxtPath(mDocPath);
+        mRvTxtPreview.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            //用来标记是否正在向最后一个滑动
+            boolean isSlidingToLast = false;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                // 当不滚动时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    //获取最后一个完全显示的ItemPosition
+                    int lastVisibleItem = manager.findLastCompletelyVisibleItemPosition();
+                    int totalItemCount = manager.getItemCount();
+
+                    // 判断是否滚动到底部，并且是最后滚动
+                    if (lastVisibleItem == (totalItemCount - 1)) {
+                        //加载更多功能的代码
+                        mTxtDecodeManager.LoadTxtPath(mDocPath);
+                    }
+                }
+            }
+        });
     }
 
     private void initClick() {
@@ -120,5 +162,13 @@ public class TxtPreviewActivity extends BaseActivity {
         if (mErrorDialog != null) {
             mErrorDialog.dismiss();
         }
+        mTxtDecodeManager.cancelTask();
+        mTxtDecodeManager.isStillRead = false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
