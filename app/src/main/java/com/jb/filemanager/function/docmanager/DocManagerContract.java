@@ -19,13 +19,10 @@ public class DocManagerContract {
         void initData();
         void initList();
         void initClick();
-        void refreshList(boolean keepUserCheck);
+        void refreshList(boolean keepUserCheck, boolean shouldScanAgain);
         void initBroadcastReceiver();
         void releaseBroadcastReceiver();
         void finishActivity();
-        void showDocDetail(List<DocChildBean> docList);
-        void fileRename(List<DocChildBean> docList);
-//        void openWith(List<DocChildBean> docList);
         void updateDeleteProgress(int done,int total);
         void refreshTile();
     }
@@ -36,12 +33,12 @@ public class DocManagerContract {
         void onPause();
         void onDestroy();
         void onActivityResult(int requestCode, int resultCode, Intent data);
-        void refreshData(boolean keepUserCheck);
+        void refreshData(boolean keepUserCheck, boolean shouldScanAgain);
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
         void scanStart();
         void scanFinished();
-        void getDocInfo(boolean keepUserCheck);
+        void getDocInfo(boolean keepUserCheck, boolean shouldScanAgain);
         void handleFileDelete(List<File> docPathList);
     }
 

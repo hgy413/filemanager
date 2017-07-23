@@ -11,7 +11,6 @@ import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.os.ZAsyncTask;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.StorageUtil;
-import com.jb.filemanager.util.device.Machine;
 import com.jb.filemanager.util.file.FileUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -85,9 +84,9 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     @Override
-    public void refreshData(boolean keepUserCheck) {
+    public void refreshData(boolean keepUserCheck, boolean shouldScanAgain) {
         onCreate(null);
-        mView.refreshList(keepUserCheck);
+        mView.refreshList(keepUserCheck, shouldScanAgain);
     }
 
     @Override
@@ -115,13 +114,13 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         Logger.d(TAG, "scan finish");
         Toast.makeText(TheApplication.getAppContext(), "System scan finish ,refresh the list", Toast.LENGTH_SHORT).show();
         //更新数据
-        refreshData(true); //暂时不处理
+        refreshData(true, false); //暂时不处理
     }
 
     @Override
-    public void getDocInfo(boolean keepUserCheck) {
+    public void getDocInfo(boolean keepUserCheck, boolean shouldScanAgain) {
         ScanDocFileTask scanDocFileTask = new ScanDocFileTask();
-        scanDocFileTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, keepUserCheck);
+        scanDocFileTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, keepUserCheck, shouldScanAgain);
     }
 
     @Override
@@ -130,7 +129,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         int size = docPathList.size();
         for (int i = 0; i < size; i++) {
             mSupport.handleFileDelete(docPathList.get(i).getAbsolutePath());
-            mView.updateDeleteProgress(i + 1, size + 1);
         }
     }
 
@@ -151,23 +149,14 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     private void handleFileCopy(FileOperateEvent fileOperateEvent) {
         File newFile = fileOperateEvent.mNewFile;
-        if (Machine.HAS_SDK_KITKAT){
-            mSupport.handleFileCopy(fileOperateEvent.mOldFile.getAbsolutePath(),fileOperateEvent.mNewFile.getAbsolutePath());
-            refreshData(false);
-        }else {
-            mSupport.scanBroadcastReceiver(newFile.getParentFile());
-        }
+        mSupport.handleFileCopy(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
+        refreshData(false, false);
         Logger.d(TAG, "copy   " + newFile.getAbsolutePath() + "      " + newFile.getParent());
     }
 
     private void handleFileCut(FileOperateEvent fileOperateEvent) {
-        if (Machine.HAS_SDK_KITKAT) {
-            mSupport.handleFileCut(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
-            refreshData(false);
-        }else {
-            mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile.getParentFile());
-            mSupport.handleFileDelete(fileOperateEvent.mOldFile.getAbsolutePath());
-        }
+        mSupport.handleFileCut(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
+        refreshData(false, false);
         Logger.d(TAG, "cut   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
@@ -177,12 +166,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     private void handleFileRename(FileOperateEvent fileOperateEvent) {
-        if (Machine.HAS_SDK_KITKAT) {
-            mSupport.handleFileRename(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
-            refreshData(false);
-        } else {
-            mSupport.scanBroadcastReceiver(fileOperateEvent.mNewFile);
-        }
+        mSupport.handleFileRename(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
+        refreshData(false, false);
         Logger.d(TAG, "rename   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
@@ -214,15 +199,15 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
         @Override
         protected Boolean doInBackground(Boolean... params) {
-            if (Machine.HAS_SDK_KITKAT) {
+            if (params[1]) {//重头开始扫描
                 for (String path : StorageUtil.getAllExternalPaths(TheApplication.getAppContext())) {
                     File root = new File(path);
                     scanPath(root, 0);
                 }
-            } else {
+            } else {//取数据库
                 mDocList = mSupport.getDocFileInfo();
-                mSupport.getTextFileInfo();
-                mSupport.getPdfFileInfo();
+                mTxtList = mSupport.getTextFileInfo();
+                mPdfList = mSupport.getPdfFileInfo();
             }
 
             sortResult(mDocList);
@@ -238,10 +223,10 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 groups.add(txtGroupBean);
             }
             if (mPdfList.size() > 0) {
-                groups.add(docGroupBean);
+                groups.add(pdfGroupBean);
             }
             if (mTxtList.size() > 0) {
-                groups.add(pdfGroupBean);
+                groups.add(docGroupBean);
             }
 
             if (mDocScanListener != null) {

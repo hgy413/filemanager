@@ -1,14 +1,8 @@
 package com.jb.filemanager.function.docmanager;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -23,14 +17,10 @@ import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
 import com.jb.filemanager.home.MainActivity;
-import com.jb.filemanager.ui.dialog.DocRenameDialog;
-import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
-import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
-import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,9 +44,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     private DocManagerAdapter mAdapter;
     private List<DocGroupBean> mAppInfo;
-    private BroadcastReceiver mScanSdReceiver;
-    private SingleFileDetailDialog mSingleFileDetailDialog;
-    private MultiFileDetailDialog mMultiFileDetailDialog;
     private boolean mIsSelectMode;
     private boolean mIsAllSelect;
     ArrayList<File> mChosenFiles;
@@ -135,7 +122,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             }
         });
-        mPresenter.getDocInfo(false);
+        mPresenter.getDocInfo(false, true);
     }
 
     /**
@@ -190,7 +177,17 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 mChosenFiles.clear();
                 for (int i = 0; i < checkedDoc.size(); i++) {
                     DocChildBean childBean = checkedDoc.get(i);
-                    mChosenFiles.add(new File(childBean.mDocPath));
+                    File file = new File(childBean.mDocPath);
+                    if (!file.exists()) {
+                        ArrayList<File> arrayList = new ArrayList<>();
+                        arrayList.add(file);
+                        mPresenter.handleFileDelete(arrayList);
+                        continue;
+                    }
+                    mChosenFiles.add(file);
+                }
+                if (mChosenFiles.size() == 0) {
+                    return null;
                 }
                 return mChosenFiles;
             }
@@ -256,141 +253,23 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     @Override
-    public void refreshList(boolean keepUserCheck) {
-        mPresenter.getDocInfo(keepUserCheck);//新获取到的数据
+    public void refreshList(boolean keepUserCheck, boolean shouldScanAgain) {
+        mPresenter.getDocInfo(keepUserCheck, shouldScanAgain);//新获取到的数据
     }
 
     @Override
     public void initBroadcastReceiver() {
-        IntentFilter intentfilter = new IntentFilter(Intent.ACTION_MEDIA_SCANNER_STARTED);
-        intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-        intentfilter.addDataScheme("file");
-        mScanSdReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (Intent.ACTION_MEDIA_SCANNER_STARTED.equals(intent.getAction())) {
-                    mPresenter.scanStart();
-                } else if (Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(intent.getAction())) {
-                    mPresenter.scanFinished();
-                }
-            }
-        };
-        registerReceiver(mScanSdReceiver, intentfilter);
 
-        //扫描sd的广播在19以后只有系统才能发出   之后只能扫描制定的文件或者文件夹
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            final Uri contentUri = Uri.fromFile(Environment.getExternalStorageDirectory());
-            Logger.d(TAG,contentUri.toString());
-            scanIntent.setData(contentUri);
-            sendBroadcast(scanIntent);
-
-            /*String[] paths = {Environment.getExternalStorageDirectory().getAbsolutePath()};
-            String[] mimeTypes = {DocManagerSupport.DOC_MIME_TYPE,DocManagerSupport.DOCX_MIME_TYPE,DocManagerSupport.XLS_MIME_TYPE,DocManagerSupport.XLSX_MIME_TYPE,
-                    DocManagerSupport.PPT_MIME_TYPE,DocManagerSupport.PPTX_MIME_TYPE,DocManagerSupport.TXT_MIME_TYPE,DocManagerSupport.PDF_MIME_TYPE};
-            MediaScannerConnection.scanFile(TheApplication.getAppContext(), paths, null, new MediaScannerConnection.MediaScannerConnectionClient() {
-                @Override
-                public void onMediaScannerConnected() {
-                    mPresenter.scanStart();
-                }
-
-                @Override
-                public void onScanCompleted(String s, Uri uri) {
-                    mPresenter.scanFinished();
-                }
-            });*/
-        } else {
-            final Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory()));
-            sendBroadcast(intent);
-        }
     }
 
     @Override
     public void releaseBroadcastReceiver() {
-        unregisterReceiver(mScanSdReceiver);
     }
 
     @Override
     public void finishActivity() {
         finish();
     }
-
-    @Override
-    public void showDocDetail(List<DocChildBean> docList) {
-        Toast.makeText(DocManagerActivity.this, docList.size() + "个 文件的detail", Toast.LENGTH_SHORT).show();
-        if (docList.size() == 1) {//选中的是单个文件
-            DocChildBean childBean = docList.get(0);
-            File file = new File(childBean.mDocPath);
-            mSingleFileDetailDialog = new SingleFileDetailDialog(this, file, new SingleFileDetailDialog.Listener() {
-                @Override
-                public void onConfirm(SingleFileDetailDialog dialog) {
-                    mSingleFileDetailDialog.dismiss();//确认关闭弹窗
-                    // TODO: 2017/7/6 add by --miwo 是否要取消选择?
-                }
-            });
-            mSingleFileDetailDialog.show();
-        } else {//多个文件
-            ArrayList<File> fileList = new ArrayList<>();
-            for (DocChildBean childBean : docList) {
-                fileList.add(new File(childBean.mDocPath));
-            }
-            mMultiFileDetailDialog = new MultiFileDetailDialog(this, fileList, new MultiFileDetailDialog.Listener() {
-                @Override
-                public void onConfirm(MultiFileDetailDialog dialog) {
-                    mMultiFileDetailDialog.dismiss();
-                    // TODO: 2017/7/6 add by --miwo 是否要处理取消选择?
-                }
-            });
-            mMultiFileDetailDialog.show();
-        }
-    }
-
-    @Override
-    public void fileRename(List<DocChildBean> docList) {
-        Toast.makeText(DocManagerActivity.this, docList.get(0).mDocName + " will be rename", Toast.LENGTH_SHORT).show();
-        final File file = new File(docList.get(0).mDocPath);
-        if (file.exists()) {
-            DocRenameDialog docRenameDialog = new DocRenameDialog(this, file.isDirectory(), new DocRenameDialog.Listener() {
-                @SuppressWarnings("ResultOfMethodCallIgnored")
-                @Override
-                public void onConfirm(DocRenameDialog dialog, String newName) {
-                    if (file.exists()) {
-                        file.renameTo(new File(file.getParentFile().getAbsolutePath() + File.separator + newName));
-                    }
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onCancel(DocRenameDialog dialog) {
-                    dialog.dismiss();
-                }
-            });
-            docRenameDialog.show();
-        }
-    }
-
-//    @Override
-//    public void openWith(List<DocChildBean> docList) {
-//        DocChildBean childBean = docList.get(0);
-//        Toast.makeText(DocManagerActivity.this, childBean.mDocName + "will open", Toast.LENGTH_SHORT).show();
-//        Intent fileIntent;
-//        //打开文件
-//        switch (childBean.mFileType) {
-//            case DocChildBean.TYPE_DOC:
-//                fileIntent = FileUtil.getWordFileIntent(childBean.mDocPath);
-//                break;
-//            case DocChildBean.TYPE_TXT:
-//                fileIntent = FileUtil.getTextFileIntent(childBean.mDocPath, false);
-//                break;
-//            case DocChildBean.TYPE_PDF:
-//                fileIntent = FileUtil.getPdfFileIntent(childBean.mDocPath);
-//                break;
-//            default:
-//                fileIntent = FileUtil.getTextFileIntent(childBean.mDocPath, false);
-//                break;
-//        }
-//        startActivity(fileIntent);
-//    }
 
     @Override
     public void updateDeleteProgress(int done, int total) {
@@ -551,7 +430,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     private void handleDataDelete() {
         mPresenter.handleFileDelete(mChosenFiles);//处理数据库的删除
-        mPresenter.refreshData(false);
+        mPresenter.refreshData(false, false);
         refreshTile();
         //隐藏底部栏
         mBobBottomOperator.setVisibility(View.GONE);

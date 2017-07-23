@@ -15,7 +15,9 @@ import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -111,10 +113,19 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
     private void updateGroupState(DocGroupBean appGroupBean) {
         boolean isAllSelect = true;
         boolean isPartSelect = false;
-        for (DocChildBean childBean : appGroupBean.getChildren()) {
-            isAllSelect = isAllSelect && childBean.mIsChecked;
-            isPartSelect = isPartSelect || childBean.mIsChecked;
+        List<DocChildBean> children = appGroupBean.getChildren();
+        Iterator<DocChildBean> iterator = children.iterator();
+        while (iterator.hasNext()) {
+            DocChildBean next = iterator.next();
+            File file = new File(next.mDocPath);
+            if (!file.exists()) {//及时处理无效文件
+                iterator.remove();
+                continue;
+            }
+            isAllSelect = isAllSelect && next.mIsChecked;
+            isPartSelect = isPartSelect || next.mIsChecked;
         }
+
         if (isAllSelect) {
             appGroupBean.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
         } else if (isPartSelect) {
@@ -131,9 +142,16 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         mCheckedFile.clear();
         for (DocGroupBean groupBean : mGroups) {
             List<DocChildBean> children = groupBean.getChildren();
-            for (DocChildBean childBean : children) {
-                if (childBean.mIsChecked) {
-                    mCheckedFile.add(childBean);
+            Iterator<DocChildBean> iterator = children.iterator();
+            while (iterator.hasNext()) {
+                DocChildBean next = iterator.next();
+                File file = new File(next.mDocPath);
+                if (!file.exists()) {//及时处理无效文件
+                    iterator.remove();
+                    continue;
+                }
+                if (next.mIsChecked) {
+                    mCheckedFile.add(next);
                     mCheckedCount++;
                 }
             }

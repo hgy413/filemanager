@@ -12,7 +12,9 @@ import com.jb.filemanager.database.table.DocFileTable;
 import com.jb.filemanager.function.docmanager.DocChildBean;
 import com.jb.filemanager.util.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Desc:
@@ -119,10 +121,25 @@ public class DocFileProvider extends BaseDataProvider {
         if (cursor != null) {
             cursor.close();
         }
+
+        Iterator<DocChildBean> iterator = childList.iterator();
+        while (iterator.hasNext()) {
+            DocChildBean next = iterator.next();
+            File file = new File(next.mDocPath);
+            if (!file.exists()) {
+                deleteDocFile(next.mDocPath);
+                iterator.remove();
+            }
+        }
         return childList;
     }
 
     public DocChildBean queryItem(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {//文件不存在 则删除数据
+            deleteDocFile(filePath);
+            return null;
+        }
         DocChildBean childBean = null;
         String[] projection = new String[]{DocFileTable.DOC_ID,
                 DocFileTable.DOC_NAME,
@@ -183,6 +200,9 @@ public class DocFileProvider extends BaseDataProvider {
     }
 
     public void insertDocItem(DocChildBean childBean) {
+        if (childBean == null) {
+            return;
+        }
         ContentValues contentValues = new ContentValues();
         contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
         contentValues.put(DocFileTable.DOC_PATH, childBean.mDocPath);
@@ -192,7 +212,12 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_TYPE, type);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
-        sContentResolver.insert(mUri, contentValues);
+        DocChildBean queryItem = queryItem(childBean.mDocPath);
+        if (queryItem == null) {//插入新的数据
+            sContentResolver.insert(mUri, contentValues);
+        } else {//之前就有的数据  那么更新数据
+            updateDocFile(queryItem, childBean);
+        }
     }
     public void insertDocList(ArrayList<DocChildBean> itemList) {
         if (itemList == null || itemList.size() == 0) {
@@ -240,6 +265,20 @@ public class DocFileProvider extends BaseDataProvider {
 
         sContentResolver.update(mUri, contentValues,
                 DocFileTable.DOC_ID + " like ?", new String[]{childBean.mDocId});
+    }
+
+    public void updateDocFile(DocChildBean oldFile, DocChildBean newFile) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DocFileTable.DOC_ID, oldFile.mDocId);
+        contentValues.put(DocFileTable.DOC_PATH, newFile.mDocPath);
+        contentValues.put(DocFileTable.DOC_SIZE, newFile.mDocSize);
+        contentValues.put(DocFileTable.DOC_NAME, newFile.mDocName);
+        contentValues.put(DocFileTable.DOC_TYPE, newFile.mFileType);
+        contentValues.put(DocFileTable.DOC_ADDED_DATE, newFile.mAddDate);
+        contentValues.put(DocFileTable.DOC_MODIFY_DATE, newFile.mModifyDate);
+
+        sContentResolver.update(mUri, contentValues,
+                DocFileTable.DOC_ID + " like ?", new String[]{newFile.mDocId});
     }
 
     public void deleteDocFile(String oldFile) {
