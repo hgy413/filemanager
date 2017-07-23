@@ -90,7 +90,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mPresenter.setDocScanListener(new DocScanListener() {
             @Override
             public void onScanStart() {
-
+                Toast.makeText(DocManagerActivity.this, "加载开始了", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -98,6 +98,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 TheApplication.postRunOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Toast.makeText(DocManagerActivity.this, "加载完成了", Toast.LENGTH_SHORT).show();
                         if (arrayList == null) {
                             return;
                         }

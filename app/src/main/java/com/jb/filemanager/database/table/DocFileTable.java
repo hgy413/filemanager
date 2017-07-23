@@ -30,8 +30,7 @@ public class DocFileTable {
     static {
         StringBuilder b = new StringBuilder();
         b.append("CREATE TABLE IF NOT EXISTS " + TABLE_NAME);
-        b.append(" (_id INTEGER PRIMARY KEY, ");
-        b.append(DOC_ID + " INTEGER, ");
+        b.append(" (" + DOC_ID + " INTEGER PRIMARY KEY, ");
         b.append(DOC_NAME + " TEXT, ");
         b.append(DOC_TYPE + " TEXT, ");
         b.append(DOC_PATH + " TEXT, ");

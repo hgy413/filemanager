@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.database.DatabaseHelper;
@@ -180,7 +179,7 @@ public class DocFileProvider extends BaseDataProvider {
         if (cursor != null) {
             cursor.close();
         }
-        return null;
+        return childBean;
     }
 
     public void insertDocItem(DocChildBean childBean) {
@@ -204,17 +203,40 @@ public class DocFileProvider extends BaseDataProvider {
         }
     }
 
-    public void updateDocFile(String oldFile, String newFile) {
+    public void updateDocFilePath(String oldFile, String newFile) {
         DocChildBean childBean = queryItem(oldFile);
         if (childBean == null) {
             return;
         }
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Files.FileColumns._ID, childBean.mDocId);
-        contentValues.put(MediaStore.Files.FileColumns.DATA, newFile);
-        contentValues.put(MediaStore.Files.FileColumns.SIZE, childBean.mDocSize);
-        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, childBean.mAddDate);
-        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, childBean.mModifyDate);
+        contentValues.put(DocFileTable.DOC_ID, childBean.mDocId);
+        contentValues.put(DocFileTable.DOC_PATH, newFile);
+        contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
+        contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
+        contentValues.put(DocFileTable.DOC_TYPE, childBean.mFileType);
+        contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
+        contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
+
+        sContentResolver.update(mUri, contentValues,
+                DocFileTable.DOC_ID + " like ?", new String[]{childBean.mDocId});
+    }
+
+    public void updateDocFileName(String oldFile, String newFile) {
+        DocChildBean childBean = queryItem(oldFile);
+        if (childBean == null) {
+            return;
+        }
+
+        int dot = newFile.lastIndexOf("/");
+        String name = newFile.substring(dot + 1);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DocFileTable.DOC_ID, childBean.mDocId);
+        contentValues.put(DocFileTable.DOC_PATH, newFile);
+        contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
+        contentValues.put(DocFileTable.DOC_NAME, name);
+        contentValues.put(DocFileTable.DOC_TYPE, childBean.mFileType);
+        contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
+        contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
 
         sContentResolver.update(mUri, contentValues,
                 DocFileTable.DOC_ID + " like ?", new String[]{childBean.mDocId});

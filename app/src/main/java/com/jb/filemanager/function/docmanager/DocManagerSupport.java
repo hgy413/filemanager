@@ -7,11 +7,14 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.database.provider.DocFileProvider;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.device.Machine;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import static com.jb.filemanager.R.string.delete;
 
 /**
  * Desc:
@@ -62,7 +65,8 @@ public class DocManagerSupport implements DocManagerContract.Support {
 
     private ArrayList<DocChildBean> queryFiles(String type) {
         ArrayList<DocChildBean> childList = new ArrayList<>();
-        String[] projection = new String[]{MediaStore.Files.FileColumns._ID,
+        childList.addAll(DocFileProvider.getInstance().queryDocList(type));
+        /*String[] projection = new String[]{MediaStore.Files.FileColumns._ID,
                 MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.SIZE,
                 MediaStore.Files.FileColumns.DATE_ADDED,
@@ -125,34 +129,39 @@ public class DocManagerSupport implements DocManagerContract.Support {
         }
         if (cursor != null) {
             cursor.close();
-        }
+        }*/
         return childList;
     }
 
     @Override
     public void handleFileDelete(String docPath) {
-            int delete = TheApplication.getAppContext().getContentResolver().delete(
+            /*int delete = TheApplication.getAppContext().getContentResolver().delete(
                     Uri.parse("content://media/external/file"),
                     MediaStore.Files.FileColumns.DATA + " like ?",
-                    new String[]{docPath});
+                    new String[]{docPath});*/
+        DocFileProvider.getInstance().deleteDocFile(docPath);
         Logger.d(TAG, "delete number" + delete + "   " + docPath);
     }
 
     @Override
     public void handleFileCopy(String oldFile, String newFile) {
-        DocChildBean childBeen = handleQueryFile(oldFile);
+        /*DocChildBean childBeen = handleQueryFile(oldFile);
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.Files.FileColumns.DATA, newFile);
         contentValues.put(MediaStore.Files.FileColumns.SIZE, childBeen.mDocSize);
         contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, childBeen.mAddDate);
         contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, childBeen.mModifyDate);
         TheApplication.getAppContext().getContentResolver().insert(
-                Uri.parse("content://media/external/file"), contentValues);
+                Uri.parse("content://media/external/file"), contentValues);*/
+        DocChildBean childBean = DocFileProvider.getInstance().queryItem(oldFile);
+        childBean.mDocPath = newFile;
+        DocFileProvider.getInstance().insertDocItem(childBean);
     }
 
     @Override
     public void handleFileCut(String oldFile, String newFile) {
-        DocChildBean childBean = handleQueryFile(oldFile);
+        DocFileProvider.getInstance().updateDocFilePath(oldFile, newFile);
+        /*DocChildBean childBean = handleQueryFile(oldFile);
         if (childBean == null) {
             return;
         }
@@ -164,12 +173,13 @@ public class DocManagerSupport implements DocManagerContract.Support {
         contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, childBean.mModifyDate);
         handleFileDelete(oldFile);
         TheApplication.getAppContext().getContentResolver().insert(
-                Uri.parse("content://media/external/file"), contentValues);
+                Uri.parse("content://media/external/file"), contentValues);*/
     }
 
     @Override
     public void handleFileRename(String oldFile, String newFile) {
-        DocChildBean childBean = handleQueryFile(oldFile);
+        DocFileProvider.getInstance().updateDocFileName(oldFile,newFile);
+       /* DocChildBean childBean = handleQueryFile(oldFile);
         if (childBean == null) {
             return;
         }
@@ -182,7 +192,7 @@ public class DocManagerSupport implements DocManagerContract.Support {
 
         TheApplication.getAppContext().getContentResolver().update(
                 Uri.parse("content://media/external/file"), contentValues,
-                MediaStore.Files.FileColumns._ID + " like ?", new String[]{childBean.mDocId});
+                MediaStore.Files.FileColumns._ID + " like ?", new String[]{childBean.mDocId});*/
     }
 
     public DocChildBean handleQueryFile(String filePath) {

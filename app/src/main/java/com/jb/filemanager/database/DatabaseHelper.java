@@ -1,22 +1,19 @@
 package com.jb.filemanager.database;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.jb.filemanager.database.table.AppPermissionsTable;
 import com.jb.filemanager.database.table.CacheTrashRecordTable;
 import com.jb.filemanager.database.table.CleanIgnoreTable;
 import com.jb.filemanager.database.table.CleanScanOvertimeTable;
+import com.jb.filemanager.database.table.DocFileTable;
 import com.jb.filemanager.database.table.IgnoreListTable;
-import com.jb.filemanager.database.table.RateTriggeringFactorTable;
-import com.jb.filemanager.database.upgrade.DatabaseUpgrade;
-
-
 import com.jb.filemanager.database.table.LockerSceneItemTable;
 import com.jb.filemanager.database.table.LockerSceneTable;
 import com.jb.filemanager.database.table.LockerTable;
+import com.jb.filemanager.database.table.RateTriggeringFactorTable;
+import com.jb.filemanager.database.upgrade.DatabaseUpgrade;
 /**
  * @version 1.0.0
  */
@@ -76,6 +73,7 @@ public class DatabaseHelper extends BaseDatabaseHelper {
             db.execSQL(AppPermissionsTable.CREATE_TABLE);
             //评分引导触发因素表
             db.execSQL(RateTriggeringFactorTable.CREATE_TABLE);
+            db.execSQL(DocFileTable.CREATE_TABLE);
             mIsNewDB = true;
             db.setTransactionSuccessful();
         } catch (Exception e) {
