@@ -22,7 +22,7 @@
     <color name="black_70">#B2000000</color>
     <!--规范-->
     <color name="common_bg">#F5F6FF</color>
-
+    <color name="common_style_green">#FF39BDAC</color>
     <!-- home -->
     <color name="main_tab_text_color_select">#B2000000</color>
     <color name="main_tab_text_color_normal">#66000000</color>

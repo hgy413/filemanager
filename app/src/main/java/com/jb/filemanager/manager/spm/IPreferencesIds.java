@@ -66,9 +66,8 @@ public class IPreferencesIds {
 
     // Low Space Warning开关
     public static final String KEY_LOW_SPACE_WARNING_ENABLE = "key_low_space_warning_enable";
-
-    // Logger Notification开关
-    public static final String KEY_LOGGER_NOTIFICATION_ENABLE = "key_logger_notification_enable";
+    // 智能充电开关提示
+    public static final String KEY_SMART_CHARGE_ENABLE = "key_smart_charge_enable";
 
     /***********************评分引导*********************/
     //上一次评论的时间
