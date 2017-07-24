@@ -1,5 +1,6 @@
 package com.jb.filemanager.manager.file.task;
 
+import android.media.MediaScannerConnection;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
@@ -115,6 +116,7 @@ public class CopyFileTask {
                             Logger.i(LOG_TAG, "跳过:" + file.getAbsolutePath());
                         }
                     }
+                    MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[]{dest}, null, null); // 修改后的文件添加到系统数据库
                 }
 
                 final boolean finalResult = result;
