@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface Contract {
     interface View {
-        android.view.View getView();
         void showSuitableView(boolean isHaveData);
         void setListData(List<CleanIgnoreGroupBean> data);
         void notifyListDataSetChanged();
