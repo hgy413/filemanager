@@ -18,15 +18,18 @@ public interface ImageDetailsContract {
         void bindData(List<ImageModle> imageModleList);
         void setViewPos(int pos);
         Bitmap getCurrentBitmap();
+        void closeView();
     }
 
     interface Support {
         void setWallPager(Bitmap bitmap);
+        void deleteImage(ImageModle imageModle);
     }
 
     interface Presenter {
         void handleExtras(List<Parcelable> imageModleList, int pos);
         void handlePagerChange(int pos);
+        void handleDelete();
         void handleSetWallPaper();
     }
 }

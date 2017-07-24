@@ -364,7 +364,10 @@
     <string name="toast_logger_notification_switch_disable">Logger notification disable</string>
     <string name="toast_paste_dest_disable">Can not paste here</string>
     <string name="toast_search_input_empty">Please input something to search</string>
-
+    <string name="toast_set_wallpaper_success">Set the wallpaper success</string>
+    <string name="toast_set_wallpaper_fail">Set the wallpaper failure</string>
+    <string name="toast_delete_file_success">Delete File success</string>
+    <string name="toast_delete_file_fail">Delete File failure</string>
 
 
     <string name="see"><u><![CDATA[See>>]]></u></string>

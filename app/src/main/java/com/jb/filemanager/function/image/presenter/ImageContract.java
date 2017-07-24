@@ -1,11 +1,12 @@
 package com.jb.filemanager.function.image.presenter;
 
-import android.app.Application;
-import android.content.Context;
 import android.database.Cursor;
 
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
+import com.jb.filemanager.function.image.modle.ImageModle;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,8 +18,11 @@ public class ImageContract {
     public interface View {
         void bindData(List<ImageGroupModle> imageGroupModleList);
         void showSelected(int selectSize, int allSize);
+        void dismissBobar();
+        void showBobar();
         void notifyViewChg();
         void finish();
+        void gotoStoragePage();
     }
 
     public interface Presenter {
@@ -27,10 +31,15 @@ public class ImageContract {
         void handleCheck(boolean isCheck);
         void handleSelected(List<ImageGroupModle> imageGroupModleList);
         void handleDataFinish(Cursor cursor);
+        void handleDeleted();
+        void handleRename();
+        void handleDeletedBg(ImageModle imageModle);
+        ArrayList<File> getCurrentSelectedFiles();
     }
 
     public interface Support {
-        Context getContext();
-        Application getApplication();
+        void deleteImage(ImageModle imageModle);
+        int deleteImageInDb(ImageModle imageModle);
+        void renameImage(ImageModle imageModle);
     }
 }

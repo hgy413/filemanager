@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:clickable="true"
-              android:background="@color/white">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fragment_image_details_view_paper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#333333"/>
 
     <!-- Title -->
     <RelativeLayout
         android:id="@+id/fragment_image_details_title_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#4c4c4c">
+        android:background="#4c4c4c"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/fragment_image_details_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:padding="15dp"
             android:layout_marginLeft="1dp"
+            android:padding="15dp"
             android:src="@drawable/common_white_back"/>
 
         <TextView
@@ -29,19 +35,45 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/white_40"
-            android:text="Set As Wallpaper"
-            android:textSize="@dimen/h5_12"
-            android:gravity="center"
-            android:drawableRight="@drawable/ic_set_wallpaper"
-            android:drawablePadding="16dp"
             android:layout_marginRight="16dp"
+            android:drawablePadding="16dp"
+            android:drawableRight="@drawable/ic_set_wallpaper"
+            android:gravity="center"
+            android:text="Set As Wallpaper"
+            android:textColor="@color/white_40"
+            android:textSize="@dimen/h5_12"
             tools:ignore="ContentDescription"/>
     </RelativeLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/fragment_image_details_view_paper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_common_operate_bar_delete"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/bottom_item_selector"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#00000000"
+            android:src="@drawable/ic_bottom_delete"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@string/delete"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

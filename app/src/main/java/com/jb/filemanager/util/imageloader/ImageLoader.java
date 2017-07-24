@@ -78,6 +78,26 @@ public class ImageLoader {
     /**
      * 显示本地图片
      *
+     * @param uri        图片路径
+     * @param imageView  视图
+     * @param drawable 默认位图
+     */
+    public void displayImage(String uri, ImageView imageView, Bitmap drawable) {
+        ImageViewAware imageViewAware = new ImageViewAware(imageView);
+        PictureLoadTask.Builder builder = new PictureLoadTask.Builder(uri,
+                imageViewAware);
+        builder.setScaleFactor(1).setContext(mContext)
+                .setCacheKey(uri).setEngine(mEngine).setCache(mCache)
+                .setBitmapDisplayer(mDisplayer)
+                .setReentrantLock(mEngine.getLockForUri(uri))
+                .setHandler(mHandler);
+        displayImage(uri, uri, imageViewAware, drawable, 1,
+                new PictureLoadTask(builder));
+    }
+
+    /**
+     * 显示本地图片
+     *
      * @param uri         图片路径
      * @param imageView   视图
      * @param drawableId  默认图片的资源引用ID,不显示则传入{@link #NONE_DEFAULT_IMAGE}
@@ -193,6 +213,20 @@ public class ImageLoader {
                     e.printStackTrace();
                 }
             }
+            imageViewAware.setImageBitmap(bm);
+            mEngine.submit(task);
+        }
+    }
+
+    private void displayImage(String uri, String cacheKey,
+                              ImageViewAware imageViewAware, Bitmap drawable, int scaleFactor,
+                              AbstractImageLoadTask task) {
+        mEngine.prepareDisplayTaskFor(imageViewAware, cacheKey);
+        Bitmap bitmap = mCache.get(cacheKey);
+        if (bitmap != null && !bitmap.isRecycled()) {
+            mDisplayer.display(bitmap, imageViewAware);
+        } else {
+            Bitmap bm = drawable;
             imageViewAware.setImageBitmap(bm);
             mEngine.submit(task);
         }

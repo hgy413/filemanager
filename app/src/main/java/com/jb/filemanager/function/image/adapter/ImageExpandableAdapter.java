@@ -1,5 +1,10 @@
 package com.jb.filemanager.function.image.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ import com.jb.filemanager.function.image.presenter.ImageContract;
 import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.QuickClickGuard;
 import com.jb.filemanager.util.imageloader.ImageLoader;
+import com.jb.ga0.commerce.util.topApp.TopHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +43,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
     private int m6dpDx;
     private int m10dpDx;
     private int mPhotoSize;
+    private Bitmap mGrayBitmap;
 
     public ImageExpandableAdapter(List<ImageGroupModle> imageGroupModleList, BaseFragmentWithImmersiveStatusBar currentFragment, ImageContract.Presenter presenter) {
         this.mImageGroupModleList = imageGroupModleList;
@@ -48,6 +55,13 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         int widthPixels = TheApplication.getAppContext().getResources().getDisplayMetrics().widthPixels;
         int interval = TheApplication.getInstance().getResources().getDimensionPixelSize(R.dimen.image_interval_distance);
         mPhotoSize = (widthPixels - interval * 2) / 3;
+        //RGB_565 不包含透明度通道 可以减少内存消耗 每个像素只需要2byte
+        mGrayBitmap = Bitmap.createBitmap(mPhotoSize, mPhotoSize, Bitmap.Config.RGB_565);
+        for (int i = 0; i < mPhotoSize; i++) {
+            for (int j = 0; j < mPhotoSize; j++) {
+                mGrayBitmap.setPixel(i, j, 0xFFEBEBEB);
+            }
+        }
     }
 
     @Override
@@ -109,11 +123,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         ImageGroupModle imageGroupModle = mImageGroupModleList.get(groupPosition);
 
         viewGroupHolder.mDate.setText(imageGroupModle.mTimeDate);
-        if (imageGroupModle.isCheck) {
-            viewGroupHolder.mGroupSelectBox.setState(GroupSelectBox.SelectState.ALL_SELECTED);
-        } else {
-            viewGroupHolder.mGroupSelectBox.setState(GroupSelectBox.SelectState.NONE_SELECTED);
-        }
+        viewGroupHolder.mGroupSelectBox.setState(imageGroupModle.mSelectState);
         viewGroupHolder.mGroupSelectBox.setTag(imageGroupModle);
         viewGroupHolder.mGroupSelectBox.setOnClickListener(this);
 
@@ -140,7 +150,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         int end = size;
         while (end < 3) {
             viewItemHolder.gone(end);
-            end ++;
+            end++;
         }
 
         return convertView;
@@ -171,7 +181,14 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
                 break;
             case R.id.group_image_result_gsb:
                 ImageGroupModle imageGroupModle = (ImageGroupModle) v.getTag();
-                boolean result = imageGroupModle.isCheck = !imageGroupModle.isCheck;
+                boolean result = false;
+                if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {
+                    imageGroupModle.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
+                    result = false;
+                } else {
+                    imageGroupModle.mSelectState = GroupSelectBox.SelectState.ALL_SELECTED;
+                    result = true;
+                }
                 for (int i = 0; i < imageGroupModle.mImageModleList.size(); i++) {
                     List<ImageModle> imageModleList = imageGroupModle.mImageModleList.get(i);
                     for (int i1 = 0; i1 < imageModleList.size(); i1++) {
@@ -243,6 +260,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
 
         SubViewItemHolder[] mSubViewItem = new SubViewItemHolder[3];
         Space mSpace;
+
         public ViewItemHolder(View itemView) {
             mSubViewItem[0] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_1));
             mSubViewItem[1] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_2));
@@ -257,7 +275,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
 
         /**
          * 是否是最后一个视图
-         * */
+         */
         void showViewSpace(boolean isLastChild) {
             ViewGroup.LayoutParams layoutParams = mSpace.getLayoutParams();
             if (isLastChild) {
@@ -291,7 +309,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             mPhoto.setMaxHeight(mPhotoSize);
             mPhoto.setMaxWidth(mPhotoSize);
             mGroupSelectBox = (GroupSelectBox) itemView.findViewById(R.id.item_sub_image_gsb);
-            mGroupSelectBox.setImageSource(R.drawable.choose_none, R.drawable.choose_all, R.drawable.choose_all);
+            mGroupSelectBox.setImageSource(R.drawable.choose_none_gray, R.drawable.choose_part, R.drawable.choose_all);
             mMask = itemView.findViewById(R.id.item_sub_image_photo_mask);
         }
 
@@ -300,7 +318,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
                 //更新数据 用于直接修改
                 mImageModle = imageModle;
                 ImageLoader.getInstance(TheApplication.getAppContext()).displayImage(imageModle.mImagePath,
-                        mPhoto, R.drawable.common_default_app_icon);
+                        mPhoto, mGrayBitmap);
                 if (imageModle.isChecked) {
                     mMask.setVisibility(View.VISIBLE);
                     mGroupSelectBox.setState(GroupSelectBox.SelectState.ALL_SELECTED);
@@ -320,7 +338,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         }
 
         void gone() {
-            root.setVisibility(View.GONE);
+            root.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -336,6 +354,13 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             this.groupPos = groupPos;
             this.childPos = childPos;
             this.mImageModle = imageModle;
+        }
+    }
+
+    public void release() {
+        if (mGrayBitmap != null) {
+            mGrayBitmap.recycle();
+            mGrayBitmap = null;
         }
     }
 }

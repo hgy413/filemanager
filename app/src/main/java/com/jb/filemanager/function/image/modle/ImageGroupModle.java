@@ -1,9 +1,8 @@
 package com.jb.filemanager.function.image.modle;
 
-import com.jb.filemanager.util.TimeUtil;
+import com.jb.filemanager.commomview.GroupSelectBox;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -13,22 +12,14 @@ import java.util.List;
 
 public class ImageGroupModle {
     //时间
-    public Calendar mCalendar;
-    //时间
     public String mTimeDate;
     //图片数据列表 包含三个三个的数组列表
     public List<List<ImageModle>> mImageModleList;
     //图片分组模组数据
-    public boolean isCheck;
+    public GroupSelectBox.SelectState mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
 
     public ImageGroupModle() {
         mImageModleList = new ArrayList<>();
     }
 
-    public ImageGroupModle(long date, List<List<ImageModle>> imageModleList) {
-        this.mCalendar = Calendar.getInstance();
-        this.mCalendar.setTimeInMillis(date);
-        this.mTimeDate = TimeUtil.getStringDate(mCalendar.getTime());
-        this.mImageModleList = imageModleList;
-    }
 }

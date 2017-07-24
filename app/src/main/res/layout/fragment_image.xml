@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/white"
+             android:orientation="vertical">
 
-    <ExpandableListView
+    <ViewStub
         android:id="@+id/fragment_image_el"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0px"
-        android:divider="@null"
-        android:childDivider="@null"
         android:layout_marginTop="@dimen/common_title_bar_exclude_shadow_height"
-        android:groupIndicator="@null"/>
+        android:layout="@layout/layout_expandable_list"/>
+
+    <ViewStub
+        android:id="@+id/fragment_image_empty_vs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/common_title_bar_exclude_shadow_height"
+        android:layout="@layout/layout_no_files"/>
 
     <com.jb.filemanager.ui.widget.CommonTitleBar
         android:id="@+id/fragment_image_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"/>
+
+    <com.jb.filemanager.ui.widget.BottomOperateBar
+        android:id="@+id/fragment_image_bob"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"/>
 
 </FrameLayout>

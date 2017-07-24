@@ -58,6 +58,20 @@ public class ImageDetailsPresenter implements ImageDetailsContract.Presenter {
     }
 
     @Override
+    public void handleDelete() {
+        ImageModle imageModle = mImageModleList.get(mCurrentPos);
+        mImageModleList.remove(mCurrentPos);
+        if (mSupport != null) {
+            mSupport.deleteImage(imageModle);
+        }
+        if (mImageModleList.size() == 0) {
+            mView.closeView();
+        }  else {
+            mView.bindData(mImageModleList);
+        }
+    }
+
+    @Override
     public void handleSetWallPaper() {
         if (mView != null && mSupport != null) {
             Bitmap bitmap = mView.getCurrentBitmap();

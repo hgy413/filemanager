@@ -42,6 +42,8 @@ public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar impl
     private ImageDetailsContract.Presenter mPresenter;
     //图片适配器
     private ImageDetailsPagerAdapter mImageDitalsViewPagerAdapter;
+    //顶部栏 以及 删除按钮
+    private View mHead, mDelete;
 
     @Nullable
     @Override
@@ -52,6 +54,8 @@ public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar impl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mHead = view.findViewById(R.id.fragment_image_details_title_bar);
+        mDelete = view.findViewById(R.id.ll_common_operate_bar_delete);
         mBack = (ImageView) view.findViewById(R.id.fragment_image_details_icon);
         mSetWallPaper = (TextView) view.findViewById(R.id.fragment_image_details_set_wallpaper);
         mImageDitalsViewPager = (ViewPager) view.findViewById(R.id.fragment_image_details_view_paper);
@@ -76,6 +80,15 @@ public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar impl
                 }
             }
         });
+
+        mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPresenter != null) {
+                    mPresenter.handleDelete();
+                }
+            }
+        });
     }
 
     /**
@@ -90,26 +103,43 @@ public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar impl
 
     @Override
     public void bindData(List<ImageModle> imageModleList) {
-        mImageDitalsViewPagerAdapter = new ImageDetailsPagerAdapter(imageModleList);
-        mImageDitalsViewPager.setAdapter(mImageDitalsViewPagerAdapter);
-        mImageDitalsViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (mPresenter != null) {
-                    mPresenter.handlePagerChange(position);
+        if (mImageDitalsViewPagerAdapter == null) {
+            mImageDitalsViewPagerAdapter = new ImageDetailsPagerAdapter(imageModleList);
+            mImageDitalsViewPager.setAdapter(mImageDitalsViewPagerAdapter);
+            mImageDitalsViewPagerAdapter.setOnImgClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int visiable = mHead.getVisibility();
+                    if (visiable == View.VISIBLE) {
+                        mHead.setVisibility(View.GONE);
+                        mDelete.setVisibility(View.GONE);
+                    } else {
+                        mHead.setVisibility(View.VISIBLE);
+                        mDelete.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
+            });
+            mImageDitalsViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                }
 
-            }
-        });
+                @Override
+                public void onPageSelected(int position) {
+                    if (mPresenter != null) {
+                        mPresenter.handlePagerChange(position);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+        } else {
+            mImageDitalsViewPagerAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -123,5 +153,10 @@ public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar impl
             return DrawUtils.drawable2Bitmap(mImageDitalsViewPagerAdapter.getCurrentView().getDrawable());
         }
         return null;
+    }
+
+    @Override
+    public void closeView() {
+        onToBack();
     }
 }

@@ -34,6 +34,7 @@ import com.jb.filemanager.eventbus.DocFileScanFinishEvent;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
+import com.jb.filemanager.function.image.ImageManagerFragment;
 import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.function.recent.RecentFileActivity;
 import com.jb.filemanager.function.recent.RecentFileManager;
@@ -179,7 +180,9 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     //add by nieyh 收集评分引导的触发因素信息
                     RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 图片管理
-                    startActivity(new Intent(getContext(), ImageActivity.class));
+                    Intent intent = new Intent(getContext(), ImageActivity.class);
+                    intent.putExtra(ImageManagerFragment.ARG_IS_INTERNAL_STORAGE, mIsInternalStorage);
+                    startActivity(intent);
                 }
             });
 
