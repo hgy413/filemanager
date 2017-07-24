@@ -37,14 +37,35 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
 
     public FileLoader(Context context, String path) {
         super(context);
-        this.mPath = path;
+        mPath = path;
         mSort = FileUtil.sComparator;
+        mFileObserver = new FileObserver(mPath, FILE_OBSERVER_MASK) {
+            @Override
+            public void onEvent(int event, String path) {
+                onContentChanged();
+            }
+        };
     }
 
     public FileLoader(Context context, String path, Comparator<File> sort) {
         super(context);
-        this.mPath = path;
-        this.mSort = sort;
+        mPath = path;
+        mSort = sort;
+        mFileObserver = new FileObserver(mPath, FILE_OBSERVER_MASK) {
+            @Override
+            public void onEvent(int event, String path) {
+                onContentChanged();
+            }
+        };
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (mFileObserver != null) {
+            mFileObserver.stopWatching();
+            mFileObserver = null;
+        }
     }
 
     @Override
@@ -109,15 +130,10 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
             deliverResult(mData);
         }
 
-        if (mFileObserver == null) {
-            mFileObserver = new FileObserver(mPath, FILE_OBSERVER_MASK) {
-                @Override
-                public void onEvent(int event, String path) {
-                    onContentChanged();
-                }
-            };
+        if (mFileObserver != null) {
+            mFileObserver.startWatching();
         }
-        mFileObserver.startWatching();
+
         if (takeContentChanged() || mData == null) {
             forceLoad();
         }
@@ -125,12 +141,15 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
 
     @Override
     protected void onStopLoading() {
-        cancelLoad();
+        super.onStopLoading();
+        if (mFileObserver != null) {
+            mFileObserver.stopWatching();
+        }
     }
 
     @Override
     protected void onReset() {
-        onStopLoading();
+        super.onReset();
 
         if (mData != null) {
             onReleaseResources(mData);
@@ -145,9 +164,8 @@ public class FileLoader extends AsyncTaskLoader<List<File>> {
     }
 
     protected void onReleaseResources(List<File> data) {
-        if (mFileObserver != null) {
-            mFileObserver.stopWatching();
-            mFileObserver = null;
+        if (data != null) {
+            data.clear();
         }
     }
 }
