@@ -1,0 +1,2 @@
+res path mapping:
+    res/raw -> res/raw
