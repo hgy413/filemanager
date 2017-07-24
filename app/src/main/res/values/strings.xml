@@ -25,6 +25,7 @@
     <string name="about_law_url">http://d2prafqgniatg5.cloudfront.net/soft/file/term/1272/acenetwork_privacy.html</string>
 
     <!-- 首页 -->
+    <string name="main_title"><b>File</b> Manager</string>
     <string name="main_category_title">Category</string>
     <string name="main_storage_title">Storage</string>
     <string name="main_category_item_number">(%1$d)</string>
