@@ -22,7 +22,7 @@ public class DocRenameDialog extends FMBaseDialog {
     private TextView mTvErrorTips;
     private EditText mEtInput;
 
-    public DocRenameDialog(Activity act, final boolean isFolder, final Listener listener) {
+    public DocRenameDialog(final Activity act, final boolean isFolder, final Listener listener) {
         super(act, true);
 
         View dialogView = View.inflate(act, R.layout.dialog_file_rename, null);
@@ -55,12 +55,26 @@ public class DocRenameDialog extends FMBaseDialog {
                                 mTvErrorTips.setText(isFolder ? R.string.dialog_rename_folder_empty_input : R.string.dialog_rename_file_empty_input);
                             }
                         } else if (!input.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
+                            String notContain = "";
+                            for (int i = 0; i < input.length(); i++) {
+                                char testChar = input.charAt(i);
+                                String testString = String.valueOf(testChar);
+                                if (!testString.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
+                                    if (!notContain.contains(testString)) {
+                                        if (notContain.length() > 0) {
+                                            notContain += ",";
+                                        }
+                                        notContain += testString;
+                                    }
+                                }
+                            }
+
                             if (mTvTitle != null) {
                                 mTvTitle.setVisibility(View.GONE);
                             }
                             if (mTvErrorTips != null) {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(isFolder ? R.string.dialog_rename_folder_error_input : R.string.dialog_rename_file_empty_input);
+                                mTvErrorTips.setText(isFolder ? act.getString(R.string.dialog_rename_folder_error_input, notContain) : act.getString(R.string.dialog_rename_file_error_input, notContain));
                             }
                         } else {
                             listener.onConfirm(DocRenameDialog.this, mEtInput.getText().toString());

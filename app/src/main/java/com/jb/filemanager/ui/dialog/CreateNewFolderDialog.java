@@ -1,16 +1,21 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.graphics.Region;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by bill wang on 2017/7/11.
@@ -56,12 +61,25 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                                 mTvErrorTips.setText(R.string.dialog_create_folder_empty_input);
                             }
                         } else if (!input.matches(FileUtil.FOLDER_NAME_REG)) {
+                            String notContain = "";
+                            for (int i = 0; i < input.length(); i++) {
+                                char testChar = input.charAt(i);
+                                String testString = String.valueOf(testChar);
+                                if (!testString.matches(FileUtil.FOLDER_NAME_REG)) {
+                                    if (!notContain.contains(testString)) {
+                                        if (notContain.length() > 0) {
+                                            notContain += ",";
+                                        }
+                                        notContain += testString;
+                                    }
+                                }
+                            }
                             if (mTvTitle != null) {
                                 mTvTitle.setVisibility(View.GONE);
                             }
                             if (mTvErrorTips != null) {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(R.string.dialog_create_folder_error_input);
+                                mTvErrorTips.setText(act.getString(R.string.dialog_create_folder_error_input, notContain));
                             }
                         } else {
                             if (!TextUtils.isEmpty(path)) {

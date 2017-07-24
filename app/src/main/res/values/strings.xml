@@ -301,7 +301,7 @@
     <!-- dialog -->
     <string name="dialog_create_folder_title">Create a folder</string>
     <string name="dialog_create_folder_hint">Type a new name</string>
-    <string name="dialog_create_folder_error_input">The name can\'t contain the char</string>
+    <string name="dialog_create_folder_error_input">The name can\'t contain the char \"%1$s\"</string>
     <string name="dialog_create_folder_empty_input">The name can\'t be empty</string>
     <string name="dialog_create_folder_name_duplicate">The name has been used</string>
 
@@ -346,8 +346,8 @@
 
     <string name="dialog_rename_title">Rename</string>
     <string name="dialog_rename_hint">Type a new name</string>
-    <string name="dialog_rename_file_error_input">The file name could not contain the char</string>
-    <string name="dialog_rename_folder_error_input">The folder name could not contain the char</string>
+    <string name="dialog_rename_file_error_input">The file name could not contain the char \"%1$s\"</string>
+    <string name="dialog_rename_folder_error_input">The folder name could not contain the char \"%1$s\"</string>
     <string name="dialog_rename_file_empty_input">The file name could not be empty</string>
     <string name="dialog_rename_folder_empty_input">The folder name could not be empty</string>
 
