@@ -61,4 +61,14 @@ public class GroupList<K, V> extends ArrayMap<K, ArrayList<V>> {
         return size;
     }
 
+    @Override
+    public ArrayList<V> valueAt(int index) {
+        return super.valueAt(size() - 1 - index);
+    }
+
+    @Override
+    public K keyAt(int index) {
+        return super.keyAt(size() - 1 - index);
+    }
+
 }
