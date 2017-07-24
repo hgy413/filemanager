@@ -1,5 +1,6 @@
 package com.jb.filemanager.home.fragment.storage;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -39,5 +40,14 @@ public class StorageSupport implements StorageContract.Support {
             loaderManager = mFragmentRef.get().getLoaderManager();
         }
         return loaderManager;
+    }
+
+    @Override
+    public Activity getActivity() {
+        Activity activity = null;
+        if (mFragmentRef != null && mFragmentRef.get() != null) {
+            activity = mFragmentRef.get().getActivity();
+        }
+        return activity;
     }
 }

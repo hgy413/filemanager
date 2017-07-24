@@ -1,6 +1,7 @@
 package com.jb.filemanager.manager.file.task;
 
 
+import android.media.MediaScannerConnection;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;
@@ -116,6 +117,13 @@ public class CutFileTask {
                             Logger.i(LOG_TAG, "跳过:" + file.getAbsolutePath());
                         }
                     }
+
+                    String[] paths = new String[mSource.size() + 1];
+                    for (int i = 0; i < mSource.size(); i++) {
+                        paths[i] = mSource.get(i).getParentFile().getAbsolutePath();
+                    }
+                    paths[mSource.size()] = mDest;
+                    MediaScannerConnection.scanFile(TheApplication.getInstance(), paths, null, null); // 修改后的文件添加到系统数据库
                 }
 
                 final boolean finalResult = result;

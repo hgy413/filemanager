@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -23,7 +22,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
     private TextView mTvErrorTips;
     private EditText mEtInput;
 
-    public CreateNewFolderDialog(final Activity act, final String path) {
+    public CreateNewFolderDialog(final Activity act, final String path, final Listener listener) {
         super(act, true);
 
         View dialogView = View.inflate(act, R.layout.dialog_create_folder, null);
@@ -56,12 +55,25 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                                 mTvErrorTips.setText(R.string.dialog_create_folder_empty_input);
                             }
                         } else if (!input.matches(FileUtil.FOLDER_NAME_REG)) {
+                            String notContain = "";
+                            for (int i = 0; i < input.length(); i++) {
+                                char testChar = input.charAt(i);
+                                String testString = String.valueOf(testChar);
+                                if (!testString.matches(FileUtil.FOLDER_NAME_REG)) {
+                                    if (!notContain.contains(testString)) {
+                                        if (notContain.length() > 0) {
+                                            notContain += ",";
+                                        }
+                                        notContain += testString;
+                                    }
+                                }
+                            }
                             if (mTvTitle != null) {
                                 mTvTitle.setVisibility(View.GONE);
                             }
                             if (mTvErrorTips != null) {
                                 mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(R.string.dialog_create_folder_error_input);
+                                mTvErrorTips.setText(act.getString(R.string.dialog_create_folder_error_input, notContain));
                             }
                         } else {
                             if (!TextUtils.isEmpty(path)) {
@@ -76,10 +88,8 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                                     }
                                 } else {
                                     boolean success = FileUtil.createFolder(path + File.separator + input);
-                                    if (success) {
-                                        dismiss();
-                                    } else {
-                                        AppUtils.showToast(act, R.string.toast_create_folder_failed);
+                                    if (listener != null) {
+                                        listener.onResult(CreateNewFolderDialog.this, success);
                                     }
                                 }
                             }
@@ -95,11 +105,18 @@ public class CreateNewFolderDialog extends FMBaseDialog {
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dismiss();
+                    if (listener != null) {
+                        listener.onCancel(CreateNewFolderDialog.this);
+                    }
                 }
             }); // 取消按钮点击事件
         }
 
         setContentView(dialogView);
+    }
+
+    public interface Listener {
+        void onResult(CreateNewFolderDialog dialog, boolean success);
+        void onCancel(CreateNewFolderDialog dialog);
     }
 }

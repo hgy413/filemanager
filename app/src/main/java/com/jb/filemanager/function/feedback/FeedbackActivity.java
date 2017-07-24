@@ -2,8 +2,10 @@ package com.jb.filemanager.function.feedback;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -49,29 +51,6 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
     private FeedbackContract.Presenter mPresenter;
     private Timer mTimer;
     private ListDialog mQuestionListDialog;
-    //文本输入监听器
-    private TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (s.toString().equals("")) {
-                mIvCommonActionBarMore.setAlpha(0.3f);
-                mIvCommonActionBarMore.setEnabled(false);
-            } else {
-                mIvCommonActionBarMore.setAlpha(1.0f);
-                mIvCommonActionBarMore.setEnabled(true);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +65,6 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
 
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mIvCommonActionBarMore = (ImageView) findViewById(R.id.iv_common_action_bar_send);
-
-        mIvCommonActionBarMore.setAlpha(0.3f);
-        mIvCommonActionBarMore.setEnabled(false);
 
         mContainer = (EditText) findViewById(R.id.container_setting_feedback);
         select = (TextView) findViewById(R.id.setting_feedback_menu_select);
@@ -157,14 +133,11 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
             }
         });
 
-        mContainer.addTextChangedListener(mTextWatcher);
-
         mIvCommonActionBarMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String detailString = mContainer.getText().toString().trim();
-                //	String mailString = mEmail.getText().toString().trim();
                 String selectItem = select.getText().toString();
                 if (detailString.equals("")) {
                     Toast.makeText(FeedbackActivity.this, getString(R.string.feedback_no_contain), Toast.LENGTH_SHORT).show();
@@ -172,6 +145,24 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
                 }
                 sendFeedBack(detailString, selectItem);
                 finish();
+            }
+        });
+
+        mIvCommonActionBarMore.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int mask = MotionEventCompat.getActionMasked(event);
+                switch (mask) {
+                    case MotionEvent.ACTION_DOWN:
+                        mIvCommonActionBarMore.setAlpha(0.3f);
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_OUTSIDE:
+                    case MotionEvent.ACTION_UP:
+                        mIvCommonActionBarMore.setAlpha(1f);
+                        break;
+                }
+                return false;
             }
         });
 
@@ -235,10 +226,6 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         if (mTimer != null) {
             mTimer.cancel();
         }
-        if (mTextWatcher != null) {
-            mContainer.removeTextChangedListener(mTextWatcher);
-        }
-        mTextWatcher = null;
         //InputMethodManager 释放当前Activity
         AppUtils.fixInputMethodManagerLeak(this);
         super.onDestroy();

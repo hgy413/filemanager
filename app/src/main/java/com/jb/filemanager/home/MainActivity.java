@@ -318,7 +318,21 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void showNewFolderDialog() {
-        CreateNewFolderDialog dialog = new CreateNewFolderDialog(this, mPresenter.getCurrentPath());
+        CreateNewFolderDialog dialog = new CreateNewFolderDialog(this, mPresenter.getCurrentPath(), new CreateNewFolderDialog.Listener() {
+            @Override
+            public void onResult(CreateNewFolderDialog dialog, boolean success) {
+                if (success) {
+                    dialog.dismiss();
+                } else {
+                    AppUtils.showToast(MainActivity.this, R.string.toast_create_folder_failed);
+                }
+            }
+
+            @Override
+            public void onCancel(CreateNewFolderDialog dialog) {
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 

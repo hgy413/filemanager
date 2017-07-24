@@ -18,9 +18,10 @@ public class ImageActivity extends BaseFragmentActivity {
         //不用设置视图 直接使用Content视图 减少没必要的层次
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            boolean internal = bundle.getBoolean(ImageManagerFragment.ARG_IS_INTERNAL_STORAGE);
+//            boolean internal = bundle.getBoolean(ImageManagerFragment.ARG_IS_INTERNAL_STORAGE);
             ImageManagerFragment imageManagerFragment = new ImageManagerFragment();
-            imageManagerFragment.setExtras(internal);
+//            imageManagerFragment.setExtras(internal);
+            imageManagerFragment.setExtras(false);
             setDefaultFragment(imageManagerFragment);
         }
     }

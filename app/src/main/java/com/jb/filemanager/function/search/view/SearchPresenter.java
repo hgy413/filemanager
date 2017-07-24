@@ -71,9 +71,9 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void onResume() {
         mAnimPlayOnce = false;
-        // TODO research
-
-        doSearch(mKeyword);
+        if (!TextUtils.isEmpty(mKeyword)) {
+            doSearch(mKeyword);
+        }
     }
 
     @Override

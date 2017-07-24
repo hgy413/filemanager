@@ -179,8 +179,7 @@ class StoragePresenter implements StorageContract.Presenter,
                     mPathStack.push(file);
                     restartLoad();
                 } else {
-                    mView.updateItemSelectStatus(holder);
-                    addOrRemoveSelected(file);
+                    FileUtil.openFile(mSupport.getActivity(), file);
                 }
             }
         }
@@ -189,8 +188,10 @@ class StoragePresenter implements StorageContract.Presenter,
     @Override
     public void onClickPath(String word) {
         if (mView != null && mSupport != null) {
-            mStatus = MAIN_STATUS_NORMAL;
-            resetSelectFile();
+            if (mStatus == MAIN_STATUS_SELECT) {
+                mStatus = MAIN_STATUS_NORMAL;
+                resetSelectFile();
+            }
 
             String clickDirectory = word;
             for (File file : mStorageList) {

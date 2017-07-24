@@ -3,8 +3,8 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 android:fitsSystemWindows="true"
+                android:background="@android:color/white"
                 android:orientation="vertical">
 
     <com.jb.filemanager.ui.view.SearchTitleView
@@ -14,9 +14,9 @@
 
     <View
         android:id="@+id/shadow"
-        android:layout_below="@id/search_title"
         android:layout_width="match_parent"
         android:layout_height="6dp"
+        android:layout_below="@id/search_title"
         android:background="@drawable/main_shadow"/>
 
     <com.jb.filemanager.commomview.ProgressWheel
@@ -41,6 +41,6 @@
     <com.jb.filemanager.ui.widget.BottomOperateBar
         android:id="@+id/bob_bottom_operator"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="60dp"/>
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

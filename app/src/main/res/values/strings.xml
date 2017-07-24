@@ -301,7 +301,7 @@
     <!-- dialog -->
     <string name="dialog_create_folder_title">Create a folder</string>
     <string name="dialog_create_folder_hint">Type a new name</string>
-    <string name="dialog_create_folder_error_input">The name can\'t contain the char</string>
+    <string name="dialog_create_folder_error_input">The name can\'t contain the char \"%1$s\"</string>
     <string name="dialog_create_folder_empty_input">The name can\'t be empty</string>
     <string name="dialog_create_folder_name_duplicate">The name has been used</string>
 
@@ -346,8 +346,8 @@
 
     <string name="dialog_rename_title">Rename</string>
     <string name="dialog_rename_hint">Type a new name</string>
-    <string name="dialog_rename_file_error_input">The file name could not contain the char</string>
-    <string name="dialog_rename_folder_error_input">The folder name could not contain the char</string>
+    <string name="dialog_rename_file_error_input">The file name could not contain the char \"%1$s\"</string>
+    <string name="dialog_rename_folder_error_input">The folder name could not contain the char \"%1$s\"</string>
     <string name="dialog_rename_file_empty_input">The file name could not be empty</string>
     <string name="dialog_rename_folder_empty_input">The folder name could not be empty</string>
 
@@ -417,4 +417,7 @@
     <string name="within_days">Within %1$d days</string>
     <string name="early">Early</string>
     <string name="file_selected">%1$dfile(s) selected</string>
+    <!--侧边栏引导弹框-->
+    <string name="guide_dialog_title">User guide</string>
+    <string name="guide_dialog_smart_charge_tip">Display the current charging status, including sponsored content.</string>
 </resources>

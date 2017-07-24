@@ -45,9 +45,14 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:gravity="center_vertical"
         android:hint="@string/dialog_create_folder_hint"
-        android:textColor="#000000"
+        android:background="@drawable/bg_action_bar_search_container"
+        android:textCursorDrawable="@drawable/common_action_bar_search_cursor"
+        android:textColor="@color/black_70"
+        android:textColorHint="@color/black_20"
         android:textSize="14dp"
         android:inputType="text" />
 

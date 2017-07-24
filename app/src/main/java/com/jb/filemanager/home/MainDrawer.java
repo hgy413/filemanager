@@ -6,12 +6,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -21,8 +17,12 @@ import com.jb.filemanager.function.about.AboutActivity;
 import com.jb.filemanager.function.applock.activity.AppLockPreActivity;
 import com.jb.filemanager.function.applock.manager.LockerFloatLayerManager;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
+import com.jb.filemanager.function.permissionalarm.manager.PermissionAlarmManager;
 import com.jb.filemanager.function.setting.SettingActivity;
+import com.jb.filemanager.function.tip.manager.StorageTipManager;
+import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
+import com.jb.filemanager.home.dialog.IntroduceChargeDialog;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.statistics.StatisticsConstants;
@@ -31,9 +31,6 @@ import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.QuickClickGuard;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by bill wang on 16/8/19.
@@ -146,24 +143,28 @@ public class MainDrawer implements View.OnClickListener {
             smartChargeItem.getPaint().setAntiAlias(true);
             smartChargeItem.setOnClickListener(this);
         }
+        smartChargeItem.setSelected(SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, false));
 
         TextView usbPluginItem = (TextView) mActivity.findViewById(R.id.tv_drawer_usb_plugin);
         if (usbPluginItem != null) {
             usbPluginItem.getPaint().setAntiAlias(true);
             usbPluginItem.setOnClickListener(this);
         }
+        usbPluginItem.setSelected(UsbStateManager.getInstance().isSwitchEnable());
 
         TextView lowSpaceItem = (TextView) mActivity.findViewById(R.id.tv_drawer_low_space);
         if (lowSpaceItem != null) {
             lowSpaceItem.getPaint().setAntiAlias(true);
             lowSpaceItem.setOnClickListener(this);
         }
+        lowSpaceItem.setSelected(StorageTipManager.getInstance().isSwitchEnable());
 
         TextView loggerNotificationItem = (TextView) mActivity.findViewById(R.id.tv_drawer_logger_notification);
         if (loggerNotificationItem != null) {
             loggerNotificationItem.getPaint().setAntiAlias(true);
             loggerNotificationItem.setOnClickListener(this);
         }
+        loggerNotificationItem.setSelected(PermissionAlarmManager.getInstance().isSwitchEnable());
 
         TextView ratingItem = (TextView) mActivity.findViewById(R.id.tv_drawer_rating);
         if (ratingItem != null) {
@@ -266,33 +267,32 @@ public class MainDrawer implements View.OnClickListener {
                 jumpToApplock();
                 break;
             case R.id.tv_drawer_smart_charge:
-                // TODO @wangzq
+                boolean isSelect = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, false);
+                if (!isSelect) {
+                    IntroduceChargeDialog introduceChargeDialog = new IntroduceChargeDialog(mActivity);
+                    introduceChargeDialog.show();
+                }
+                isSelect = !isSelect;
+                SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, isSelect);
+                v.setSelected(isSelect);
                 break;
             case R.id.tv_drawer_usb_plugin:{
-                boolean usbPluginEnable = !v.isSelected();
-                v.setSelected(usbPluginEnable);
-                SharedPreferencesManager spm = SharedPreferencesManager.getInstance(TheApplication.getInstance());
-                spm.commitBoolean(IPreferencesIds.KEY_USB_CONNECTED_TIP_ENABLE, usbPluginEnable);
-
-                AppUtils.showToast(TheApplication.getInstance(), usbPluginEnable ? R.string.toast_usb_plugin_switch_enable : R.string.toast_usb_plugin_switch_disable);
+                boolean isSwitch = UsbStateManager.getInstance().changerSwitch();
+                v.setSelected(isSwitch);
+                AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_usb_plugin_switch_enable : R.string.toast_usb_plugin_switch_disable);
             }
                 break;
             case R.id.tv_drawer_low_space: {
-                boolean lowSpaceEnable = !v.isSelected();
-                v.setSelected(lowSpaceEnable);
-                SharedPreferencesManager spm = SharedPreferencesManager.getInstance(TheApplication.getInstance());
-                spm.commitBoolean(IPreferencesIds.KEY_LOW_SPACE_WARNING_ENABLE, lowSpaceEnable);
-
-                AppUtils.showToast(TheApplication.getInstance(), lowSpaceEnable ? R.string.toast_low_space_switch_enable : R.string.toast_low_space_switch_disable);
+                boolean isSwitch = StorageTipManager.getInstance().changerSwitch();
+                v.setSelected(isSwitch);
+                AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_low_space_switch_enable : R.string.toast_low_space_switch_disable);
             }
                 break;
             case R.id.tv_drawer_logger_notification: {
-                boolean loggerNotificationEnable = !v.isSelected();
-                v.setSelected(loggerNotificationEnable);
-                SharedPreferencesManager spm = SharedPreferencesManager.getInstance(TheApplication.getInstance());
-                spm.commitBoolean(IPreferencesIds.KEY_LOGGER_NOTIFICATION_ENABLE, loggerNotificationEnable);
+                boolean isSwitch = PermissionAlarmManager.getInstance().changerSwitch();
+                v.setSelected(isSwitch);
 
-                AppUtils.showToast(TheApplication.getInstance(), loggerNotificationEnable ? R.string.toast_logger_notification_switch_enable : R.string.toast_logger_notification_switch_disable);
+                AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_logger_notification_switch_enable : R.string.toast_logger_notification_switch_disable);
             }
                 break;
             case R.id.tv_drawer_rating:

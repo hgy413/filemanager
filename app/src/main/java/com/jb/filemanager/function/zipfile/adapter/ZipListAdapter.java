@@ -76,7 +76,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolder) convertView.getTag(R.layout.group_zip_file);
         }
         final ZipFileGroupBean group = getGroup(groupPosition);
-        holder.groupTime.setText(group.getGroupTimeStr());
+        holder.groupTime.setText(group.getGroupTimeStr() + " (" + group.getChildCount() + ")");
         int selectedState = group.getSelectedState();
         if (selectedState == 1) {
             holder.groupCheckBox.setImageResource(R.drawable.select_none);
