@@ -13,9 +13,9 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
-import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
@@ -198,13 +198,13 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             @Override
             public void afterCopy() {
-                startActivity(new Intent(DocManagerActivity.this, MainActivity.class));
+                FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
                 handleDataCopy();
             }
 
             @Override
             public void afterCut() {
-                startActivity(new Intent(DocManagerActivity.this, MainActivity.class));
+                FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
                 handleDataCut();
             }
 
