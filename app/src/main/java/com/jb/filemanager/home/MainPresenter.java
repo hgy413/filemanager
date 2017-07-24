@@ -173,28 +173,8 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public boolean onClickConfirmCreateFolderButton(String name) {
-        return FileUtil.createFolder(mCurrentPath + File.separator + name);
-    }
-
-    @Override
-    public void updateCurrentPath(String path) {
-        mCurrentPath = path;
-    }
-
-    @Override
     public String getCurrentPath() {
         return mCurrentPath;
-    }
-
-    @Override
-    public boolean isFileExplorer() {
-        return mIsFileExplorer;
-    }
-
-    @Override
-    public String getTargetFilePath() {
-        return mRootDir;//目标路径
     }
 
     private void handleTrashFiles(Intent intent) {

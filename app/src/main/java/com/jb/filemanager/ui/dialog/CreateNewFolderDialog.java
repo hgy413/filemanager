@@ -7,7 +7,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
+
+import java.io.File;
 
 /**
  * Created by bill wang on 2017/7/11.
@@ -20,7 +23,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
     private TextView mTvErrorTips;
     private EditText mEtInput;
 
-    public CreateNewFolderDialog(Activity act, final Listener listener) {
+    public CreateNewFolderDialog(final Activity act, final String path) {
         super(act, true);
 
         View dialogView = View.inflate(act, R.layout.dialog_create_folder, null);
@@ -61,7 +64,25 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                                 mTvErrorTips.setText(R.string.dialog_create_folder_error_input);
                             }
                         } else {
-                            listener.onConfirm(CreateNewFolderDialog.this, mEtInput.getText().toString());
+                            if (!TextUtils.isEmpty(path)) {
+                                File target = new File(path + File.separator + input);
+                                if (target.exists()) {
+                                    if (mTvTitle != null) {
+                                        mTvTitle.setVisibility(View.GONE);
+                                    }
+                                    if (mTvErrorTips != null) {
+                                        mTvErrorTips.setVisibility(View.VISIBLE);
+                                        mTvErrorTips.setText(R.string.dialog_create_folder_name_duplicate);
+                                    }
+                                } else {
+                                    boolean success = FileUtil.createFolder(path + File.separator + input);
+                                    if (success) {
+                                        dismiss();
+                                    } else {
+                                        AppUtils.showToast(act, R.string.toast_create_folder_failed);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -74,20 +95,11 @@ public class CreateNewFolderDialog extends FMBaseDialog {
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onCancel(CreateNewFolderDialog.this);
+                    dismiss();
                 }
             }); // 取消按钮点击事件
         }
 
         setContentView(dialogView);
-    }
-
-    public interface Listener {
-        /**
-         * 点击确定按钮
-         */
-        void onConfirm(CreateNewFolderDialog dialog, String folderName);
-
-        void onCancel(CreateNewFolderDialog dialog);
     }
 }

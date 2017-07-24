@@ -303,6 +303,7 @@
     <string name="dialog_create_folder_hint">Type a new name</string>
     <string name="dialog_create_folder_error_input">The name can\'t contain the char</string>
     <string name="dialog_create_folder_empty_input">The name can\'t be empty</string>
+    <string name="dialog_create_folder_name_duplicate">The name has been used</string>
 
     <string name="dialog_sort_by_title">Sort by</string>
     <string name="dialog_sort_by_name">Name</string>
