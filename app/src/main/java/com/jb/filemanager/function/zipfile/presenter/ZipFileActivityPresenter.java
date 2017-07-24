@@ -230,6 +230,14 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
                     return (int) (o1.getGroupTime() - o2.getGroupTime());
                 }
             });
+            for (ZipFileGroupBean groupBean : mGroupList) {
+                Collections.sort(groupBean.getZipFileList(), new Comparator<ZipFileItemBean>() {
+                    @Override
+                    public int compare(ZipFileItemBean o1, ZipFileItemBean o2) {
+                        return (int) (o2.getLastModifiedTime() - o1.getLastModifiedTime());
+                    }
+                });
+            }
         }
     }
 }
