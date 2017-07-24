@@ -224,12 +224,6 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
         }
 
         private void sortResult() {
-            Collections.sort(mGroupList, new Comparator<ZipFileGroupBean>() {
-                @Override
-                public int compare(ZipFileGroupBean o1, ZipFileGroupBean o2) {
-                    return (int) (o1.getGroupTime() - o2.getGroupTime());
-                }
-            });
             for (ZipFileGroupBean groupBean : mGroupList) {
                 Collections.sort(groupBean.getZipFileList(), new Comparator<ZipFileItemBean>() {
                     @Override
@@ -238,6 +232,13 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
                     }
                 });
             }
+
+            Collections.sort(mGroupList, new Comparator<ZipFileGroupBean>() {
+                @Override
+                public int compare(ZipFileGroupBean o1, ZipFileGroupBean o2) {
+                    return (int) (o2.getGroupTime() / 1000 - o1.getGroupTime() / 1000);
+                }
+            });
         }
     }
 }
