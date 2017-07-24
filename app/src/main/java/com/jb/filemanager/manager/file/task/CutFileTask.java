@@ -31,7 +31,7 @@ public class CutFileTask {
     private boolean mIsStop = false;
     private boolean mIsApplyToAll = false;
 
-    public CutFileTask(final ArrayList<File> source, String dest, Listener listener) {
+    public CutFileTask(ArrayList<File> source, String dest, Listener listener) {
 
         mListener = listener;
         mSource = new ArrayList<> (source);
@@ -122,7 +122,7 @@ public class CutFileTask {
                     for (int i = 0; i < mSource.size(); i++) {
                         paths[i] = mSource.get(i).getParentFile().getAbsolutePath();
                     }
-                    paths[source.size()] = mDest;
+                    paths[mSource.size()] = mDest;
                     MediaScannerConnection.scanFile(TheApplication.getInstance(), paths, null, null); // 修改后的文件添加到系统数据库
                 }
 
