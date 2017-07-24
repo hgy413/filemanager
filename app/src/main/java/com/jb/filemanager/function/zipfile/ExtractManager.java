@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -227,7 +226,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     }
 
     private void showMessage(String message) {
-        Log.e("extract", message);
+//        Log.e("extract", message);
     }
 
     /**
@@ -272,14 +271,14 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     ///////////////////////////////
     @Override
     public void onViewAttachedToWindow(View v) {
-        Log.e("dialog", "onViewAttachedToWindow");
+//        Log.e("dialog", "onViewAttachedToWindow");
         mIsProgressDialogAttached = true;
     }
 
     // 若点击物理返回键可隐藏弹窗, 默认不取消任务, 后台继续运行
     @Override
     public void onViewDetachedFromWindow(View v) {
-        Log.e("dialog", "onViewDetachedToWindow");
+//        Log.e("dialog", "onViewDetachedToWindow");
         mIsProgressDialogAttached = false;
     }
 

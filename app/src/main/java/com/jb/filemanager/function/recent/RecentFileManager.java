@@ -1,7 +1,5 @@
 package com.jb.filemanager.function.recent;
 
-import android.util.Log;
-
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.listener.RecentFileInnerListener;
 import com.jb.filemanager.function.recent.listener.RecentFileScanTaskListener;
@@ -73,7 +71,7 @@ public final class RecentFileManager implements RecentFileScanTaskListener {
     // ---------------扫描全盘任务回调接口--------开始---------------------
     @Override
     public void onPreScan() {
-        Log.e("recent", "开始扫描");
+//        Log.e("recent", "开始扫描");
         mIsScanning = true;
     }
 

@@ -1,7 +1,5 @@
 package com.jb.filemanager.function.zipfile.presenter;
 
-import android.util.Log;
-
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
@@ -63,7 +61,7 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
     public void onPreLoad() {
         mSelected.clear();
         mView.setExtractBtnVisibility(false);
-        Log.e("task", "开始加载");
+//        Log.e("task", "开始加载");
         TheApplication.postRunOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -86,12 +84,12 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
         } else {
             onLoadError();
         }
-        Log.e("task", "加载完成");
+//        Log.e("task", "加载完成");
     }
 
     @Override
     public void onCanceled() {
-        Log.e("task", "任务取消");
+//        Log.e("task", "任务取消");
     }
 
     /**
@@ -141,9 +139,6 @@ public class ZipFilePreviewPresenter implements ZipFilePreviewContract.Presenter
             mRootDir = item.getFullPath();
             mView.navigationForward(mRootDir);
 
-            for (String s : mPathStack) {
-                Log.e("stack", s);
-            }
             loadFiles();
         } else {
            // mView.showToast("click file");

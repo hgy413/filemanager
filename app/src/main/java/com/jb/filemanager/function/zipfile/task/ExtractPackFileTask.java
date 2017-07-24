@@ -83,7 +83,6 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, String> {
                     if (isCancelled()) return saveDir.getPath();
                     net.lingala.zip4j.model.FileHeader header = headers.get(i);
                     publishProgress(i / totalCount);
-                    Log.e("extract", "percent = " + (i / totalCount));
                     zipFile.extractFile(header, saveDir.getPath());
                 }
                 return  saveDir.getPath();
@@ -110,7 +109,6 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, String> {
                     String name = FileUtils.formatterRarFileNameCode(header);
                     File destFile = new File(saveDir.getPath() + File.separator + name);
                     publishProgress(i / totalCount);
-                    Log.e("extract", "percent = " + (i / totalCount));
                     if (header.isDirectory()) {
                         destFile.mkdirs();
                     } else {
@@ -135,17 +133,17 @@ public class ExtractPackFileTask extends AsyncTask<String, Float, String> {
                 return saveDir.getPath();
             } catch (RarException e) {
                 e.printStackTrace();
-                Log.e("task", "rar exception");
+//                Log.e("task", "rar exception");
                 return null;
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e("task", "io exception");
+//                Log.e("task", "io exception");
                 return null;
             } finally {
                 CloseUtils.closeIO(archive);
             }
         } else {
-            Log.e("task", "else");
+//            Log.e("task", "else");
             return null;
         }
     }

@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.zipfile.util;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jiubang.commerce.utils.StringUtils;
@@ -474,7 +473,6 @@ public final class ZipUtils {
     public static boolean isValidPackFile(File file) {
         if (file == null || !file.exists() || !file.isFile() || file.isDirectory()) return false;
         String extension = FileUtils.getFileExtension(file);
-        Log.e("zipUtil", file.getName());
         if (TextUtils.isEmpty(extension)) return false;
         if ("zip".equalsIgnoreCase(extension)) {
             try {
