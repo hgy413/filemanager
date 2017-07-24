@@ -19,6 +19,7 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
 import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
@@ -153,9 +154,7 @@ public class ImageManagerFragment extends BaseFragmentWithImmersiveStatusBar imp
 
     @Override
     public void gotoStoragePage() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("HAVE_PAST_DATE", true);
-        startActivity(intent);
+        FileBrowserActivity.startBrowser(getActivity(), null);
     }
 
     @Override

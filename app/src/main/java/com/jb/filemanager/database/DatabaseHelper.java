@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.jb.filemanager.database.table.AppPermissionsTable;
-import com.jb.filemanager.database.table.CacheTrashRecordTable;
 import com.jb.filemanager.database.table.CleanIgnoreTable;
 import com.jb.filemanager.database.table.CleanScanOvertimeTable;
 import com.jb.filemanager.database.table.DocFileTable;
@@ -61,8 +60,6 @@ public class DatabaseHelper extends BaseDatabaseHelper {
             db.execSQL(CleanIgnoreTable.CREATE_TABLE);
             db.execSQL(CleanScanOvertimeTable.CREATE_TABLE);
             db.execSQL(IgnoreListTable.CREATE_TABLE);
-            //缓存垃圾清理记录
-            db.execSQL(CacheTrashRecordTable.CREATE_TABLE);
 
             // app locker
             db.execSQL(LockerTable.CREATE_TABLE);

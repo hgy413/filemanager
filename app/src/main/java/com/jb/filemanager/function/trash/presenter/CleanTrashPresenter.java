@@ -8,7 +8,6 @@ import android.os.Message;
 import android.os.SystemClock;
 
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.database.provider.CacheTrashRecordProvider;
 import com.jb.filemanager.function.scanframe.bean.CleanGroupsBean;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.function.scanframe.bean.cachebean.CacheBean;
@@ -655,10 +654,6 @@ public class CleanTrashPresenter {
     public void startDelete() {
         mIsStopDelete = false;
         mAppCacheChildren.addAll(filterSubBean(mCleanManager.getCacheList()));
-        //add by nieyh 将应用缓存垃圾记录添加到数据库中 ↓↓↓
-        CacheTrashRecordProvider cacheTrashRecordProvider = new CacheTrashRecordProvider(TheApplication.getAppContext());
-        cacheTrashRecordProvider.insertAllCacheTrashRecord(mAppCacheChildren);
-        //add by nieyh 将应用缓存垃圾记录添加到数据库中 ↑↑↑
         mResidueChildren.addAll(filterSubBean(mCleanManager.getResidueList()));
         mAdChildren.addAll(filterSubBean(mCleanManager.getAdList()));
         mTempChildren.addAll(filterSubBean(mCleanManager.getTempArrayList()));
