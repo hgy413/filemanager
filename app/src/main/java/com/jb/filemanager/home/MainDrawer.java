@@ -34,7 +34,6 @@ import com.jb.filemanager.util.QuickClickGuard;
 
 /**
  * Created by bill wang on 16/8/19.
- *
  */
 public class MainDrawer implements View.OnClickListener {
 
@@ -143,7 +142,6 @@ public class MainDrawer implements View.OnClickListener {
             smartChargeItem.getPaint().setAntiAlias(true);
             smartChargeItem.setOnClickListener(this);
         }
-        smartChargeItem.setSelected(SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, false));
 
         TextView usbPluginItem = (TextView) mActivity.findViewById(R.id.tv_drawer_usb_plugin);
         if (usbPluginItem != null) {
@@ -262,39 +260,33 @@ public class MainDrawer implements View.OnClickListener {
         if (mQuickClickGuard.isQuickClick(v.getId())) {
             return;
         }
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_drawer_app_locker:
                 jumpToApplock();
                 break;
             case R.id.tv_drawer_smart_charge:
-                boolean isSelect = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, false);
-                if (!isSelect) {
-                    IntroduceChargeDialog introduceChargeDialog = new IntroduceChargeDialog(mActivity);
-                    introduceChargeDialog.show();
-                }
-                isSelect = !isSelect;
-                SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, isSelect);
-                v.setSelected(isSelect);
+                IntroduceChargeDialog introduceChargeDialog = new IntroduceChargeDialog(mActivity);
+                introduceChargeDialog.show();
                 break;
-            case R.id.tv_drawer_usb_plugin:{
+            case R.id.tv_drawer_usb_plugin: {
                 boolean isSwitch = UsbStateManager.getInstance().changerSwitch();
                 v.setSelected(isSwitch);
                 AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_usb_plugin_switch_enable : R.string.toast_usb_plugin_switch_disable);
             }
-                break;
+            break;
             case R.id.tv_drawer_low_space: {
                 boolean isSwitch = StorageTipManager.getInstance().changerSwitch();
                 v.setSelected(isSwitch);
                 AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_low_space_switch_enable : R.string.toast_low_space_switch_disable);
             }
-                break;
+            break;
             case R.id.tv_drawer_logger_notification: {
                 boolean isSwitch = PermissionAlarmManager.getInstance().changerSwitch();
                 v.setSelected(isSwitch);
 
                 AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_logger_notification_switch_enable : R.string.toast_logger_notification_switch_disable);
             }
-                break;
+            break;
             case R.id.tv_drawer_rating:
                 // TODO @wangzq
                 break;
@@ -346,7 +338,7 @@ public class MainDrawer implements View.OnClickListener {
 
     /**
      * 延时跳转
-     * */
+     */
     private void delayStartActivity(final Intent intent) {
         TheApplication.postRunOnUiThread(new Runnable() {
             @Override

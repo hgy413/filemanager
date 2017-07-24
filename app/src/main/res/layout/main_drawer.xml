@@ -51,8 +51,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
-            android:drawableRight="@drawable/drawer_setting_switcher_selector"
-            android:drawableEnd="@drawable/drawer_setting_switcher_selector"
             android:drawableLeft="@drawable/ic_drawer_smart_charge"
             android:drawableStart="@drawable/ic_drawer_smart_charge"
             android:drawablePadding="15dp"

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/shape_rate_top">
+        android:background="@drawable/shape_rate_top"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:text="@string/guide_dialog_title"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:textSize="@dimen/h1_20"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"/>
+            android:textStyle="bold"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -32,29 +32,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/shape_rate_bottom">
+        android:background="@drawable/shape_rate_bottom"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/h1_20"
-            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/drawer_smart_charge"
             android:textColor="@color/black_70"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/drawer_smart_charge"/>
+            android:textSize="@dimen/h1_20"
+            android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/h3_16"
-            android:textColor="@color/black_70"
-            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/guide_dialog_smart_charge_tip"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/guide_dialog_smart_charge_tip"
+                android:textColor="@color/black_70"
+                android:textSize="@dimen/h4_14"/>
+
+            <ImageView
+                android:id="@+id/dialog_introduce_charge_iv"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="11dp"
+                android:background="@drawable/drawer_setting_switcher_selector"/>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -66,13 +81,13 @@
             android:id="@+id/dialog_introduce_charge_ok"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:text="@string/common_ok"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="@dimen/h3_16"
-            android:textStyle="bold"
             android:background="@drawable/common_item_bottom_round_selector"
-            android:textColor="@color/common_style_green"/>
+            android:gravity="center"
+            android:text="@string/common_ok"
+            android:textColor="@color/common_style_green"
+            android:textSize="@dimen/h3_16"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
