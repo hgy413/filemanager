@@ -7,6 +7,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.database.provider.DocFileProvider;
+import com.jb.filemanager.eventbus.DocFileScanFinishEvent;
 import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
@@ -198,7 +199,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         private ArrayList<DocChildBean> mDocList = new ArrayList<>();
         private ArrayList<DocChildBean> mTxtList = new ArrayList<>();
         private ArrayList<DocChildBean> mPdfList = new ArrayList<>();
-
+        private int mFileCount;
+        private long mFileTotalSize;
 
         @Override
         protected void onPreExecute() {
@@ -250,6 +252,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 mDocScanListener.onScanFinish(groups, params[0]);
             }
 
+            TheApplication.getGlobalEventBus().post(new DocFileScanFinishEvent(mFileCount, mFileTotalSize));
             return null;
         }
 
@@ -275,6 +278,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
                         docFileProvider.insertDocItem(childBean);
+                        mFileCount++;
+                        mFileTotalSize += file.length();
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(XLS) || extension.equalsIgnoreCase(XLSX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -285,6 +290,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
                         docFileProvider.insertDocItem(childBean);
+                        mFileCount++;
+                        mFileTotalSize += file.length();
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PPT) || extension.equalsIgnoreCase(PPTX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -295,6 +302,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
                         docFileProvider.insertDocItem(childBean);
+                        mFileCount++;
+                        mFileTotalSize += file.length();
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(TXT)) {
                         DocChildBean childBean = new DocChildBean();
@@ -304,6 +313,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        mFileCount++;
+                        mFileTotalSize += file.length();
                         docFileProvider.insertDocItem(childBean);
                         mTxtList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PDF)) {
@@ -314,6 +325,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
+                        mFileCount++;
+                        mFileTotalSize += file.length();
                         docFileProvider.insertDocItem(childBean);
                         mPdfList.add(childBean);
                     }

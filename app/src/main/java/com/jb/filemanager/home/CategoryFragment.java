@@ -30,6 +30,7 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.ad.bubble.ShuffleAdPresenter;
+import com.jb.filemanager.eventbus.DocFileScanFinishEvent;
 import com.jb.filemanager.function.apkmanager.AppManagerActivity;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
 import com.jb.filemanager.function.image.ImageActivity;
@@ -624,6 +625,11 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
             //垃圾清理开始  改变文字显示
             mTvCleanTrash.setText(R.string.home_button_clean);
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(DocFileScanFinishEvent event) {
+        mTvDocCount.setText(event.mDocFileCount);
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> getImageLoaderCallback() {
