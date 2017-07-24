@@ -11,7 +11,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
@@ -139,11 +138,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 holder.mIvIcon.setImageResource(R.drawable.img_music);
                 break;
             case VIDEO:
-                holder.mIvIcon.setImageResource(R.drawable.video_icon);
+                mImageFetcher.setLoadingImage(R.drawable.video_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case PICTURE:
-                holder.mIvIcon.setImageResource(R.drawable.img_picture);
+                mImageFetcher.setLoadingImage(R.drawable.img_picture);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case ZIP:
