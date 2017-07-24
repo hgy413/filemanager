@@ -531,6 +531,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                 convertView.setTag(holder);
             } else {
                 holder = (ListItemViewHolder) convertView.getTag();
+                holder.mIvFileThumb.setBackgroundResource(0);
             }
 
             File file = getItem(position);
