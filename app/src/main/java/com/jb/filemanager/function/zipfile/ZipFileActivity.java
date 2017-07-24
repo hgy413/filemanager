@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.zipfile;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -10,6 +9,7 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.ProgressWheel;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.zipfile.adapter.ZipListAdapter;
 import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
@@ -18,7 +18,6 @@ import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
 import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.presenter.ZipActivityContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
-import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
@@ -97,17 +96,13 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
 
             @Override
             public void afterCopy() {
-                Intent intent = new Intent(ZipFileActivity.this, MainActivity.class);
-                intent.putExtra("HAVE_PAST_DATE", true);
-                startActivity(intent);
+                FileBrowserActivity.startBrowser(ZipFileActivity.this, "");
                 mPresenter.afterCopy();
             }
 
             @Override
             public void afterCut() {
-                Intent intent = new Intent(ZipFileActivity.this, MainActivity.class);
-                intent.putExtra("HAVE_PAST_DATE", true);
-                startActivity(intent);
+                FileBrowserActivity.startBrowser(ZipFileActivity.this, "");
                 mPresenter.afterCut();
             }
 

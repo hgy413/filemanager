@@ -115,7 +115,6 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
     @Override
     public void afterCopy() {
         onTitleCancelBtnClick();
-
     }
 
     @Override
