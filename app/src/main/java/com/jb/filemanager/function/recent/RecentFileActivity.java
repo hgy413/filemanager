@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.jb.filemanager.BaseActivity;
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.recent.adapter.RecentFileAdapter;
@@ -13,6 +14,7 @@ import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
 import com.jb.filemanager.function.recent.presenter.RecentFileContract;
 import com.jb.filemanager.function.recent.presenter.RecentFilePresenter;
+import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
@@ -44,7 +46,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
     private void initViews() {
         mSearchTitle = (SearchTitleView) findViewById(R.id.search_title);
-        mSearchTitle.setSearchIconVisibility(false);
+        mSearchTitle.setSearchIconVisibility(true);
         mSearchTitle.setTitleName(getString(R.string.recent));
         mSearchTitle.setClickCallBack(new SearchTitleViewCallback() {
             @Override
@@ -60,6 +62,11 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
             @Override
             public void onSelectBtnClick() {
                 mPresenter.onTitleSelectBtnClick();
+            }
+
+            @Override
+            public void onSearchClick() {
+                SearchActivity.showSearchResult(getApplicationContext(), Const.CategoryType.CATEGORY_TYPE_RECENT);
             }
         });
         mListView = (ListView) findViewById(R.id.recent_expand_lv);
