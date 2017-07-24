@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 
@@ -18,24 +19,11 @@ import java.util.ArrayList;
 
 public class MultiFileDetailDialog extends FMBaseDialog {
 
-    public MultiFileDetailDialog(Activity act, ArrayList<File> files, final Listener listener) {
+    public MultiFileDetailDialog(final Activity act, final ArrayList<File> files, final Listener listener) {
         super(act, true);
         if (files != null && files.size() > 0) {
-            long filesSize = 0L;
-            Integer folderTotalCount = 0;
-            Integer fileTotalCount = 0;
-            for (File file : files) {
-                int[] count = FileUtil.countFolderAndFile(file);
-                filesSize += FileUtil.getSize(file);
-                folderTotalCount += count[0];
-                fileTotalCount += count[1];
 
-                if (file.isDirectory()) {
-                    folderTotalCount++;
-                } else {
-                    fileTotalCount++;
-                }
-            }
+
 
             View dialogView = View.inflate(act, R.layout.dialog_multi_files_detail, null);
 
@@ -50,10 +38,10 @@ public class MultiFileDetailDialog extends FMBaseDialog {
                 sizeTitle.getPaint().setAntiAlias(true);
             }
 
-            TextView sizeValue = (TextView) dialogView.findViewById(R.id.tv_multi_files_detail_size_value);
+            final TextView sizeValue = (TextView) dialogView.findViewById(R.id.tv_multi_files_detail_size_value);
             if (sizeValue != null) {
                 sizeValue.getPaint().setAntiAlias(true);
-                sizeValue.setText(ConvertUtils.getReadableSize(filesSize));
+                sizeValue.setText(R.string.common_ellipsis);
             }
 
             TextView containTitle = (TextView) dialogView.findViewById(R.id.tv_multi_files_detail_contain_title);
@@ -61,10 +49,10 @@ public class MultiFileDetailDialog extends FMBaseDialog {
                 containTitle.getPaint().setAntiAlias(true);
             }
 
-            TextView containValue = (TextView) dialogView.findViewById(R.id.tv_multi_files_detail_contain_value);
+            final TextView containValue = (TextView) dialogView.findViewById(R.id.tv_multi_files_detail_contain_value);
             if (containValue != null) {
                 containValue.getPaint().setAntiAlias(true);
-                containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, folderTotalCount, fileTotalCount));
+                containValue.setText(R.string.common_ellipsis);
             }
 
             TextView okButton = (TextView) dialogView.findViewById(R.id.tv_multi_files_detail_confirm);
@@ -77,6 +65,42 @@ public class MultiFileDetailDialog extends FMBaseDialog {
                     }
                 }); // 确定按钮点击事件
             }
+
+            TheApplication.postRunOnShortTaskThread(new Runnable() {
+                @Override
+                public void run() {
+                    long filesSize = 0L;
+                    Integer folderTotalCount = 0;
+                    Integer fileTotalCount = 0;
+                    for (File file : files) {
+                        int[] count = FileUtil.countFolderAndFile(file);
+                        filesSize += FileUtil.getSize(file);
+                        folderTotalCount += count[0];
+                        fileTotalCount += count[1];
+
+                        if (file.isDirectory()) {
+                            folderTotalCount++;
+                        } else {
+                            fileTotalCount++;
+                        }
+                    }
+
+                    final long fileSizeFinal = filesSize;
+                    final int folderTotalCountFinal = folderTotalCount;
+                    final int fileTotalCountFinal = fileTotalCount;
+                    TheApplication.postRunOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (sizeValue != null) {
+                                sizeValue.setText(ConvertUtils.getReadableSize(fileSizeFinal));
+                            }
+                            if (containValue != null) {
+                                containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, folderTotalCountFinal, fileTotalCountFinal));
+                            }
+                        }
+                    });
+                }
+            });
 
             setContentView(dialogView);
         }

@@ -16,6 +16,8 @@
     <string name="common_paste">Paste</string>
     <string name="common_retry">Retry</string>
     <string name="common_search">Search</string>
+    <string name="common_ellipsis">…</string>
+
 
     <string name="gp_not_connect">Unable to open connection</string>
 

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
@@ -18,7 +19,7 @@ import java.io.File;
 
 public class SingleFileDetailDialog extends FMBaseDialog {
 
-    public SingleFileDetailDialog(Activity act, File file, final Listener listener) {
+    public SingleFileDetailDialog(final Activity act, final File file, final Listener listener) {
         super(act, true);
         if (file != null && file.exists()) {
             View dialogView = View.inflate(act, R.layout.dialog_single_file_detail, null);
@@ -51,10 +52,22 @@ public class SingleFileDetailDialog extends FMBaseDialog {
                 modifyTime.setText(TimeUtil.getTime(file.lastModified()));
             }
 
-            TextView size = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_size_value);
+            final TextView size = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_size_value);
             if (size != null) {
                 size.getPaint().setAntiAlias(true);
-                size.setText(ConvertUtils.getReadableSize(FileUtil.getSize(file)));
+                TheApplication.postRunOnShortTaskThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String readableSize = ConvertUtils.getReadableSize(FileUtil.getSize(file));
+                        TheApplication.postRunOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                size.setText(readableSize);
+                            }
+                        });
+                    }
+                });
+                size.setText(R.string.common_ellipsis);
             }
 
             TextView containTitle = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_contain_title);
@@ -65,12 +78,23 @@ public class SingleFileDetailDialog extends FMBaseDialog {
                 }
             }
 
-            TextView containValue = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_contain_value);
+            final TextView containValue = (TextView) dialogView.findViewById(R.id.tv_single_file_detail_contain_value);
             if (containValue != null) {
                 containValue.getPaint().setAntiAlias(true);
                 if (file.isDirectory()) {
-                    int[] counts = FileUtil.countFolderAndFile(file);
-                    containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, counts[0], counts[1]));
+                    TheApplication.postRunOnShortTaskThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final int[] counts = FileUtil.countFolderAndFile(file);
+                            TheApplication.postRunOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    containValue.setText(act.getString(R.string.main_dialog_single_detail_contain, counts[0], counts[1]));
+                                }
+                            });
+                        }
+                    });
+                    containValue.setText(R.string.common_ellipsis);
                 } else {
                     containValue.setVisibility(View.GONE);
                 }
