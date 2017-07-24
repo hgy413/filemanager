@@ -2,7 +2,6 @@ package com.jb.filemanager.function.docmanager;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
@@ -46,6 +45,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     private DocManagerContract.View mView;
     private DocManagerContract.Support mSupport;
     private DocScanListener mDocScanListener;
+    private boolean mIsFirstIn = true;
 
     public DocManagerPresenter(DocManagerContract.View view, DocManagerContract.Support support) {
         mView = view;
@@ -106,21 +106,31 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     @Override
-    public void scanStart() {
-        Logger.d(TAG, "scan start");
-        Toast.makeText(TheApplication.getAppContext(), "System Scan Start", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void scanFinished() {
-        Logger.d(TAG, "scan finish");
-        Toast.makeText(TheApplication.getAppContext(), "System scan finish ,refresh the list", Toast.LENGTH_SHORT).show();
-        //更新数据
-        refreshData(true, false); //暂时不处理
-    }
-
-    @Override
     public void getDocInfo(boolean keepUserCheck, boolean shouldScanAgain) {
+        if (mIsFirstIn) {//第一次进入先从数据库读取数据 然后再扫描
+            ArrayList<DocChildBean> mDocList = mSupport.getDocFileInfo();
+            ArrayList<DocChildBean> mTxtList = mSupport.getTextFileInfo();
+            ArrayList<DocChildBean> mPdfList = mSupport.getPdfFileInfo();
+            DocGroupBean txtGroupBean = new DocGroupBean(mTxtList, "TXT", GroupSelectBox.SelectState.NONE_SELECTED, false);
+            DocGroupBean docGroupBean = new DocGroupBean(mDocList, "DOC", GroupSelectBox.SelectState.NONE_SELECTED, false);
+            DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, "PDF", GroupSelectBox.SelectState.NONE_SELECTED, false);
+
+            ArrayList<DocGroupBean> groups = new ArrayList<>();
+            if (mDocList.size() > 0) {
+                groups.add(txtGroupBean);
+            }
+            if (mPdfList.size() > 0) {
+                groups.add(pdfGroupBean);
+            }
+            if (mTxtList.size() > 0) {
+                groups.add(docGroupBean);
+            }
+
+            if (mDocScanListener != null) {
+                mDocScanListener.onScanFinish(groups, false);
+            }
+            mIsFirstIn = false;
+        }
         ScanDocFileTask scanDocFileTask = new ScanDocFileTask();
         scanDocFileTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, keepUserCheck, shouldScanAgain);
     }

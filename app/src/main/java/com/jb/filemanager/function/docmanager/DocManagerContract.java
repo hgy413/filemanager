@@ -36,8 +36,6 @@ public class DocManagerContract {
         void refreshData(boolean keepUserCheck, boolean shouldScanAgain);
         void onClickBackButton(boolean systemBack);
         void onPressHomeKey();
-        void scanStart();
-        void scanFinished();
         void getDocInfo(boolean keepUserCheck, boolean shouldScanAgain);
         void handleFileDelete(List<File> docPathList);
     }
@@ -50,6 +48,5 @@ public class DocManagerContract {
         void handleFileCopy(String oldFile, String newFile);
         void handleFileCut(String oldFile, String newFile);
         void handleFileRename(String oldFile, String newFile);
-        void scanBroadcastReceiver(File file);
     }
 }

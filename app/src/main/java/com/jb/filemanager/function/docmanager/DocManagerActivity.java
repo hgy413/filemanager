@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
@@ -77,7 +76,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mPresenter.setDocScanListener(new DocScanListener() {
             @Override
             public void onScanStart() {
-                Toast.makeText(DocManagerActivity.this, "加载开始了", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DocManagerActivity.this, "加载开始了", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -85,7 +84,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 TheApplication.postRunOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(DocManagerActivity.this, "加载完成了", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DocManagerActivity.this, "加载完成了", Toast.LENGTH_SHORT).show();
                         if (arrayList == null) {
                             return;
                         }
@@ -122,7 +121,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             }
         });
-        mPresenter.getDocInfo(false, true);
+        mPresenter.getDocInfo(true, true);
     }
 
     /**
@@ -275,7 +274,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     public void updateDeleteProgress(int done, int total) {
         if (done == total) {
             //说明删完了
-            Toast.makeText(DocManagerActivity.this, total + "delete has done", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(DocManagerActivity.this, total + "delete has done", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -338,9 +337,6 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             return;
         }
         switch (view.getId()){
-            case R.id.rl_common_operate_bar_container:
-                Toast.makeText(DocManagerActivity.this, "我是占位的bottom啦", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.tv_common_action_bar_title:
                 if (!mIsSelectMode) {
                     finishActivity();
