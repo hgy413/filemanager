@@ -158,6 +158,28 @@ public class SameFileSupport implements SameFileContract.Support {
                 list.add(info);
                 continue;
             }
+            if (info.mFullPath.endsWith(".apk") || info.mFullPath.endsWith(".APK") ) {
+                info.mFileType = Const.FILE_TYPE.APP;
+                list = infoGroupList.get("Application");
+                if (null == list) {
+                    list = new ArrayList();
+                    infoGroupList.put("Application", list);
+                }
+                list.add(info);
+                continue;
+            }
+            if (info.mFullPath.endsWith(".img") || info.mFullPath.endsWith(".png")
+                    || info.mFullPath.endsWith(".gif") || info.mFullPath.endsWith(".mpg") ) {
+                info.mFileType = Const.FILE_TYPE.PICTURE;
+                list = infoGroupList.get("Picture");
+                if (null == list) {
+                    list = new ArrayList();
+                    infoGroupList.put("Picture", list);
+                }
+                list.add(info);
+                continue;
+            }
+
             info.mFileType = Const.FILE_TYPE.OTHER;
             list = infoGroupList.get("Other");
             if (null == list) {

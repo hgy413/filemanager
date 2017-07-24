@@ -21,6 +21,7 @@ import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by boole on 17-7-13.
@@ -160,10 +161,13 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         holder.mTvName.setText(fileInfo.mName);
         String showInfo = "";
         if (fileInfo.mFileType == Const.FILE_TYPE.MUSIC || fileInfo.mFileType == Const.FILE_TYPE.VIDEO) {
-            showInfo += fileInfo.mArtist + " ";
+            showInfo += fileInfo.mArtist + " " + ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
+                    TimeUtil.getMSTime(fileInfo.mDuration);
+        } else {
+            showInfo += TimeUtil.getYandMandD(new Date(fileInfo.mModified)) + "   "
+                    + ConvertUtils.getReadableSize(fileInfo.mSize);
         }
-        holder.mTvInfo.setText(showInfo + ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
-                TimeUtil.getMSTime(fileInfo.mDuration));
+        holder.mTvInfo.setText(showInfo);
         holder.savePosition(groupPosition, childPosition, fileInfo);
 
         return convertView;
