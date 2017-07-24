@@ -67,4 +67,7 @@
     <string name="clean_group_big_file">大文件</string>
     <string name="clean_group_ad">广告文件</string>
     <string name="clean_group_memory">内存垃圾</string>
+    <string name="txt_preview_error">错误</string>
+    <string name="txt_preview_wrong_msg">文件打开错误,请退出重试。</string>
+    <string name="txt_preview_exit">退出</string>
 </resources>

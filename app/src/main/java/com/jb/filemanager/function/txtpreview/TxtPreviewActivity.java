@@ -13,7 +13,6 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.dialog.ExtractErrorDialog;
-import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.Logger;
 
 import java.util.ArrayList;
@@ -65,13 +64,13 @@ public class TxtPreviewActivity extends BaseActivity {
         mTxtDecodeManager.setTxtLoadListener(new BookPageFactory.OnTxtLoadListener() {
             @Override
             public void onLoadStart() {
-                AppUtils.showToast("这里有个你看不到的加载动画");
+//                AppUtils.showToast("这里有个你看不到的加载动画");
                 mRvTxtPreview.setEnabled(false);
             }
 
             @Override
             public void onLoadComplete() {
-                AppUtils.showToast("Duang Duang Duang 加载完成了");
+//                AppUtils.showToast("Duang Duang Duang 加载完成了");
                 TheApplication.postRunOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -84,10 +83,10 @@ public class TxtPreviewActivity extends BaseActivity {
             public void onLoadError(String msg) {
 
                 mErrorDialog = new ExtractErrorDialog(TxtPreviewActivity.this, "nothing");
-                mErrorDialog.setTvDialogTitle("error");
+                mErrorDialog.setTvDialogTitle(getString(R.string.txt_preview_error));
                 mErrorDialog.setTvFileName("");
-                mErrorDialog.setTvRetryTxt("something wrong ,plz exit");
-                mErrorDialog.setOkBtn("exit");
+                mErrorDialog.setTvRetryTxt(getString(R.string.txt_preview_wrong_msg));
+                mErrorDialog.setOkBtn(getString(R.string.txt_preview_exit));
                 mErrorDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {

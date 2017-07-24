@@ -229,7 +229,13 @@
     <string name="clean_suggest">Suggest</string>
     <string name="clean_result_cleaned">Cleaned</string>
     <string name="no_need_to_clean_again">No need to clean again</string>
-
+    <string name="trash_aty_top_suggest">Suggest</string>
+    <string name="file_type_txt">TXT</string>
+    <string name="file_type_doc">DOC</string>
+    <string name="file_type_pdf">PDF</string>
+    <string name="txt_preview_error">error</string>
+    <string name="txt_preview_wrong_msg">something wrong ,plz exit</string>
+    <string name="txt_preview_exit">exit</string>
 
     <!--评分引导-->
     <string name="googleplay_dialog_love_titel">Rate us at Google Play</string>
@@ -405,8 +411,4 @@
     <string name="within_days">Within %1$d days</string>
     <string name="early">Early</string>
     <string name="file_selected">%1$dfile(s) selected</string>
-    <string name="trash_aty_top_suggest">Suggest</string>
-    <string name="file_type_txt">TXT</string>
-    <string name="file_type_doc">DOC</string>
-    <string name="file_type_pdf">PDF</string>
 </resources>
