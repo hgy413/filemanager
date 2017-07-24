@@ -3,7 +3,7 @@
     <string name="common_cancel">取消</string>
     <string name="common_ok">好</string>
 
-    <string name="clean_storage">Clean Storage</string>
+    <string name="clean_storage">垃圾清理</string>
     <string name="see"><![CDATA[查看>>]]></string>
     <string name="zip">压缩包</string>
     <string name="please_retry_or_cancel">请重试或取消</string>
@@ -29,4 +29,42 @@
     <string name="within_days">%1$d天前</string>
     <string name="early">更早</string>
     <string name="file_selected">%1$d个文件被选中</string>
+
+    <!--Clean-->
+    <string name="clean_subitem_detail_warn_desc_pre">&lt;font color="#ff8517">注意！&lt;/font>%1$s</string>
+    <string name="user_app">用户应用</string>
+    <string name="system_app">系统应用</string>
+    <string name="app_uninstall">卸载</string>
+    <string name="clean_suggest">建议清理</string>
+    <string name="clean_result_cleaned">已清理</string>
+    <string name="no_need_to_clean_again">您的手机很干净。</string>
+    <string name="junk_file_ignore_list">垃圾扫描白名单</string>
+    <string name="long_press_items_in_junk_files_to_add">垃圾页长按项目便可以添加忽略列表</string>
+    <string name="these_items_will_not_be_scan_as_junk_files">垃圾扫描时将忽略以下项目</string>
+    <string name="add_to_ignore_list">添加至白名单</string>
+    <string name="will_not_be_scanned">&lt;font color="#0084ff">%1$s&lt;/font>将不会被扫描</string>
+    <string name="will_be_scanned">&lt;font color="#0084ff">%1$s&lt;/font>将会被扫描</string>
+    <string name="clean_dialog_message_contain">包含</string>
+    <string name="clean_dialog_message_folder">个文件夹</string>
+    <string name="clean_dialog_message_file">个文件</string>
+    <string name="clean_dialog_message_path">路径</string>
+    <string name="clean_dialog_file_yes_btn">打开</string>
+    <string name="clean_dialog_media_yes_btn">播放</string>
+    <string name="clean_dialog_folder_yes_btn">浏览</string>
+    <string name="clean_dialog_app_cache_yes_btn">手动清理</string>
+    <string name="clean_file_browser_no_files">空文件夹</string>
+    <string name="clean_subitem_detail_connect">这是%2$s生成的%1$s</string>
+    <string name="clean_subitem_detail_result_0">%1$s&lt;font color="#0083ff">清理后您的文件不会受到影响。&lt;/font></string>
+    <string name="clean_subitem_detail_result_1">%1$s&lt;font color="#0083ff">建议清理。&lt;/font></string>
+    <string name="clean_subitem_detail_result_2">%1$s&lt;font color="#ff8517">清理后需要联网重新加载。&lt;/font></string>
+    <string name="clean_subitem_detail_result_10">%1$s&lt;font color="#ff8517">清理后无法恢复！&lt;/font></string>
+    <string name="common_comma">，</string>
+    <string name="clean_days_ago"> 天前</string>
+    <string name="clean_group_residue">临时文件</string>
+    <string name="clean_group_cache">缓存垃圾</string>
+    <string name="clean_group_temp">系统临时文件</string>
+    <string name="clean_group_apk">apk安装包</string>
+    <string name="clean_group_big_file">大文件</string>
+    <string name="clean_group_ad">广告文件</string>
+    <string name="clean_group_memory">内存垃圾</string>
 </resources>

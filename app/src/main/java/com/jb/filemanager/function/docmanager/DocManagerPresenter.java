@@ -3,6 +3,7 @@ package com.jb.filemanager.function.docmanager;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.database.provider.DocFileProvider;
@@ -111,9 +112,9 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             ArrayList<DocChildBean> mDocList = mSupport.getDocFileInfo();
             ArrayList<DocChildBean> mTxtList = mSupport.getTextFileInfo();
             ArrayList<DocChildBean> mPdfList = mSupport.getPdfFileInfo();
-            DocGroupBean txtGroupBean = new DocGroupBean(mTxtList, "TXT", GroupSelectBox.SelectState.NONE_SELECTED, false);
-            DocGroupBean docGroupBean = new DocGroupBean(mDocList, "DOC", GroupSelectBox.SelectState.NONE_SELECTED, false);
-            DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, "PDF", GroupSelectBox.SelectState.NONE_SELECTED, false);
+            DocGroupBean txtGroupBean = new DocGroupBean(mTxtList, TheApplication.getAppContext().getString(R.string.file_type_txt), GroupSelectBox.SelectState.NONE_SELECTED, false);
+            DocGroupBean docGroupBean = new DocGroupBean(mDocList, TheApplication.getAppContext().getString(R.string.file_type_doc), GroupSelectBox.SelectState.NONE_SELECTED, false);
+            DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, TheApplication.getAppContext().getString(R.string.file_type_pdf), GroupSelectBox.SelectState.NONE_SELECTED, false);
 
             ArrayList<DocGroupBean> groups = new ArrayList<>();
             if (mDocList.size() > 0) {

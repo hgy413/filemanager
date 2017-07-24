@@ -35,7 +35,7 @@
         android:layout_alignParentBottom="true"
         android:drawableTop="@drawable/ic_bottom_delete"
         android:background="@drawable/app_uninstall_item_selector"
-        android:text="Uninstall"
+        android:text="@string/app_uninstall"
         android:gravity="center_horizontal"
         android:textColor="@color/white"
         android:textSize="10dp"

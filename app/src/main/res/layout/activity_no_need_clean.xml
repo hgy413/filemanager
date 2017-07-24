@@ -22,7 +22,7 @@
     <TextView
         android:layout_marginTop="30dp"
         android:textSize="20dp"
-        android:text="No need to clean again"
+        android:text="@string/no_need_to_clean_again"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/black_70"
         android:layout_width="wrap_content"

@@ -198,7 +198,7 @@
     <string name="applock_retrieve_psd_error_tip">The answer is wrong. Please re-enter.</string>
 
 
-    <string name="pcs">pcs</string>
+    <!--Clean-->
     <string name="junk_file_ignore_list">Junk File Ignore List</string>
     <string name="long_press_items_in_junk_files_to_add">Long press items in Junk Files to add to Ignore List.</string>
     <string name="these_items_will_not_be_scan_as_junk_files">These items will not be scan as junk files.</string>
@@ -225,6 +225,11 @@
     <string name="file_open_as">Open as</string>
     <string name="user_app">UserApp</string>
     <string name="system_app">SystemApp</string>
+    <string name="app_uninstall">Uninstall</string>
+    <string name="clean_suggest">Suggest</string>
+    <string name="clean_result_cleaned">Cleaned</string>
+    <string name="no_need_to_clean_again">No need to clean again</string>
+
 
     <!--评分引导-->
     <string name="googleplay_dialog_love_titel">Rate us at Google Play</string>
@@ -401,4 +406,7 @@
     <string name="early">Early</string>
     <string name="file_selected">%1$dfile(s) selected</string>
     <string name="trash_aty_top_suggest">Suggest</string>
+    <string name="file_type_txt">TXT</string>
+    <string name="file_type_doc">DOC</string>
+    <string name="file_type_pdf">PDF</string>
 </resources>
