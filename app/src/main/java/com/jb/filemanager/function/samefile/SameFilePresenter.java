@@ -143,9 +143,6 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void jumpToFileBrowserPage(){
-//        Intent intent = new Intent(mView, MainActivity.class);
-//        intent.putExtra("HAVE_PAST_DATE", true);
-//        mView.startActivity(intent);
         FileBrowserActivity.startBrowser(mView, null);
     }
 
