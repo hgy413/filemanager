@@ -1,7 +1,5 @@
 package com.jb.filemanager.home;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -45,10 +43,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.Comparator;
-
-import static com.jb.filemanager.home.MainPresenter.EXTRA_DIRS;
-import static com.jb.filemanager.home.MainPresenter.EXTRA_FOCUS_FILE;
-import static com.jb.filemanager.home.MainPresenter.EXTRA_TITLE;
 
 public class MainActivity extends PrivacyGuardActivity implements MainContract.View, View.OnClickListener, RateContract.View {
 
@@ -441,50 +435,6 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
                 break;
             default:
                 break;
-        }
-    }
-
-    /**
-     * 预览文件
-     *
-     * @param context 上下文
-     * @param title   文件的类型
-     * @param path    文件路径
-     */
-    public static void browserFile(Context context, String title, String path) {
-        Intent intent = new Intent(context, MainActivity.class);
-        if (!(context instanceof Activity)) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        intent.putExtra(EXTRA_TITLE, title);
-        intent.putExtra(EXTRA_FOCUS_FILE, path);
-        intent.putExtra(MainPresenter.FILE_EXPLORER, true);
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 预览文件夹
-     *
-     * @param context 上下文
-     * @param title   文件类型
-     * @param dirs    文件夹的路径集合
-     */
-    public static void browserDirs(Context context, String title, String... dirs) {
-        Intent intent = new Intent(context, MainActivity.class);
-        if (!(context instanceof Activity)) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        intent.putExtra(EXTRA_TITLE, title);
-        intent.putExtra(EXTRA_DIRS, dirs);
-        intent.putExtra(MainPresenter.FILE_EXPLORER, true);
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
