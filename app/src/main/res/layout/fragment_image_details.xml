@@ -39,7 +39,7 @@
             android:drawablePadding="16dp"
             android:drawableRight="@drawable/ic_set_wallpaper"
             android:gravity="center"
-            android:text="Set As Wallpaper"
+            android:text="@string/set_wall_paper"
             android:textColor="@color/white_40"
             android:textSize="@dimen/h5_12"
             tools:ignore="ContentDescription"/>

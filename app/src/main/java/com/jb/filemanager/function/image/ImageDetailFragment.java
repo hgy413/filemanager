@@ -1,7 +1,10 @@
 package com.jb.filemanager.function.image;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -9,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.image.adapter.ImageDetailsPagerAdapter;
 import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageModle;
@@ -153,6 +158,22 @@ public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar impl
             return DrawUtils.drawable2Bitmap(mImageDitalsViewPagerAdapter.getCurrentView().getDrawable());
         }
         return null;
+    }
+
+    @Override
+    public void gotoSettingWallPager(Bitmap bitmap) {
+        if (bitmap == null) {
+            Toast.makeText(TheApplication.getAppContext(), R.string.toast_set_wallpaper_fail, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra("mimeType", "image/*");
+        Uri uri = Uri.parse(MediaStore.Images.Media
+                .insertImage(getActivity().getContentResolver(),
+                        bitmap, null, null));
+        intent.setData(uri);
+        startActivity(Intent.createChooser(intent, getString(R.string.set_wall_paper)));
     }
 
     @Override

@@ -19,10 +19,10 @@ public interface ImageDetailsContract {
         void setViewPos(int pos);
         Bitmap getCurrentBitmap();
         void closeView();
+        void gotoSettingWallPager(Bitmap bitmap);
     }
 
     interface Support {
-        void setWallPager(Bitmap bitmap);
         void deleteImage(ImageModle imageModle);
     }
 

@@ -75,7 +75,7 @@ public class ImageDetailsPresenter implements ImageDetailsContract.Presenter {
     public void handleSetWallPaper() {
         if (mView != null && mSupport != null) {
             Bitmap bitmap = mView.getCurrentBitmap();
-            mSupport.setWallPager(bitmap);
+            mView.gotoSettingWallPager(bitmap);
         }
     }
 }

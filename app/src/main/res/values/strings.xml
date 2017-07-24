@@ -421,4 +421,5 @@
     <!--侧边栏引导弹框-->
     <string name="guide_dialog_title">User guide</string>
     <string name="guide_dialog_smart_charge_tip">Display the current charging status, including sponsored content.</string>
+    <string name="set_wall_paper">Set As Wallpaper</string>
 </resources>
