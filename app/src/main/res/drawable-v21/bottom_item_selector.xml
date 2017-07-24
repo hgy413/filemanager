@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-        android:color="@color/middle_gray"
+        android:color="@color/bottom_bar_item_pressed_color"
     android:radius="30dp">
-    <item android:drawable="@color/light_gray" />    <!-- 默认字体颜色 -->
-
+    <item android:drawable="@color/bottom_bar_item_normal_color" />
 </ripple>
 

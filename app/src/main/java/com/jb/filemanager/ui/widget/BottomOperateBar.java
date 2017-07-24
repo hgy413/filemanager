@@ -55,7 +55,7 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
         //此处相当于布局文件中的Android:layout_gravity属性
         layoutParams.gravity = Gravity.BOTTOM;
         setLayoutParams(layoutParams);
-        setBackgroundColor(getResources().getColor(R.color.dark_gray));
+        setBackgroundColor(getResources().getColor(R.color.bottom_bar_item_pressed_color));
         setVisibility(View.GONE);
 
     }
