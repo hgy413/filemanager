@@ -1,10 +1,6 @@
 package com.jb.filemanager.manager;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.MediaStore;
-import android.util.Log;
 
 import com.jb.filemanager.TheApplication;
 
@@ -53,6 +49,8 @@ public class GlobalFileManager {
 
     private static GlobalFileManager sInstance;
     private Context mContext;
+    // 数据存储区
+
 
     private GlobalFileManager() {
         mContext = TheApplication.getAppContext();
@@ -61,30 +59,35 @@ public class GlobalFileManager {
     public static GlobalFileManager getInstance() {
         if (sInstance == null) {
             synchronized (GlobalFileManager.class) {
-                if (sInstance == null) {
+                if (sInstance == null)
                     sInstance = new GlobalFileManager();
-                }
             }
         }
         return sInstance;
     }
 
     // MediaStore.Audio Video Images Files
+    // http://blog.csdn.net/ifmylove2011/article/details/51425921
     public void onApplicationCreate() {
-        long start = System.currentTimeMillis();
+       /* long start = System.currentTimeMillis();
+        Log.e("time", "start=" + start);
         ContentResolver resolver = mContext.getContentResolver();
-        Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+
+        Cursor cursor = resolver.query(
+                MediaStore.Files.getContentUri("external"),
                 null,
-                null,
-                null,
+                MediaStore.Files.FileColumns.MIME_TYPE + "=? or "
+                        + MediaStore.Files.FileColumns.MIME_TYPE + "=?",
+                new String[]{MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip"),
+                        MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")},
                 null);
-        if (cursor != null) {
-            if (cursor.moveToNext()) {
-                String data = cursor.getColumnName(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-                Log.e("image", "data=" + data);
-            }
-        }
-        Log.e("time", "tiem=" + (System.currentTimeMillis() - start));
+//        if (cursor != null) {
+//            while (cursor.moveToNext()) {
+//                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+//                Log.e("image", "data=" + data);
+//            }
+//        }
+        Log.e("time", "time=" + (System.currentTimeMillis() - start));*/
     }
 
     public void onApplicationTerminate() {
