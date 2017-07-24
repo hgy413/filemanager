@@ -327,7 +327,14 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     public void finishActivity() {
-        super.onBackPressed();
+        finish();
+        // 小米自己走动画，必须重载空动画
+        overridePendingTransition(R.anim.nothing, R.anim.nothing);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPresenter.onClickBackButton(true);
     }
 
     @Override
