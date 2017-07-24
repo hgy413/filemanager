@@ -175,7 +175,9 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void onBackPressed() {
-        if (mPresenter != null) {
+        if (mFileExpandableListAdapter.getSelectCount() > 0) {
+            mPresenter.cleanSelect();
+        } else if (mPresenter != null) {
             mPresenter.onClickBackButton(true);
         }
     }

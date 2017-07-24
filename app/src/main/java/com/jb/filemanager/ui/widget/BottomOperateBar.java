@@ -228,16 +228,17 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         if (file.exists()) {
                             File targetFile = new File(file.getParentFile().getAbsolutePath() + File.separator + newName);
                             file.renameTo(targetFile);
-                            TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
                             MediaScannerConnection.scanFile(mContext, new String[]{targetFile.toString()}, null,
                                     new MediaScannerConnection.OnScanCompletedListener() {
                                         @Override
                                         public void onScanCompleted(String path, Uri uri) {
-
-
+                                            mListener.afterRename();
                                         }
                                     }); // 修改后的文件添加到系统数据库
+                            TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
+
                         }
+
                         if (mListener != null) {
                             mListener.afterRename();
                         }

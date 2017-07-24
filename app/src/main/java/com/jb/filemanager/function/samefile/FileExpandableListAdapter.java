@@ -158,8 +158,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             holder.mIvSelect.setImageResource(R.drawable.choose_none);
         }
         holder.mTvName.setText(fileInfo.mName);
-        holder.mTvInfo.setText(fileInfo.mArtist + "  " +
-                ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
+        String showInfo = "";
+        if (fileInfo.mFileType == Const.FILE_TYPE.MUSIC || fileInfo.mFileType == Const.FILE_TYPE.VIDEO) {
+            showInfo += fileInfo.mArtist + " ";
+        }
+        holder.mTvInfo.setText(showInfo + ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
                 TimeUtil.getMSTime(fileInfo.mDuration));
         holder.savePosition(groupPosition, childPosition, fileInfo);
 
@@ -192,11 +195,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 }
                 notifyDataSetChanged();
                 break;
-//            case R.id.ll_file_item_container:
-//                // Todo handle file by Type
-//                Toast.makeText(mContext, "dsfasd", Toast.LENGTH_LONG);
-//
-//                break;
+
             case R.id.iv_music_child_item_select:
                 Binder binder = (Binder) v.getTag();
                 if (binder.mFileInfo.isSelected) {
@@ -250,7 +249,6 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             mViewChildDebideLine = (View) itemView.findViewById(R.id.view_child_divide_line);
             mViewGroupDevideSpace = (View) itemView.findViewById(R.id.view_group_divide_space);
             mIvSelect.setOnClickListener(FileExpandableListAdapter.this);
-            //mLlItemContainer.setOnClickListener(FileExpandableListAdapter.this);
         }
 
         void savePosition(int group, int child, FileInfo fileInfo) {
