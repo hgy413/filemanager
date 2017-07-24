@@ -8,6 +8,8 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.database.provider.DocFileProvider;
 import com.jb.filemanager.eventbus.FileOperateEvent;
+import com.jb.filemanager.manager.spm.IPreferencesIds;
+import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.os.ZAsyncTask;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.StorageUtil;
@@ -199,11 +201,15 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
         @Override
         protected Boolean doInBackground(Boolean... params) {
-            if (params[1]) {//重头开始扫描
+            long lastTime = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(IPreferencesIds.KEY_SCAN_DOC_TIME, 0);
+            boolean shouldScan = System.currentTimeMillis() - lastTime > 5 * 60 * 1000;
+            if (params[1] && shouldScan) {//重头开始扫描
                 for (String path : StorageUtil.getAllExternalPaths(TheApplication.getAppContext())) {
                     File root = new File(path);
                     scanPath(root, 0);
                 }
+                //记录扫描时间
+                SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitLong(IPreferencesIds.KEY_SCAN_DOC_TIME, System.currentTimeMillis());
             } else {//取数据库
                 mDocList = mSupport.getDocFileInfo();
                 mTxtList = mSupport.getTextFileInfo();

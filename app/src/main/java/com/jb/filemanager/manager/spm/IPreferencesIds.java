@@ -78,4 +78,6 @@ public class IPreferencesIds {
     //评分引导出现次数
     public static final String KEY_RATE_GUIDE_TIMES = "key_rate_guidetimes";
 
+    //上次扫描doc的时间
+    public static final String KEY_SCAN_DOC_TIME = "key_scan_doc_time";
 }
