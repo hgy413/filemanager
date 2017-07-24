@@ -26,7 +26,7 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanPathEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.adapter.CleanListAdapter;
 import com.jb.filemanager.function.trash.adapter.TrashGroupAdapter;
-import com.jb.filemanager.function.trash.adapter.view.SlideInLeftAnimator;
+import com.jb.filemanager.function.trash.adapter.view.SlideInRightAnimator;
 import com.jb.filemanager.function.trash.adapter.view.WrapContentLinearLayoutManager;
 import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
@@ -225,7 +225,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     @Override
     public void startDeleteAnimation() {
-        SlideInLeftAnimator animator = new SlideInLeftAnimator();
+        SlideInRightAnimator animator = new SlideInRightAnimator();
         animator.setRemoveDuration(300);
         animator.setAddDuration(300);
         mRvTrashGroupList.setLayoutManager(new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
