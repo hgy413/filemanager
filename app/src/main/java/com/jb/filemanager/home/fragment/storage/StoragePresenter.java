@@ -189,6 +189,9 @@ class StoragePresenter implements StorageContract.Presenter,
     @Override
     public void onClickPath(String word) {
         if (mView != null && mSupport != null) {
+            mStatus = MAIN_STATUS_NORMAL;
+            resetSelectFile();
+
             String clickDirectory = word;
             for (File file : mStorageList) {
                 if ((FileUtil.isInternalStoragePath(mSupport.getContext(), file.getAbsolutePath()) && word.equals(mSupport.getContext().getString(R.string.main_internal_storage)))
