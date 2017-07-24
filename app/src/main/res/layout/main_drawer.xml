@@ -45,20 +45,6 @@
             android:text="@string/drawer_app_locker"/>
 
         <TextView
-            android:id="@+id/tv_drawer_smart_locker"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_drawer_smart_locker"
-            android:drawableStart="@drawable/ic_drawer_smart_locker"
-            android:drawablePadding="15dp"
-            android:textColor="#B2000000"
-            android:textSize="15dp"
-            android:text="@string/drawer_smart_locker"/>
-
-        <TextView
             android:id="@+id/tv_drawer_smart_charge"
             android:layout_width="match_parent"
             android:layout_height="40dp"

@@ -135,17 +135,10 @@ public class MainDrawer implements View.OnClickListener {
     }
 
     private void initDrawerItems() {
-//<<<<<<< 771485e706d23dcbeab215255df64ac065e2f862
         TextView appLockerItem = (TextView) mActivity.findViewById(R.id.tv_drawer_app_locker);
         if (appLockerItem != null) {
             appLockerItem.getPaint().setAntiAlias(true);
             appLockerItem.setOnClickListener(this);
-        }
-
-        TextView smartLockerItem = (TextView) mActivity.findViewById(R.id.tv_drawer_smart_locker);
-        if (smartLockerItem != null) {
-            smartLockerItem.getPaint().setAntiAlias(true);
-            smartLockerItem.setOnClickListener(this);
         }
 
         TextView smartChargeItem = (TextView) mActivity.findViewById(R.id.tv_drawer_smart_charge);
@@ -271,9 +264,6 @@ public class MainDrawer implements View.OnClickListener {
         switch (v.getId()){
             case R.id.tv_drawer_app_locker:
                 jumpToApplock();
-                break;
-            case R.id.tv_drawer_smart_locker:
-                // TODO @wangzq
                 break;
             case R.id.tv_drawer_smart_charge:
                 // TODO @wangzq
