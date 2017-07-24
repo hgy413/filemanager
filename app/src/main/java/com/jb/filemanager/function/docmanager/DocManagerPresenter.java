@@ -127,7 +127,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 groups.add(docGroupBean);
             }
 
-            if (mDocScanListener != null) {
+            if (mDocScanListener != null && groups.size() > 0) {
                 mDocScanListener.onScanFinish(groups, false);
             }
             mIsFirstIn = false;

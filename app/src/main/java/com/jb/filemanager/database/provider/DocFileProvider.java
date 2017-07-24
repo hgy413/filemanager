@@ -238,7 +238,9 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_PATH, newFile);
         contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
         contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
-        contentValues.put(DocFileTable.DOC_TYPE, childBean.mFileType);
+        int dot = childBean.mDocName.lastIndexOf(".");
+        String type = childBean.mDocName.substring(dot + 1);
+        contentValues.put(DocFileTable.DOC_TYPE, type);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
 
@@ -259,7 +261,8 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_PATH, newFile);
         contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
         contentValues.put(DocFileTable.DOC_NAME, name);
-        contentValues.put(DocFileTable.DOC_TYPE, childBean.mFileType);
+        String type = childBean.mDocName.substring(dot + 1);
+        contentValues.put(DocFileTable.DOC_TYPE, type);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
 
@@ -273,7 +276,9 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_PATH, newFile.mDocPath);
         contentValues.put(DocFileTable.DOC_SIZE, newFile.mDocSize);
         contentValues.put(DocFileTable.DOC_NAME, newFile.mDocName);
-        contentValues.put(DocFileTable.DOC_TYPE, newFile.mFileType);
+        int dot = newFile.mDocName.lastIndexOf("/");
+        String type = newFile.mDocName.substring(dot + 1);
+        contentValues.put(DocFileTable.DOC_TYPE, type);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, newFile.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, newFile.mModifyDate);
 

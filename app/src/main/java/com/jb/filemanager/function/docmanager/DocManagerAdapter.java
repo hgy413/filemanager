@@ -85,7 +85,7 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         ChildItemViewHolder viewHolder = new ChildItemViewHolder(convertView);
         final DocGroupBean appGroupBean = mGroups.get(groupPosition);
         final DocChildBean child = appGroupBean.getChild(childPosition);
-        if (child.mFileType == DocChildBean.TYPE_DOC){
+        if (child.mFileType == DocChildBean.TYPE_DOC || child.mFileType == DocChildBean.TYPE_XLS || child.mFileType == DocChildBean.TYPE_PPT) {
             viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_doc);
         }else if (child.mFileType == DocChildBean.TYPE_PDF){
             viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_pdf);

@@ -237,8 +237,14 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                     }
                 } else if (child.mFileType == DocChildBean.TYPE_DOC) {
                     mFileIntent = FileUtil.getWordFileIntent(child.mDocPath);
-                } else {
+                } else if (child.mFileType == DocChildBean.TYPE_XLS) {
+                    mFileIntent = FileUtil.getExcelFileIntent(child.mDocPath);
+                } else if (child.mFileType == DocChildBean.TYPE_PPT) {
+                    mFileIntent = FileUtil.getPptFileIntent(child.mDocPath);
+                } else if (child.mFileType == DocChildBean.TYPE_PDF) {
                     mFileIntent = FileUtil.getPdfFileIntent(child.mDocPath);
+                } else {
+                    mFileIntent = FileUtil.getTextFileIntent(child.mDocPath, false);
                 }
                 startActivity(mFileIntent);
                 return false;

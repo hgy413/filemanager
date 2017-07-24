@@ -45,7 +45,15 @@ public class DocManagerSupport implements DocManagerContract.Support {
 //        return queryFiles("doc");
         ArrayList<DocChildBean> doc = queryFiles(DOC);
         ArrayList<DocChildBean> docX = queryFiles(DOCX);
+        ArrayList<DocChildBean> xls = queryFiles(XLSX);
+        ArrayList<DocChildBean> xlsX = queryFiles(XLS);
+        ArrayList<DocChildBean> ppt = queryFiles(PPT);
+        ArrayList<DocChildBean> pptX = queryFiles(PPTX);
         doc.addAll(docX);
+        doc.addAll(xls);
+        doc.addAll(xlsX);
+        doc.addAll(ppt);
+        doc.addAll(pptX);
         return doc;
     }
 
