@@ -14,7 +14,6 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.flashlight.brightestflashlightpro.app.ToolLockerSdk;
 import com.gau.go.gostaticsdk.StatisticsManager;
 import com.jb.filemanager.abtest.ABTest;
 import com.jb.filemanager.ad.AdManager;
@@ -48,8 +47,6 @@ import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.device.Machine;
 import com.jiubang.commerce.ad.AdSdkApi;
 import com.jiubang.commerce.ad.params.ClientParams;
-import com.jiubang.commerce.buychannel.BuyChannelApi;
-import com.jiubang.commerce.buychannel.buyChannel.bean.BuyChannelBean;
 import com.jiubang.commerce.buychannel.buyChannel.utils.AppInfoUtils;
 import com.jiubang.commerce.daemon.DaemonClient;
 import com.jiubang.commerce.daemon.DaemonConfigurations;

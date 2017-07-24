@@ -64,7 +64,7 @@ public class SearchTitleView extends RelativeLayout implements View.OnClickListe
                     mIvSelectBtn.setImageResource(R.drawable.choose_none_black);
                     break;
                 case 1:
-                    mIvSelectBtn.setImageResource(R.drawable.select_multi);
+                    mIvSelectBtn.setImageResource(R.drawable.choose_none_black);
                     break;
                 case 2:
                     mIvSelectBtn.setImageResource(R.drawable.choose_all);
