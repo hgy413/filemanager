@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CleanTrashActivity extends BaseActivity implements Contract.ICleanMainView, View.OnClickListener {
 
     private static final String TAG = CleanTrashActivity.class.getSimpleName();
+    private static final long TOP_TRANSLATION_DURATION = 3000;
     private CleanTrashPresenter mPresenter = new CleanTrashPresenter(this);
     private RelativeLayout mRlRoot;
     private TextView mTvCommonActionBarTitle;
@@ -67,6 +69,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     private ImageView mIvTopRed;
     private ImageView mIvTopGradient;
     private ImageView mIvTopGreen;
+    private LinearLayout mLlContent;
 
     private CleanListAdapter mAdapter;
     private String[] mSelectedStorageSize;
@@ -126,6 +129,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mIvCommonActionBarMore.setImageResource(R.drawable.trash_ignore_icon);
         mIvCommonActionBarMore.setEnabled(false);
 
+        mLlContent = (LinearLayout) findViewById(R.id.ll_content);
         mIvTopRed = (ImageView) findViewById(R.id.iv_top_red);
         mIvTopGradient = (ImageView) findViewById(R.id.iv_top_gradient);
         mIvTopGreen = (ImageView) findViewById(R.id.iv_top_green);
@@ -230,11 +234,10 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     @Override
     public void startDeleteAnimation() {
         SlideInRightAnimator animator = new SlideInRightAnimator();
-        animator.setRemoveDuration(300);
-        animator.setAddDuration(300);
         mRvTrashGroupList.setLayoutManager(new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvTrashGroupList.setItemAnimator(animator);
         TrashGroupAdapter adapter = new TrashGroupAdapter(mPresenter.getDataGroup());
+        animator.setRemoveDuration(TOP_TRANSLATION_DURATION / adapter.getItemCount());
         mRvTrashGroupList.setAdapter(adapter);
         mRvTrashGroupList.setVisibility(View.VISIBLE);
         mCleanTrashExpandableListView.setVisibility(View.GONE);
@@ -251,9 +254,9 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     }
 
     private void initTopGradientAnimation() {
-        final int screenWidth = (int) (ScreenUtils.getScreenWidth());
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(-2 * screenWidth, 0);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        final int screenWidth = ScreenUtils.getScreenWidth();
+        ValueAnimator translateAnimator = ValueAnimator.ofInt(-2 * screenWidth, 0);
+        translateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int animatedValue = (int) valueAnimator.getAnimatedValue();
@@ -262,7 +265,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             }
         });
 
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
+        translateAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
@@ -270,9 +273,39 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 mIvTopGreen.setVisibility(View.VISIBLE);
                 Logger.d(TAG, "start translationX");
             }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Logger.d(TAG, "end translationX");
+                mIvTopRed.setVisibility(View.GONE);
+                mIvTopGradient.setVisibility(View.GONE);
+            }
         });
-        valueAnimator.setDuration(10000);
-        valueAnimator.start();
+        translateAnimator.setDuration(TOP_TRANSLATION_DURATION);
+
+
+        ValueAnimator hideAnimator = ValueAnimator.ofFloat(1, 0);
+        hideAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float animatedValue = (float) valueAnimator.getAnimatedValue();
+                mLlContent.setAlpha(animatedValue);
+                mIvTopGreen.setAlpha(animatedValue);
+            }
+        });
+        hideAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                gotoResultPage();
+            }
+        });
+        hideAnimator.setStartDelay(TOP_TRANSLATION_DURATION + 90);
+        hideAnimator.setDuration(170);
+
+        translateAnimator.start();
+        hideAnimator.start();
     }
 
     private Object mSubscriber = new Object() {
@@ -444,7 +477,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
             case R.id.iv_clean_button_red:
                 doCleanTrash();
                 mPbScanProgress.setVisibility(View.GONE);
-                mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
+//                mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
                 mIvCleanButton.setVisibility(View.GONE);
                 break;
             default:

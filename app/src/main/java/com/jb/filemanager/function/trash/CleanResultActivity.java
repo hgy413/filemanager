@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -18,14 +17,11 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     public static final String CLEAN_SIZE = "clean_size";
     public static final String TAG = CleanResultActivity.class.getSimpleName();
     private TextView mTvCommonActionBarTitle;
-    private RelativeLayout mRlBlueRect;
-    private TextView mTvTrashSizeNumber;
-    private TextView mTvTrashSizeUnit;
     private ImageView mIvCleanResultButtonBlue;
     private TextView mTvCleanResultSize;
     private TextView mTvCleanResultSizeUnit;
     private TextView mTvCleanResultCleaned;
-    private ValueAnimator mTopHideAnimation;
+
     private ValueAnimator mResultContentShowAnimation;
     private boolean mIsFirstComeIn = true;
 
@@ -43,9 +39,6 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
 
     private void initView() {
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
-        mRlBlueRect = (RelativeLayout) findViewById(R.id.rl_blue_rect);
-        mTvTrashSizeNumber = (TextView) findViewById(R.id.tv_trash_size_number);
-        mTvTrashSizeUnit = (TextView) findViewById(R.id.tv_trash_size_unit);
         mIvCleanResultButtonBlue = (ImageView) findViewById(R.id.iv_clean_result_button_blue);
         mTvCleanResultSize = (TextView) findViewById(R.id.tv_clean_result_size);
         mTvCleanResultSizeUnit = (TextView) findViewById(R.id.tv_clean_result_size_unit);
@@ -56,9 +49,6 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     private void initData() {
         Intent intent = getIntent();
         String[] cleanSizes = intent.getStringArrayExtra(CLEAN_SIZE);
-        mTvTrashSizeNumber.setText(cleanSizes[0]);
-        mTvTrashSizeUnit.setText(cleanSizes[1]);
-        mRlBlueRect.setVisibility(View.VISIBLE);
 
         mTvCleanResultSize.setText(cleanSizes[0]);
         mTvCleanResultSizeUnit.setText(cleanSizes[1]);
@@ -69,43 +59,24 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initAnimation() {
-        mTopHideAnimation = ValueAnimator.ofFloat(1f, 0f);
-        mTopHideAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float animatedValue = (float) valueAnimator.getAnimatedValue();
-                mRlBlueRect.setScaleY(animatedValue);
-                mRlBlueRect.setScaleX(animatedValue);
-            }
-        });
-        mTopHideAnimation.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                super.onAnimationCancel(animation);
-                mRlBlueRect.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mRlBlueRect.setVisibility(View.GONE);
-            }
-        });
-
-
-        mTopHideAnimation.setDuration(1500);
-
         mResultContentShowAnimation = ValueAnimator.ofFloat(0, 1);
         mResultContentShowAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float animatedValue = (float) valueAnimator.getAnimatedValue();
+                mTvCleanResultSize.setAlpha(animatedValue);
                 mTvCleanResultSize.setScaleX(animatedValue);
                 mTvCleanResultSize.setScaleY(animatedValue);
+
+                mTvCleanResultSizeUnit.setAlpha(animatedValue);
                 mTvCleanResultSizeUnit.setScaleX(animatedValue);
                 mTvCleanResultSizeUnit.setScaleY(animatedValue);
+
+                mTvCleanResultCleaned.setAlpha(animatedValue);
                 mTvCleanResultCleaned.setScaleX(animatedValue);
                 mTvCleanResultCleaned.setScaleY(animatedValue);
+
+                mIvCleanResultButtonBlue.setAlpha(animatedValue);
                 mIvCleanResultButtonBlue.setScaleX(animatedValue);
                 mIvCleanResultButtonBlue.setScaleY(animatedValue);
             }
@@ -121,8 +92,7 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
                 mIvCleanResultButtonBlue.setVisibility(View.VISIBLE);
             }
         });
-        mResultContentShowAnimation.setStartDelay(1200);
-        mResultContentShowAnimation.setDuration(1500);
+        mResultContentShowAnimation.setDuration(750);
     }
 
     private void initClick() {
@@ -130,12 +100,6 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void releaseAnimation() {
-        if (mTopHideAnimation != null) {
-            mTopHideAnimation.cancel();
-            mTopHideAnimation.removeAllListeners();
-            mTopHideAnimation.removeAllUpdateListeners();
-            mTopHideAnimation = null;
-        }
 
         if (mResultContentShowAnimation != null) {
             mResultContentShowAnimation.cancel();
@@ -146,11 +110,9 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void startAnimation() {
-        if (mTopHideAnimation == null || mResultContentShowAnimation == null) {
+        if (mResultContentShowAnimation == null) {
             initAnimation();
         }
-
-        mTopHideAnimation.start();
         mResultContentShowAnimation.start();
     }
 
