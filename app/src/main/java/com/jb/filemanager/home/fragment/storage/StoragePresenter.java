@@ -179,8 +179,7 @@ class StoragePresenter implements StorageContract.Presenter,
                     mPathStack.push(file);
                     restartLoad();
                 } else {
-                    mView.updateItemSelectStatus(holder);
-                    addOrRemoveSelected(file);
+                    FileUtil.openFile(mSupport.getActivity(), file);
                 }
             }
         }

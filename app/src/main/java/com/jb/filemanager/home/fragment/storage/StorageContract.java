@@ -1,5 +1,6 @@
 package com.jb.filemanager.home.fragment.storage;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ public class StorageContract {
         Context getContext();
         Application getApplication();
         LoaderManager getLoaderManager();
+        Activity getActivity();
     }
 
 }
