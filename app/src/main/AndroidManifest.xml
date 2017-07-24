@@ -193,13 +193,13 @@
         <activity
             android:name=".function.fileexplorer.FileBrowserActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!-- 垃圾清理的白名单页 -->
         <activity
             android:name=".function.trashignore.activity.TrashIgnoreActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!--垃圾清理的最优页-->
         <activity
@@ -211,19 +211,13 @@
         <activity
             android:name=".function.apkmanager.AppManagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
-
-        <!-- app管理的搜索结果页 -->
-        <activity
-            android:name=".function.apkmanager.searchresult.AppManagerSearchResultActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!-- 文档管理 -->
         <activity
             android:name=".function.docmanager.DocManagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <activity
             android:name=".function.search.view.SearchActivity"
@@ -281,7 +275,7 @@
         <activity
             android:name=".function.txtpreview.TxtPreviewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!-- 守护进程 start -->
         <!-- 后台监测应用流量使用的服务 -->
