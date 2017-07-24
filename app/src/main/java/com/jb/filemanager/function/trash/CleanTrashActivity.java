@@ -151,7 +151,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
     private void setTotalCheckedSizeText() {
         long checkedSize = CleanCheckedFileSizeEvent.getJunkFileAllSize(true);
-        mSelectedStorageSize = ConvertUtils.getFormatterTrafficForShorter(checkedSize);
+        mSelectedStorageSize = ConvertUtils.getFormatterTraffic(checkedSize);
         mTvTrashSizeNumber.setText(mSelectedStorageSize[0]);
         mTvTrashSizeUnit.setText(mSelectedStorageSize[1]);
     }
