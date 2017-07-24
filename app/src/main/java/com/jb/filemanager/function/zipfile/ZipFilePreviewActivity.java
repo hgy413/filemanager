@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -147,7 +146,7 @@ public class ZipFilePreviewActivity extends BaseActivity implements
     @Override
     public void showToast(String toast) {
         if (!TextUtils.isEmpty(toast)) {
-            Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
@@ -125,7 +124,9 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
             public void run() {
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     dismissProgressDialog();
-                    Toast.makeText(mContext, "File Error. error_code=" + errorCode, Toast.LENGTH_SHORT).show();
+                    ExtractErrorDialog extractErrorDialog = new ExtractErrorDialog(mActivity, mFile.getFileName());
+                    extractErrorDialog.show();
+//                    Toast.makeText(mContext, "File Error. error_code=" + errorCode, Toast.LENGTH_SHORT).show();
                 }
             }
         });
