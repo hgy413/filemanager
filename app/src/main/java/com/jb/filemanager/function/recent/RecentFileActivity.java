@@ -143,7 +143,13 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mPresenter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPresenter.onBackPressed();
+        super.onBackPressed();
     }
 }

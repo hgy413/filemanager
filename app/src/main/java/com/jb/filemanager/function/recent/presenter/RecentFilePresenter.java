@@ -37,6 +37,11 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
     }
 
     @Override
+    public void onBackPressed() {
+        onTitleCancelBtnClick();
+    }
+
+    @Override
     public void onItemCheckChanged() {
         int totalCount = 0;
         mCurrentSelect.clear();
