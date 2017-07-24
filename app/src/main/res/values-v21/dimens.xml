@@ -9,4 +9,6 @@
     <dimen name="trash_ignore_status_bar_height">24dp</dimen>
     <dimen name="trash_ignore_title_height">72dp</dimen>
     <dimen name="system_status_bar_top_margin">24dp</dimen>
+    <dimen name="title_margin_top">20dp</dimen>
+    <dimen name="clean_top_gradient_height">173dp</dimen>
 </resources>
