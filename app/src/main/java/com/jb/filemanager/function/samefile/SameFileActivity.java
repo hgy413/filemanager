@@ -166,6 +166,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         if (mImageFetcher != null) {
             mImageFetcher.setExitTasksEarly(false);
         }
+        mPresenter.onCreate(getIntent());
     }
 
     @Override

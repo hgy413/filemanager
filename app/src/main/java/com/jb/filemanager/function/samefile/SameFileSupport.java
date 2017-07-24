@@ -169,7 +169,7 @@ public class SameFileSupport implements SameFileContract.Support {
                 continue;
             }
             if (info.mFullPath.endsWith(".img") || info.mFullPath.endsWith(".png")
-                    || info.mFullPath.endsWith(".gif") || info.mFullPath.endsWith(".mpg") ) {
+                    || info.mFullPath.endsWith(".gif") || info.mFullPath.endsWith(".jpg") ) {
                 info.mFileType = Const.FILE_TYPE.PICTURE;
                 list = infoGroupList.get("Picture");
                 if (null == list) {

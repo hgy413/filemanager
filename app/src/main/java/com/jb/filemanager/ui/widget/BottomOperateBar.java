@@ -226,15 +226,16 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                     @Override
                     public void onConfirm(DocRenameDialog dialog, String newName) {
                         if (file.exists()) {
+                            FileUtil.renameSelectedFile(file, file.getParentFile().getAbsolutePath() + File.separator + newName);
                             File targetFile = new File(file.getParentFile().getAbsolutePath() + File.separator + newName);
-                            file.renameTo(targetFile);
-                            MediaScannerConnection.scanFile(mContext, new String[]{targetFile.getParentFile().getAbsolutePath()}, null,
-                                    new MediaScannerConnection.OnScanCompletedListener() {
-                                        @Override
-                                        public void onScanCompleted(String path, Uri uri) {
-                                            mListener.afterRename();
-                                        }
-                                    }); // 修改后的文件添加到系统数据库
+//                            file.renameTo(targetFile);
+//                            MediaScannerConnection.scanFile(mContext, new String[]{targetFile.getParentFile().getAbsolutePath()}, null,
+//                                    new MediaScannerConnection.OnScanCompletedListener() {
+//                                        @Override
+//                                        public void onScanCompleted(String path, Uri uri) {
+//                                            mListener.afterRename();
+//                                        }
+//                                    }); // 修改后的文件添加到系统数据库
                             TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
                         }
 

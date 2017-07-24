@@ -3,6 +3,7 @@ package com.jb.filemanager.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
@@ -13,6 +14,7 @@ import android.util.ArrayMap;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.fileexplorer.NewListItemDialog;
 import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.manager.file.FileManager;
@@ -481,11 +483,19 @@ public class FileUtil {
     }
 
     public static boolean renameSelectedFile(File file, String newFilePath) {
-        boolean result = false;
+        final boolean[] result = {false};
         if (file != null && file.exists() && !TextUtils.isEmpty(newFilePath)) {
-            result = file.renameTo(new File(newFilePath));
+            result[0] = file.renameTo(new File(newFilePath));
+            MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFilePath}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            //mListener.afterRename();
+                            result[0] = true;
+                        }
+                    }); // 修改后的文件添加到系统数据库
         }
-        return result;
+        return result[0];
     }
 
     public static int[] countFolderAndFile(File parent) {
