@@ -124,11 +124,11 @@
         <activity
             android:name=".function.zipfile.ZipFileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
         <activity
             android:name=".function.zipfile.ZipFilePreviewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
         <activity
             android:name=".function.zipfile.dialog.ExtractSnackBar"
             android:screenOrientation="portrait"
@@ -138,7 +138,7 @@
         <activity
             android:name=".function.recent.RecentFileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
         <activity
             android:name=".function.recent.RecentImageActivity"
             android:screenOrientation="portrait"

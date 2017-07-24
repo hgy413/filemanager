@@ -35,4 +35,5 @@
     <dimen name="common_title_bar_total_height">56dp</dimen>
     <!--图片管理间隔-->
     <dimen name="image_interval_distance">6dp</dimen>
+    <dimen name="system_status_bar_top_margin">0dp</dimen>
 </resources>

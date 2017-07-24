@@ -37,6 +37,16 @@ public class ColorStatusBarUtil {
         }
     }
 
+    public static void setStatusBarColor(Activity activity, int colorInt) {
+        if (isSupport()) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(colorInt);
+            window.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+    }
+
     /**
      * 获取透明状态栏的特性
      */

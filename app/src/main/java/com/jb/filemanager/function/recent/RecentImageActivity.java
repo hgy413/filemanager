@@ -31,7 +31,7 @@ public class RecentImageActivity extends BaseActivity {
         Bundle bundle = getIntent().getBundleExtra(EXTRA_BUNDLE_DATA);
         ArrayList<ImageModle> imageModleList = bundle.getParcelableArrayList(EXTRA_DATA_LIST);
         int currentPos = bundle.getInt(EXTRA_CURR_POSITION);
-        // R.id.recent_image
+        // R.id.recent_image : Fragment容器
         ImageDetailFragment imageDetailFragment = new ImageDetailFragment();
         imageDetailFragment.setExtras(imageModleList, currentPos);
         FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
