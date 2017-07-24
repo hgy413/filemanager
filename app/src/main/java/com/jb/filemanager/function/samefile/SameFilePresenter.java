@@ -13,6 +13,7 @@ import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.jb.filemanager.Const;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.util.TimeUtil;
@@ -141,10 +142,11 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     }
 
     @Override
-    public void jumpToStoragePage(){
-        Intent intent = new Intent(mView, MainActivity.class);
-        intent.putExtra("HAVE_PAST_DATE", true);
-        mView.startActivity(intent);
+    public void jumpToFileBrowserPage(){
+//        Intent intent = new Intent(mView, MainActivity.class);
+//        intent.putExtra("HAVE_PAST_DATE", true);
+//        mView.startActivity(intent);
+        FileBrowserActivity.startBrowser(mView, null);
     }
 
     @Override

@@ -134,12 +134,14 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void afterCopy() {
-                mPresenter.jumpToStoragePage();
+                mPresenter.cleanSelect();
+                mPresenter.jumpToFileBrowserPage();
             }
 
             @Override
             public void afterCut() {
-                mPresenter.jumpToStoragePage();
+                mPresenter.cleanSelect();
+                mPresenter.jumpToFileBrowserPage();
             }
 
             @Override

@@ -34,7 +34,7 @@ public interface SameFileContract {
 
         ArrayList<File> getSelectFile();
 
-        void jumpToStoragePage();
+        void jumpToFileBrowserPage();
 
         void reloadData();
 

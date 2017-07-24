@@ -17,6 +17,7 @@ import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.TimeUtil;
+import com.jb.filemanager.util.imageloader.IconLoader;
 import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 import java.util.ArrayList;
