@@ -11,6 +11,9 @@ import com.jb.filemanager.home.event.CurrentPathChangeEvent;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.Logger;
@@ -229,6 +232,7 @@ class StoragePresenter implements StorageContract.Presenter,
             }
         }
 
+        statisticsClickPath();
     }
 
     @Override
@@ -268,6 +272,21 @@ class StoragePresenter implements StorageContract.Presenter,
             } else {
                 AppUtils.showToast(mSupport.getContext(), R.string.toast_paste_dest_disable);
             }
+        }
+
+        statisticsClickPaste();
+    }
+
+    @Override
+    public void onClickStyleSwitcher(boolean currentIsGrid) {
+        if (mView != null) {
+            if (currentIsGrid) {
+                mView.showListStyle();
+            } else {
+                mView.showGridStyle();
+            }
+
+            statisticsClickStyleSwitch(currentIsGrid ? "1" : "2");
         }
     }
 
@@ -464,5 +483,24 @@ class StoragePresenter implements StorageContract.Presenter,
                 }
             }
         }
+    }
+
+    private void statisticsClickPath() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_PATH;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickStyleSwitch(String style) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_STYLE_SWITCH;
+        bean.mTab = style;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickPaste() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_PASTE;
+        StatisticsTools.upload101InfoNew(bean);
     }
 }

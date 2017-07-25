@@ -23,6 +23,9 @@ public class StorageContract {
         void updateCurrentPath(List<File> data, File currentPath);
         void updateItemSelectStatus(Object holder);
         void showPasteNeedMoreSpaceDialog(long needMoreSpace);
+
+        void showGridStyle();
+        void showListStyle();
     }
 
     interface Presenter {
@@ -37,6 +40,7 @@ public class StorageContract {
         void onClickPath(String word);
         void onClickOperateCancelButton();
         void onClickOperatePasteButton();
+        void onClickStyleSwitcher(boolean currentIsGrid);
 
         void afterCopy();
         void afterCut();

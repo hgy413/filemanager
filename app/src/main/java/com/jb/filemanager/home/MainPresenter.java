@@ -104,9 +104,7 @@ public class MainPresenter implements MainContract.Presenter {
             mView.showNormalStatus(mCurrentTab);
         }
 
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = mCurrentTab == 0 ? StatisticsConstants.HOME_CLICK_TAB_CATEGORY : StatisticsConstants.HOME_CLICK_TAB_STORAGE;
-        StatisticsTools.upload101InfoNew(bean);
+        statisticsSwitchTab();
     }
 
     @Override
@@ -114,9 +112,8 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.openDrawer(MainDrawer.CLI_OPEN);
         }
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.HOME_CLICK_DRAWER;
-        StatisticsTools.upload101InfoNew(bean);
+
+        statisticsClickDrawer();
     }
 
     @Override
@@ -124,9 +121,8 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.goToSearchActivity();
         }
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.HOME_CLICK_SEARCH;
-        StatisticsTools.upload101InfoNew(bean);
+
+        statisticsClickSearch();
     }
 
     @Override
@@ -134,6 +130,8 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.showActionMoreOperatePopWindow();
         }
+
+        statisticsClickActionMore();
     }
 
     @Override
@@ -141,6 +139,8 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.showNewFolderDialog();
         }
+
+        statisticsClickCreateNewFolder();
     }
 
     @Override
@@ -148,10 +148,49 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.showSortByDialog();
         }
+
+        statisticsClickSort();
     }
 
     @Override
     public String getCurrentPath() {
         return mCurrentPath;
+    }
+
+
+    private void statisticsSwitchTab() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = mCurrentTab == 0 ? StatisticsConstants.HOME_CLICK_TAB_CATEGORY : StatisticsConstants.HOME_CLICK_TAB_STORAGE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickDrawer() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.HOME_CLICK_DRAWER;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickSearch() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = mCurrentTab == 0 ? StatisticsConstants.HOME_CLICK_SEARCH : StatisticsConstants.STORAGE_CLICK_SEARCH;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickActionMore() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_ACTION_MORE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickCreateNewFolder() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_CREATE_FOLDER;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickSort() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_SORT;
+        StatisticsTools.upload101InfoNew(bean);
     }
 }

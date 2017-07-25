@@ -1,6 +1,7 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.FileUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +36,25 @@ public class SortByDialog extends FMBaseDialog {
         TextView descendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_descending);
         TextView ascendButton = (TextView) dialogView.findViewById(R.id.tv_main_sort_ascending);
         final RadioGroup itemGroup = (RadioGroup) dialogView.findViewById(R.id.rg_main_sort_by);
+        itemGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_main_sort_by_name:
+                        statisticsClickSortByName();
+                        break;
+                    case R.id.rb_main_sort_by_date:
+                        statisticsClickSortByDate();
+                        break;
+                    case R.id.rb_main_sort_by_type:
+                        statisticsClickSortByType();
+                        break;
+                    case R.id.rb_main_sort_by_size:
+                        statisticsClickSortBySize();
+                        break;
+                }
+            }
+        });
 
         int currentId;
         switch (currentSortBy) {
@@ -76,6 +99,7 @@ public class SortByDialog extends FMBaseDialog {
                         break;
                 }
                 listener.onDescend(SortByDialog.this, sortBy);
+                statisticsClickDescending();
             }
         }); // 降序按钮点击事件
 
@@ -102,10 +126,47 @@ public class SortByDialog extends FMBaseDialog {
                         break;
                 }
                 listener.onAscend(SortByDialog.this, sortBy);
+                statisticsClickAscending();
             }
         }); // 升序按钮点击事件
 
         setContentView(dialogView);
+    }
+
+    private void statisticsClickSortByName() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_SORT_NAME;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickSortByDate() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_SORT_DATE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickSortByType() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_SORT_TYPE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickSortBySize() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_SORT_SIZE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickAscending() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_SORT_ASCENDING;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickDescending() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_SORT_DESCENDING;
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     public interface Listener {

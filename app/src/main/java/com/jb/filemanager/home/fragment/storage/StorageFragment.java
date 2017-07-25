@@ -106,15 +106,9 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                 @Override
                 public void onClick(View v) {
                     boolean isGridStyle = mIvStyleSwitcher.isSelected();
-                    if (isGridStyle) {
-                        mLvFiles.setVisibility(View.VISIBLE);
-                        mGvFiles.setVisibility(View.GONE);
-                    } else {
-                        mGvFiles.setVisibility(View.VISIBLE);
-                        mLvFiles.setVisibility(View.GONE);
+                    if (mPresenter != null) {
+                        mPresenter.onClickStyleSwitcher(isGridStyle);
                     }
-
-                    mIvStyleSwitcher.setSelected(!isGridStyle);
                 }
             });
         }
@@ -370,6 +364,24 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void showGridStyle() {
+        if (mGvFiles != null && mLvFiles != null && mIvStyleSwitcher != null) {
+            mGvFiles.setVisibility(View.VISIBLE);
+            mLvFiles.setVisibility(View.GONE);
+            mIvStyleSwitcher.setSelected(true);
+        }
+    }
+
+    @Override
+    public void showListStyle() {
+        if (mGvFiles != null && mLvFiles != null && mIvStyleSwitcher != null) {
+            mGvFiles.setVisibility(View.GONE);
+            mLvFiles.setVisibility(View.VISIBLE);
+            mIvStyleSwitcher.setSelected(false);
+        }
     }
 
     // implements StorageContract.View end

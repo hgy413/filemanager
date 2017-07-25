@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
@@ -85,12 +88,14 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                 ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                 FileManager.getInstance().setCutFiles(selectedFiles);
                 mListener.afterCut();
+                statisticsClickCut();
             }
                 break;
             case R.id.ll_common_operate_bar_copy: {
                 ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                 FileManager.getInstance().setCopyFiles(selectedFiles);
                 mListener.afterCopy();
+                statisticsClickCopy();
             }
                 break;
             case R.id.ll_common_operate_bar_delete: {
@@ -111,10 +116,13 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                     }
                 });
                 dialog.show();
+                statisticsClickDelete();
             }
                 break;
-            case R.id.ll_common_operate_bar_more:
+            case R.id.ll_common_operate_bar_more: {
                 showPopupMore();
+                statisticsClickMore();
+            }
                 break;
         }
     }
@@ -169,6 +177,8 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         public void onClick(View v) {
                             showDetailDialog();
                             popupWindow.dismiss();
+
+                            statisticsClickDetail();
                         }
                     });
                 }
@@ -180,6 +190,8 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         public void onClick(View v) {
                             showRenameDialog();
                             popupWindow.dismiss();
+
+                            statisticsClickRename();
                         }
                     });
                 }
@@ -234,7 +246,42 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                 docRenameDialog.show();
             }
         }
+    }
 
+    private void statisticsClickCut() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_CUT;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickCopy() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_COPY;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickDelete() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_DELETE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickMore() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_BOTTOM_MORE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickDetail() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_DETAILS;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickRename() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_RENAME;
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     public interface Listener {

@@ -1,12 +1,17 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -95,6 +100,7 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                             }
                         }
                     }
+                    statisticsClickOk();
                 }
             }); // 确定按钮点击事件
         }
@@ -108,11 +114,36 @@ public class CreateNewFolderDialog extends FMBaseDialog {
                     if (listener != null) {
                         listener.onCancel(CreateNewFolderDialog.this);
                     }
+                    statisticsClickCancel("2");
                 }
             }); // 取消按钮点击事件
         }
 
         setContentView(dialogView);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        statisticsClickCancel("1");
+    }
+
+    @Override
+    public void setOnCancelListener(@Nullable OnCancelListener listener) {
+        super.setOnCancelListener(listener);
+    }
+
+    private void statisticsClickOk() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CREATE_FOLDER_OK;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickCancel(String tab) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.STORAGE_CREATE_FOLDER_CANCEL;
+        bean.mTab = tab;
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     public interface Listener {
