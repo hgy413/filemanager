@@ -16,9 +16,9 @@ public class StatisticsConstants {
 
 
     /**
-     * Ace network 的产品ID
+     * File Manager 的产品ID
      */
-    public final static String PRODUCT_ID = "183";
+    public final static String PRODUCT_ID = "194";
 
 
     // 侧边栏呼出

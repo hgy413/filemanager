@@ -81,7 +81,7 @@ public class Statistics103Bean {
     public static Statistics103Bean build() {
         Statistics103Bean statistics103Bean = new Statistics103Bean();
         statistics103Bean.mOperateCode = "force_install";
-        statistics103Bean.mEntrance = "168";
+        statistics103Bean.mEntrance = StatisticsConstants.PRODUCT_ID;
         statistics103Bean.mOperateResult = "1";
         statistics103Bean.mStatisticsObject = "";
         statistics103Bean.mTab = "";
