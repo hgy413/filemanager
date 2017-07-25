@@ -18,7 +18,6 @@ import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
 import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.presenter.ZipActivityContract;
 import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
-import com.jb.filemanager.manager.GlobalFileManager;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
@@ -46,7 +45,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GlobalFileManager.getInstance().sendUpdateBroadcast(new File("/storage/emulated/0/boost"));
+//        GlobalFileManager.getInstance().sendUpdateBroadcast(new File("/storage/emulated/0/boost"));
         setContentView(R.layout.activity_zip_file);
 
         mProgress = (ProgressWheel) findViewById(R.id.zip_progress);
