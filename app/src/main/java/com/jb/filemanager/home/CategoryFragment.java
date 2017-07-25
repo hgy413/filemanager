@@ -46,6 +46,9 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.function.zipfile.ZipFileActivity;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.view.UsageAnalysis;
 import com.jb.filemanager.util.APIUtil;
 import com.jb.filemanager.util.ConvertUtils;
@@ -183,6 +186,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     Intent intent = new Intent(getContext(), ImageActivity.class);
                     intent.putExtra(ImageManagerFragment.ARG_IS_INTERNAL_STORAGE, mIsInternalStorage);
                     startActivity(intent);
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_PHOTO;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -207,6 +214,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
                     intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_VIDEO);
                     startActivity(intent);
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_VIDEO;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -229,6 +240,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // apk管理
                     startActivity(new Intent(getContext(), AppManagerActivity.class));
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_APP;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -253,6 +268,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
                     intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_MUSIC);
                     startActivity(intent);
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_AUDIO;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -275,6 +294,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 文档管理
                     startActivity(new Intent(getContext(), DocManagerActivity.class));
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_DOC;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -297,6 +320,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // zip
                     startActivity(new Intent(getContext(), ZipFileActivity.class));
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_ZIP;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -321,6 +348,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     Intent intent = new Intent(getContext(), SameFileActivity.class);
                     intent.putExtra(SameFileActivity.PARAM_CATEGORY_TYPE, Const.CategoryType.CATEGORY_TYPE_DOWNLOAD);
                     startActivity(intent);
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_DOWNLOAD;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -343,6 +374,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // 最近文件
                     startActivity(new Intent(getContext(), RecentFileActivity.class));
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_RECENT;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -380,6 +415,10 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                         });
                     }
                     mShuffleAd.bubble();
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_AD;
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -430,6 +469,11 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                 public void onClick(View v) {
                     mIsInternalStorage = !mIsInternalStorage;
                     handleSwitchPhoneSdCard();
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_SWITCH_SD;
+                    bean.mTab = mIsInternalStorage ? "1" : "2";
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -444,6 +488,11 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                 public void onClick(View v) {
                     mIsInternalStorage = !mIsInternalStorage;
                     handleSwitchPhoneSdCard();
+
+                    Statistics101Bean bean = Statistics101Bean.builder();
+                    bean.mOperateId = StatisticsConstants.HOME_CLICK_SWITCH_SD;
+                    bean.mTab = mIsInternalStorage ? "1" : "2";
+                    StatisticsTools.upload101InfoNew(bean);
                 }
             });
 
@@ -455,6 +504,11 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
         mTvCleanTrash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.HOME_CLICK_CLEAN;
+                bean.mEntrance = mHasShowedNotice ? "2" : "1";
+                StatisticsTools.upload101InfoNew(bean);
+
                 mHasShowedNotice = true;
                 startActivity(new Intent(getContext(), CleanTrashActivity.class));
             }
@@ -466,8 +520,6 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
         return rootView;
     }
