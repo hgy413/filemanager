@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.zipfile;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -26,8 +25,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jb.filemanager.R.id.search_title;
-
 /**
  * Created by xiaoyu on 2017/6/29 17:01.
  */
@@ -43,9 +40,8 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     private BottomOperateBar mOperateBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        GlobalFileManager.getInstance().sendUpdateBroadcast(new File("/storage/emulated/0/boost"));
+    protected void onResume() {
+        super.onResume();
         setContentView(R.layout.activity_zip_file);
 
         mProgress = (ProgressWheel) findViewById(R.id.zip_progress);
@@ -61,7 +57,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
             }
         });
 
-        mSearchTitle = (SearchTitleView) findViewById(search_title);
+        mSearchTitle = (SearchTitleView) findViewById(R.id.search_title);
         mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
             @Override
             public void onSearchClick() {
