@@ -15,6 +15,7 @@
         android:orientation="vertical"
         tools:text="group_image_result_tv"
         android:textColor="@color/black_40"
+        android:textStyle="bold"
         android:textSize="@dimen/h5_12"/>
 
     <ImageView

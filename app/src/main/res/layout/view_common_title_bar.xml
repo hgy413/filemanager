@@ -25,7 +25,7 @@
             android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/ic_cancel_blue"
+            android:src="@drawable/iv_cancel_blue_selector"
             android:visibility="gone"
             tools:visibility="visible"/>
 

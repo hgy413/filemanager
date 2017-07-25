@@ -198,7 +198,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 Uri uri = isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
                 return new CursorLoader(getActivity(),
                         uri,
                         null,

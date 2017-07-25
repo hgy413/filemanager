@@ -26,8 +26,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
-            android:textColor="#666666"
-            android:textSize="12dp"
+            android:textColor="#999999"
+            android:textSize="@dimen/h5_12"
             android:textStyle="bold"
             android:text="@string/drawer_tools"/>
 
@@ -40,9 +40,10 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_app_locker"
             android:drawableStart="@drawable/ic_drawer_app_locker"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_app_locker"/>
 
         <TextView
@@ -54,9 +55,10 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_smart_charge"
             android:drawableStart="@drawable/ic_drawer_smart_charge"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_smart_charge"/>
 
         <View
@@ -70,8 +72,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
-            android:textColor="#666666"
-            android:textSize="12dp"
+            android:textColor="#999999"
+            android:textSize="@dimen/h5_12"
             android:textStyle="bold"
             android:text="@string/drawer_setting"/>
 
@@ -86,9 +88,10 @@
             android:drawableStart="@drawable/ic_drawer_usb"
             android:drawableRight="@drawable/drawer_setting_switcher_selector"
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_usb_plugin_message"/>
 
         <TextView
@@ -102,9 +105,10 @@
             android:drawableStart="@drawable/ic_drawer_low_space"
             android:drawableRight="@drawable/drawer_setting_switcher_selector"
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_low_space_warning"/>
 
 
@@ -119,9 +123,10 @@
             android:drawableStart="@drawable/ic_drawer_logger"
             android:drawableRight="@drawable/drawer_setting_switcher_selector"
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_logger_notification"/>
 
         <View
@@ -135,8 +140,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
-            android:textColor="#666666"
-            android:textSize="12dp"
+            android:textColor="#999999"
+            android:textSize="@dimen/h5_12"
             android:textStyle="bold"
             android:text="@string/drawer_other"/>
 
@@ -149,9 +154,10 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_rating"
             android:drawableStart="@drawable/ic_drawer_rating"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_rating"/>
 
         <TextView
@@ -163,9 +169,10 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_update"
             android:drawableStart="@drawable/ic_drawer_update"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_update"/>
 
         <TextView
@@ -177,9 +184,10 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_help"
             android:drawableStart="@drawable/ic_drawer_help"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_help"/>
 
         <TextView
@@ -191,9 +199,10 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_about"
             android:drawableStart="@drawable/ic_drawer_about"
-            android:drawablePadding="13dp"
-            android:textColor="#000000"
-            android:textSize="12dp"
+            android:drawablePadding="15dp"
+            android:textColor="#4c4c4c"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:text="@string/drawer_about"/>
 
     </LinearLayout>
