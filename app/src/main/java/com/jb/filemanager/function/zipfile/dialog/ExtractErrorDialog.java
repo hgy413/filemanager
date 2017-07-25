@@ -67,4 +67,10 @@ public class ExtractErrorDialog extends BaseDialog implements View.OnClickListen
     public void setOkBtn(String okBtn) {
         mOkBtn.setText(okBtn);
     }
+
+    public void setSubTextVisibility(boolean isShow) {
+        if (mTvRetryTxt != null) {
+            mTvRetryTxt.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        }
+    }
 }

@@ -263,6 +263,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     private void showExtractErrorDialog() {
         if (TheApplication.sCurrentActivity == null) return;
         ExtractErrorDialog extractErrorDialog = new ExtractErrorDialog(TheApplication.sCurrentActivity, mFileName);
+        extractErrorDialog.setSubTextVisibility(false);
         extractErrorDialog.show();
     }
 
