@@ -343,7 +343,12 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (mIsSelectMode){
+            refreshTile();
+            unSelectAllItem();
+        }else {
+            super.onBackPressed();
+        }
     }
 
     @Override
