@@ -53,7 +53,7 @@ public class CopyFileTask {
                             }
                         });
 
-                        if (mDest.startsWith(file.getAbsolutePath())) {
+                        if (file.isDirectory() && mDest.startsWith(file.getAbsolutePath())) {
                             Logger.i(LOG_TAG, "发现子路径:" + file.getAbsolutePath() + "  " + mDest);
                             try {
                                 Logger.i(LOG_TAG, "暂停询问处理方式:" + file.getAbsolutePath());
