@@ -623,7 +623,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CleanStateEvent event) {
         if (CleanStateEvent.DELETE_ING.equals(event) && mTvCleanTrash != null) {
             //垃圾清理开始  改变文字显示
@@ -631,7 +631,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(DocFileScanFinishEvent event) {
         mTvDocCount.setText(event.mDocFileCount);
     }

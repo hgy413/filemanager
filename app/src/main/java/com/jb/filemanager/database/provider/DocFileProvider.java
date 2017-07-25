@@ -135,11 +135,6 @@ public class DocFileProvider extends BaseDataProvider {
     }
 
     public DocChildBean queryItem(String filePath) {
-        File file = new File(filePath);
-        if (!file.exists()) {//文件不存在 则删除数据
-            deleteDocFile(filePath);
-            return null;
-        }
         DocChildBean childBean = null;
         String[] projection = new String[]{DocFileTable.DOC_ID,
                 DocFileTable.DOC_NAME,
@@ -261,7 +256,8 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_PATH, newFile);
         contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
         contentValues.put(DocFileTable.DOC_NAME, name);
-        String type = childBean.mDocName.substring(dot + 1);
+        int dot2 = childBean.mDocName.lastIndexOf(".");
+        String type = name.substring(dot2 + 1);
         contentValues.put(DocFileTable.DOC_TYPE, type);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);

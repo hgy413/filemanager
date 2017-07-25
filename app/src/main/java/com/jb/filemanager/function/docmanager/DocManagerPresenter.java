@@ -113,6 +113,11 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             ArrayList<DocChildBean> mDocList = mSupport.getDocFileInfo();
             ArrayList<DocChildBean> mTxtList = mSupport.getTextFileInfo();
             ArrayList<DocChildBean> mPdfList = mSupport.getPdfFileInfo();
+
+            sortResult(mDocList);
+            sortResult(mTxtList);
+            sortResult(mPdfList);
+
             DocGroupBean txtGroupBean = new DocGroupBean(mTxtList, TheApplication.getAppContext().getString(R.string.file_type_txt), GroupSelectBox.SelectState.NONE_SELECTED, false);
             DocGroupBean docGroupBean = new DocGroupBean(mDocList, TheApplication.getAppContext().getString(R.string.file_type_doc), GroupSelectBox.SelectState.NONE_SELECTED, false);
             DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, TheApplication.getAppContext().getString(R.string.file_type_pdf), GroupSelectBox.SelectState.NONE_SELECTED, false);
@@ -180,9 +185,17 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     }
 
     private void handleFileRename(FileOperateEvent fileOperateEvent) {
-        mSupport.handleFileRename(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
+        String oldFile = fileOperateEvent.mOldFile.getAbsolutePath();
+        String newFile = fileOperateEvent.mNewFile.getAbsolutePath();
+        String s = newFile.toLowerCase();
+        if (s.endsWith(DOC)||s.endsWith(DOCX)||s.endsWith(PPT)||s.endsWith(PPTX)
+                ||s.endsWith(XLS)||s.endsWith(XLSX)||s.endsWith(TXT)||s.endsWith(PDF)){
+            mSupport.handleFileRename(oldFile, newFile);
+        }else {
+            mSupport.handleFileDelete(oldFile);
+        }
         refreshData(false, false);
-        Logger.d(TAG, "rename   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
+        Logger.d(TAG, "rename   " + newFile + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
     private void handleError() {
@@ -349,14 +362,14 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         protected void onPostExecute(Boolean keepCheck) {
 
         }
+    }
 
-        private void sortResult(ArrayList<DocChildBean> arrayList) {
-            Collections.sort(arrayList, new Comparator<DocChildBean>() {
-                @Override
-                public int compare(DocChildBean o1, DocChildBean o2) {
-                    return (int) (Long.valueOf(o1.mDocSize) - Long.valueOf(o2.mDocSize));
-                }
-            });
-        }
+    private void sortResult(ArrayList<DocChildBean> arrayList) {
+        Collections.sort(arrayList, new Comparator<DocChildBean>() {
+            @Override
+            public int compare(DocChildBean o1, DocChildBean o2) {
+                return (int) (Long.valueOf(o1.mDocSize) - Long.valueOf(o2.mDocSize));
+            }
+        });
     }
 }

@@ -424,4 +424,8 @@
     <string name="guide_dialog_title">User guide</string>
     <string name="guide_dialog_smart_charge_tip">Display the current charging status, including sponsored content.</string>
     <string name="set_wall_paper">Set As Wallpaper</string>
+
+    <!--文档管理-->
+    <string name="doc_manager_title">Document Manager</string>
+    <string name="txt_preview">Document Manager</string>
 </resources>
