@@ -103,6 +103,10 @@ public class MainPresenter implements MainContract.Presenter {
             mCurrentTab = pos;
             mView.showNormalStatus(mCurrentTab);
         }
+
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = mCurrentTab == 0 ? StatisticsConstants.HOME_CLICK_TAB_CATEGORY : StatisticsConstants.HOME_CLICK_TAB_STORAGE;
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     @Override
