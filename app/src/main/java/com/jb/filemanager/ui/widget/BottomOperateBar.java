@@ -160,7 +160,6 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
                 popupWindow.setTouchable(true);
-
                 popupWindow.setTouchInterceptor(new View.OnTouchListener() {
 
                     @Override
@@ -173,7 +172,7 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
 
                 // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
                 // 我觉得这里是API的一个bug
-                popupWindow.setBackgroundDrawable(APIUtil.getDrawable(mListener.getActivity(), R.color.white));
+                popupWindow.setBackgroundDrawable(APIUtil.getDrawable(mListener.getActivity(), R.color.transparent));
 
                 int marginRight = (int)getResources().getDimension(R.dimen.popup_window_margin_right);
                 int marginTarget = (int)getResources().getDimension(R.dimen.popup_window_margin_target);
