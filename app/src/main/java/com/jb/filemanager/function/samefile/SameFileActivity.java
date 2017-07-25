@@ -146,7 +146,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void afterRename() {
-                mPresenter.reloadData();
+                //mPresenter.reloadData();
                 mBottomOperateContainer.setVisibility(View.GONE);
             }
 
@@ -202,7 +202,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     @Override
     protected void onDestroy() {
         if (mPresenter != null) {
-            // mPresenter.onDestroy();
+            mPresenter.onDestroy();
         }
 
         if (mImageFetcher != null) {

@@ -290,7 +290,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     public void refreshTile() {
         mTvCommonActionBarWithSearchTitle.setText(R.string.app_name);
         mIvCommonActionBarBack.setImageResource(R.drawable.action_bar_back_drawable_selector_blue);
-        mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.search_icon);
+        mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.ic_action_bar_search);
         mIsSelectMode = false;
     }
 

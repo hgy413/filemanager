@@ -426,14 +426,6 @@ public class FileUtil {
         if (file != null && file.exists() && !TextUtils.isEmpty(newFilePath)) {
             File targetFile = new File(newFilePath);
             result[0] = file.renameTo(targetFile);
-            MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFilePath}, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            //mListener.afterRename();
-                            result[0] = true;
-                        }
-                    }); // 修改后的文件添加到系统数据库
             TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
         }
         return result[0];

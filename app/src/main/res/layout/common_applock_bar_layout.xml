@@ -45,6 +45,6 @@
         android:visibility="gone"
         tools:visibility="visible"
         android:layout_toLeftOf="@id/common_applock_bar_layout_setting"
-        android:src="@drawable/search_white_icon"/>
+        android:src="@drawable/ic_action_bar_search"/>
 
 </RelativeLayout>

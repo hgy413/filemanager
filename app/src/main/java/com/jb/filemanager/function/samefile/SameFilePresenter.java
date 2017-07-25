@@ -12,15 +12,33 @@ import android.support.v4.content.Loader;
 import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.jb.filemanager.Const;
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.home.MainActivity;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.sql.Time;
 import java.util.ArrayList;
+
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.DOC;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.DOCX;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.PDF;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.PPT;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.PPTX;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.TXT;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.XLS;
+import static com.jb.filemanager.function.docmanager.DocManagerSupport.XLSX;
 
 
 /**
@@ -31,8 +49,8 @@ import java.util.ArrayList;
 public class SameFilePresenter implements SameFileContract.Presenter,
         LoaderManager.LoaderCallbacks<GroupList<String, FileInfo>> {
     private static final String TAG = "SameFilePresenter.class";
-    private final SameFileActivity mView;
-    private final SameFileContract.Support mSupport;
+    private SameFileActivity mView;
+    private SameFileContract.Support mSupport;
     private final LoaderManager mLoaderManager;
     private AsyncTaskLoader mFileLoader;
     private GroupList<String, FileInfo> mFileGroupList;
@@ -68,6 +86,10 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void onCreate(Intent intent) {
+        EventBus globalEventBus = TheApplication.getGlobalEventBus();
+        if (!globalEventBus.isRegistered(this)) {
+            globalEventBus.register(this);
+        }
         if (intent != null) {
             mCategoryType = intent.getIntExtra(SameFileActivity.PARAM_CATEGORY_TYPE,
                     Const.CategoryType.CATEGORY_TYPE_PHOTO);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
@@ -75,6 +97,60 @@ public class SameFilePresenter implements SameFileContract.Presenter,
             this.start(mCategoryType);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        EventBus globalEventBus = TheApplication.getGlobalEventBus();
+        if (globalEventBus.isRegistered(this)) {
+            globalEventBus.unregister(this);
+        }
+        mView = null;
+        mSupport = null;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(FileOperateEvent fileOperateEvent){
+        if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
+            //handleFileCopy(fileOperateEvent);
+            Toast.makeText(mView, "COPY", Toast.LENGTH_LONG);
+        }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
+            //handleFileCut(fileOperateEvent);
+            Toast.makeText(mView, "CUT", Toast.LENGTH_LONG);
+        }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
+            handleFileRename(fileOperateEvent);
+            Toast.makeText(mView, "RENAME", Toast.LENGTH_LONG);
+        }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
+        }else {
+           // handleError();
+        }
+    }
+
+    private void handleFileRename(FileOperateEvent fileOperateEvent) {
+        String oldFile = fileOperateEvent.mOldFile.getAbsolutePath();
+        String newFile = fileOperateEvent.mNewFile.getAbsolutePath();
+        String s = newFile.toLowerCase();
+        //mSupport.updateDatabaseRename(S)
+//        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile}, null,
+//                new MediaScannerConnection.OnScanCompletedListener() {
+//                    @Override
+//                    public void onScanCompleted(String path, Uri uri) {
+//                        reloadData();
+//
+//                        //mListener.afterRename();
+//                       // result[0] = true;
+//                    }
+//                }); // 修改后的文件添加到系统数据库
+//        if (s.endsWith(DOC)||s.endsWith(DOCX)||s.endsWith(PPT)||s.endsWith(PPTX)
+//                ||s.endsWith(XLS)||s.endsWith(XLSX)||s.endsWith(TXT)||s.endsWith(PDF)){
+//            //mSupport.handleFileRename(oldFile, newFile);
+//        }else {
+//            mSupport.handleFileDelete(oldFile);
+//        }
+        //refreshData(false, false);
+        reloadData();
+        Logger.d(TAG, "rename   " + newFile + "      " + fileOperateEvent.mNewFile.getParent());
+    }
+
 
     @Override
     public void onClickBackButton(boolean finishActivity) {

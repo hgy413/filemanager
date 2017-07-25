@@ -26,6 +26,8 @@ public interface SameFileContract {
     interface Presenter {
         void onCreate(Intent intent);
 
+        void onDestroy();
+
         void onClickBackButton(boolean b);
 
         void onClickSearchButton();

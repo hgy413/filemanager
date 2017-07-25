@@ -29,7 +29,7 @@
             android:layout_marginLeft="16dp"
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@id/common_applock_bar_layout_setting"
-            android:src="@drawable/search_white_icon"
+            android:src="@drawable/ic_action_bar_search"
             tools:ignore="ContentDescription" />
 
         <EditText
