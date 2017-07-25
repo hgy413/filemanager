@@ -22,38 +22,27 @@ import java.util.HashMap;
 
 public class FileManager {
 
+    // 其他文件
+    public static final int OTHERS = 0;
+
     // 图片
-    public static final int PICTURE = 0;
+    public static final int IMAGE = 1;
 
     // 视频
-    public static final int VIDEO = 1;
+    public static final int VIDEO = 2;
 
     // 音乐
-    public static final int MUSIC = 2;
-
-    // 其他文件
-    public static final int OTHERS = 3;
+    public static final int AUDIO = 3;
 
     // 应用
     public static final int APP = 4;
 
-    // 文件夹
-    public static final int DIR = 5;
+    // 文档
+    public static final int DOC = 5;
 
-    // 通讯录
-    public static final int CONTACTS = 6;
+    // 压缩包
+    public static final int ZIP = 6;
 
-    // 短信
-    public static final int SMS = 7;
-
-    // 通话记录
-    public static final int PHONE = 8;
-
-    // 书签
-    public static final int BOOKMARKS = 9;
-
-    // 日程
-    public static final int SCHEDULE = 10;
 
 
     public static final int LOADER_IMAGE = 0;

@@ -10,7 +10,6 @@ import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -44,88 +43,6 @@ import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileUtil {
-    public static ArrayMap<String, String> initArrayMap(@NonNull ArrayMap<String, String> map, @NonNull String[][] stringMap) {
-        if (map == null) {
-            new ArrayMap();
-        }
-        if (stringMap == null) return map;
-
-        for (String[] stringCuple : stringMap) {
-            map.put(stringCuple[0], stringCuple[1]);
-        }
-        return map;
-    }
-    private static final String[][] MIME_MapTable={
-            //{后缀名，MIME类型}
-            {".3gp", "video/3gpp"},
-            {".apk", "application/vnd.android.package-archive"},
-            {".asf", "video/x-ms-asf"},
-            {".avi", "video/x-msvideo"},
-            {".bin", "application/octet-stream"},
-            {".bmp", "image/bmp"},
-            {".c", "text/plain"},
-            {".class", "application/octet-stream"},
-            {".conf", "text/plain"},
-            {".cpp", "text/plain"},
-            {".doc", "application/msword"},
-            {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
-            {".xls", "application/vnd.ms-excel"},
-            {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
-            {".exe", "application/octet-stream"},
-            {".gif", "image/gif"},
-            {".gtar", "application/x-gtar"},
-            {".gz", "application/x-gzip"},
-            {".h", "text/plain"},
-            {".htm", "text/html"},
-            {".html", "text/html"},
-            {".jar", "application/java-archive"},
-            {".java", "text/plain"},
-            {".jpeg", "image/jpeg"},
-            {".jpg", "image/jpeg"},
-            {".js", "application/x-JavaScript"},
-            {".log", "text/plain"},
-            {".m3u", "audio/x-mpegurl"},
-            {".m4a", "audio/mp4a-latm"},
-            {".m4b", "audio/mp4a-latm"},
-            {".m4p", "audio/mp4a-latm"},
-            {".m4u", "video/vnd.mpegurl"},
-            {".m4v", "video/x-m4v"},
-            {".mov", "video/quicktime"},
-            {".mp2", "audio/x-mpeg"},
-            {".mp3", "audio/x-mpeg"},
-            {".acc", "audio/x-mpeg"},
-            {".mp4", "video/mp4"},
-            {".mpc", "application/vnd.mpohun.certificate"},
-            {".mpe", "video/mpeg"},
-            {".mpeg", "video/mpeg"},
-            {".mpg", "video/mpeg"},
-            {".mpg4", "video/mp4"},
-            {".mpga", "audio/mpeg"},
-            {".msg", "application/vnd.ms-outlook"},
-            {".ogg", "audio/ogg"},
-            {".pdf", "application/pdf"},
-            {".png", "image/png"},
-            {".pps", "application/vnd.ms-powerpoint"},
-            {".ppt", "application/vnd.ms-powerpoint"},
-            {".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},
-            {".prop", "text/plain"},
-            {".rc", "text/plain"},
-            {".rmvb", "audio/x-pn-realaudio"},
-            {".rtf", "application/rtf"},
-            {".sh", "text/plain"},
-            {".tar", "application/x-tar"},
-            {".tgz", "application/x-compressed"},
-            {".txt", "text/plain"},
-            {".wav", "audio/x-wav"},
-            {".wma", "audio/x-ms-wma"},
-            {".wmv", "audio/x-ms-wmv"},
-            {".wps", "application/vnd.ms-works"},
-            {".xml", "text/plain"},
-            {".z", "application/x-compress"},
-            {".zip", "application/x-zip-compressed"},
-            {"", "*/*"}
-    };
-    public static final ArrayMap<String, String> MIME_MAP = initArrayMap(new ArrayMap<String, String>(), MIME_MapTable);
 
     public static final String FILE_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,19}[.][a-zA-Z0-9]{1,10}$";
     public static final String FOLDER_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
@@ -402,25 +319,46 @@ public class FileUtil {
      * @return result
      */
     public static int getFileType(String name) {
+        int type;
+
         int lastDot = name.lastIndexOf(".");
         if (lastDot < 0) {
-            return FileManager.OTHERS;
-        }
-        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                name.substring(lastDot + 1).toLowerCase(Locale.getDefault()));
-        if (mimeType == null) {
-            return FileManager.OTHERS;
-        } else if (mimeType.matches("image/.+")) {
-            return FileManager.PICTURE;
-        } else if (mimeType.matches("audio/.+")) {
-            return FileManager.MUSIC;
-        } else if (mimeType.matches("video/.+")) {
-            return FileManager.VIDEO;
-        } else if (mimeType.equals("application/vnd.android.package-archive")) {
-            return FileManager.APP;
+            type = FileManager.OTHERS;
         } else {
-            return FileManager.OTHERS;
+            String extension = name.substring(lastDot + 1).toLowerCase(Locale.getDefault());
+            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            if (TextUtils.isEmpty(extension) || TextUtils.isEmpty(mimeType)) {
+                type = FileManager.OTHERS;
+            } else {
+                if (mimeType.matches("image/.+")) {
+                    type = FileManager.IMAGE;
+                } else if (mimeType.matches("audio/.+")) {
+                    type = FileManager.AUDIO;
+                } else if (mimeType.matches("video/.+")) {
+                    type = FileManager.VIDEO;
+                } else if (mimeType.equals("application/vnd.android.package-archive")) {
+                    type = FileManager.APP;
+                } else {
+                    // 剩下的mime type 格式不统一，简单使用后缀名判断
+                    switch (extension) {
+                        case "txt":
+                        case "doc":
+                        case "docx":
+                            type = FileManager.DOC;
+                            break;
+                        case "rar":
+                        case "zip":
+                        case "7z":
+                            type = FileManager.ZIP;
+                            break;
+                        default:
+                            type = FileManager.OTHERS;
+                            break;
+                    }
+                }
+            }
         }
+        return type;
     }
 
     public static String getDirName(String dirPath) {
@@ -1018,17 +956,21 @@ public class FileUtil {
      * file path is a directory return null.
      */
     public static Intent getOpenFileIntent(@NonNull String fullPath) {
-        if (fullPath == null) return null;
+        Intent intent = null;
         File file = new File(fullPath);
-        if (!file.exists() || file.isDirectory()) return null;
-        String suffix = fullPath.substring(fullPath.lastIndexOf('.'));
-        String mime = MIME_MAP.get(suffix);
-        if (mime == null || mime.equals("")) {
-            mime = "*/*"; // Unknow type
+        if (!(!file.exists() || file.isDirectory())) {
+            int lastDot = fullPath.lastIndexOf(".");
+            if (lastDot >= 0 && fullPath.length() > lastDot + 1) {
+                String extension = fullPath.substring(lastDot + 1).toLowerCase(Locale.getDefault());
+                String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                if (mime == null || mime.equals("")) {
+                    mime = "*/*"; // Unknow type
+                }
+                Uri uri = Uri.fromFile(file);
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, mime);
+            }
         }
-        Uri uri = Uri.fromFile(file);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, mime);
         return intent;
     }
 

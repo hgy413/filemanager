@@ -473,25 +473,27 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
         void loadFileThumb(String path, ImageView ivThumb) {
             int type = FileUtil.getFileType(path);
             switch (type) {
-                case FileManager.PICTURE:
+                case FileManager.IMAGE:
                 case FileManager.VIDEO:
                     if (mImageFetcher != null) {
                         mImageFetcher.loadImage(path, ivThumb);
                     }
                     break;
-
-                case FileManager.MUSIC:
+                case FileManager.AUDIO:
                     ivThumb.setImageResource(R.drawable.img_music);
                     break;
-
                 case FileManager.OTHERS:
                     ivThumb.setImageResource(R.drawable.img_file);
                     break;
-
                 case FileManager.APP:
                     ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
                     break;
-
+                case FileManager.DOC:
+                    ivThumb.setImageResource(R.drawable.img_txt);
+                    break;
+                case FileManager.ZIP:
+                    ivThumb.setImageResource(R.drawable.zip_icon);
+                    break;
                 default:
                     break;
             }
