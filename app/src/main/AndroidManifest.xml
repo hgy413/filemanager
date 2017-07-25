@@ -110,7 +110,7 @@
         <activity
             android:name=".function.image.ImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_with_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!-- 音乐管理页 -->
         <!--视频管理页 -->
@@ -162,7 +162,7 @@
             android:name=".function.splash.SplashActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_Blue_StateBar"/>
+            android:theme="@style/AppTheme.NoActionBar_FullScreen"/>
 
         <!-- about页面 -->
         <activity

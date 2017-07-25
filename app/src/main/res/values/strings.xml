@@ -431,4 +431,5 @@
     <string name="doc_manager_title">Document Manager</string>
     <string name="txt_preview">TXT Preview</string>
     <string name="app_manager">App Manager</string>
+    <string name="splash_content">Let Manage File Easier</string>
 </resources>
