@@ -2,8 +2,6 @@ package com.jb.filemanager.ui.widget;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -16,8 +14,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
-import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
@@ -221,24 +217,9 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
             ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
             if (selectedFiles != null && selectedFiles.size() == 1 && selectedFiles.get(0).exists()) {
                 final File file = selectedFiles.get(0);
-                DocRenameDialog docRenameDialog = new DocRenameDialog(mListener.getActivity(), file.isDirectory(), new DocRenameDialog.Listener() {
-                    @SuppressWarnings("ResultOfMethodCallIgnored")
+                DocRenameDialog docRenameDialog = new DocRenameDialog(mListener.getActivity(), file, new DocRenameDialog.Listener() {
                     @Override
-                    public void onConfirm(DocRenameDialog dialog, String newName) {
-                        if (file.exists()) {
-                            FileUtil.renameSelectedFile(file, file.getParentFile().getAbsolutePath() + File.separator + newName);
-                            File targetFile = new File(file.getParentFile().getAbsolutePath() + File.separator + newName);
-//                            file.renameTo(targetFile);
-//                            MediaScannerConnection.scanFile(mContext, new String[]{targetFile.getParentFile().getAbsolutePath()}, null,
-//                                    new MediaScannerConnection.OnScanCompletedListener() {
-//                                        @Override
-//                                        public void onScanCompleted(String path, Uri uri) {
-//                                            mListener.afterRename();
-//                                        }
-//                                    }); // 修改后的文件添加到系统数据库
-                            TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
-                        }
-
+                    public void onResult(DocRenameDialog dialog, boolean success) {
                         if (mListener != null) {
                             mListener.afterRename();
                         }

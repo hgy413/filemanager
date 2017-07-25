@@ -15,6 +15,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.fileexplorer.NewListItemDialog;
 import com.jb.filemanager.function.scanframe.bean.common.FileType;
 import com.jb.filemanager.manager.file.FileManager;
@@ -485,7 +486,8 @@ public class FileUtil {
     public static boolean renameSelectedFile(File file, String newFilePath) {
         final boolean[] result = {false};
         if (file != null && file.exists() && !TextUtils.isEmpty(newFilePath)) {
-            result[0] = file.renameTo(new File(newFilePath));
+            File targetFile = new File(newFilePath);
+            result[0] = file.renameTo(targetFile);
             MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFilePath}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
@@ -494,6 +496,7 @@ public class FileUtil {
                             result[0] = true;
                         }
                     }); // 修改后的文件添加到系统数据库
+            TheApplication.postEvent(new FileOperateEvent(file, targetFile, FileOperateEvent.OperateType.RENAME));
         }
         return result[0];
     }

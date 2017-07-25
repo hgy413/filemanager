@@ -351,6 +351,8 @@
     <string name="dialog_rename_folder_error_input">The folder name could not contain the char \"%1$s\"</string>
     <string name="dialog_rename_file_empty_input">The file name could not be empty</string>
     <string name="dialog_rename_folder_empty_input">The folder name could not be empty</string>
+    <string name="dialog_rename_source_not_exist">The file/folder not exist</string>
+    <string name="dialog_rename_target_exist">The name has been used</string>
 
 
 

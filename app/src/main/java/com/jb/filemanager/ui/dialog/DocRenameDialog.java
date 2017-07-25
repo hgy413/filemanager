@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.util.FileUtil;
 
+import java.io.File;
+
 /**
  * Desc:
  * Author lqf
@@ -22,7 +24,7 @@ public class DocRenameDialog extends FMBaseDialog {
     private TextView mTvErrorTips;
     private EditText mEtInput;
 
-    public DocRenameDialog(final Activity act, final boolean isFolder, final Listener listener) {
+    public DocRenameDialog(final Activity act, final File sourceFile, final Listener listener) {
         super(act, true);
 
         View dialogView = View.inflate(act, R.layout.dialog_file_rename, null);
@@ -44,42 +46,43 @@ public class DocRenameDialog extends FMBaseDialog {
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mEtInput != null) {
-                        String input = mEtInput.getText().toString();
-                        if (TextUtils.isEmpty(input)) {
-                            if (mTvTitle != null) {
-                                mTvTitle.setVisibility(View.GONE);
-                            }
-                            if (mTvErrorTips != null) {
-                                mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(isFolder ? R.string.dialog_rename_folder_empty_input : R.string.dialog_rename_file_empty_input);
-                            }
-                        } else if (!input.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
-                            String notContain = "";
-                            for (int i = 0; i < input.length(); i++) {
-                                char testChar = input.charAt(i);
-                                String testString = String.valueOf(testChar);
-                                if (!testString.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
-                                    if (!notContain.contains(testString)) {
-                                        if (notContain.length() > 0) {
-                                            notContain += ",";
+                    if (sourceFile != null && sourceFile.exists()) {
+                        boolean isFolder = sourceFile.isDirectory();
+                        if (mEtInput != null) {
+                            String input = mEtInput.getText().toString();
+                            if (TextUtils.isEmpty(input)) {
+                                showErrorTips(act.getString(isFolder ? R.string.dialog_rename_folder_empty_input : R.string.dialog_rename_file_empty_input));
+                            } else if (!input.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
+                                String notContain = "";
+                                for (int i = 0; i < input.length(); i++) {
+                                    char testChar = input.charAt(i);
+                                    String testString = String.valueOf(testChar);
+                                    if (!testString.matches(isFolder ? FileUtil.FOLDER_NAME_REG : FileUtil.FILE_NAME_REG)) {
+                                        if (!notContain.contains(testString)) {
+                                            if (notContain.length() > 0) {
+                                                notContain += ",";
+                                            }
+                                            notContain += testString;
                                         }
-                                        notContain += testString;
+                                    }
+                                }
+                                showErrorTips(isFolder ? act.getString(R.string.dialog_rename_folder_error_input, notContain) : act.getString(R.string.dialog_rename_file_error_input, notContain));
+                            } else {
+                                File target = new File(sourceFile.getParentFile().getAbsolutePath() + File.separator + input);
+                                if (target.exists()) {
+                                    showErrorTips(getString(R.string.dialog_rename_target_exist));
+                                } else {
+                                    boolean success = FileUtil.renameSelectedFile(sourceFile, target.getAbsolutePath());
+                                    if (listener != null) {
+                                        listener.onResult(DocRenameDialog.this, success);
                                     }
                                 }
                             }
-
-                            if (mTvTitle != null) {
-                                mTvTitle.setVisibility(View.GONE);
-                            }
-                            if (mTvErrorTips != null) {
-                                mTvErrorTips.setVisibility(View.VISIBLE);
-                                mTvErrorTips.setText(isFolder ? act.getString(R.string.dialog_rename_folder_error_input, notContain) : act.getString(R.string.dialog_rename_file_error_input, notContain));
-                            }
-                        } else {
-                            listener.onConfirm(DocRenameDialog.this, mEtInput.getText().toString());
                         }
+                    } else {
+                        showErrorTips(getString(R.string.dialog_rename_source_not_exist));
                     }
+
                 }
             }); // 确定按钮点击事件
         }
@@ -98,11 +101,23 @@ public class DocRenameDialog extends FMBaseDialog {
         setContentView(dialogView);
     }
 
+    private void showErrorTips(String errorDesc) {
+        if (!TextUtils.isEmpty(errorDesc)) {
+            if (mTvTitle != null) {
+                mTvTitle.setVisibility(View.GONE);
+            }
+            if (mTvErrorTips != null) {
+                mTvErrorTips.setVisibility(View.VISIBLE);
+                mTvErrorTips.setText(errorDesc);
+            }
+        }
+    }
+
     public interface Listener {
         /**
          * 点击确定按钮
          */
-        void onConfirm(DocRenameDialog dialog, String folderName);
+        void onResult(DocRenameDialog dialog, boolean success);
 
         void onCancel(DocRenameDialog dialog);
     }
