@@ -29,7 +29,7 @@ public class ExtractProgress extends View {
         }
         mPaint.setColor(0xffe7e9f3);
         canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);
-        mPaint.setColor(0xff39bdac);
+        mPaint.setColor(0xff00BBA0);
         canvas.drawRect(0, 0, getWidth() * mPercent, getHeight(), mPaint);
     }
 

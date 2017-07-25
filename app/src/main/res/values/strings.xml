@@ -148,8 +148,8 @@
     <string name="clean_item_sys_cache">System Cache</string>
     <string name="gallery_thumbnails">Gallery Thumbnails</string>
 
-    <string name="clean_subitem_detail_result_0">%1$s &lt;font color="#39BDAC">Your files will not be affected after cleaning.&lt;/font></string>
-    <string name="clean_subitem_detail_result_1">%1$s &lt;font color="#39BDAC">Cleaning is completely safe.&lt;/font></string>
+    <string name="clean_subitem_detail_result_0">%1$s &lt;font color="#00BBA0">Your files will not be affected after cleaning.&lt;/font></string>
+    <string name="clean_subitem_detail_result_1">%1$s &lt;font color="#00BBA0">Cleaning is completely safe.&lt;/font></string>
     <string name="clean_subitem_detail_result_2">%1$s &lt;font color="#FF7D7D">They will need to be reDownloaded.&lt;/font></string>
     <string name="clean_subitem_detail_result_10">%1$s &lt;font color="#FF7D7D">Cleaning will remove these forever!&lt;/font></string>
     <string name="trash">trash</string>
@@ -206,8 +206,8 @@
     <string name="long_press_items_in_junk_files_to_add">Long press items in Junk Files to add to Ignore List.</string>
     <string name="these_items_will_not_be_scan_as_junk_files">These items will not be scan as junk files.</string>
     <string name="add_to_ignore_list">Add to Ignore List</string>
-    <string name="will_not_be_scanned">&lt;font color="#39BDAC">%1$s&lt;/font> will not be scanned</string>
-    <string name="will_be_scanned">&lt;font color="#39BDAC">%1$s&lt;/font> will be scanned</string>
+    <string name="will_not_be_scanned">&lt;font color="#00BBA0">%1$s&lt;/font> will not be scanned</string>
+    <string name="will_be_scanned">&lt;font color="#00BBA0">%1$s&lt;/font> will be scanned</string>
     <string name="clean_dialog_message_contain">Contain</string>
     <string name="clean_dialog_message_folder">folders</string>
     <string name="clean_dialog_message_file">files</string>
@@ -219,7 +219,7 @@
     <string name="clean_file_browser_no_files">No Files</string>
     <string name="clean_subitem_detail_connect">This is %1$s of %2$s</string>
     <string name="common_comma">，</string>
-    <string name="clean_subitem_detail_warn_desc_pre">&lt;font color="#39BDAC">Be careful! &lt;/font>%1$s</string>
+    <string name="clean_subitem_detail_warn_desc_pre">&lt;font color="#00BBA0">Be careful! &lt;/font>%1$s</string>
     <string name="no_enough_storage">There is no enough storage in SD card</string>
     <string name="backup_dialog_prgress">&lt;font color="#333333">%1$d&lt;/font>/%2$d</string>
     <string name="version">Version</string>

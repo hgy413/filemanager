@@ -67,7 +67,7 @@
         android:layout_weight="4"
         android:gravity="center"
         android:text="@string/see"
-        android:textColor="#39bdac"
+        android:textColor="#00BBA0"
         android:textSize="16dp"/>
 
 </LinearLayout>

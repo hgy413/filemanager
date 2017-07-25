@@ -117,7 +117,7 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
         mLockOptionsTextView = (TextView) findViewById(R.id.fragment_app_lock_lock_options_show);
         mQuestionBottomLine3 = findViewById(R.id.fragment_app_lock_set_psd_bottom_line3);
         mSave = findViewById(R.id.fragment_app_lock_set_psd_bottom_save);
-        findViewById(R.id.fragment_app_lock_head).setBackgroundColor(0xFF39BDAC);
+        findViewById(R.id.fragment_app_lock_head).setBackgroundColor(0xFF00BBA0);
         //标题
         mBack = (ImageView) findViewById(R.id.common_applock_bar_layout_back);
         mTitle = (TextView) findViewById(R.id.common_applock_bar_layout_title);

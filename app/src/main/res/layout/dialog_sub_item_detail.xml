@@ -96,7 +96,7 @@
             android:textStyle="bold"
             android:layout_marginRight="8dp"
             android:text="@string/common_view"
-            android:textColor="#FF39BDAC"
+            android:textColor="#FF00BBA0"
             android:textSize="16sp"/>
     </LinearLayout>
 </LinearLayout>

@@ -141,7 +141,7 @@
         android:layout_marginTop="22dp"
         android:background="@drawable/tip_btu_shape"
         android:gravity="center"
-        android:textColor="#FF39BDAC"
+        android:textColor="#FF00BBA0"
         android:textSize="@dimen/h3_16"
         android:textStyle="bold"
         android:text="@string/permission_dialog_dital_txt_tip"
