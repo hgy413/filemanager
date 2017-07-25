@@ -652,6 +652,13 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(CleanScanDoneEvent event) {
+
+        //清理动画的统计
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.HOME_SHOW_CLEAN_ANIM;
+        StatisticsTools.upload101InfoNew(bean);
+
+
         boolean allDone = CleanScanDoneEvent.isAllDone();
 //        Logger.e("Main", isNeedShowAnim() + "接收到CleanScanDoneEvent事件: " + allDone + event.name());
         long junkFileAllSize = CleanScanFileSizeEvent.getJunkFileAllSize();

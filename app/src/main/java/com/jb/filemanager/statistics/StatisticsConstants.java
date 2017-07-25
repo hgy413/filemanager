@@ -95,7 +95,7 @@ public class StatisticsConstants {
     public static final String USB_SHOW                     = "f000_tool_usb";
     public static final String USB_CLICK_MANAGER            = "c000_tool_manage";
 
-    // TODO @liqf 统计 清理按钮动画展示 加完清除todo
+    //清理按钮动画展示
     public static final String HOME_SHOW_CLEAN_ANIM         = "f000_home_clean";
 
     //APP管理页面
