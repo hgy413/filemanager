@@ -79,17 +79,11 @@ public class MainDrawer implements View.OnClickListener {
             @Override
             public void onDrawerClosed(View view) {
                 mOpenType = FLING_OPEN;
-                //add by nieyh 抽屉栏关闭 入口值都是1
-                statisticsCloseDrawer(1);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                if (mOpenType == FLING_OPEN) {
-                    statisticsStartDrawer(2);
-                } else {
-                    statisticsStartDrawer(1);
-                }
+
             }
 
             @Override
@@ -238,22 +232,6 @@ public class MainDrawer implements View.OnClickListener {
         }
     }
 
-    private void statisticsStartDrawer(int entrance) {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.HOME_SIDE_SHOW;
-        bean.mEntrance = String.valueOf(entrance);
-        StatisticsTools.upload101InfoNew(bean);
-        Logger.d("MainActivity:statistics", "[]:" + "点击开启侧边栏 OperateId" + bean.mOperateId + " entrance" + bean.mEntrance);
-    }
-
-    private void statisticsCloseDrawer(int entrance) {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.HOME_SIDE_CLOSE;
-        bean.mEntrance = String.valueOf(entrance);
-        StatisticsTools.upload101InfoNew(bean);
-        Logger.d("MainActivity:statistics", "[]:" + "关闭侧边栏 OperateId" + bean.mOperateId + " entrance" + bean.mEntrance);
-    }
-
     void setOpenType(int openType) {
         this.mOpenType = openType;
     }
@@ -266,21 +244,31 @@ public class MainDrawer implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.tv_drawer_app_locker:
                 jumpToApplock();
+
+                boolean isAppLockerEnable = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_APP_LOCK_ENABLE, false);
+                statisticsClickAppLocker(isAppLockerEnable);
                 break;
             case R.id.tv_drawer_smart_charge:
                 IntroduceChargeDialog introduceChargeDialog = new IntroduceChargeDialog(mActivity);
                 introduceChargeDialog.show();
+
+                boolean isSmartChargeEnable = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, false);
+                statisticsClickSmartCharge(isSmartChargeEnable);
                 break;
             case R.id.tv_drawer_usb_plugin: {
                 boolean isSwitch = UsbStateManager.getInstance().changerSwitch();
                 v.setSelected(isSwitch);
                 AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_usb_plugin_switch_enable : R.string.toast_usb_plugin_switch_disable);
+
+                statisticsClickUSBSwitch(isSwitch);
             }
             break;
             case R.id.tv_drawer_low_space: {
                 boolean isSwitch = StorageTipManager.getInstance().changerSwitch();
                 v.setSelected(isSwitch);
                 AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_low_space_switch_enable : R.string.toast_low_space_switch_disable);
+
+                statisticsClickLowSwitch(isSwitch);
             }
             break;
             case R.id.tv_drawer_logger_notification: {
@@ -288,6 +276,7 @@ public class MainDrawer implements View.OnClickListener {
                 v.setSelected(isSwitch);
 
                 AppUtils.showToast(TheApplication.getInstance(), isSwitch ? R.string.toast_logger_notification_switch_enable : R.string.toast_logger_notification_switch_disable);
+                statisticsClickLoggerSwitch(isSwitch);
             }
             break;
             case R.id.tv_drawer_rating:
@@ -310,15 +299,19 @@ public class MainDrawer implements View.OnClickListener {
                         view.dismissLoveDialog();
                     }
                 });
+                statisticsClickRating();
                 break;
             case R.id.tv_drawer_update:
                 // TODO @wangzq
+                statisticsClickUpdate();
                 break;
             case R.id.tv_drawer_help:
                 jumpToFeedBack();
+                statisticsClickFeedback();
                 break;
             case R.id.tv_drawer_about:
                 jumpToAbout();
+                statisticsClickAbout();
                 break;
 
             default:
@@ -369,5 +362,61 @@ public class MainDrawer implements View.OnClickListener {
                 }
             }
         }, 260);
+    }
+
+    private void statisticsClickAppLocker(boolean isEnable) {
+
+    }
+
+    private void statisticsClickSmartCharge(boolean isEnable) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_ENTER_SMART_CHARGE;
+        bean.mEntrance = isEnable ? "1" : "2";
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickUSBSwitch(boolean isEnable) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_USB_SWITCH;
+        bean.mTab = isEnable ? "1" : "2";
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickLowSwitch(boolean isEnable) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_LOW_SWITCH;
+        bean.mTab = isEnable ? "1" : "2";
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickLoggerSwitch(boolean isEnable) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_LOGGER_SWITCH;
+        bean.mTab = isEnable ? "1" : "2";
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickRating() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_RATING;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickUpdate() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_UPDATE;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickFeedback() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_FEEDBACK;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickAbout() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_CLICK_ABOUT;
+        StatisticsTools.upload101InfoNew(bean);
     }
 }
