@@ -23,7 +23,7 @@
         android:visibility="gone"
         tools:visibility="visible"/>
 
-    <com.jb.filemanager.commomview.GroupSelectBox
+    <ImageView
         android:id="@+id/item_sub_image_gsb"
         android:layout_width="32dp"
         android:layout_height="32dp"

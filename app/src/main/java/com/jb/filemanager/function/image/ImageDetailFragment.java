@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.image.adapter.ImageDetailsPagerAdapter;
@@ -31,7 +32,7 @@ import java.util.List;
  * Created by nieyh on 17-7-4.
  */
 
-public class ImageDetailFragment extends BaseFragmentWithImmersiveStatusBar implements ImageDetailsContract.View {
+public class ImageDetailFragment extends BaseFragment implements ImageDetailsContract.View {
 
     //图片详情列表
     private final String ARG_IMG_DITALS_LIST = "arg_img_ditals_list";

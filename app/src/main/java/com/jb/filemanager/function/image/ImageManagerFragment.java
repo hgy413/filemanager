@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ExpandableListView;
 
+import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
@@ -43,7 +44,7 @@ import java.util.List;
  * Created by nieyh on 17-7-3.
  */
 
-public class ImageManagerFragment extends BaseFragmentWithImmersiveStatusBar implements ImageContract.View, CommonTitleBar.OnActionListener, BottomOperateBar.Listener {
+public class ImageManagerFragment extends BaseFragment implements ImageContract.View, CommonTitleBar.OnActionListener, BottomOperateBar.Listener {
 
     private ImageContract.Presenter mPresenter;
     //是否是内部存储

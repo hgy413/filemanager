@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.image.adapter;
 
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
     private int mPhotoSize;
     private Bitmap mGrayBitmap;
 
-    public ImageExpandableAdapter(List<ImageGroupModle> imageGroupModleList, BaseFragmentWithImmersiveStatusBar currentFragment, ImageContract.Presenter presenter) {
+    public ImageExpandableAdapter(List<ImageGroupModle> imageGroupModleList, BaseFragment currentFragment, ImageContract.Presenter presenter) {
         this.mImageGroupModleList = imageGroupModleList;
         this.mCurrentFragment = currentFragment;
         this.mPresenter = presenter;
@@ -119,7 +120,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
 
         viewGroupHolder.mDate.setText(imageGroupModle.mTimeDate);
         if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.NONE_SELECTED) {
-            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_none);
+            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_none_gray_width);
         } else if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.MULT_SELECTED) {
             viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_part);
         } else {
@@ -296,7 +297,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         //图片
         private ImageView mPhoto;
         //图片选项
-        private GroupSelectBox mGroupSelectBox;
+        private ImageView mGroupSelectBox;
         //掩码
         private View mMask;
 
@@ -309,8 +310,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             mPhoto = (ImageView) itemView.findViewById(R.id.item_sub_image_photo);
             mPhoto.setMaxHeight(mPhotoSize);
             mPhoto.setMaxWidth(mPhotoSize);
-            mGroupSelectBox = (GroupSelectBox) itemView.findViewById(R.id.item_sub_image_gsb);
-            mGroupSelectBox.setImageSource(R.drawable.choose_none_green, R.drawable.choose_part, R.drawable.choose_all);
+            mGroupSelectBox = (ImageView) itemView.findViewById(R.id.item_sub_image_gsb);
             mMask = itemView.findViewById(R.id.item_sub_image_photo_mask);
         }
 
@@ -322,10 +322,10 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
                         mPhoto, mGrayBitmap);
                 if (imageModle.isChecked) {
                     mMask.setVisibility(View.VISIBLE);
-                    mGroupSelectBox.setState(GroupSelectBox.SelectState.ALL_SELECTED);
+                    mGroupSelectBox.setImageResource(R.drawable.choose_all);
                 } else {
                     mMask.setVisibility(View.GONE);
-                    mGroupSelectBox.setState(GroupSelectBox.SelectState.NONE_SELECTED);
+                    mGroupSelectBox.setImageResource(R.drawable.choose_none_green);
                 }
                 mPhoto.setTag(new Binder(group, child, mImageModle));
                 mGroupSelectBox.setTag(mImageModle);
