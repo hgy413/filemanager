@@ -40,17 +40,18 @@
 
         <com.jb.filemanager.function.applock.view.PatternView
             android:id="@+id/view_applock_inner_float_layout_patternview"
-            android:layout_width="282dp"
-            android:layout_height="282dp"
+            android:layout_width="315dp"
+            android:layout_height="315dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             app:pl_aspect="square"
-            app:pl_dot_line_width="3dp"
-            app:pl_dot_size="12dp"
-            app:pl_dot_size_activated="20dp"
-            app:pl_errorColor="#FF7D7D"
-            app:pl_regularColor="#D8D8D8"
-            app:pl_successColor="#52D9C8"/>
+            app:pl_dot_line_width="3.4dp"
+            app:pl_dot_size="14dp"
+            app:pl_dot_size_activated="23dp"
+            app:pl_errorColor="#FF6464"
+            app:pl_regularColor="#6FC9BB"
+            app:pl_successColor="@color/common_style_green"/>
+
     </LinearLayout>
 
     <FrameLayout

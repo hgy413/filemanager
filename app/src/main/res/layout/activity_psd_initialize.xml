@@ -50,7 +50,6 @@
                 android:id="@+id/fragment_app_lock_step_2_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
                 android:background="@drawable/applock_step_arrow1"/>
 
             <TextView
@@ -72,7 +71,6 @@
                 android:id="@+id/fragment_app_lock_step_3_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
                 android:background="@drawable/applock_step_arrow1"/>
 
             <TextView
@@ -94,23 +92,23 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
-        android:textColor="#44D6C3"
+        android:textColor="@color/common_style_green"
         android:textSize="@dimen/h3_16"
         tools:text="Please set up a password"/>
 
     <com.jb.filemanager.function.applock.view.PatternView
         android:id="@+id/fragment_app_lock_set_psd_patternview"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="315dp"
+        android:layout_height="315dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         app:pl_aspect="square"
-        app:pl_dot_line_width="3dp"
-        app:pl_dot_size="12dp"
-        app:pl_dot_size_activated="20dp"
-        app:pl_errorColor="#FF7D7D"
-        app:pl_regularColor="#D8D8D8"
-        app:pl_successColor="#52D9C8"/>
+        app:pl_dot_line_width="3.4dp"
+        app:pl_dot_size="14dp"
+        app:pl_dot_size_activated="23dp"
+        app:pl_errorColor="#FF6464"
+        app:pl_regularColor="#6FC9BB"
+        app:pl_successColor="@color/common_style_green"/>
 
     <LinearLayout
         android:id="@+id/fragment_app_lock_set_psd_question_layout"

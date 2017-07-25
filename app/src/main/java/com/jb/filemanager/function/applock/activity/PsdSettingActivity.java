@@ -211,25 +211,37 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
 
     @Override
     public void showStepTopPatternTip(int step) {
+//        for (int i = 0; i < mStepIv.length; i++) {
+//            mStepIv[i].clearColorFilter();
+//        }
         switch (step) {
             case 1:
-                mStepIv[0].setAlpha(1f);
-                mStepIv[1].setAlpha(0.5f);
-                mStepIv[2].setAlpha(0.5f);
+//                mStepIv[0].setColorFilter(0xff00BBA0);
+//                mStepIv[1].setColorFilter(0xffCBF2ED);
+//                mStepIv[2].setColorFilter(0xffCBF2ED);
+                mStepIv[0].setAlpha(1.0f);
+                mStepIv[1].setAlpha(0.3f);
+                mStepIv[2].setAlpha(0.3f);
                 setQuestionLayerVisiable(false);
                 mApplockTip.setText(R.string.applock_psd_set_step_1);
                 break;
             case 2:
-                mStepIv[0].setAlpha(0.5f);
-                mStepIv[1].setAlpha(1f);
-                mStepIv[2].setAlpha(0.5f);
+//                mStepIv[0].setColorFilter(0xff00BBA0);
+//                mStepIv[1].setColorFilter(0xff00BBA0);
+//                mStepIv[2].setColorFilter(0xffCBF2ED);
+                mStepIv[0].setAlpha(1.0f);
+                mStepIv[1].setAlpha(1.0f);
+                mStepIv[2].setAlpha(0.3f);
                 setQuestionLayerVisiable(false);
                 mApplockTip.setText(R.string.applock_psd_set_step_2);
                 break;
             case 3:
-                mStepIv[0].setAlpha(0.5f);
-                mStepIv[1].setAlpha(0.5f);
-                mStepIv[2].setAlpha(1f);
+//                mStepIv[0].setColorFilter(0xff00BBA0);
+//                mStepIv[1].setColorFilter(0xff00BBA0);
+//                mStepIv[2].setColorFilter(0xff00BBA0);
+                mStepIv[0].setAlpha(1.0f);
+                mStepIv[1].setAlpha(1.0f);
+                mStepIv[2].setAlpha(1.0f);
                 setQuestionLayerVisiable(true);
                 mApplockTip.setText(R.string.applock_psd_set_step_3);
                 break;

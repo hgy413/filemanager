@@ -18,6 +18,9 @@ import com.jb.filemanager.function.applock.activity.AppLockPreActivity;
 import com.jb.filemanager.function.applock.manager.LockerFloatLayerManager;
 import com.jb.filemanager.function.feedback.FeedbackActivity;
 import com.jb.filemanager.function.permissionalarm.manager.PermissionAlarmManager;
+import com.jb.filemanager.function.rate.RateManager;
+import com.jb.filemanager.function.rate.dialog.AbsRateDialog;
+import com.jb.filemanager.function.rate.presenter.RateContract;
 import com.jb.filemanager.function.setting.SettingActivity;
 import com.jb.filemanager.function.tip.manager.StorageTipManager;
 import com.jb.filemanager.function.tip.manager.UsbStateManager;
@@ -256,7 +259,7 @@ public class MainDrawer implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         if (mQuickClickGuard.isQuickClick(v.getId())) {
             return;
         }
@@ -288,7 +291,25 @@ public class MainDrawer implements View.OnClickListener {
             }
             break;
             case R.id.tv_drawer_rating:
-                // TODO @wangzq
+                final RateContract.View view = ((RateContract.View)mActivity);
+                RateManager.getsInstance().commitRateSuccess();
+                view.showLoveDialog(new AbsRateDialog.OnPressListener() {
+                    @Override
+                    public void pressBack() {
+                        view.dismissLoveDialog();
+                    }
+
+                    @Override
+                    public void pressYes() {
+                        view.dismissLoveDialog();
+                        view.gotoGp();
+                    }
+
+                    @Override
+                    public void pressNo() {
+                        view.dismissLoveDialog();
+                    }
+                });
                 break;
             case R.id.tv_drawer_update:
                 // TODO @wangzq
