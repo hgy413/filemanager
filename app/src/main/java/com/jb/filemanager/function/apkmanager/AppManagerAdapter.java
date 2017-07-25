@@ -31,7 +31,7 @@ import java.util.List;
 
 class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
 
-
+    private boolean[] mGroupExpandState = {true, false};//默认是user打开   system关闭
     private static final String TAG = "mCheckedCount";
     private int mCheckedCount;
     private OnItemChosenListener mOnItemChosenListener;
@@ -82,7 +82,19 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
 
     @Override
     public View onGetChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child, parent, false);
+        boolean isTheLastOne = true;
+        for (int i = groupPosition; i < getGroupCount(); i++) {
+            isTheLastOne = isTheLastOne && !mGroupExpandState[i];//下面只要有一个展开的  就不是最后一个
+        }
+
+        if (isLastChild && groupPosition == getGroupCount() - 1) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child_with_bottom_space, parent, false);
+        } else if (isLastChild) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child_with_bottom_space, parent, false);
+        } else {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child, parent, false);
+        }
+
         ChildItemViewHolder viewHolder = new ChildItemViewHolder(convertView);
         final AppGroupBean appGroupBean = mGroups.get(groupPosition);
         final AppItemInfo child = appGroupBean.getChild(childPosition);
@@ -161,7 +173,22 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
+        if (groupPosition < mGroupExpandState.length) {
+            mGroupExpandState[groupPosition] = false;
+        }
         statisticsCollapseGroup();
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+        if (groupPosition < mGroupExpandState.length) {
+            mGroupExpandState[groupPosition] = true;
+        }
+    }
+
+    public boolean isTargetGroupExpand(int position) {
+        return mGroupExpandState[position];
     }
 
     private static class GroupItemViewHolder {
