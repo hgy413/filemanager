@@ -96,7 +96,7 @@ public class TimeUtil {
      * @return 相差天数  0代表同一天
      */
     public static int calcDifferenceDays(long startTime, long endTime) throws Exception {
-        if (startTime <= 0 || endTime <= 0)
+        if (startTime < 0 || endTime < 0)
             throw new Exception("startTime or endTime < 0");
         return Math.abs((int) (toDay(startTime) - toDay(endTime)));
     }

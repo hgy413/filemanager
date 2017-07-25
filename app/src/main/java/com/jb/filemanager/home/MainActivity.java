@@ -53,7 +53,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
     private MainDrawer mDrawer;
 
     private ImageView mIvActionBarMenu;
-    private TextView mTvActionBarTitle;
+    private ImageView mTvActionBarTitle;
     private ImageView mIvActionBarSearch;
     private ImageView mIvActionBarMore;
 
@@ -168,10 +168,7 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
             mIvActionBarMenu.setOnClickListener(this);
         }
 
-        mTvActionBarTitle = (TextView) findViewById(R.id.tv_main_action_bar_title);
-        if (mTvActionBarTitle != null) {
-            mTvActionBarTitle.getPaint().setAntiAlias(true);
-        }
+        mTvActionBarTitle = (ImageView) findViewById(R.id.tv_main_action_bar_title);
 
         mIvActionBarSearch = (ImageView) findViewById(R.id.iv_main_action_bar_search);
         if (mIvActionBarSearch != null) {

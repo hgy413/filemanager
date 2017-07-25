@@ -23,8 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseFragment;
-import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
@@ -189,6 +189,8 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
 
             @Override
             public void afterCopy() {
+                //add nieyh 添加评分引导底部栏的操作因素
+                RateManager.getsInstance().collectTriggeringFactor(RateManager.FILE_OPERATE);
                 if (mPresenter != null) {
                     mPresenter.afterCopy();
                 }
@@ -196,6 +198,8 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
 
             @Override
             public void afterCut() {
+                //add nieyh 添加评分引导底部栏的操作因素
+                RateManager.getsInstance().collectTriggeringFactor(RateManager.FILE_OPERATE);
                 if (mPresenter != null) {
                     mPresenter.afterCut();
                 }
@@ -203,6 +207,8 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
 
             @Override
             public void afterRename() {
+                //add nieyh 添加评分引导底部栏的操作因素
+                RateManager.getsInstance().collectTriggeringFactor(RateManager.FILE_OPERATE);
                 if (mPresenter != null) {
                     mPresenter.afterRename();
                 }
@@ -210,6 +216,8 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
 
             @Override
             public void afterDelete() {
+                //add nieyh 添加评分引导底部栏的操作因素
+                RateManager.getsInstance().collectTriggeringFactor(RateManager.FILE_OPERATE);
                 if (mPresenter != null) {
                     mPresenter.afterDelete();
                 }
@@ -238,6 +246,8 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //add nieyh 添加评分引导底部栏的操作因素
+                        RateManager.getsInstance().collectTriggeringFactor(RateManager.FILE_OPERATE);
                         if (mPresenter != null) {
                             mPresenter.onClickOperatePasteButton();
                         }

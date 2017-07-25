@@ -25,12 +25,10 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
+import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.function.search.modle.FileInfo;
 import com.jb.filemanager.util.AppUtils;
-import com.jb.filemanager.util.FileUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -434,6 +432,8 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
             mAdapter.setOnItemClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //add by nieyh 评分引导逻辑 收集评分因素
+                    RateManager.getsInstance().collectTriggeringFactor(RateManager.SEARCH_RESULT_CLICK);
                     FileInfo fileInfo = (FileInfo)v.getTag();
 
                     if (mPresenter != null) {
