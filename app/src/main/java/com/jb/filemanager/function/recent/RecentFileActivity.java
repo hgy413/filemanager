@@ -151,7 +151,10 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
     @Override
     public void onBackPressed() {
-        mPresenter.onBackPressed();
-        super.onBackPressed();
+        if (mSearchTitle.isSelectMode()) {
+            mPresenter.onTitleCancelBtnClick();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -21,7 +21,6 @@ public interface RecentFileContract {
     interface Presenter {
         void onCreate();
         void onDestroy();
-        void onBackPressed();
         void onItemCheckChanged();
         void onTitleCancelBtnClick();
         void onTitleSelectBtnClick();
