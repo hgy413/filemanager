@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jb.filemanager.BaseActivity;
@@ -30,6 +31,7 @@ public class TrashIgnoreActivity extends BaseActivity implements Contract.View {
     private TextView mTvCommonActionBarTitle;
     private View mNoDataTip;
     private View mHasDataTip;
+    private RelativeLayout mLlTitle;
     private FloatingGroupExpandableListView mListView;
     private TrashIgnoreAdapter mAdapter;
 
@@ -45,6 +47,7 @@ public class TrashIgnoreActivity extends BaseActivity implements Contract.View {
     }
 
     private void initializeView() {
+        mLlTitle = (RelativeLayout) findViewById(R.id.ll_title);
         mTvCommonActionBarTitle = (TextView) findViewById(R.id.tv_common_action_bar_title);
         mNoDataTip = findViewById(R.id.trash_ignore_no_data_tip);
         mHasDataTip = findViewById(R.id.trash_ignore_has_data_tip);
@@ -58,10 +61,12 @@ public class TrashIgnoreActivity extends BaseActivity implements Contract.View {
             mNoDataTip.setVisibility(View.GONE);
             mHasDataTip.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.VISIBLE);
+            mLlTitle.setBackgroundResource(R.color.white);
         } else {
             mNoDataTip.setVisibility(View.VISIBLE);
             mHasDataTip.setVisibility(View.GONE);
             mListView.setVisibility(View.GONE);
+            mLlTitle.setBackgroundResource(R.color.trash_ignore_bg);
         }
     }
 

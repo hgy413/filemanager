@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.eventbus.DocFileScanFinishEvent;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
 import com.jb.filemanager.util.ConvertUtils;
@@ -166,6 +167,12 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         if (keepUserCheck) {
             handleUserChecked(groups);
         }
+        int count = 0;
+        for (DocGroupBean groupBean : groups) {
+            count += groupBean.getchildrenSize();
+        }
+        TheApplication.getGlobalEventBus().post(new DocFileScanFinishEvent(count));
+
         mGroups.clear();
         mGroups.addAll(groups);
 //        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中

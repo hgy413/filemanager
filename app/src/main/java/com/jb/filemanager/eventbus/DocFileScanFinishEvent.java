@@ -9,10 +9,8 @@ package com.jb.filemanager.eventbus;
 
 public class DocFileScanFinishEvent {
     public int mDocFileCount;
-    public long mDocFileSize;
 
-    public DocFileScanFinishEvent(int docFileCount, long docFileSize) {
+    public DocFileScanFinishEvent(int docFileCount) {
         mDocFileCount = docFileCount;
-        mDocFileSize = docFileSize;
     }
 }

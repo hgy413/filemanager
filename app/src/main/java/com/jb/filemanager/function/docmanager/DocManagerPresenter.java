@@ -213,7 +213,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         private ArrayList<DocChildBean> mTxtList = new ArrayList<>();
         private ArrayList<DocChildBean> mPdfList = new ArrayList<>();
         private int mFileCount;
-        private long mFileTotalSize;
 
         @Override
         protected void onPreExecute() {
@@ -251,21 +250,25 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, "PDF", GroupSelectBox.SelectState.NONE_SELECTED, false);
 
             ArrayList<DocGroupBean> groups = new ArrayList<>();
+            mFileCount = 0;
             if (mDocList.size() > 0) {
                 groups.add(txtGroupBean);
+                mFileCount += txtGroupBean.getchildrenSize();
             }
             if (mPdfList.size() > 0) {
                 groups.add(pdfGroupBean);
+                mFileCount += pdfGroupBean.getchildrenSize();
             }
             if (mTxtList.size() > 0) {
                 groups.add(docGroupBean);
+                mFileCount += docGroupBean.getchildrenSize();
             }
 
             if (mDocScanListener != null) {
                 mDocScanListener.onScanFinish(groups, params[0]);
             }
 
-            TheApplication.getGlobalEventBus().post(new DocFileScanFinishEvent(mFileCount, mFileTotalSize));
+            TheApplication.getGlobalEventBus().post(new DocFileScanFinishEvent(mFileCount));
             return null;
         }
 
@@ -291,8 +294,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
                         docFileProvider.insertDocItem(childBean);
-                        mFileCount++;
-                        mFileTotalSize += file.length();
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(XLS) || extension.equalsIgnoreCase(XLSX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -303,8 +304,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
                         docFileProvider.insertDocItem(childBean);
-                        mFileCount++;
-                        mFileTotalSize += file.length();
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PPT) || extension.equalsIgnoreCase(PPTX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -315,8 +314,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
                         docFileProvider.insertDocItem(childBean);
-                        mFileCount++;
-                        mFileTotalSize += file.length();
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(TXT)) {
                         DocChildBean childBean = new DocChildBean();
@@ -326,8 +323,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        mFileCount++;
-                        mFileTotalSize += file.length();
                         docFileProvider.insertDocItem(childBean);
                         mTxtList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PDF)) {
@@ -338,8 +333,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        mFileCount++;
-                        mFileTotalSize += file.length();
                         docFileProvider.insertDocItem(childBean);
                         mPdfList.add(childBean);
                     }

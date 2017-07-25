@@ -99,4 +99,6 @@
 
     <color name="sa">#0083ff</color>
     <color name="aaa">#FF8517</color>
+
+    <color name="trash_ignore_bg">#f2f2f2</color>
 </resources>
