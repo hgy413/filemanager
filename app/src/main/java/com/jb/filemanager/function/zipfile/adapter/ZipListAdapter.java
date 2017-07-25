@@ -71,6 +71,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
             convertView = View.inflate(parent.getContext().getApplicationContext(), R.layout.group_zip_file, null);
             holder.groupTime = (TextView) convertView.findViewById(R.id.group_zip_time);
             holder.groupCheckBox = (ImageView) convertView.findViewById(R.id.group_zip_iv);
+            holder.groupFooter = convertView.findViewById(R.id.group_zip_footer);
             convertView.setTag(R.layout.group_zip_file, holder);
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.group_zip_file);
@@ -95,6 +96,11 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
+        if (groupPosition == getGroupCount() - 1 && !isExpanded) {
+            holder.groupFooter.setVisibility(View.VISIBLE);
+        } else {
+            holder.groupFooter.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -110,6 +116,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
             holder.itemCheckBox = (ImageView) convertView.findViewById(R.id.item_zip_checkbox);
             holder.divider = convertView.findViewById(R.id.item_zip_divider);
             holder.wideDivider = convertView.findViewById(R.id.item_zip_wide_divider);
+            holder.footer = convertView.findViewById(R.id.item_zip_footer);
             convertView.setTag(R.layout.item_zip_file, holder);
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.item_zip_file);
@@ -129,13 +136,20 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
-        // 最后一个子项
-        if (childPosition == getChildrenCount(groupPosition) - 1 && groupPosition != getGroupCount() - 1) {
+        if (childPosition == getChildrenCount(groupPosition) - 1 && groupPosition == getGroupCount() - 1) {
+            // 最后一组的最后一项
+            holder.divider.setVisibility(View.GONE);
+            holder.wideDivider.setVisibility(View.GONE);
+            holder.footer.setVisibility(View.VISIBLE);
+        } else if (childPosition == getChildrenCount(groupPosition) - 1 && groupPosition != getGroupCount() - 1) {
+            // 非最后一组的最后一项
             holder.divider.setVisibility(View.GONE);
             holder.wideDivider.setVisibility(View.VISIBLE);
+            holder.footer.setVisibility(View.GONE);
         } else {
             holder.divider.setVisibility(View.VISIBLE);
             holder.wideDivider.setVisibility(View.GONE);
+            holder.footer.setVisibility(View.GONE);
         }
         return convertView;
     }
@@ -149,6 +163,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
         // group
         TextView groupTime;
         ImageView groupCheckBox;
+        View groupFooter;
         // item
         ImageView icon;
         TextView name;
@@ -156,6 +171,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
         ImageView itemCheckBox;
         View divider;
         View wideDivider;
+        View footer;
     }
 
     public void setListener(ZipListAdapterClickListener listener) {
