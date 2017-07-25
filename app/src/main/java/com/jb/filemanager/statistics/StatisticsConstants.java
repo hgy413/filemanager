@@ -46,9 +46,9 @@ public class StatisticsConstants {
 
     // 搜索页
     public static final String SEARCH_EXIT_SEARCH           = "c000_home_exit";
-    public static final String SEARCH_SHOW_SEARCH_ANIM      = "f000_home_search";
-    public static final String SEARCH_SHOW_SEARCH_RESULT    = "f000_home_result";
-    public static final String SEARCH_CLICK_SEARCH_RESULT   = "c000_home_result";
+    public static final String SEARCH_SHOW_ANIM             = "f000_home_search";
+    public static final String SEARCH_SHOW_RESULT           = "f000_home_result";
+    public static final String SEARCH_CLICK_RESULT          = "c000_home_result";
 
     // 工具栏
     public static final String DRAWER_ENTER_APP_LOCKER      = "c000_tool_locker";
@@ -61,6 +61,7 @@ public class StatisticsConstants {
     public static final String DRAWER_CLICK_FEEDBACK        = "c000_tool_Feed";
     public static final String DRAWER_CLICK_ABOUT           = "c000_tool_About";
 
+    // 树状结构
     public static final String STORAGE_CLICK_PATH           = "c000_stor_way";
     public static final String STORAGE_CLICK_STYLE_SWITCH   = "c000_stor_list";
     public static final String STORAGE_CLICK_SEARCH         = "c000_stor_search";

@@ -1,18 +1,25 @@
 package com.jb.filemanager.function.search.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.SearchManager;
 import com.jb.filemanager.function.search.event.SearchFinishEvent;
 import com.jb.filemanager.function.search.modle.FileInfo;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
+import com.jb.filemanager.util.FileUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -42,6 +49,8 @@ public class SearchPresenter implements SearchContract.Presenter {
                 if (mAnimPlayOnce) {
                     mView.stopSearchAnim();
                     mView.showSearchResult(event.mFileInfoList);
+
+                    statisticsShowSearchResult();
                 } else {
                     mSearchResult = event.mFileInfoList;
                     mSearchFinished = true;
@@ -99,6 +108,8 @@ public class SearchPresenter implements SearchContract.Presenter {
         if (mView != null) {
             mView.finishActivity();
         }
+
+        statisticsSearchExit(systemBack ? "1" : "2");
     }
 
     @Override
@@ -112,6 +123,8 @@ public class SearchPresenter implements SearchContract.Presenter {
         if (mView != null) {
             mView.finishActivity();
         }
+
+        statisticsSearchExit("3");
     }
 
     @Override
@@ -131,7 +144,18 @@ public class SearchPresenter implements SearchContract.Presenter {
         doSearch(keyword);
     }
 
-
+    @Override
+    public void onClickSearchResult(Activity activity, String clickedFilePath) {
+        File clickedFile = new File(clickedFilePath);
+        if (clickedFile.exists()) {
+            if (clickedFile.isDirectory()) {
+                FileBrowserActivity.startBrowser(activity, clickedFilePath);
+            } else {
+                FileUtil.openFile(activity, clickedFile);
+            }
+        }
+        statisticsClickResult();
+    }
 
     // private
     private void doSearch(String keyword) {
@@ -146,6 +170,8 @@ public class SearchPresenter implements SearchContract.Presenter {
         if (mView != null) {
             mView.hideKeyboard();
             mView.showSearchAnim();
+
+            statisticsShowSearchAnim();
         }
 
         if (!TheApplication.getGlobalEventBus().isRegistered(mSearchFinishMainThreadSubscriber)) {
@@ -160,6 +186,33 @@ public class SearchPresenter implements SearchContract.Presenter {
         if (mSearchFinished && mView != null) {
             mView.stopSearchAnim();
             mView.showSearchResult(mSearchResult);
+
+            statisticsShowSearchResult();
         }
+    }
+
+    private void statisticsShowSearchAnim() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.SEARCH_SHOW_ANIM;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsShowSearchResult() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.SEARCH_SHOW_RESULT;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsSearchExit(String entrance) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.SEARCH_EXIT_SEARCH;
+        bean.mEntrance = entrance;
+        StatisticsTools.upload101InfoNew(bean);
+    }
+
+    private void statisticsClickResult() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.SEARCH_CLICK_RESULT;
+        StatisticsTools.upload101InfoNew(bean);
     }
 }

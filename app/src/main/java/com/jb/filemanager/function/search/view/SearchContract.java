@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.search.view;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,7 @@ public class SearchContract {
         void onClickClearInputButton();
         void onClickSearch(String keyword);
         void onClickSearchOnKeyboard(String keyword);
+        void onClickSearchResult(Activity activity, String clickedFilePath);
 
         void onAnimRepeat();
     }

@@ -435,13 +435,9 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 @Override
                 public void onClick(View v) {
                     FileInfo fileInfo = (FileInfo)v.getTag();
-                    File clickedFile = new File(fileInfo.mFileAbsolutePath);
-                    if (clickedFile.exists()) {
-                        if (clickedFile.isDirectory()) {
-                            FileBrowserActivity.startBrowser(SearchActivity.this, fileInfo.mFileAbsolutePath);
-                        } else {
-                            FileUtil.openFile(SearchActivity.this, clickedFile);
-                        }
+
+                    if (mPresenter != null) {
+                        mPresenter.onClickSearchResult(SearchActivity.this, fileInfo.mFileAbsolutePath);
                     }
                 }
             });
