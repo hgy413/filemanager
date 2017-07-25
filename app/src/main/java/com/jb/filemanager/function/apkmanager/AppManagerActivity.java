@@ -67,6 +67,8 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         mElvApk = (ExpandableListView) findViewById(R.id.elv_apk);
         mTvBottomDelete = (TextView) findViewById(R.id.tv_bottom_delete);
         mIvCommonActionBarWithSearchSearch.setVisibility(View.VISIBLE);
+
+        mTvCommonActionBarWithSearchTitle.setText(R.string.clean_group_apk);
     }
 
     @Override

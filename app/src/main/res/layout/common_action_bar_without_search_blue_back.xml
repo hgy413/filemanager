@@ -31,7 +31,6 @@
         android:scaleType="centerInside"
         android:layout_centerVertical="true"
         android:visibility="gone"
-        android:padding="16dp"
         android:src="@drawable/ic_action_bar_search"/>
     
     <View

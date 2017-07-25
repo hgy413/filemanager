@@ -55,6 +55,8 @@ public class TxtPreviewActivity extends BaseActivity {
         mRvTxtPreview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mPreviewAdapter = new TxtPreviewAdapter(mTxtData);
         mRvTxtPreview.setAdapter(mPreviewAdapter);
+
+        mTvCommonActionBarTitle.setText(R.string.txt_preview);
     }
 
     public void initData() {
@@ -90,7 +92,7 @@ public class TxtPreviewActivity extends BaseActivity {
                 mErrorDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-//                        finish();
+                        finish();
                     }
                 });
                 mErrorDialog.show();

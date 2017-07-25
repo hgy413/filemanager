@@ -69,6 +69,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_search);
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
         mBobBottomOperator = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
+
+        mTvCommonActionBarWithSearchTitle.setText(R.string.app_manager);
     }
 
     @Override
