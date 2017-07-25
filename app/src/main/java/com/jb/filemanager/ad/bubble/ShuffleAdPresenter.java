@@ -76,13 +76,14 @@ public class ShuffleAdPresenter implements AdPresetView.Listener{
                 dismissAdScrollView();
                 mListener.onBack(0);
                 mIsWorking = false;
-            }
-
-            if (mRecommendAdView != null && mListener != null) {
+            } else if (mRecommendAdView != null && mListener != null) {
                 dismissRecommend();
                 mListener.onBack(1);
                 mIsWorking = false;
+            } else {
+                cancel();
             }
+
         }
         return result;
     }
