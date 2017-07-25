@@ -63,9 +63,9 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
         if (item.isDirectory()) {
             holder.icon.setImageResource(R.drawable.img_folder);
         } else if ("png".equalsIgnoreCase(extension) || "jpg".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.img_picture);
+            holder.icon.setImageResource(R.drawable.photo_icon);
         } else if ("mp3".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.img_music);
+            holder.icon.setImageResource(R.drawable.music_icon);
         } else if ("mp4".equalsIgnoreCase(extension)) {
             holder.icon.setImageResource(R.drawable.video_icon);
         } else if ("zip".equalsIgnoreCase(extension) || "rar".equalsIgnoreCase(extension)) {

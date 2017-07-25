@@ -60,5 +60,7 @@ public interface SameFileContract {
         GroupList<String,FileInfo> getAllVideoInfo();
 
         List<File> getFiles(File file);
+
+        void updateDatabaseRename(String oldFile, String newFile);
     }
 }

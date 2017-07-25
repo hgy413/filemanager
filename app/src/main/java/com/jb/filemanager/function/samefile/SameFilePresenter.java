@@ -129,7 +129,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         String oldFile = fileOperateEvent.mOldFile.getAbsolutePath();
         String newFile = fileOperateEvent.mNewFile.getAbsolutePath();
         String s = newFile.toLowerCase();
-        //mSupport.updateDatabaseRename(S)
+        mSupport.updateDatabaseRename(oldFile, newFile);
 //        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile}, null,
 //                new MediaScannerConnection.OnScanCompletedListener() {
 //                    @Override

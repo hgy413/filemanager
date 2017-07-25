@@ -455,7 +455,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
             mInflater = LayoutInflater.from(context);
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
-            mImageFetcher = ImageUtils.createImageFetcher((FragmentActivity) context, mImageSize, R.drawable.img_picture);
+            mImageFetcher = ImageUtils.createImageFetcher((FragmentActivity) context, mImageSize, R.drawable.photo_icon);
             mRootDirs = rootDirs;
         }
 
@@ -502,7 +502,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     }
                     break;
                 case FileManager.AUDIO:
-                    ivThumb.setImageResource(R.drawable.img_music);
+                    ivThumb.setImageResource(R.drawable.music_icon);
                     break;
                 case FileManager.OTHERS:
                     ivThumb.setImageResource(R.drawable.img_file);

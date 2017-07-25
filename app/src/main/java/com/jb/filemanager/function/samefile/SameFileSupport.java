@@ -1,8 +1,10 @@
 package com.jb.filemanager.function.samefile;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -27,7 +29,7 @@ import java.util.List;
  */
 
 public class SameFileSupport implements SameFileContract.Support {
-    private static final Uri NUSIC_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    private static final Uri MUSIC_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     private static final Uri VIDEO_URI = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
     private static final String[] MUSIC_PROPERTIES = {
             MediaStore.Audio.Media._ID,
@@ -67,7 +69,7 @@ public class SameFileSupport implements SameFileContract.Support {
 
     @Override
     public GroupList<String, FileInfo> getAllMusicInfo() {
-        return getMediaInfo(NUSIC_URI, MUSIC_PROPERTIES);
+        return getMediaInfo(MUSIC_URI, MUSIC_PROPERTIES);
     }
 
     @Override
@@ -209,7 +211,7 @@ public class SameFileSupport implements SameFileContract.Support {
             while (cursor.moveToNext()) {
                 if (null != (info = cursorToFileInfo(cursor))) {
                     modify = info.mModified;
-                    if (uri == NUSIC_URI) {
+                    if (uri == MUSIC_URI) {
                         info.mFileType = Const.FILE_TYPE.MUSIC;
                     } else if (uri == VIDEO_URI) {
                         info.mFileType = Const.FILE_TYPE.VIDEO;
@@ -265,7 +267,7 @@ public class SameFileSupport implements SameFileContract.Support {
     @Override
     public int getMuscisNum() {
         int musicCount = 0;
-        Cursor cursor = mResolver.query(NUSIC_URI,
+        Cursor cursor = mResolver.query(MUSIC_URI,
                 new String[]{MediaStore.Audio.Media._COUNT},
                 MediaStore.Audio.Media.SIZE + " > 0 ",
                 null,
@@ -293,6 +295,39 @@ public class SameFileSupport implements SameFileContract.Support {
         }
         return list;
     }
+
+    @Override
+    public void updateDatabaseRename(String oldFile, String newFile) {
+//        Uri targetUri = null;
+//        File file = new File(newFile);
+//        if (!file.exists() || file.isDirectory()){
+//            return;
+//            new android.media.MediaRecorder(newFile);
+//            //MediaStore.Video.Media(newFile);
+//        }
+//        if (Const.FILE_TYPE.VIDEO == isType(newFile)) {
+//            targetUri = VIDEO_URI;
+//
+//        } else {
+//            targetUri = MUSIC_URI;
+//        }
+//        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Video.Media.DISPLAY_NAME, file.getName());
+//        values.put(MediaStore.Video.Media.SIZE, file.length());
+//        values.put(MediaStore.Video.Media.DATA, file.getAbsolutePath());
+//        values.put(MediaStore.Video.Media.DATE_MODIFIED, file.lastModified());
+//        values.put(MediaStore.Video.Media.MIME_TYPE, 1);
+//        values.put(MediaStore.Video.Media.DURATION, );
+//        values.put(MediaStore.Video.Media.ARTIST, )
+//
+//        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER,0);
+//        mResolver.insert(targetUri, values);
+    }
+
+//    private Const.FILE_TYPE isType(String newFile) {
+//
+//    }
 
     public FileInfo getFileInfo(File file){
         FileInfo info = new FileInfo();

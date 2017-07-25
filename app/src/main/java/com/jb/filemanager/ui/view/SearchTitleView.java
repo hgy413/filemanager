@@ -1,6 +1,7 @@
 package com.jb.filemanager.ui.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -33,7 +34,7 @@ public class SearchTitleView extends RelativeLayout implements View.OnClickListe
     }
 
     private void initializeView() {
-        setBackgroundColor(0xffffffff);
+        setBackgroundColor(Color.WHITE);
         mTvTitleName = (TextView) findViewById(R.id.search_title_name);
         mTvTitleName.setOnClickListener(this);
         mIvSearchIcon = (ImageView) findViewById(R.id.search_title_search_icon);
