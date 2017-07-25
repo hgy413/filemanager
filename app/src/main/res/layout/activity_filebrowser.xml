@@ -10,15 +10,27 @@
         layout="@layout/common_action_bar_without_search_blue_back"/>
 
     <View
+        android:background="@color/white"
+        android:layout_below="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
+    <View
+        android:id="@+id/v_title_shadow"
+        android:layout_below="@+id/ll_title"
+        android:background="@drawable/main_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
+
+    <View
         android:id="@+id/bg_color"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@id/ll_title"
+        android:layout_below="@id/v_title_shadow"
         android:background="@color/white"
         />
 
     <View
-        android:layout_below="@id/ll_title"
+        android:layout_below="@id/v_title_shadow"
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:background="@color/list_divider_line_color_e7e9f3"
@@ -27,7 +39,7 @@
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_title"
+        android:layout_below="@id/v_title_shadow"
         android:overScrollMode="never"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"

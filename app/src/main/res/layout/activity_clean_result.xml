@@ -13,9 +13,16 @@
         android:id="@+id/ll_title"
         layout="@layout/common_action_bar_without_search_blue_back"/>
 
+    <View
+        android:layout_below="@+id/ll_title"
+        android:background="@drawable/main_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_below="@+id/ll_title"
+        android:layout_marginTop="6dp"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

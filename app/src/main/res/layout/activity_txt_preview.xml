@@ -9,6 +9,11 @@
 
     <include layout="@layout/common_action_bar_without_search_blue_back"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/main_shadow"/>
+
     <android.support.v7.widget.RecyclerView
         android:visibility="visible"
         android:id="@+id/rv_txt_preview"

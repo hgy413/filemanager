@@ -6,11 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.jb.filemanager.function.trash.NoNeedCleanActivity">
 
     <include layout="@layout/common_action_bar_without_search_blue_back"/>
+
+    <View
+        android:background="@drawable/main_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
 
     <ImageView
         android:layout_width="60dp"

@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
@@ -385,7 +384,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                     mIvCleanButton.setVisibility(View.GONE);
                     startActivity(new Intent(CleanTrashActivity.this, NoNeedCleanActivity.class));
                     finish();
-                    Toast.makeText(CleanTrashActivity.this, "Had nothing to show and no where to go", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CleanTrashActivity.this, "Had nothing to show and no where to go", Toast.LENGTH_SHORT).show();
                 } else {
                     showScanResult();
                 }

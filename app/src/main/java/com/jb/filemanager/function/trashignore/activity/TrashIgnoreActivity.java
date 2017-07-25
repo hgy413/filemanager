@@ -61,12 +61,10 @@ public class TrashIgnoreActivity extends BaseActivity implements Contract.View {
             mNoDataTip.setVisibility(View.GONE);
             mHasDataTip.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.VISIBLE);
-            mLlTitle.setBackgroundResource(R.color.white);
         } else {
             mNoDataTip.setVisibility(View.VISIBLE);
             mHasDataTip.setVisibility(View.GONE);
             mListView.setVisibility(View.GONE);
-            mLlTitle.setBackgroundResource(R.color.trash_ignore_bg);
         }
     }
 

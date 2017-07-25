@@ -34,6 +34,11 @@
             android:textSize="16sp"/>
     </LinearLayout>-->
     <include layout="@layout/common_action_bar_without_search_blue_back"/>
+    <View
+        android:background="@drawable/main_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
+
     <!-- no data tip -->
     <TextView
         android:id="@+id/trash_ignore_no_data_tip"

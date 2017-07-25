@@ -10,7 +10,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
@@ -215,7 +214,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
                 finishActivity();
                 break;
             case R.id.tv_bottom_delete:
-                Toast.makeText(AppManagerActivity.this, mChosenCount + "个app被选中了呢   欧尼酱", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(AppManagerActivity.this, mChosenCount + "个app被选中了呢   欧尼酱", Toast.LENGTH_SHORT).show();
                 List<AppItemInfo> children = mAppInfo.get(0).getChildren();
                 for (AppItemInfo childBean : children) {
                     if (childBean.mIsChecked) {
