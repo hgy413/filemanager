@@ -35,7 +35,6 @@ import com.jb.filemanager.function.search.SearchManager;
 import com.jb.filemanager.function.tip.manager.StorageTipManager;
 import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.zipfile.ExtractManager;
-import com.jb.filemanager.global.TheUncaughtExceptionHandler;
 import com.jb.filemanager.manager.GlobalFileManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
@@ -113,7 +112,7 @@ public class TheApplication extends Application {
 
         long s = System.currentTimeMillis();
         initCrashReport();
-        TheUncaughtExceptionHandler.getInstance().init();
+//        TheUncaughtExceptionHandler.getInstance().init();
         /*
          * fix android leak fix which is caused by UserManager holding on to a activity ctx
          * 反射处理userManager的泄露

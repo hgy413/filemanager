@@ -6,12 +6,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.docmanager.DocGroupBean;
+import com.jb.filemanager.function.image.modle.ImageModle;
+import com.jb.filemanager.function.recent.bean.BlockBean;
+import com.jb.filemanager.function.samefile.FileInfo;
+import com.jb.filemanager.function.samefile.GroupList;
+import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
+import com.jb.filemanager.util.StorageUtil;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by xiaoyu on 2017/7/21 10:36.
@@ -59,12 +75,26 @@ public class GlobalFileManager {
     private static GlobalFileManager sInstance;
     private Context mContext;
     private BroadcastReceiver mReceiver;
-    // 数据存储区 : 压缩文件 最近文件 下载文件 文档文件
+    // 数据存储区 : 压缩文件 视频文件 音频文件 图片文件 ---- 最近文件 下载文件 文档文件
 
+    // 压缩文件
+    private List<ZipFileItemBean> mZipFileList = new ArrayList<>();
+    // 图片文件
+    private List<ImageModle> mImageList = new ArrayList<>();
+    // 视频文件
+    private GroupList<String,FileInfo> mVideoList = new GroupList<String,FileInfo>();
+    // 音频文件
+    private GroupList<String,FileInfo> mAudioList = new GroupList<String,FileInfo>();
+
+    // 最近文件
+    private List<BlockBean> mRecentList = new ArrayList<>();
+    // 下载文件
+    private GroupList<String,FileInfo> mDownloadList = new GroupList<String,FileInfo>();
+    // 下载文件
+    private List<DocGroupBean> mDocumentList = new ArrayList<>();
 
     private GlobalFileManager() {
         mContext = TheApplication.getAppContext();
-        registerMediaScannerReceiver();
     }
 
     public static GlobalFileManager getInstance() {
@@ -78,7 +108,7 @@ public class GlobalFileManager {
     }
 
     public void onApplicationCreate() {
-        initAllData();
+//        initAllData();
     }
 
     // MediaStore.Audio Video Images Files
@@ -109,10 +139,60 @@ public class GlobalFileManager {
         Log.e("time", "time=" + (System.currentTimeMillis() - start));
     }
 
-    public void sendUpdateBroadcast() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mContext.sendBroadcast(intent);
+    /**
+     * 根据文件扩展名获取MIME_TYPE
+     *
+     * @param extension e
+     * @return s
+     */
+    public String getMimeType(String extension) {
+        if (!TextUtils.isEmpty(extension)) {
+            return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return null;
+    }
+
+    public void sendUpdateBroadcast(File f, String[] mimeType) {
+        if (isSupportUpdateDirect()) { // 判断SDK版本是不是4.4或者高于4.4
+            String[] paths = getExternalPaths();
+
+            MediaScannerConnection.scanFile(mContext, paths, mimeType, new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    Log.e("global", "4.4以及4.4以上扫描完成" + path);
+                }
+            });
+        } else {
+            registerMediaScannerReceiver();
+            final Intent intent;
+            if (f.isDirectory()) {
+                intent = new Intent(Intent.ACTION_MEDIA_MOUNTED);
+                intent.setClassName("com.android.providers.media", "com.android.providers.media.MediaScannerReceiver");
+                intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
+                Log.e("global", "directory changed, send broadcast:" + intent.toString());
+            } else {
+                intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent.setData(Uri.fromFile(f));
+                Log.e("global", "file changed, send broadcast:" + intent.toString());
+            }
+            mContext.sendBroadcast(intent);
+        }
+    }
+
+    private String[] getExternalPaths() {
+        Set<String> allExternalPaths = StorageUtil.getAllExternalPaths(mContext);
+        String[] paths = new String[allExternalPaths.size()];
+        allExternalPaths.toArray(paths);
+        return paths;
+    }
+
+    /**
+     * 是否支持不通过广播的方式直接刷新
+     *
+     * @return true if support
+     */
+    private boolean isSupportUpdateDirect() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
     private void registerMediaScannerReceiver() {

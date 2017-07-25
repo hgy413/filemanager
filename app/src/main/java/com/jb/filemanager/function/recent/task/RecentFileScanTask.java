@@ -63,9 +63,11 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
     // 注意图片和文件不可放到同一个Block
     private void scanPath(File dir, int depth) {
         if (depth > DEPTH_THRESHOLD) return;
-        if (!dir.exists() || !dir.isDirectory()) return;
+        if (dir == null || !dir.exists() || !dir.isDirectory()) return;
         List<BlockBean> currentDir = new ArrayList<>();
-        for (File file : dir.listFiles()) {
+        File[] files = dir.listFiles();
+        if (files == null) return;
+        for (File file : files) {
             if (isCancelled()) return;
             if (file.isDirectory()) {
                 scanPath(file, depth + 1);
