@@ -1,6 +1,15 @@
 package com.jb.filemanager.manager;
 
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.jb.filemanager.TheApplication;
 
@@ -49,11 +58,13 @@ public class GlobalFileManager {
 
     private static GlobalFileManager sInstance;
     private Context mContext;
-    // 数据存储区
+    private BroadcastReceiver mReceiver;
+    // 数据存储区 : 压缩文件 最近文件 下载文件 文档文件
 
 
     private GlobalFileManager() {
         mContext = TheApplication.getAppContext();
+        registerMediaScannerReceiver();
     }
 
     public static GlobalFileManager getInstance() {
@@ -66,12 +77,20 @@ public class GlobalFileManager {
         return sInstance;
     }
 
+    public void onApplicationCreate() {
+        initAllData();
+    }
+
     // MediaStore.Audio Video Images Files
     // http://blog.csdn.net/ifmylove2011/article/details/51425921
-    public void onApplicationCreate() {
-       /* long start = System.currentTimeMillis();
+    private void initAllData() {
+        long start = System.currentTimeMillis();
         Log.e("time", "start=" + start);
         ContentResolver resolver = mContext.getContentResolver();
+        Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        Uri audioUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri filesUri = MediaStore.Files.getContentUri("external");
 
         Cursor cursor = resolver.query(
                 MediaStore.Files.getContentUri("external"),
@@ -87,10 +106,37 @@ public class GlobalFileManager {
 //                Log.e("image", "data=" + data);
 //            }
 //        }
-        Log.e("time", "time=" + (System.currentTimeMillis() - start));*/
+        Log.e("time", "time=" + (System.currentTimeMillis() - start));
+    }
+
+    public void sendUpdateBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mContext.sendBroadcast(intent);
+    }
+
+    private void registerMediaScannerReceiver() {
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.e("global", "MediaScannerReceiver");
+                String action = intent.getAction();
+                if (Intent.ACTION_MEDIA_SCANNER_STARTED.equals(action)) {
+                    Log.e("global", "MediaScannerReceiver ACTION_MEDIA_SCANNER_STARTED");
+                } else if (Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(action)) {
+                    Log.e("global", "MediaScannerReceiver ACTION_MEDIA_SCANNER_FINISHED");
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED);
+        filter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+        mContext.registerReceiver(mReceiver, filter);
     }
 
     public void onApplicationTerminate() {
-
+        if (mReceiver != null) {
+            mContext.unregisterReceiver(mReceiver);
+        }
     }
 }

@@ -45,6 +45,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        GlobalFileManager.getInstance().sendUpdateBroadcast();
         setContentView(R.layout.activity_zip_file);
 
         mProgress = (ProgressWheel) findViewById(R.id.zip_progress);
