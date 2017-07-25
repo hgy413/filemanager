@@ -34,7 +34,6 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
         initView();
         initData();
         initClick();
-        releaseAnimation();
     }
 
     private void initView() {
@@ -43,7 +42,7 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
         mTvCleanResultSize = (TextView) findViewById(R.id.tv_clean_result_size);
         mTvCleanResultSizeUnit = (TextView) findViewById(R.id.tv_clean_result_size_unit);
         mTvCleanResultCleaned = (TextView) findViewById(R.id.tv_clean_result_cleaned);
-
+        mTvCommonActionBarTitle.setVisibility(View.INVISIBLE);
     }
 
     private void initData() {
@@ -64,6 +63,10 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float animatedValue = (float) valueAnimator.getAnimatedValue();
+                mTvCommonActionBarTitle.setAlpha(animatedValue);
+                mTvCommonActionBarTitle.setScaleX(animatedValue);
+                mTvCommonActionBarTitle.setScaleY(animatedValue);
+
                 mTvCleanResultSize.setAlpha(animatedValue);
                 mTvCleanResultSize.setScaleX(animatedValue);
                 mTvCleanResultSize.setScaleY(animatedValue);
@@ -86,6 +89,7 @@ public class CleanResultActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
+                mTvCommonActionBarTitle.setVisibility(View.VISIBLE);
                 mTvCleanResultCleaned.setVisibility(View.VISIBLE);
                 mTvCleanResultSize.setVisibility(View.VISIBLE);
                 mTvCleanResultSizeUnit.setVisibility(View.VISIBLE);

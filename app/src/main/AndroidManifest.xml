@@ -234,7 +234,7 @@
         <activity
             android:name=".function.trash.CleanResultActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <activity
             android:name=".function.applock.activity.AppLockPreActivity"

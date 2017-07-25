@@ -38,4 +38,5 @@
     <dimen name="system_status_bar_top_margin">0dp</dimen>
     <dimen name="title_margin_top">0dp</dimen>
     <dimen name="clean_top_gradient_height">153dp</dimen>
+    <dimen name="clean_trash_top">27dp</dimen>
 </resources>

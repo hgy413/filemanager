@@ -11,4 +11,5 @@
     <dimen name="system_status_bar_top_margin">24dp</dimen>
     <dimen name="title_margin_top">20dp</dimen>
     <dimen name="clean_top_gradient_height">173dp</dimen>
+    <dimen name="clean_trash_top">47dp</dimen>
 </resources>
