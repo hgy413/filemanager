@@ -26,8 +26,6 @@
             android:scrollbars="none"/>
     </LinearLayout>
 
-    <include layout="@layout/common_operate_bar_modify"/>
-
     <com.jb.filemanager.ui.widget.BottomOperateBar
         android:id="@+id/bob_bottom_operator"
         android:layout_width="match_parent"

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@color/white"
-    android:paddingTop="50dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,14 +14,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <View
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@color/common_bg"/>
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_drawer_title"
+            android:scaleType="centerInside"/>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="43dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -33,7 +33,7 @@
         <TextView
             android:id="@+id/tv_drawer_app_locker"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -47,7 +47,7 @@
         <TextView
             android:id="@+id/tv_drawer_smart_charge"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
@@ -65,7 +65,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="43dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -76,7 +76,7 @@
         <TextView
             android:id="@+id/tv_drawer_usb_plugin"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
@@ -92,7 +92,7 @@
         <TextView
             android:id="@+id/tv_drawer_low_space"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
@@ -109,7 +109,7 @@
         <TextView
             android:id="@+id/tv_drawer_logger_notification"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
@@ -129,7 +129,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="43dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -140,7 +140,7 @@
         <TextView
             android:id="@+id/tv_drawer_rating"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -154,7 +154,7 @@
         <TextView
             android:id="@+id/tv_drawer_update"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -168,7 +168,7 @@
         <TextView
             android:id="@+id/tv_drawer_help"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
@@ -182,7 +182,7 @@
         <TextView
             android:id="@+id/tv_drawer_about"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="33dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
