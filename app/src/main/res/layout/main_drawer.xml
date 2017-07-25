@@ -40,9 +40,15 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_app_locker"
             android:drawableStart="@drawable/ic_drawer_app_locker"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_app_locker"/>
 
@@ -55,9 +61,15 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_smart_charge"
             android:drawableStart="@drawable/ic_drawer_smart_charge"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_smart_charge"/>
 
@@ -88,9 +100,15 @@
             android:drawableStart="@drawable/ic_drawer_usb"
             android:drawableRight="@drawable/drawer_setting_switcher_selector"
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_usb_plugin_message"/>
 
@@ -105,9 +123,15 @@
             android:drawableStart="@drawable/ic_drawer_low_space"
             android:drawableRight="@drawable/drawer_setting_switcher_selector"
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_low_space_warning"/>
 
@@ -123,9 +147,15 @@
             android:drawableStart="@drawable/ic_drawer_logger"
             android:drawableRight="@drawable/drawer_setting_switcher_selector"
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_logger_notification"/>
 
@@ -154,9 +184,15 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_rating"
             android:drawableStart="@drawable/ic_drawer_rating"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_rating"/>
 
@@ -169,9 +205,15 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_update"
             android:drawableStart="@drawable/ic_drawer_update"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_update"/>
 
@@ -184,9 +226,15 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_help"
             android:drawableStart="@drawable/ic_drawer_help"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_help"/>
 
@@ -199,9 +247,15 @@
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_about"
             android:drawableStart="@drawable/ic_drawer_about"
+<<<<<<< HEAD
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
             android:textSize="@dimen/h5_12"
+=======
+            android:drawablePadding="13dp"
+            android:textColor="#000000"
+            android:textSize="12dp"
+>>>>>>> 更新左侧菜单UI
             android:textStyle="bold"
             android:text="@string/drawer_about"/>
 
