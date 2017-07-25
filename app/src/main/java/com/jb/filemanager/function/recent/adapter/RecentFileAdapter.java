@@ -62,6 +62,7 @@ public class RecentFileAdapter extends BaseAdapter {
             holder.withinTime = (TextView) convertView.findViewById(R.id.item_within_time);
             holder.listView = (ListView) convertView.findViewById(R.id.item_block_list_view);
             holder.tvMoreBtn = convertView.findViewById(R.id.item_btn_more);
+            holder.footer = convertView.findViewById(R.id.item_footer);
             convertView.setTag(R.layout.item_recent_file_block, holder);
         } else {
             holder = (ViewHolder) convertView.getTag(R.layout.item_recent_file_block);
@@ -85,6 +86,12 @@ public class RecentFileAdapter extends BaseAdapter {
         }
         holder.tvMoreBtn.setVisibility(!item.isPictureType() && item.isHaveMore() ? View.VISIBLE : View.GONE);
 
+        if (position == getCount() - 1) {
+            holder.footer.setVisibility(View.VISIBLE);
+        } else {
+            holder.footer.setVisibility(View.GONE);
+        }
+        
         holder.titleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +113,7 @@ public class RecentFileAdapter extends BaseAdapter {
         TextView withinTime;
         ListView listView;
         View tvMoreBtn;
+        View footer;
     }
 
     private void setListViewHeightBasedOnChildren(ListView listView) {
