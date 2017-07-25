@@ -22,7 +22,7 @@
     <string name="gp_not_connect">Unable to open connection</string>
 
     <string name="about_copyright">Copyright:2013–2016 Go File Manager.</string>
-    <string name="about_law_url">http://d2prafqgniatg5.cloudfront.net/soft/file/term/1272/acenetwork_privacy.html</string>
+    <string name="about_law_url">http://d2prafqgniatg5.cloudfront.net/soft/file/term/1272/gofilemanager_privacy.html</string>
 
     <!-- 首页 -->
     <string name="main_title"><b>File</b> Manager</string>
@@ -67,7 +67,7 @@
     <string name="drawer_other">OTHER</string>
     <string name="drawer_rating">Rating This App</string>
     <string name="drawer_update">Update Setting</string>
-    <string name="drawer_help">Help</string>
+    <string name="drawer_help">Help&amp;Feedback</string>
     <string name="drawer_about">About</string>
     <string name="drawer_feedback">Feedback</string>
 
@@ -75,7 +75,7 @@
     <string name="private_start">START</string>
     <string name="private_join_uep">&lt;u&gt;User Experience Program&lt;/u&gt;</string>
     <string name="privacy_start_by_agree_policy">Agree to the &lt;u&gt;Privacy Policy&lt;/u&gt;</string>
-    <string name="privacy_uep_plan_info_page">http://d2prafqgniatg5.cloudfront.net/soft/file/term/1272/acenetwork_statement.html</string>
+    <string name="privacy_uep_plan_info_page">http://d2prafqgniatg5.cloudfront.net/soft/file/term/1272/gofilemanager_statement.html</string>
 
     <!-- 用户许可协议页 -->
     <string name="user_protocol_privacy_policy">Privacy Policy</string>

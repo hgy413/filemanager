@@ -64,8 +64,8 @@
 
             <ImageView
                 android:id="@+id/dialog_introduce_charge_iv"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40.5dp"
+                android:layout_height="23dp"
                 android:layout_marginLeft="11dp"
                 android:background="@drawable/drawer_setting_switcher_selector"/>
 

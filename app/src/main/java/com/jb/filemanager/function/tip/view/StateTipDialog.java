@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.ContentFrameLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,8 +116,8 @@ public class StateTipDialog extends BaseActivity {
         TipLayer tipLayer = null;
         switch (tipType) {
             case TipLayer.USB_STATE_TIP_LAYER:
-                tipLayer = new UsbStateTipLayer(this);
-                break;
+//                tipLayer = new UsbStateTipLayer(this);
+//                break;
             case TipLayer.FREE_SPACE_TIP_LAYER:
                 tipLayer = new FreeSpaceTipLayer(this);
                 break;
@@ -128,7 +129,7 @@ public class StateTipDialog extends BaseActivity {
             }
             return;
         }
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ContentFrameLayout.LayoutParams layoutParams = new ContentFrameLayout.LayoutParams(ContentFrameLayout.LayoutParams.MATCH_PARENT, ContentFrameLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
         if (tipLayer != null) {
             Logger.w(TAG, "addView2Root >> " + tipLayer.getLayerType());
@@ -144,6 +145,10 @@ public class StateTipDialog extends BaseActivity {
     public void onBackPressed() {
         Logger.w(TAG, "onBackPressed");
         int count = mRoot.getChildCount();
+        if (count == 0 ) {
+            super.onBackPressed();
+            return;
+        }
         TipLayer tipLayer = (TipLayer) mRoot.getChildAt(count - 1);
         if (tipLayer.onTouchOutSide()) {
             //如果被消耗了事件 则退出

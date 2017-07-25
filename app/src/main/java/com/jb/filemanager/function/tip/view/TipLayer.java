@@ -25,9 +25,9 @@ import java.lang.annotation.RetentionPolicy;
 public class TipLayer extends BaseLayer implements View.OnClickListener {
 
     //释放空间提示层
-    public static final int FREE_SPACE_TIP_LAYER = 1;
+    public static final int FREE_SPACE_TIP_LAYER = 0;
     //usb状态提示层
-    public static final int USB_STATE_TIP_LAYER = 2;
+    public static final int USB_STATE_TIP_LAYER = 1;
 
     /**
      * {@link #FREE_SPACE_TIP_LAYER} <br/>

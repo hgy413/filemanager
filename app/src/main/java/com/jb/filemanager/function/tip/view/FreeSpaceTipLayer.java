@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
+import com.jb.filemanager.home.MainActivity;
 
 /**
  * Created by nieyh on 17-7-17.
@@ -27,9 +28,11 @@ public class FreeSpaceTipLayer extends TipLayer {
                 close();
                 Intent intent = new Intent(getContext(), CleanTrashActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 TheApplication.getAppContext().startActivity(intent);
             }
         });
+
     }
 
 }
