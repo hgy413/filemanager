@@ -19,6 +19,7 @@
             android:layout_weight="1"
             android:textColor="#60000000"
             android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             tools:text="title"/>
 
         <ImageView

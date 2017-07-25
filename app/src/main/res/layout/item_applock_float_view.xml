@@ -29,7 +29,8 @@
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/item_applock_float_view_icon"
             android:textColor="#B2000000"
-            android:textSize="16dp"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             tools:text="@string/app_name"/>
 
         <com.jb.filemanager.commomview.GroupSelectBox
