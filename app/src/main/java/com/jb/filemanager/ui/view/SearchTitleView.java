@@ -26,6 +26,7 @@ public class SearchTitleView extends RelativeLayout implements View.OnClickListe
     private ImageView mIvSelectBtn;
     private SearchTitleViewCallback mCallback;
     private boolean mIsNeedSearchBtnShow = true;
+    private boolean mIsSelectMode = false;
 
     public SearchTitleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -85,16 +86,19 @@ public class SearchTitleView extends RelativeLayout implements View.OnClickListe
     }
 
     public void switchTitleMode(boolean isToSelectMode) {
-        if (isToSelectMode) {
-            mTvTitleName.setVisibility(GONE);
-            mIvSearchIcon.setVisibility(GONE);
-            mTvSelectCount.setVisibility(VISIBLE);
-            mIvSelectBtn.setVisibility(VISIBLE);
-        } else {
-            mTvTitleName.setVisibility(VISIBLE);
-            mIvSearchIcon.setVisibility(mIsNeedSearchBtnShow ? VISIBLE : GONE);
-            mTvSelectCount.setVisibility(GONE);
-            mIvSelectBtn.setVisibility(GONE);
+        if (mIsSelectMode != isToSelectMode) {
+            mIsSelectMode = isToSelectMode;
+            if (mIsSelectMode) {
+                mTvTitleName.setVisibility(GONE);
+                mIvSearchIcon.setVisibility(GONE);
+                mTvSelectCount.setVisibility(VISIBLE);
+                mIvSelectBtn.setVisibility(VISIBLE);
+            } else {
+                mTvTitleName.setVisibility(VISIBLE);
+                mIvSearchIcon.setVisibility(mIsNeedSearchBtnShow ? VISIBLE : GONE);
+                mTvSelectCount.setVisibility(GONE);
+                mIvSelectBtn.setVisibility(GONE);
+            }
         }
     }
 
@@ -124,6 +128,7 @@ public class SearchTitleView extends RelativeLayout implements View.OnClickListe
                 break;
         }
     }
+
     /**
      * 建议使用{@link #setClickCallBack(SearchTitleViewCallback)}
      *
@@ -148,4 +153,7 @@ public class SearchTitleView extends RelativeLayout implements View.OnClickListe
         }
     }
 
+    public boolean isSelectMode() {
+        return mIsSelectMode;
+    }
 }

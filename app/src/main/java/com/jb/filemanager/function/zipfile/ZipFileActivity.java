@@ -172,6 +172,8 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     public void onBackPressed() {
         if (ExtractManager.getInstance().isProgressDialogAttached()) {
             ExtractManager.getInstance().hideProgressDialogFromWindow();
+        } else if (mSearchTitle.isSelectMode()){
+            mPresenter.onTitleCancelBtnClick();
         } else {
             super.onBackPressed();
         }
