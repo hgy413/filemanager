@@ -16,10 +16,14 @@ import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -202,22 +206,26 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             public void afterCopy() {
                 FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
                 handleDataCopy();
+                statisticsClickCopy();
             }
 
             @Override
             public void afterCut() {
                 FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
                 handleDataCut();
+                statisticsClickCut();
             }
 
             @Override
             public void afterRename() {
                 handleRename();
+                statisticsClickRename();
             }
 
             @Override
             public void afterDelete() {
                 handleDataDelete();
+                statisticsClickDelete();
             }
         });
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
@@ -232,20 +240,27 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 if (child.mFileType == DocChildBean.TYPE_TXT) {//只针对txt提供预览
                     long fileSize = Long.parseLong(child.mDocSize);
                     if (fileSize > 1024 * 1024) {
+                        statisticsClickOtherFile();
                         mFileIntent = FileUtil.getTextFileIntent(child.mDocPath, false);
                     } else {//只提供1M以下的小文件的预览
+                        statisticsClickTxt();
                         mFileIntent = new Intent(DocManagerActivity.this, TxtPreviewActivity.class);
                         mFileIntent.putExtra(TxtPreviewActivity.TARGET_DOC_PATH, child.mDocPath);
                     }
                 } else if (child.mFileType == DocChildBean.TYPE_DOC) {
+                    statisticsClickOtherFile();
                     mFileIntent = FileUtil.getWordFileIntent(child.mDocPath);
                 } else if (child.mFileType == DocChildBean.TYPE_XLS) {
+                    statisticsClickOtherFile();
                     mFileIntent = FileUtil.getExcelFileIntent(child.mDocPath);
                 } else if (child.mFileType == DocChildBean.TYPE_PPT) {
+                    statisticsClickOtherFile();
                     mFileIntent = FileUtil.getPptFileIntent(child.mDocPath);
                 } else if (child.mFileType == DocChildBean.TYPE_PDF) {
+                    statisticsClickOtherFile();
                     mFileIntent = FileUtil.getPdfFileIntent(child.mDocPath);
                 } else {
+                    statisticsClickOtherFile();
                     mFileIntent = FileUtil.getTextFileIntent(child.mDocPath, false);
                 }
                 startActivity(mFileIntent);
@@ -362,6 +377,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 if (mIsSelectMode) {
                     handleTitleSelect(mIsAllSelect);
                 } else {
+                    statisticsClickSearch();
                     SearchActivity.showSearchResult(this, Const.CategoryType.CATEGORY_TYPE_DOC);
                 }
                 break;
@@ -451,4 +467,76 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         //隐藏底部栏
         mBobBottomOperator.setVisibility(View.GONE);
     }
+
+    //====================统计代码  Start =====================
+    private void statisticsClickOtherFile() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_OTHER_FILE;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击其他文件---" + bean.mOperateId);
+    }
+
+    private void statisticsClickCopy() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_COPY;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击复制---" + bean.mOperateId);
+    }
+
+    private void statisticsClickCut() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_CUT;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击剪切---" + bean.mOperateId);
+    }
+
+    private void statisticsClickPast() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_PAST;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击粘贴---" + bean.mOperateId);
+    }
+
+    private void statisticsClickDelete() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_DELETE;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击删除---" + bean.mOperateId);
+    }
+
+    private void statisticsClickRename() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_RENAME;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击重命名---" + bean.mOperateId);
+    }
+
+    private void statisticsClickDetail() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_DETAIL;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击详情---" + bean.mOperateId);
+    }
+
+    private void statisticsClickMore() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_MORE;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击more---" + bean.mOperateId);
+    }
+
+    private void statisticsClickTxt() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_TXT;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击小的txt---" + bean.mOperateId);
+    }
+
+    private void statisticsClickSearch() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_SEARCH_BUTTON;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击搜索---" + bean.mOperateId);
+    }
+    //====================统计代码  end =====================
 }

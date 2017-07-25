@@ -13,6 +13,9 @@ import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
@@ -58,6 +61,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         viewHolder.mSelectBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                statisticsGroupSelectBoxClick();
                 if (appGroupBean.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {
                     appGroupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
                     for (AppItemInfo childBean : appGroupBean.getChildren()) {
@@ -95,6 +99,7 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                statisticsItemSelectBoxClick();
                 child.mIsChecked = !child.mIsChecked;
                 updateGroupState(appGroupBean);
             }
@@ -153,6 +158,12 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
         return true;
     }
 
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        statisticsCollapseGroup();
+    }
+
     private static class GroupItemViewHolder {
         View mView;
         TextView mTvGroupTitle;
@@ -197,4 +208,26 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     interface OnItemChosenListener {
         void onItemChosen(int chosenCount);
     }
+    //====================统计代码  Start =====================
+    private void statisticsCollapseGroup() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.APP_CLICK_COLLAPSE_GROUP;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "app 点击折叠分类---" + bean.mOperateId);
+    }
+
+    private void statisticsGroupSelectBoxClick() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.APP_CLICK_GROUP_SELECT_BOX;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "app 点击组的选择框---" + bean.mOperateId);
+    }
+
+    private void statisticsItemSelectBoxClick() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.APP_CLICK_ITEM_SELECT_BOX;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "app 点击条目选择框---" + bean.mOperateId);
+    }
+    //====================统计代码  end =====================
 }

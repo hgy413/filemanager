@@ -1,12 +1,9 @@
 package com.jb.filemanager.function.apkmanager;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +16,11 @@ import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.function.scanframe.clean.event.AppInstallEvent;
 import com.jb.filemanager.function.scanframe.clean.event.AppUninstallEvent;
 import com.jb.filemanager.function.search.view.SearchActivity;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,9 +41,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
     private ExpandableListView mElvApk;
     private AppManagerAdapter mAdapter;
     private TextView mTvBottomDelete;
-    private int mChosenCount;
     private List<AppGroupBean> mAppInfo;
-    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,20 +93,6 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
 
     @Override
     public void initBroadcastReceiver() {
-        /*//监听应用的安装卸载广播   刷系列表
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mPresenter != null) {
-                    mPresenter.refreshData();
-                }
-            }
-        };
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        intentFilter.addDataScheme("package");
-        registerReceiver(mReceiver, intentFilter);*/
 
         EventBus globalEventBus = TheApplication.getGlobalEventBus();
         if (!globalEventBus.isRegistered(this)) {
@@ -144,7 +129,6 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
     }
 
     private void handleBottomDeleteShow(int chosenCount) {
-        mChosenCount = chosenCount;
         if (chosenCount == 0) {
             mTvBottomDelete.setVisibility(View.GONE);
         } else {
@@ -215,6 +199,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
                 break;
             case R.id.tv_bottom_delete:
 //                Toast.makeText(AppManagerActivity.this, mChosenCount + "个app被选中了呢   欧尼酱", Toast.LENGTH_SHORT).show();
+                statisticsBottomDeleteClick();
                 List<AppItemInfo> children = mAppInfo.get(0).getChildren();
                 for (AppItemInfo childBean : children) {
                     if (childBean.mIsChecked) {
@@ -223,25 +208,11 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
                 }
                 break;
             case R.id.iv_common_action_bar_search:
+                statisticsClickSearch();
                 SearchActivity.showSearchResult(this, Const.CategoryType.CATEGORY_TYPE_APP);
                 break;
             default:
                 break;
-        }
-    }
-
-    /**
-     * 隐藏输入法面板
-     *
-     * @param activity
-     */
-    public static void hideInputMethod(Activity activity) {
-        if (null == activity) {
-            return;
-        }
-        if (null != activity.getCurrentFocus() && null != activity.getCurrentFocus().getWindowToken()) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
@@ -252,4 +223,20 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         uninstall_intent.setData(Uri.parse("package:" + pkgName));
         startActivityForResult(uninstall_intent, UNINSTALL_APP_REQUEST_CODE);
     }
+
+    //====================统计代码  Start =====================
+    private void statisticsBottomDeleteClick() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.APP_CLICK_UNINSTALL;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "app 点击删除应用---" + bean.mOperateId);
+    }
+
+    private void statisticsClickSearch() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.APP_CLICK_SEARCH_BUTTON;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "app 点击搜索---" + bean.mOperateId);
+    }
+    //====================统计代码  end =====================
 }

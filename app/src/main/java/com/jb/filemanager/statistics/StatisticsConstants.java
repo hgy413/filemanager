@@ -98,4 +98,44 @@ public class StatisticsConstants {
     // TODO @liqf 统计 清理按钮动画展示 加完清除todo
     public static final String HOME_SHOW_CLEAN_ANIM         = "f000_home_clean";
 
+    //APP管理页面
+    public static final String APP_CLICK_COLLAPSE_GROUP = "c000_app_sort";
+    public static final String APP_CLICK_GROUP_SELECT_BOX = "c000_app_sortselec";
+    public static final String APP_CLICK_ITEM_SELECT_BOX = "c000_app_select";
+    public static final String APP_CLICK_UNINSTALL = "c000_app_delete";
+    public static final String APP_CLICK_SEARCH_BUTTON = "c000_app_search";
+
+    //文档管理
+    public static final String DOC_CLICK_OTHER_FILE = "c000_doc_other";
+    public static final String DOC_CLICK_COLLAPSE_GROUP = "c000_doc_sort";
+    public static final String DOC_CLICK_GROUP_SELECT_BOX = "c000_doc_sortselect";
+    public static final String DOC_CLICK_ITEM_SELECT_BOX = "c000_doc_select";
+    public static final String DOC_CLICK_SEARCH_BUTTON = "c000_doc_search";
+    public static final String DOC_CLICK_COPY = "c000_doc_copy";
+    public static final String DOC_CLICK_CUT = "c000_doc_cut";
+    public static final String DOC_CLICK_PAST = "c000_doc_paste";
+    public static final String DOC_CLICK_DELETE = "c000_doc_delete";
+    public static final String DOC_CLICK_MORE = "c000_doc_more";
+    public static final String DOC_CLICK_DETAIL = "c000_doc_detail";
+    public static final String DOC_CLICK_RENAME = "c000_doc_rename";
+    public static final String DOC_CLICK_TXT = "c000_doc_txt";
+
+
+    //清理
+    public static final String CLEAN_SCAN_ANIM_SHOW = "f000_clean_gom";
+    public static final String CLEAN_CLICK_COLLAPSE_GROUP = "c000_clean_sort";
+    public static final String CLEAN_CLICK_GROUP_SELECT_BOX = "c000_clean_sortselect";
+    public static final String CLEAN_CLICK_ITEM_SELECT_BOX = "c000_clean_select";
+    public static final String CLEAN_CLICK_CACHE_JUNK_ITEM = "c000_clean_cache";
+    public static final String CLEAN_CLICK_RESIDUAL_FILE_ITEM = "c000_clean_res";
+    public static final String CLEAN_CLICK_AD_JUNK_ITEM = "c000_clean_ad";
+    public static final String CLEAN_CLICK_SYSTEM_TEMP_ITEM = "c000_clean_sys";
+    public static final String CLEAN_CLICK_OBSOLETE_APK_ITEM = "c000_clean_obso";
+    public static final String CLEAN_CLICK_BIG_FILE_ITEM = "c000_clean_Big";
+    public static final String CLEAN_CLICK_CLEAN_BUTTON = "c000_clean_clean";
+    public static final String CLEAN_CLICK_TRASH_IGNORE = "c000_clean_white";
+    public static final String CLEAN_CLEAN_ANIM_SHOW = "f000_clean_go";
+    public static final String CLEAN_PAGE_EXIT = "c000_clean_exit";
+
+
 }

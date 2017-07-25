@@ -41,9 +41,13 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.dialog.TrashIgnoreDialog;
 import com.jb.filemanager.function.trash.dialog.TrashItemDetailDialog;
 import com.jb.filemanager.function.trash.dialog.TrashSubItemDetailDialog;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileTypeUtil;
 import com.jb.filemanager.util.IntentUtil;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.StorageUtil;
 import com.jb.filemanager.util.file.FileSizeFormatter;
 import com.jb.filemanager.util.file.FileUtil;
@@ -191,6 +195,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         holder.mSelectBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statisticsClickGroupSelectBox();
                 handleGroupCheck(group);
             }
         });
@@ -428,6 +433,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         holder.mSelectBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statisticsClickItemSelectBox();
                 handleItemCheck(group, item);
             }
         });
@@ -482,6 +488,22 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             @SuppressWarnings("deprecation")
             @Override
             public void onClick(View v) {
+                if (item.getGroupType().equals(GroupType.APP_CACHE)) {
+                    statisticsClickCacheJunkItem();
+                } else if (item.getGroupType().equals(GroupType.RESIDUE)) {
+                    statisticsClickResidualFileItem();
+                } else if (item.getGroupType().equals(GroupType.SYS_CACHE)) {
+                    statisticsClickCacheJunkItem();
+                } else if (item.getGroupType().equals(GroupType.TEMP)) {
+                    statisticsClickSystemTempItem();
+                } else if (item.getGroupType().equals(GroupType.APK)) {
+                    statisticsClickObsoleteApk();
+                } else if (item.getGroupType().equals(GroupType.BIG_FILE)) {
+                    statisticsClickBigFile();
+                } else if (item.getGroupType().equals(GroupType.AD)) {
+                    statisticsClickADJunkItem();
+                }
+
                 if (item.getSubItemList().isEmpty()) {
                     onItemClick(item, size);
                 } else {
@@ -508,6 +530,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             public boolean onLongClick(View v) {
                 switch (group.getGroupType()) {
                     case APP_CACHE:
+                        statisticsClickCacheJunkItem();
                         if (item instanceof AppCacheBean) {
 //                            StatisticsTools.uploadClickData(StatisticsConstants.CLEAN_RAB_POP);
                             mIgnoreDialog.setName(item.getTitle());
@@ -539,6 +562,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                         }
                         break;
                     case RESIDUE:
+                        statisticsClickResidualFileItem();
 //                        StatisticsTools.uploadClickData(StatisticsConstants.CLEAN_RAB_POP);
                         mIgnoreDialog.setAppIcon(GroupType.RESIDUE.getChildIconId());
                         mIgnoreDialog.setName(item.getTitle());
@@ -566,6 +590,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                         });
                         break;
                     case AD:
+                        statisticsClickADJunkItem();
 //                        StatisticsTools.uploadClickData(StatisticsConstants.CLEAN_RAB_POP);
                         mIgnoreDialog.setName(item.getTitle());
                         mIgnoreDialog.setAppIcon(GroupType.AD.getChildIconId());
@@ -723,6 +748,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         holder.mRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statisticsClickCacheJunkItem();
                 if (subItem instanceof SubAppCacheBean) {
                     onAppCacheSubItemClick(item, (SubAppCacheBean) subItem);
                 } else if (subItem instanceof SubSysCacheBean) {
@@ -1014,4 +1040,75 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         }
 //        StatisticsTools.uploadClickData(StatisticsConstants.DET_DIA_SHOW);
     }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        statisticsClickGroupCollapse();
+    }
+
+    //====================统计代码  Start =====================
+    private void statisticsClickGroupCollapse() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_COLLAPSE_GROUP;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击关闭分组---" + bean.mOperateId);
+    }
+
+    private void statisticsClickGroupSelectBox() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_GROUP_SELECT_BOX;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击组的复选框---" + bean.mOperateId);
+    }
+
+    private void statisticsClickItemSelectBox() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_ITEM_SELECT_BOX;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击条目的选择框---" + bean.mOperateId);
+    }
+
+    private void statisticsClickCacheJunkItem() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_CACHE_JUNK_ITEM;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击缓存的条目---" + bean.mOperateId);
+    }
+
+    private void statisticsClickResidualFileItem() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_RESIDUAL_FILE_ITEM;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击残余文件的条目---" + bean.mOperateId);
+    }
+
+    private void statisticsClickADJunkItem() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_AD_JUNK_ITEM;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击广告垃圾的条目---" + bean.mOperateId);
+    }
+
+    private void statisticsClickSystemTempItem() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_SYSTEM_TEMP_ITEM;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击系统临时文件的条目---" + bean.mOperateId);
+    }
+
+    private void statisticsClickObsoleteApk() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_OBSOLETE_APK_ITEM;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击APK的条目---" + bean.mOperateId);
+    }
+
+    private void statisticsClickBigFile() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_BIG_FILE_ITEM;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击大文件的条目---" + bean.mOperateId);
+    }
+    //====================统计代码  end =====================
 }

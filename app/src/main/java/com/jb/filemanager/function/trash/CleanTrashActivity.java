@@ -34,6 +34,9 @@ import com.jb.filemanager.function.trash.adapter.view.WrapContentLinearLayoutMan
 import com.jb.filemanager.function.trash.presenter.CleanTrashPresenter;
 import com.jb.filemanager.function.trash.presenter.Contract;
 import com.jb.filemanager.function.trashignore.activity.TrashIgnoreActivity;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.ConvertUtils;
@@ -87,6 +90,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         initView();
         initData();
         initClick();
+        statisticsScanAnimShow();
     }
 
     private void initView() {
@@ -170,6 +174,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
     @Override
     public void onBackPressed() {
         if (!mIsDeleting) {//删除的时候禁止退出页面
+            statisticsCleanPageExit(2);
             super.onBackPressed();
         }
     }
@@ -305,6 +310,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
 
         translateAnimator.start();
         hideAnimator.start();
+        statisticsCleanAnimShow();
     }
 
     private Object mSubscriber = new Object() {
@@ -468,12 +474,15 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         }
         switch (view.getId()) {
             case R.id.tv_common_action_bar_title:
+                statisticsCleanPageExit(1);
                 finish();
                 break;
             case R.id.iv_common_action_bar_more:
+                statisticsClickTrashIgnore();
                 startActivity(new Intent(this, TrashIgnoreActivity.class));
                 break;
             case R.id.iv_clean_button_red:
+                statisticsClickCleanButtom();
                 doCleanTrash();
                 mPbScanProgress.setVisibility(View.GONE);
 //                mRlRoot.setBackgroundResource(R.color.clean_trash_bg_blue);
@@ -483,4 +492,42 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                 break;
         }
     }
+
+    //====================统计代码  Start =====================
+    private void statisticsScanAnimShow() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_SCAN_ANIM_SHOW;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 扫描动画展示---" + bean.mOperateId);
+    }
+
+    private void statisticsClickCleanButtom() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_CLEAN_BUTTON;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击清理按钮---" + bean.mOperateId);
+    }
+
+    private void statisticsClickTrashIgnore() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLICK_TRASH_IGNORE;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 点击白名单---" + bean.mOperateId);
+    }
+
+    private void statisticsCleanAnimShow() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_CLEAN_ANIM_SHOW;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 清理动画展示---" + bean.mOperateId);
+    }
+
+    private void statisticsCleanPageExit(int entrance) {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.CLEAN_PAGE_EXIT;
+        bean.mEntrance = String.valueOf(entrance);
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "clean 清理页面退出---" + bean.mOperateId);
+    }
+    //====================统计代码  end =====================
 }

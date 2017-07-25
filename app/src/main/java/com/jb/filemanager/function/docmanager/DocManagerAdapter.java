@@ -13,6 +13,9 @@ import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.eventbus.DocFileScanFinishEvent;
 import com.jb.filemanager.function.applock.adapter.AbsAdapter;
 import com.jb.filemanager.function.trash.adapter.ItemCheckBox;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.Logger;
 
@@ -56,6 +59,7 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         viewHolder.mSelectBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                statisticsClickGropuSelectBox();
                 if (appGroupBean.mSelectState == GroupSelectBox.SelectState.ALL_SELECTED) {
                     appGroupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
                     for (DocChildBean childBean : appGroupBean.getChildren()) {
@@ -104,6 +108,7 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                statisticsClickItemSelectBox();
                 child.mIsChecked = !child.mIsChecked;
                 updateGroupState(appGroupBean);
             }
@@ -247,4 +252,33 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
             mItemCheckBox = (ItemCheckBox) convertView.findViewById(R.id.icb_child_check);
         }
     }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        statisticsClickCollapseGroup();
+    }
+
+    //====================统计代码  Start =====================
+    private void statisticsClickCollapseGroup() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_COLLAPSE_GROUP;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击关闭分组---" + bean.mOperateId);
+    }
+
+    private void statisticsClickGropuSelectBox() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_GROUP_SELECT_BOX;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击组的复选框---" + bean.mOperateId);
+    }
+
+    private void statisticsClickItemSelectBox() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_ITEM_SELECT_BOX;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击条目的复选框---" + bean.mOperateId);
+    }
+    //====================统计代码  end =====================
 }
