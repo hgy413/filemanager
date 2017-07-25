@@ -2,6 +2,7 @@ package com.jb.filemanager.function.apkmanager;
 
 import android.content.Intent;
 
+import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
@@ -34,6 +35,10 @@ class AppManagerPresenter implements AppManagerContract.Presenter {
         mUserAppBean = new ArrayList<>();
         mSystemAppBean = new ArrayList<>();
         for (AppItemInfo appBean : installAppInfo) {
+            appBean.mIsChecked = false;
+            if (appBean.mAppPackageName.contains(Const.PACKAGE_NAME)) {//过滤自身
+                continue;
+            }
             if (appBean.mIsSysApp) {
                 mSystemAppBean.add(appBean);
             } else {
