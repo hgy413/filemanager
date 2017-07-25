@@ -5,7 +5,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.jb.filemanager.Const;
 import com.jb.filemanager.manager.PackageManagerLocker;
+import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,6 +54,10 @@ class AppSizeLoader extends AsyncTaskLoader<List<Long>> {
 //            if (PackageManagerLocker.getInstance().getLaunchIntentForPackage(applicationInfo.packageName) == null)
 //                continue;
 
+            // 自己不算
+            if (applicationInfo.packageName.equals(Const.PACKAGE_NAME))
+                continue;
+            
             File apk = new File(applicationInfo.sourceDir);
             result.add(apk.length());
         }
