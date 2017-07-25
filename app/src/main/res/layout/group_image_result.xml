@@ -17,7 +17,7 @@
         android:textColor="@color/black_40"
         android:textSize="@dimen/h5_12"/>
 
-    <com.jb.filemanager.commomview.GroupSelectBox
+    <ImageView
         android:id="@+id/group_image_result_gsb"
         android:layout_width="40dp"
         android:layout_height="40dp"

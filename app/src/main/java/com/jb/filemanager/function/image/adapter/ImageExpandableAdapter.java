@@ -1,10 +1,6 @@
 package com.jb.filemanager.function.image.adapter;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +21,6 @@ import com.jb.filemanager.function.image.presenter.ImageContract;
 import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.QuickClickGuard;
 import com.jb.filemanager.util.imageloader.ImageLoader;
-import com.jb.ga0.commerce.util.topApp.TopHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +118,13 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         ImageGroupModle imageGroupModle = mImageGroupModleList.get(groupPosition);
 
         viewGroupHolder.mDate.setText(imageGroupModle.mTimeDate);
-        viewGroupHolder.mGroupSelectBox.setState(imageGroupModle.mSelectState);
+        if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.NONE_SELECTED) {
+            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_none);
+        } else if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.MULT_SELECTED) {
+            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_part);
+        } else {
+            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_all);
+        }
         viewGroupHolder.mGroupSelectBox.setTag(imageGroupModle);
         viewGroupHolder.mGroupSelectBox.setOnClickListener(this);
 
@@ -245,11 +246,11 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         //时间
         private TextView mDate;
         //check按钮
-        private GroupSelectBox mGroupSelectBox;
+        private ImageView mGroupSelectBox;
 
         public ViewGroupHolder(View itemView) {
             mDate = (TextView) itemView.findViewById(R.id.group_image_result_date);
-            mGroupSelectBox = (GroupSelectBox) itemView.findViewById(R.id.group_image_result_gsb);
+            mGroupSelectBox = (ImageView) itemView.findViewById(R.id.group_image_result_gsb);
         }
     }
 
@@ -309,7 +310,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             mPhoto.setMaxHeight(mPhotoSize);
             mPhoto.setMaxWidth(mPhotoSize);
             mGroupSelectBox = (GroupSelectBox) itemView.findViewById(R.id.item_sub_image_gsb);
-            mGroupSelectBox.setImageSource(R.drawable.choose_none_gray, R.drawable.choose_part, R.drawable.choose_all);
+            mGroupSelectBox.setImageSource(R.drawable.choose_none_green, R.drawable.choose_part, R.drawable.choose_all);
             mMask = itemView.findViewById(R.id.item_sub_image_photo_mask);
         }
 
