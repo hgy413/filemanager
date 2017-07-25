@@ -74,7 +74,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
         mBobBottomOperator = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
 
-        mTvCommonActionBarWithSearchTitle.setText(R.string.app_manager);
+        mTvCommonActionBarWithSearchTitle.setText(R.string.doc_manager_title);
     }
 
     @Override
@@ -303,7 +303,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
     @Override
     public void refreshTile() {
-        mTvCommonActionBarWithSearchTitle.setText(R.string.app_name);
+        mTvCommonActionBarWithSearchTitle.setText(R.string.doc_manager_title);
         mIvCommonActionBarBack.setImageResource(R.drawable.action_bar_back_drawable_selector_blue);
         mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.ic_action_bar_search);
         mIsSelectMode = false;

@@ -66,7 +66,7 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
         mTvBottomDelete = (TextView) findViewById(R.id.tv_bottom_delete);
         mIvCommonActionBarWithSearchSearch.setVisibility(View.VISIBLE);
 
-        mTvCommonActionBarWithSearchTitle.setText(R.string.clean_group_apk);
+        mTvCommonActionBarWithSearchTitle.setText(R.string.app_manager);
     }
 
     @Override
