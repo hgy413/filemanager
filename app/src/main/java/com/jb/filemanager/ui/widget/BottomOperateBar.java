@@ -2,6 +2,7 @@ package com.jb.filemanager.ui.widget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
@@ -106,6 +108,16 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         if (mListener != null) {
                             ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                             FileUtil.deleteSelectedFiles(selectedFiles);
+
+                            ArrayList<String> paths = new ArrayList<>();
+                            for (File file : selectedFiles) {
+                                if (!paths.contains(file.getAbsolutePath())) {
+                                    paths.add(file.getParentFile().getAbsolutePath());
+                                }
+                            }
+                            String[] dest = new String[paths.size()];
+                            dest = paths.toArray(dest);
+                            MediaScannerConnection.scanFile(TheApplication.getInstance(), dest, null, null); // 修改后的文件添加到系统数据库
                             mListener.afterDelete();
                         }
                     }
