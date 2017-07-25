@@ -893,7 +893,8 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
             if (file.exists()) {
                 int[] folderAndFile = FileUtil.countFolderAndFile(file);
                 if (folderAndFile != null && folderAndFile.length == 2) {
-                    count += folderAndFile[0] + folderAndFile[1];
+                    // 只取file，不去folder
+                    count += folderAndFile[1];
                 }
             }
         }

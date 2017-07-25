@@ -48,8 +48,9 @@ class AppSizeLoader extends AsyncTaskLoader<List<Long>> {
                 continue;
             if ((applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)
                 continue;
-            if (PackageManagerLocker.getInstance().getLaunchIntentForPackage(applicationInfo.packageName) == null)
-                continue;
+            // 为了和点进去显示的一致，不过滤没有启动项的
+//            if (PackageManagerLocker.getInstance().getLaunchIntentForPackage(applicationInfo.packageName) == null)
+//                continue;
 
             File apk = new File(applicationInfo.sourceDir);
             result.add(apk.length());
