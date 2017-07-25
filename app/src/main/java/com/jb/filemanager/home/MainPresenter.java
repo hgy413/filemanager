@@ -6,6 +6,9 @@ import android.widget.Toast;
 import com.jb.filemanager.R;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.home.event.CurrentPathChangeEvent;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -107,6 +110,9 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.openDrawer(MainDrawer.CLI_OPEN);
         }
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.HOME_CLICK_DRAWER;
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     @Override
@@ -114,6 +120,9 @@ public class MainPresenter implements MainContract.Presenter {
         if (mView != null) {
             mView.goToSearchActivity();
         }
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.HOME_CLICK_SEARCH;
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     @Override
