@@ -38,7 +38,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         mContext = context;
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         int mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
-        mImageFetcher = ImageUtils.createImageFetcher((SameFileActivity)context, mImageSize, R.drawable.img_picture);
+        mImageFetcher = ImageUtils.createImageFetcher((SameFileActivity)context, mImageSize, R.drawable.photo_icon);
     }
 
     @Override
@@ -136,14 +136,14 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 holder.mIvIcon.setImageResource(R.drawable.img_txt);
                 break;
             case MUSIC:
-                holder.mIvIcon.setImageResource(R.drawable.img_music);
+                holder.mIvIcon.setImageResource(R.drawable.music_icon);
                 break;
             case VIDEO:
                 mImageFetcher.setLoadingImage(R.drawable.video_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case PICTURE:
-                mImageFetcher.setLoadingImage(R.drawable.img_picture);
+                mImageFetcher.setLoadingImage(R.drawable.photo_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case ZIP:
