@@ -80,9 +80,9 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
         if (mPresenter != null) {
             mPresenter.onResume();
         }
-//        if (mAppUpdatePresenter != null) {
-//            mAppUpdatePresenter.onResume();
-//        }
+        if (mAppUpdatePresenter != null) {
+            mAppUpdatePresenter.onResume();
+        }
 
         mRatePresenter.rateShow();
     }
