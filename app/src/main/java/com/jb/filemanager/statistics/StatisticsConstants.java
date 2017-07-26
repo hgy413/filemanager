@@ -139,16 +139,101 @@ public class StatisticsConstants {
 
 
     //about
+    //点击联系我们
     public static final String ABOUT_CONTACT_ME_CLI = "c000_About_contact";
+    //点击隐私政策
     public static final String ABOUT_PRO_CLI = "c000_About_pro";
+    //点击用户体验计划
     public static final String ABOUT_USER_CLI = "c000_About_yuser";
     //APPlock
+    //点击搜索icon
     public static final String APPLOCK_SEARCH_CLI = "c000_Locker_icon";
+    //点击设置
     public static final String APPLOCK_SETTING_CLI = "c000_Locker_set";
+    //折叠Re分类
     public static final String APPLOCK_RECOMMOND_FLOD_CLI = "c000_Locker_re";
+    //折叠Other分类
     public static final String APPLOCK_OTHER_FLOD_CLI = "c000_Locker_other";
+    //点击Re分类下应用复选框
     public static final String APPLOCK_PRE_RE_CHECK_CLI = "c000_Locker_reapp";
+    //点击Ot分类下应用复选框
     public static final String APPLOCK_PRE_OTHER_CHECK_CLI = "c000_Locker_othapp";
+    //退出应用锁
     public static final String APPLOCK_EXIT = "c000_Locker_exit";
-
+    //点击锁定
+    public static final String APPLOCK_START_LOCK = "c000_Locker_lock";
+    //密码设置第1步退出
+    public static final String APPLOCK_INIT_PSD_1_EXIT = "c000_Locker_exit1";
+    //密码设置第2步退出
+    public static final String APPLOCK_INIT_PSD_2_EXIT = "c000_Locker_exit2";
+    //密码设置第3步退出
+    public static final String APPLOCK_INIT_PSD_3_EXIT = "c000_Locker_exit3";
+    //第3步切换问题
+    public static final String APPLOCK_INIT_PSD_3_SWITCH_QUESTION = "c000_Locker_ques";
+    //第3步切换设置
+    public static final String APPLOCK_INIT_PSD_3_SWITCH_SETTING = "c000_Locker_setc";
+    //第3步点击OK
+    public static final String APPLOCK_INIT_PSD_3_OK = "c000_Locker_ok";
+    //应用外应用锁展示
+    public static final String APPLOCK_OUTTER_LOCK_SHOW = "f000_Locker_true";
+    //应用外应用锁解锁
+    public static final String APPLOCK_OUTTER_LOCK_UNLOCK = "t000_Locker_unlock";
+    //应用外点击忘记密码
+    public static final String APPLOCK_OUTTER_FORGET_PSD = "c000_Locker_forget";
+    //应用外点击取消锁定
+    public static final String APPLOCK_OUTTER_CANCEL_LOCK = "c000_Locker_unset";
+    //取消保护Re应用
+    public static final String APPLOCK_RE_UNLOCK = "c000_Locker_unpro";
+    //保护Re应用
+    public static final String APPLOCK_RE_LOCK = "c000_Locker_pro";
+    //取消保护Ot应用
+    public static final String APPLOCK_OTHER_UNLOCK = "c000_Locker_unproOt";
+    //保护Ot应用
+    public static final String APPLOCK_OTHER_LOCK = "c000_Locker_proOt";
+    //Feedback
+    //点击yes,report
+    public static final String FEEDBACK_YES_CLI = "c000_feedback_yes";
+    //点击NO
+    public static final String FEEDBACK_NO_CLI = "c000_feedback_no";
+    //点击发送按钮
+    public static final String FEEDBACK_SEND_CLI = "c000_feedback_report";
+    //切换反馈类型
+    public static final String FEEDBACK_SWITCH_TYPE = "c000_feedback_change";
+    //image
+    //点击折叠分类
+    public static final String IMG_GROUP_FLOD = "c000_pho_sort";
+    //点击分类后复选框
+    public static final String IMG_GROUP_CHECK = "c000_pho_sortselcet";
+    //点击单个文件复选框
+    public static final String IMG_ITEM_CHECK = "c000_pho_select";
+    //点击搜索
+    public static final String IMG_SEARCH_CLI = "c000_pho_search";
+    //点击剪切
+    public static final String IMG_CUT_CLI = "c000_pho_cut";
+    //点击复制
+    public static final String IMG_COPY_CLI = "c000_pho_copy";
+    //点击粘贴
+    public static final String IMG_PASTE_CLI = "c000_pho_paste";
+    //点击删除
+    public static final String IMG_DELETE_CLI = "c000_pho_delete";
+    //点击More
+    public static final String IMG_MORE_CLI = "c000_pho_more";
+    //点击Details
+    public static final String IMG_DETAILS_CLI = "c000_pho_detail";
+    //点击Rename
+    public static final String IMG_RENAME_CLI = "c000_pho_rename";
+    //点击单个图片
+    public static final String IMG_ITEM_CLI = "c000_pho_single";
+    //扩大图片
+    public static final String IMG_2_LARGE = "t000_pho_big";
+    //左右切换图片
+    public static final String IMG_DETAIL_SWTICH = "t000_pho_left";
+    //缩小图片
+    public static final String IMG_2_SMALL = "t000_pho_small";
+    //点击设置为壁纸
+    public static final String IMG_SET_WALLPAPER = "c000_pho_wallpaper";
+    //点击删除图片（图片内）
+    public static final String IMG_DETAIL_DELETE = "c000_pho_indelete";
+    //退出图片管理
+    public static final String IMG_EXIT = "c000_pho_exit";
 }
