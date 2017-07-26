@@ -71,7 +71,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     @Override
     public void onLoadFinished(Loader<GroupList<String, FileInfo>> loader, GroupList<String, FileInfo> data) {
         mFileGroupList = data;
-        if (mFileGroupList == null) {
+        if (mFileGroupList == null || mFileGroupList.size() == 0) {
             mView.onNoFileFindShow();
         } else {
             // 显示列表

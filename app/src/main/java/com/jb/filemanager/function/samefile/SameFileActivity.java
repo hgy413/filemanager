@@ -294,6 +294,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void showFileList(GroupList<String, FileInfo> mMusicMaps) {
+        mLlNoFileView.setVisibility(View.GONE);
         mFileGroupList = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
         for (int i = 0; i < mItemSelected.length; i++) {
