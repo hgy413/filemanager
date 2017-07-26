@@ -71,4 +71,9 @@ public class DocChildBean implements Parcelable{
         parcel.writeString(mDocSize);
         parcel.writeByte((byte) (mIsChecked ? 1 : 0));
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

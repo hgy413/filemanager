@@ -171,7 +171,7 @@ public class DocFileProvider extends BaseDataProvider {
                     String id = cursor.getString(idIndex);
                     String name = cursor.getString(nameIndex);
                     String path = cursor.getString(dataIndex);
-//                    String type = cursor.getString(typeIndex);
+                    String type = cursor.getString(typeIndex);
                     String size = cursor.getString(sizeIndex);
                     long dataAdded = cursor.getLong(dataAddedIndex);
                     long dateModify = cursor.getLong(dataModifyIndex);
@@ -184,7 +184,7 @@ public class DocFileProvider extends BaseDataProvider {
                     childBean.mModifyDate = dateModify;
 
                     Logger.d(TAG, childBean.mDocPath + "   " + childBean.mDocSize + "   " + childBean.mDocName + "   " +
-                            childBean.mAddDate + "   " + childBean.mModifyDate + "   " + id);
+                            childBean.mAddDate + "   " + type + "   " + id);
                 } while (cursor.moveToNext());
             }
         }
@@ -204,7 +204,7 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
         int dot = childBean.mDocName.lastIndexOf(".");
         String type = childBean.mDocName.substring(dot + 1);
-        contentValues.put(DocFileTable.DOC_TYPE, type);
+        contentValues.put(DocFileTable.DOC_TYPE, type.toLowerCase());
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         DocChildBean queryItem = queryItem(childBean.mDocPath);
@@ -235,12 +235,15 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
         int dot = childBean.mDocName.lastIndexOf(".");
         String type = childBean.mDocName.substring(dot + 1);
-        contentValues.put(DocFileTable.DOC_TYPE, type);
+        contentValues.put(DocFileTable.DOC_TYPE, type.toLowerCase());
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
 
         sContentResolver.update(mUri, contentValues,
                 DocFileTable.DOC_ID + " like ?", new String[]{childBean.mDocId});
+
+        Logger.d(TAG, "update path" + newFile + "   " + childBean.mDocSize + "   " + childBean.mDocName + "   " +
+                childBean.mAddDate + "   " + type + "   " + childBean.mDocId);
     }
 
     public void updateDocFileName(String oldFile, String newFile) {
@@ -256,14 +259,17 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_PATH, newFile);
         contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
         contentValues.put(DocFileTable.DOC_NAME, name);
-        int dot2 = childBean.mDocName.lastIndexOf(".");
+        int dot2 = name.lastIndexOf(".");
         String type = name.substring(dot2 + 1);
-        contentValues.put(DocFileTable.DOC_TYPE, type);
+        contentValues.put(DocFileTable.DOC_TYPE, type.toLowerCase());
         contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
 
         sContentResolver.update(mUri, contentValues,
                 DocFileTable.DOC_ID + " like ?", new String[]{childBean.mDocId});
+
+        Logger.d(TAG, "update name" + newFile + "   " + childBean.mDocSize + "   " + name + "   " +
+                childBean.mAddDate + "   " + type + "   " + childBean.mDocId);
     }
 
     public void updateDocFile(DocChildBean oldFile, DocChildBean newFile) {
@@ -272,14 +278,17 @@ public class DocFileProvider extends BaseDataProvider {
         contentValues.put(DocFileTable.DOC_PATH, newFile.mDocPath);
         contentValues.put(DocFileTable.DOC_SIZE, newFile.mDocSize);
         contentValues.put(DocFileTable.DOC_NAME, newFile.mDocName);
-        int dot = newFile.mDocName.lastIndexOf("/");
+        int dot = newFile.mDocName.lastIndexOf(".");
         String type = newFile.mDocName.substring(dot + 1);
-        contentValues.put(DocFileTable.DOC_TYPE, type);
+        contentValues.put(DocFileTable.DOC_TYPE, type.toLowerCase());
         contentValues.put(DocFileTable.DOC_ADDED_DATE, newFile.mAddDate);
         contentValues.put(DocFileTable.DOC_MODIFY_DATE, newFile.mModifyDate);
 
         sContentResolver.update(mUri, contentValues,
                 DocFileTable.DOC_ID + " like ?", new String[]{newFile.mDocId});
+
+        Logger.d(TAG, "update File" + newFile.mDocPath + "   " + newFile.mDocSize + "   " + newFile.mDocName + "   " +
+                newFile.mAddDate + "   " + type + "   " + oldFile.mDocId);
     }
 
     public void deleteDocFile(String oldFile) {

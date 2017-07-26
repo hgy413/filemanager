@@ -211,7 +211,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mProgress.stopSpinning();
             holder.mProgress.setVisibility(View.GONE);
             holder.mSelectBox.setVisibility(View.VISIBLE);
-            holder.mTitle.setTextColor(AppUtils.getColor(R.color.black_40));//加载完成后修改字体颜色  
+            holder.mTitle.setTextColor(AppUtils.getColor(R.color.black_40));//加载完成后修改字体颜色
         }
         holder.mProgress.setCallback(new ProgressWheel.ProgressCallback() {
             @Override
