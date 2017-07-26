@@ -206,56 +206,52 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             public void afterCopy() {
                 FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
                 handleDataCopy();
-                statisticsClickCopy();
             }
 
             @Override
             public void afterCut() {
                 FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
                 handleDataCut();
-                statisticsClickCut();
             }
 
             @Override
             public void afterRename() {
                 handleRename();
-                statisticsClickRename();
             }
 
             @Override
             public void afterDelete() {
                 handleDataDelete();
-                statisticsClickDelete();
             }
 
             @Override
             public void statisticsClickCopy() {
-                // TODO 统计
+                statisticsClickBottomCopy();
             }
 
             @Override
             public void statisticsClickCut() {
-                // TODO 统计
+                statisticsClickBottomCut();
             }
 
             @Override
             public void statisticsClickDelete() {
-                // TODO 统计
+                statisticsClickBottomDelete();
             }
 
             @Override
             public void statisticsClickMore() {
-                // TODO 统计
+                statisticsClickBottomMore();
             }
 
             @Override
             public void statisticsClickRename() {
-                // TODO 统计
+                statisticsClickBottomRename();
             }
 
             @Override
             public void statisticsClickDetail() {
-                // TODO 统计
+                statisticsClickBottomDetail();
             }
         });
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
@@ -511,49 +507,42 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击其他文件---" + bean.mOperateId);
     }
 
-    private void statisticsClickCopy() {
+    private void statisticsClickBottomCopy() {
         Statistics101Bean bean = Statistics101Bean.builder();
         bean.mOperateId = StatisticsConstants.DOC_CLICK_COPY;
         StatisticsTools.upload101InfoNew(bean);
         Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击复制---" + bean.mOperateId);
     }
 
-    private void statisticsClickCut() {
+    private void statisticsClickBottomCut() {
         Statistics101Bean bean = Statistics101Bean.builder();
         bean.mOperateId = StatisticsConstants.DOC_CLICK_CUT;
         StatisticsTools.upload101InfoNew(bean);
         Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击剪切---" + bean.mOperateId);
     }
 
-    private void statisticsClickPast() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.DOC_CLICK_PAST;
-        StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击粘贴---" + bean.mOperateId);
-    }
-
-    private void statisticsClickDelete() {
+    private void statisticsClickBottomDelete() {
         Statistics101Bean bean = Statistics101Bean.builder();
         bean.mOperateId = StatisticsConstants.DOC_CLICK_DELETE;
         StatisticsTools.upload101InfoNew(bean);
         Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击删除---" + bean.mOperateId);
     }
 
-    private void statisticsClickRename() {
+    private void statisticsClickBottomRename() {
         Statistics101Bean bean = Statistics101Bean.builder();
         bean.mOperateId = StatisticsConstants.DOC_CLICK_RENAME;
         StatisticsTools.upload101InfoNew(bean);
         Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击重命名---" + bean.mOperateId);
     }
 
-    private void statisticsClickDetail() {
+    private void statisticsClickBottomDetail() {
         Statistics101Bean bean = Statistics101Bean.builder();
         bean.mOperateId = StatisticsConstants.DOC_CLICK_DETAIL;
         StatisticsTools.upload101InfoNew(bean);
         Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击详情---" + bean.mOperateId);
     }
 
-    private void statisticsClickMore() {
+    private void statisticsClickBottomMore() {
         Statistics101Bean bean = Statistics101Bean.builder();
         bean.mOperateId = StatisticsConstants.DOC_CLICK_MORE;
         StatisticsTools.upload101InfoNew(bean);

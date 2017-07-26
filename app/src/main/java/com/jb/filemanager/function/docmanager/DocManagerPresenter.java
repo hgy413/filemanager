@@ -12,6 +12,9 @@ import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.os.ZAsyncTask;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.StorageUtil;
 import com.jb.filemanager.util.file.FileUtil;
@@ -155,8 +158,10 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     public void onEventMainThread(FileOperateEvent fileOperateEvent){
         if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
             handleFileCopy(fileOperateEvent);
+            statisticsClickBottomPast();
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
             handleFileCut(fileOperateEvent);
+            statisticsClickBottomPast();
         }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
             handleFileRename(fileOperateEvent);
         }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
@@ -364,5 +369,12 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 return (int) (Long.valueOf(o1.mDocSize) - Long.valueOf(o2.mDocSize));
             }
         });
+    }
+
+    private void statisticsClickBottomPast() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DOC_CLICK_PAST;
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, "doc 点击粘贴---" + bean.mOperateId);
     }
 }
