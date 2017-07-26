@@ -128,12 +128,12 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         // Set Icon
         switch (fileType) {
             case FileManager.APP:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_app);
+                holder.mIvIcon.setImageResource(R.drawable.app_icon);
                 holder.mIvIcon.setImageDrawable(PackageManagerLocker.getInstance()
                         .getApplicationIconByPath(fileInfo.mFullPath, 120, 120));
                 break;
             case FileManager.DOC:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_doc);
+                holder.mIvIcon.setImageResource(R.drawable.doc_icon);
                 break;
             case FileManager.PDF:
                 holder.mIvIcon.setImageResource(R.drawable.file_type_pdf);
@@ -142,18 +142,18 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 holder.mIvIcon.setImageResource(R.drawable.file_type_txt);
                 break;
             case FileManager.AUDIO:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_music);
+                holder.mIvIcon.setImageResource(R.drawable.music_icon);
                 break;
             case FileManager.VIDEO:
-                mImageFetcher.setLoadingImage(R.drawable.file_type_video);
+                mImageFetcher.setLoadingImage(R.drawable.video_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case FileManager.IMAGE:
-                mImageFetcher.setLoadingImage(R.drawable.file_type_photo);
+                mImageFetcher.setLoadingImage(R.drawable.photo_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
             case FileManager.ZIP:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_zip);
+                holder.mIvIcon.setImageResource(R.drawable.zip_icon);
                 break;
             case FileManager.OTHERS:
             default:
