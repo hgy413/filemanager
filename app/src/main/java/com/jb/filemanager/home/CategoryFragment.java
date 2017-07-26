@@ -460,7 +460,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
         mLlPhoneAndSdcardSwitcher = (LinearLayout) rootView.findViewById(R.id.ll_main_category_phone_sdcard_switch);
         if (mLlPhoneAndSdcardSwitcher != null) {
             // 咱不支持外置，因为数据没有准备好
-//            mLlPhoneAndSdcardSwitcher.setVisibility(mHasExternalStorage ? View.VISIBLE : View.GONE);
+            mLlPhoneAndSdcardSwitcher.setVisibility(mHasExternalStorage ? View.GONE : View.GONE);
         }
 
         mTvSwitchPhone = (TextView) rootView.findViewById(R.id.tv_main_category_info_switch_phone);
@@ -541,28 +541,6 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mTvStorageUsed != null) {
-            String usedReadableString = ConvertUtils.getReadableSize(mUsedSize);
-            String usedString = getString(R.string.main_info_phone_used, usedReadableString);
-            SpannableStringBuilder ssb = new SpannableStringBuilder(usedString);
-            ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
-                    usedString.length() - usedReadableString.length(),
-                    usedString.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mTvStorageUsed.setText(ssb);
-        }
-
-        if (mTvStorageUnused != null) {
-            String unusedReadableString = ConvertUtils.getReadableSize(mTotalSize - mUsedSize);
-            String unusedString = getString(R.string.main_info_phone_unused, unusedReadableString);
-            SpannableStringBuilder ssb = new SpannableStringBuilder(unusedString);
-            ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
-                    unusedString.length() - unusedReadableString.length(),
-                    unusedString.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mTvStorageUnused.setText(ssb);
-        }
 
         updateUsageAnalysis();
 
@@ -1005,6 +983,28 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
         if (mUaStorage != null) {
             mUaStorage.setTotal(mTotalSize);
             mUaStorage.setUsed(APIUtil.getColor(getContext(), R.color.main_category_info_other_color), mUsedSize);
+        }
+
+        if (mTvStorageUsed != null) {
+            String usedReadableString = ConvertUtils.getReadableSize(mUsedSize);
+            String usedString = getString(R.string.main_info_phone_used, usedReadableString);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(usedString);
+            ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
+                    usedString.length() - usedReadableString.length(),
+                    usedString.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTvStorageUsed.setText(ssb);
+        }
+
+        if (mTvStorageUnused != null) {
+            String unusedReadableString = ConvertUtils.getReadableSize(mTotalSize - mUsedSize);
+            String unusedString = getString(R.string.main_info_phone_unused, unusedReadableString);
+            SpannableStringBuilder ssb = new SpannableStringBuilder(unusedString);
+            ssb.setSpan(new ForegroundColorSpan(APIUtil.getColor(getContext(), R.color.main_category_info_storage_value_color)),
+                    unusedString.length() - unusedReadableString.length(),
+                    unusedString.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTvStorageUnused.setText(ssb);
         }
 
         getLoaderManager().restartLoader(FileManager.LOADER_IMAGE, null, mPhotoLoaderCallback);
