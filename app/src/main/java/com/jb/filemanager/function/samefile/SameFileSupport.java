@@ -16,6 +16,9 @@ import android.util.Log;
 
 import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.scanframe.bean.common.FileType;
+import com.jb.filemanager.util.FileTypeUtil;
+import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -298,36 +301,39 @@ public class SameFileSupport implements SameFileContract.Support {
 
     @Override
     public void updateDatabaseRename(String oldFile, String newFile) {
-//        Uri targetUri = null;
-//        File file = new File(newFile);
-//        if (!file.exists() || file.isDirectory()){
-//            return;
-//            new android.media.MediaRecorder(newFile);
-//            //MediaStore.Video.Media(newFile);
-//        }
-//        if (Const.FILE_TYPE.VIDEO == isType(newFile)) {
-//            targetUri = VIDEO_URI;
-//
-//        } else {
-//            targetUri = MUSIC_URI;
-//        }
-//        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Video.Media.DISPLAY_NAME, file.getName());
-//        values.put(MediaStore.Video.Media.SIZE, file.length());
-//        values.put(MediaStore.Video.Media.DATA, file.getAbsolutePath());
-//        values.put(MediaStore.Video.Media.DATE_MODIFIED, file.lastModified());
-//        values.put(MediaStore.Video.Media.MIME_TYPE, 1);
-//        values.put(MediaStore.Video.Media.DURATION, );
-//        values.put(MediaStore.Video.Media.ARTIST, )
-//
-//        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER,0);
-//        mResolver.insert(targetUri, values);
+        Uri targetUri = null;
+        File file = new File(newFile);
+        if (!file.exists() || file.isDirectory()){
+            return;
+        }
+        MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
+        if (FileTypeUtil.getFileTypeFromPostfix(newFile) == FileType.VIDEO) {
+            targetUri = VIDEO_URI;
+        } else if (FileTypeUtil.getFileTypeFromPostfix(newFile) == FileType.MUSIC) {
+            targetUri = MUSIC_URI;
+        } else {
+            return;
+        }
+        mediaMetadata.setDataSource(newFile);
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Video.Media.DISPLAY_NAME, file.getName());
+        values.put(MediaStore.Video.Media.SIZE, file.length());
+        values.put(MediaStore.Video.Media.DATA, file.getAbsolutePath());
+        values.put(MediaStore.Video.Media.DATE_MODIFIED, file.lastModified());
+        values.put(MediaStore.Video.Media.MIME_TYPE,
+                mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE));
+        values.put(MediaStore.Video.Media.DURATION,
+                mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+        values.put(MediaStore.Video.Media.ARTIST,
+                mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER,0);
+        mResolver.insert(targetUri, values);
     }
 
-//    private Const.FILE_TYPE isType(String newFile) {
-//
-//    }
+    private Const.FILE_TYPE isType(String newFile) {
+        return Const.FILE_TYPE.VIDEO;
+    }
 
     public FileInfo getFileInfo(File file){
         FileInfo info = new FileInfo();
@@ -409,5 +415,6 @@ public class SameFileSupport implements SameFileContract.Support {
 //            infoGroupList.put("Other", list);
 //        }
 //    }
+//
 
 }
