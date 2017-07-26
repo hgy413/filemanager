@@ -79,6 +79,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
             @Override
             public void onSearchClick() {
                 SearchActivity.showSearchResult(getApplicationContext(), Const.CategoryType.CATEGORY_TYPE_RECENT);
+                RecentStatistics.upload(RecentStatistics.RECENT_SEARCH);
             }
         });
         mProgress = (ProgressWheel) findViewById(R.id.recent_progress);
@@ -97,23 +98,27 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
             @Override
             public void afterCopy() {
+                RecentStatistics.upload(RecentStatistics.RECENT_COPY);
                 FileBrowserActivity.startBrowser(RecentFileActivity.this, "");
                 mPresenter.afterCopy();
             }
 
             @Override
             public void afterCut() {
+                RecentStatistics.upload(RecentStatistics.RECENT_CUT);
                 FileBrowserActivity.startBrowser(RecentFileActivity.this, "");
                 mPresenter.afterCut();
             }
 
             @Override
             public void afterRename() {
+                RecentStatistics.upload(RecentStatistics.RECENT_RENAME);
                 mPresenter.afterRename();
             }
 
             @Override
             public void afterDelete() {
+                RecentStatistics.upload(RecentStatistics.RECENT_DELETE);
                 mPresenter.afterDelete();
             }
         });

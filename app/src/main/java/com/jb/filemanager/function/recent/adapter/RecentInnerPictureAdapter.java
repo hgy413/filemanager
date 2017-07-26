@@ -11,6 +11,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.recent.RecentImageActivity;
+import com.jb.filemanager.function.recent.RecentStatistics;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
@@ -95,7 +96,7 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         RecentImageActivity.startView(context, mImageModles, index);
-//                        RecentFileUtil.openFile(context, new File(bean.getFilePath()));
+                        RecentStatistics.upload(RecentStatistics.RECENT_SINGLE);
                     }
                 });
                 holder.btns[i].setOnClickListener(new View.OnClickListener() {
@@ -106,6 +107,7 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
                             mListener.onItemCheckChanged();
                         }
                         notifyDataSetChanged();
+                        RecentStatistics.upload(RecentStatistics.RECENT_SELECT);
                     }
                 });
             } else {

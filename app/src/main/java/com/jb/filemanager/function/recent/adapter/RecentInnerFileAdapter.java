@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.recent.RecentStatistics;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
 import com.jb.filemanager.function.recent.listener.RecentItemCheckChangedListener;
@@ -87,6 +88,7 @@ public class RecentInnerFileAdapter extends BaseAdapter {
                     mListener.onItemCheckChanged();
                 }
                 notifyDataSetChanged();
+                RecentStatistics.upload(RecentStatistics.RECENT_SELECT);
             }
         });
         holder.root.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +102,7 @@ public class RecentInnerFileAdapter extends BaseAdapter {
                 } else {
                     RecentFileUtil.openFile(context, new File(item.getFilePath()));
                 }
+                RecentStatistics.upload(RecentStatistics.RECENT_SINGLE);
             }
         });
         return convertView;
