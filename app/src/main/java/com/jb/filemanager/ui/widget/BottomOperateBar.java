@@ -3,7 +3,6 @@ package com.jb.filemanager.ui.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -18,9 +17,6 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.manager.file.FileManager;
-import com.jb.filemanager.statistics.StatisticsConstants;
-import com.jb.filemanager.statistics.StatisticsTools;
-import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
@@ -112,15 +108,19 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
             case R.id.ll_common_operate_bar_cut: {
                 ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                 FileManager.getInstance().setCutFiles(selectedFiles);
-                mListener.afterCut();
-                statisticsClickCut();
+                if (mListener != null) {
+                    mListener.afterCut();
+                    mListener.statisticsClickCut();
+                }
             }
                 break;
             case R.id.ll_common_operate_bar_copy: {
                 ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
                 FileManager.getInstance().setCopyFiles(selectedFiles);
-                mListener.afterCopy();
-                statisticsClickCopy();
+                if (mListener != null) {
+                    mListener.afterCopy();
+                    mListener.statisticsClickCopy();
+                }
             }
                 break;
             case R.id.ll_common_operate_bar_delete: {
@@ -151,12 +151,18 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                     }
                 });
                 dialog.show();
-                statisticsClickDelete();
+
+                if (mListener != null) {
+                    mListener.statisticsClickDelete();
+                }
             }
                 break;
             case R.id.ll_common_operate_bar_more: {
                 showPopupMore();
-                statisticsClickMore();
+
+                if (mListener != null) {
+                    mListener.statisticsClickMore();
+                }
             }
                 break;
         }
@@ -218,7 +224,9 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                                 mPopupWindow = null;
                             }
 
-                            statisticsClickDetail();
+                            if (mListener != null) {
+                                mListener.statisticsClickDetail();
+                            }
                         }
                     });
                 }
@@ -234,7 +242,9 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                                 mPopupWindow = null;
                             }
 
-                            statisticsClickRename();
+                            if (mListener != null) {
+                                mListener.statisticsClickRename();
+                            }
                         }
                     });
                 }
@@ -291,42 +301,6 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
         }
     }
 
-    private void statisticsClickCut() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_CUT;
-        StatisticsTools.upload101InfoNew(bean);
-    }
-
-    private void statisticsClickCopy() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_COPY;
-        StatisticsTools.upload101InfoNew(bean);
-    }
-
-    private void statisticsClickDelete() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_DELETE;
-        StatisticsTools.upload101InfoNew(bean);
-    }
-
-    private void statisticsClickMore() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_BOTTOM_MORE;
-        StatisticsTools.upload101InfoNew(bean);
-    }
-
-    private void statisticsClickDetail() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_DETAILS;
-        StatisticsTools.upload101InfoNew(bean);
-    }
-
-    private void statisticsClickRename() {
-        Statistics101Bean bean = Statistics101Bean.builder();
-        bean.mOperateId = StatisticsConstants.STORAGE_CLICK_RENAME;
-        StatisticsTools.upload101InfoNew(bean);
-    }
-
     public interface Listener {
 
         // 获取选中的文件，用于逻辑操作
@@ -346,6 +320,24 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
 
         // 点击确认删除选中文件后调用，逻辑处理已做，页面更新
         void afterDelete();
+
+        // 统计：点击Copy
+        void statisticsClickCopy();
+
+        // 统计：点击Cut
+        void statisticsClickCut();
+
+        // 统计：点击Delete
+        void statisticsClickDelete();
+
+        // 统计：点击More
+        void statisticsClickMore();
+
+        // 统计：点击Rename
+        void statisticsClickRename();
+
+        // 统计：点击Detail
+        void statisticsClickDetail();
     }
 
 }

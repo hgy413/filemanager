@@ -121,6 +121,36 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
                 RecentStatistics.upload(RecentStatistics.RECENT_DELETE);
                 mPresenter.afterDelete();
             }
+
+            @Override
+            public void statisticsClickCopy() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickCut() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickDelete() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickMore() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickRename() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickDetail() {
+                // TODO 统计
+            }
         });
     }
 

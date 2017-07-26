@@ -27,6 +27,9 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.rate.RateManager;
 import com.jb.filemanager.manager.PackageManagerLocker;
 import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.dialog.SpaceNotEnoughDialog;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.HorizontalListView;
@@ -221,6 +224,48 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                 if (mPresenter != null) {
                     mPresenter.afterDelete();
                 }
+            }
+
+            @Override
+            public void statisticsClickCopy() {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.STORAGE_CLICK_COPY;
+                StatisticsTools.upload101InfoNew(bean);
+            }
+
+            @Override
+            public void statisticsClickCut() {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.STORAGE_CLICK_CUT;
+                StatisticsTools.upload101InfoNew(bean);
+            }
+
+            @Override
+            public void statisticsClickDelete() {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.STORAGE_CLICK_DELETE;
+                StatisticsTools.upload101InfoNew(bean);
+            }
+
+            @Override
+            public void statisticsClickMore() {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.STORAGE_CLICK_BOTTOM_MORE;
+                StatisticsTools.upload101InfoNew(bean);
+            }
+
+            @Override
+            public void statisticsClickRename() {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.STORAGE_CLICK_RENAME;
+                StatisticsTools.upload101InfoNew(bean);
+            }
+
+            @Override
+            public void statisticsClickDetail() {
+                Statistics101Bean bean = Statistics101Bean.builder();
+                bean.mOperateId = StatisticsConstants.STORAGE_CLICK_DETAILS;
+                StatisticsTools.upload101InfoNew(bean);
             }
         });
 

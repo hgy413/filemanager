@@ -227,6 +227,36 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                 handleDataDelete();
                 statisticsClickDelete();
             }
+
+            @Override
+            public void statisticsClickCopy() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickCut() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickDelete() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickMore() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickRename() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickDetail() {
+                // TODO 统计
+            }
         });
         mTvCommonActionBarWithSearchTitle.setOnClickListener(this);
         mIvCommonActionBarBack.setOnClickListener(this);

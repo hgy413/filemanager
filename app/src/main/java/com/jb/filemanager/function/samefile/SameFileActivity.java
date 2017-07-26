@@ -155,6 +155,36 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 fileSelectShow(0);
                 mBottomOperateContainer.setVisibility(View.GONE);
             }
+
+            @Override
+            public void statisticsClickCopy() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickCut() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickDelete() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickMore() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickRename() {
+                // TODO 统计
+            }
+
+            @Override
+            public void statisticsClickDetail() {
+                // TODO 统计
+            }
         });
 
         mLlNoFileView = (LinearLayout) findViewById(R.id.ll_no_file);
