@@ -347,6 +347,10 @@ public class FileUtil {
                     switch (extension) {
                         case "doc":
                         case "docx":
+                        case "ppt":
+                        case "pptx":
+                        case "xls":
+                        case "xlsx":
                             type = FileManager.DOC;
                             break;
                         case "rar":
