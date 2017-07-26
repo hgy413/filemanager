@@ -1,5 +1,7 @@
 package com.jb.filemanager.function.apkmanager;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -219,6 +222,26 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
     }
 
     public void setListData(List<AppGroupBean> groups){
+        PackageManager packageManager = TheApplication.getAppContext().getPackageManager();//获取packagemanager
+        List<PackageInfo> packageInfoList = packageManager.getInstalledPackages(0);//获取所有已安装程序的包信息
+
+        Iterator<AppItemInfo> iterator = groups.get(0).getChildren().iterator();
+        while (iterator.hasNext()) {
+            AppItemInfo next = iterator.next();
+            boolean isAppStillInstall = false;
+            for (PackageInfo packageInfo : packageInfoList) {
+                if (packageInfo.packageName.equals(next.getAppPackageName())) {
+                    isAppStillInstall = true;
+                    break;
+                }
+            }
+
+            if (!isAppStillInstall) {
+                iterator.remove();
+                Logger.d(TAG, next.getAppName() + "已卸载");
+            }
+        }
+
         mGroups.clear();
         mGroups.addAll(groups);
 //        mCheckedCount = groups.get(0).getchildrenSize();//默认用户应用都选中
