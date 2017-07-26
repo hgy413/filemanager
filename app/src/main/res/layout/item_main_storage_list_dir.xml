@@ -9,6 +9,7 @@
     android:drawableEnd="@drawable/ic_path_separate"
     android:gravity="center"
     android:textColor="#66000000"
+    android:textStyle="bold"
     android:textSize="12dp">
 
 </TextView>
