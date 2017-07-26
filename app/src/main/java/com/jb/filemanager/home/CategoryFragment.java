@@ -40,6 +40,7 @@ import com.jb.filemanager.function.recent.RecentFileActivity;
 import com.jb.filemanager.function.recent.RecentFileManager;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.samefile.SameFileActivity;
+import com.jb.filemanager.function.scanframe.clean.event.CleanCheckedFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
@@ -661,7 +662,8 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
 
         boolean allDone = CleanScanDoneEvent.isAllDone();
 //        Logger.e("Main", isNeedShowAnim() + "接收到CleanScanDoneEvent事件: " + allDone + event.name());
-        long junkFileAllSize = CleanScanFileSizeEvent.getJunkFileAllSize();
+//        long junkFileAllSize = CleanScanFileSizeEvent.getJunkFileAllSize();
+        long junkFileAllSize = CleanCheckedFileSizeEvent.getJunkFileAllSize(true);
         if (allDone && junkFileAllSize > 100 * 1024 * 1024 && !mHasShowedNotice) {
             mHasShowedNotice = true;
 //            String data = ConvertUtils.formatFileSize(CleanScanFileSizeEvent.getJunkFileAllSize());

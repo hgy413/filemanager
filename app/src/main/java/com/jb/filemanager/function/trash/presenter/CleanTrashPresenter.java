@@ -1,6 +1,7 @@
 package com.jb.filemanager.function.trash.presenter;
 
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -24,6 +25,7 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanSingleSysCacheScan
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.util.Logger;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -718,6 +720,7 @@ public class CleanTrashPresenter {
          * 删除选中项
          */
         private void deleteItem(List<ItemBean> children, List<ItemBean> delList) {
+            ArrayList<String> updatePath = new ArrayList<>();
             for (int size = children.size(); size > 0; size--) {
                 if (mIsStopDelete || children.size() <= 0) {
                     return;
@@ -731,6 +734,7 @@ public class CleanTrashPresenter {
                     }
                     // 没有子项，则删除本身带的路径(二级)
                     for (String path : delBean.getPaths()) {
+                        updatePath.add(new File(path).getParentFile().getAbsolutePath());
                         deleteCategory(path);
                     }
                 } else {
@@ -739,12 +743,17 @@ public class CleanTrashPresenter {
                         // 由于界面数据只是克隆了内存数据的列表，并没有对列表进行深度克隆。
                         // 所以三级项不能直接移除(因为是同个SubItemBean)，所以只能通过判断是否勾选来决定删除文件
                         if (subItem.isChecked()) {
+                            updatePath.add(new File(subItem.getPath()).getParentFile().getAbsolutePath());
                             deleteCategory(subItem.getPath());
                             delBean.setSize(delBean.getSize() - subItem.getSize());
                         }
                     }
                 }
                 delList.add(delBean);
+            }
+            if (updatePath.size() > 0) {
+                String[] scanPaths = new String[updatePath.size()];
+                MediaScannerConnection.scanFile(TheApplication.getInstance(), updatePath.toArray(scanPaths), null, null); // 修改后的文件添加到系统数据库
             }
         }
 
