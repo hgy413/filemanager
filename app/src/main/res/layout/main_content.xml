@@ -53,9 +53,13 @@
             android:id="@+id/iv_main_action_bar_more"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:paddingRight="23dp"
+            android:paddingEnd="23dp"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_bar_more"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
     </LinearLayout>
 

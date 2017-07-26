@@ -459,7 +459,8 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
 
         mLlPhoneAndSdcardSwitcher = (LinearLayout) rootView.findViewById(R.id.ll_main_category_phone_sdcard_switch);
         if (mLlPhoneAndSdcardSwitcher != null) {
-            mLlPhoneAndSdcardSwitcher.setVisibility(mHasExternalStorage ? View.VISIBLE : View.GONE);
+            // 咱不支持外置，因为数据没有准备好
+//            mLlPhoneAndSdcardSwitcher.setVisibility(mHasExternalStorage ? View.VISIBLE : View.GONE);
         }
 
         mTvSwitchPhone = (TextView) rootView.findViewById(R.id.tv_main_category_info_switch_phone);
