@@ -15,6 +15,8 @@ import com.jb.filemanager.function.applock.presenter.PsdInitContract;
 import com.jb.filemanager.function.applock.presenter.PsdInitPresenter;
 import com.jb.filemanager.function.applock.presenter.PsdInitSupport;
 import com.jb.filemanager.function.applock.view.PatternView;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.Logger;
 
 import java.util.List;
@@ -139,9 +141,8 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
             @Override
             public void onClick(View v) {
                 if (!mQuickClickGuard.isQuickClick(v.getId()) && mPresenter != null) {
-                    mPresenter.dealBackPress();
+                    mPresenter.dealBackPress(false);
                 }
-
             }
         });
 
@@ -149,7 +150,7 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
             @Override
             public void onClick(View v) {
                 if (!mQuickClickGuard.isQuickClick(v.getId()) && mPresenter != null) {
-                    mPresenter.dealBackPress();
+                    mPresenter.dealBackPress(false);
                 }
             }
         });
@@ -205,20 +206,15 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
                     //保存答案
                     mPresenter.dealSaveSecureProblem();
                 }
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_INIT_PSD_3_OK);
             }
         });
     }
 
     @Override
     public void showStepTopPatternTip(int step) {
-//        for (int i = 0; i < mStepIv.length; i++) {
-//            mStepIv[i].clearColorFilter();
-//        }
         switch (step) {
             case 1:
-//                mStepIv[0].setColorFilter(0xff00BBA0);
-//                mStepIv[1].setColorFilter(0xffCBF2ED);
-//                mStepIv[2].setColorFilter(0xffCBF2ED);
                 mStepIv[0].setAlpha(1.0f);
                 mStepIv[1].setAlpha(0.3f);
                 mStepIv[2].setAlpha(0.3f);
@@ -226,9 +222,6 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
                 mApplockTip.setText(R.string.applock_psd_set_step_1);
                 break;
             case 2:
-//                mStepIv[0].setColorFilter(0xff00BBA0);
-//                mStepIv[1].setColorFilter(0xff00BBA0);
-//                mStepIv[2].setColorFilter(0xffCBF2ED);
                 mStepIv[0].setAlpha(1.0f);
                 mStepIv[1].setAlpha(1.0f);
                 mStepIv[2].setAlpha(0.3f);
@@ -236,9 +229,6 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
                 mApplockTip.setText(R.string.applock_psd_set_step_2);
                 break;
             case 3:
-//                mStepIv[0].setColorFilter(0xff00BBA0);
-//                mStepIv[1].setColorFilter(0xff00BBA0);
-//                mStepIv[2].setColorFilter(0xff00BBA0);
                 mStepIv[0].setAlpha(1.0f);
                 mStepIv[1].setAlpha(1.0f);
                 mStepIv[2].setAlpha(1.0f);
@@ -289,9 +279,21 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
             mQuestionInput.setText("");
             if (mQuestionListDialog == null) {
                 mQuestionListDialog = new ListDialog(mQuestionTextView, R.array.pupup_window_reset_psd_questions);
+                mQuestionListDialog.setItemClickListener(new ListDialog.OnItemClickListener() {
+                    @Override
+                    public void click(int index) {
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_INIT_PSD_3_SWITCH_QUESTION, "", String.valueOf(index + 1));
+                    }
+                });
             }
             if (mOptionsListDialog == null) {
                 mOptionsListDialog = new ListDialog(mLockOptionsTextView, R.array.pupup_window_lock_options);
+                mOptionsListDialog.setItemClickListener(new ListDialog.OnItemClickListener() {
+                    @Override
+                    public void click(int index) {
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_INIT_PSD_3_SWITCH_SETTING, "", String.valueOf(index + 1));
+                    }
+                });
             }
         }
     }
@@ -373,15 +375,9 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
     }
 
     @Override
-    protected void onHomePressed() {
-        if (mPresenter != null) {
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if (mPresenter != null) {
-            mPresenter.dealBackPress();
+            mPresenter.dealBackPress(true);
         }
     }
 
@@ -390,6 +386,14 @@ public class PsdSettingActivity extends BaseHomeWatcherActivity implements PsdIn
         if (mPresenter != null) {
             mPresenter.release();
             mPresenter = null;
+        }
+        if (mOptionsListDialog != null) {
+            mOptionsListDialog.setOnDismissListener(null);
+            mOptionsListDialog.dismiss();
+        }
+        if (mQuestionListDialog != null) {
+            mQuestionListDialog.setOnDismissListener(null);
+            mQuestionListDialog.dismiss();
         }
         super.onDestroy();
     }

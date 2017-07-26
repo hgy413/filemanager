@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.jb.filemanager.BaseActivity;
-import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.permissionalarm.event.PermissionViewDismissEvent;
-import com.jb.filemanager.manager.spm.IPreferencesIds;
-import com.jb.filemanager.manager.spm.SharedPreferencesManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -159,6 +158,7 @@ public class PermissionAlarmPopActivity extends BaseActivity {
      * 处理Intent, 获取传递的数据。
      */
     private void dealIntent(Intent intent) {
+        StatisticsTools.upload(StatisticsConstants.LOGGER_SHOW);
         isLive = true;
         if (intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();

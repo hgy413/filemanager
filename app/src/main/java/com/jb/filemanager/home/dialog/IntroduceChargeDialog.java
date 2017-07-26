@@ -11,6 +11,8 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.ui.dialog.FMBaseDialog;
 
 /**
@@ -22,6 +24,8 @@ public class IntroduceChargeDialog extends FMBaseDialog {
     private TextView mOk;
 
     private ImageView mSwitcher;
+    //点击ok
+    private boolean isClickOk = false;
 
     public IntroduceChargeDialog(Activity act) {
         super(act, true);
@@ -32,6 +36,7 @@ public class IntroduceChargeDialog extends FMBaseDialog {
         mOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isClickOk = true;
                 dismiss();
             }
         });
@@ -41,6 +46,7 @@ public class IntroduceChargeDialog extends FMBaseDialog {
             public void onClick(View v) {
                 boolean isSelect = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, false);
                 isSelect = !isSelect;
+                StatisticsTools.upload(StatisticsConstants.DIALOG_SMART_CHARGE_SWITCH_CLI, "", isSelect ? String.valueOf(1) : String.valueOf(2));
                 SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitBoolean(IPreferencesIds.KEY_SMART_CHARGE_ENABLE, isSelect);
                 v.setSelected(isSelect);
                 if (isSelect) {
@@ -50,5 +56,18 @@ public class IntroduceChargeDialog extends FMBaseDialog {
                 }
             }
         });
+    }
+
+    @Override
+    public void show() {
+        isClickOk = false;
+        super.show();
+        StatisticsTools.upload(StatisticsConstants.DIALOG_SMART_CHARGE_SHOW);
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        StatisticsTools.upload(StatisticsConstants.DIALOG_SMART_CHARGE_EXIT, isClickOk ? String.valueOf(1) : String.valueOf(2));
     }
 }

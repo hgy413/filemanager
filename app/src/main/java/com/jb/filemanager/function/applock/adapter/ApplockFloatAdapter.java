@@ -13,6 +13,8 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.applock.model.bean.AppLockGroupData;
 import com.jb.filemanager.function.applock.model.bean.LockerItem;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.imageloader.IconLoader;
 
@@ -145,6 +147,25 @@ public class ApplockFloatAdapter extends AbsAdapter<AppLockGroupData> {
         if (mGroups != null && mGroups.size() > group && mGroups.get(group).getChildren().size() > child) {
             LockerItem lockerItem = mGroups.get(group).getChild(child);
             lockerItem.isChecked = !lockerItem.isChecked;
+            if (lockerItem.isChecked) {
+                switch (group) {
+                    case 0:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_RE_LOCK);
+                        break;
+                    case 1:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_OTHER_LOCK);
+                        break;
+                }
+            } else {
+                switch (group) {
+                    case 0:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_RE_UNLOCK);
+                        break;
+                    case 1:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_OTHER_UNLOCK);
+                        break;
+                }
+            }
             chgAppInfo(lockerItem.getTitle(), lockerItem.isChecked);
             notifyDataSetChanged();
         }

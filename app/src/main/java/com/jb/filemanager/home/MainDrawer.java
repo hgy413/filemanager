@@ -243,10 +243,10 @@ public class MainDrawer implements View.OnClickListener {
         }
         switch (v.getId()) {
             case R.id.tv_drawer_app_locker:
-                jumpToApplock();
-
                 boolean isAppLockerEnable = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getBoolean(IPreferencesIds.KEY_APP_LOCK_ENABLE, false);
                 statisticsClickAppLocker(isAppLockerEnable);
+                jumpToApplock();
+
                 break;
             case R.id.tv_drawer_smart_charge:
                 IntroduceChargeDialog introduceChargeDialog = new IntroduceChargeDialog(mActivity);
@@ -365,7 +365,10 @@ public class MainDrawer implements View.OnClickListener {
     }
 
     private void statisticsClickAppLocker(boolean isEnable) {
-
+        Statistics101Bean bean = Statistics101Bean.builder();
+        bean.mOperateId = StatisticsConstants.DRAWER_ENTER_APP_LOCKER;
+        bean.mEntrance = isEnable ? "1" : "2";
+        StatisticsTools.upload101InfoNew(bean);
     }
 
     private void statisticsClickSmartCharge(boolean isEnable) {

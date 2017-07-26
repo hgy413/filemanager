@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.receiver.HomeWatcherReceiver;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.DrawUtils;
 import com.jb.filemanager.util.Logger;
@@ -112,6 +114,7 @@ public class FloatOuterAppLockerView extends FrameLayout {
                 if (mIFloatAppLockerViewEvtListener != null) {
                     mIFloatAppLockerViewEvtListener.onForgetClick(v);
                 }
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_OUTTER_FORGET_PSD);
             }
         });
 
@@ -121,6 +124,7 @@ public class FloatOuterAppLockerView extends FrameLayout {
                 if (mIFloatAppLockerViewEvtListener != null) {
                     mIFloatAppLockerViewEvtListener.onDonLockApp(v);
                 }
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_OUTTER_CANCEL_LOCK);
             }
         });
 
@@ -145,6 +149,7 @@ public class FloatOuterAppLockerView extends FrameLayout {
                 if (mIFloatAppLockerViewEvtListener != null) {
                     mIFloatAppLockerViewEvtListener.onInputCompleted(pattern, null);
                 }
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_OUTTER_LOCK_UNLOCK);
             }
         });
     }
@@ -152,6 +157,7 @@ public class FloatOuterAppLockerView extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        StatisticsTools.upload(StatisticsConstants.APPLOCK_OUTTER_LOCK_SHOW);
         mHandler = new Handler();
         mHomeKeyEventReceiver.setTouchSystemKeyListener(new HomeWatcherReceiver.TouchSystemKeyListener() {
             @Override

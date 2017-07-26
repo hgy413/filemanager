@@ -37,7 +37,7 @@ public interface PsdInitContract {
     interface Presenter {
         void start();
         void cachePattern(List<PatternView.Cell> currentCells);
-        void dealBackPress();
+        void dealBackPress(boolean isSystemBack);
         void setMode(int mode);
         void dealSaveSecureProblem();
         void dealPatternStart();

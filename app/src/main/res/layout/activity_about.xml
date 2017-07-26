@@ -67,7 +67,8 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/about_contact_us"
-            android:textSize="16dp"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:drawableRight="@drawable/ic_about_arrow"
             android:textColor="@color/black_70"/>
 
@@ -85,7 +86,8 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/about_policy"
-            android:textSize="16dp"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:drawableRight="@drawable/ic_about_arrow"
             android:textColor="@color/black_70"/>
 
@@ -104,7 +106,8 @@
             android:paddingRight="16dp"
             android:drawableRight="@drawable/ic_about_arrow"
             android:text="@string/about_user_experience_program"
-            android:textSize="16dp"
+            android:textSize="@dimen/h5_12"
+            android:textStyle="bold"
             android:textColor="@color/black_70"/>
 
     </LinearLayout>

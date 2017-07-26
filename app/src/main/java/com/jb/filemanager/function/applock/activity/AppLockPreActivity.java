@@ -17,6 +17,8 @@ import com.jb.filemanager.function.applock.presenter.AppLockPreContract;
 import com.jb.filemanager.function.applock.presenter.AppLockPrePresenter;
 import com.jb.filemanager.function.applock.presenter.AppLockPreSupport;
 import com.jb.filemanager.function.applock.view.SearchBarLayout;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.AppUtils;
@@ -50,6 +52,7 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
     private ImageView mSetting;
 
     private ViewStub mPermissionRequestLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +118,18 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                if (mSearchBarLayout != null && !mSearchBarLayout.safeToSlideClose()) {
+                    if (mPresenter != null) {
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_EXIT, String.valueOf(2));
+                        AppLockPreActivity.super.onBackPressed();
+                        mSearchBarLayout.release(AppLockPreActivity.this);
+                        mPresenter.release();
+                    }
+                } else {
+                    if (mPresenter != null) {
+                        mPresenter.search(null);
+                    }
+                }
             }
         });
         mTitle.setOnClickListener(new View.OnClickListener() {
@@ -128,9 +142,24 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 if (mAppLockPreAdapter != null) {
+                    if (groupPosition == 0) {
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_PRE_RE_CHECK_CLI);
+                    } else {
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_PRE_OTHER_CHECK_CLI);
+                    }
                     mAppLockPreAdapter.performItemClick(groupPosition, childPosition);
                 }
                 return true;
+            }
+        });
+        mLockAppsList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (groupPosition == 0) {
+                    StatisticsTools.upload(StatisticsConstants.APPLOCK_RECOMMOND_FLOD_CLI);
+                } else {
+                    StatisticsTools.upload(StatisticsConstants.APPLOCK_OTHER_FLOD_CLI);
+                }
             }
         });
         mOperaterBtu.setOnClickListener(new View.OnClickListener() {
@@ -139,11 +168,13 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
                 if (mPresenter != null) {
                     mPresenter.handleOperateClick();
                 }
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_START_LOCK);
             }
         });
         mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_SEARCH_CLI);
                 mSearchBarLayout.safeToSlideOpen();
             }
         });
@@ -152,6 +183,7 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
             @Override
             public void onClick(View v) {
                 //点击设置统计
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_SETTING_CLI);
                 Intent intent = new Intent(AppLockPreActivity.this, AppLockSettingActivity.class);
                 startActivity(intent);
             }
@@ -187,6 +219,7 @@ public class AppLockPreActivity extends BaseProgressActivity implements AppLockP
     public void onBackPressed() {
         if (mSearchBarLayout != null && !mSearchBarLayout.safeToSlideClose()) {
             if (mPresenter != null) {
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_EXIT, String.valueOf(1));
                 super.onBackPressed();
                 mSearchBarLayout.release(this);
                 mPresenter.release();

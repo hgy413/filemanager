@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.privacy.PrivacyHelper;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.AppUtils;
 
 /**
@@ -84,6 +86,7 @@ public class AboutActivity extends BaseActivity {
                 if (mQuickClickGuard.isQuickClick(v.getId())) {
                     return;
                 }
+                StatisticsTools.upload(StatisticsConstants.ABOUT_PRO_CLI);
                 PrivacyHelper.gotoPrivacyInfoPage(AboutActivity.this);
             }
         });
@@ -94,6 +97,7 @@ public class AboutActivity extends BaseActivity {
                 if (mQuickClickGuard.isQuickClick(v.getId())) {
                     return;
                 }
+                StatisticsTools.upload(StatisticsConstants.ABOUT_USER_CLI);
                 PrivacyHelper.gotoUepInfoPage(AboutActivity.this);
             }
         });
@@ -104,6 +108,7 @@ public class AboutActivity extends BaseActivity {
                 if (mQuickClickGuard.isQuickClick(v.getId())) {
                     return;
                 }
+                StatisticsTools.upload(StatisticsConstants.ABOUT_CONTACT_ME_CLI);
                 AppUtils.goToContactUs();
             }
         });

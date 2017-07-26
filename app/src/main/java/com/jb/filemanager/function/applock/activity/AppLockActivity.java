@@ -18,6 +18,8 @@ import com.jb.filemanager.function.applock.presenter.AppLockContract;
 import com.jb.filemanager.function.applock.presenter.AppLockPresenter;
 import com.jb.filemanager.function.applock.presenter.AppLockSupport;
 import com.jb.filemanager.function.applock.view.SearchBarLayout;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.imageloader.IconLoader;
@@ -104,6 +106,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
         mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_SEARCH_CLI);
                 mSearchBarLayout.safeToSlideOpen();
             }
         });
@@ -136,6 +139,7 @@ public class AppLockActivity extends BaseProgressActivity implements AppLockCont
             @Override
             public void onClick(View v) {
                 //点击设置统计
+                StatisticsTools.upload(StatisticsConstants.APPLOCK_SETTING_CLI);
                 Intent intent = new Intent(AppLockActivity.this, AppLockSettingActivity.class);
                 startActivity(intent);
             }

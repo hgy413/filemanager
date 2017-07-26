@@ -18,6 +18,7 @@ import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.statistics.bean.Statistics102Bean;
 import com.jb.filemanager.statistics.bean.Statistics103Bean;
 import com.jb.filemanager.util.AppUtils;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.device.Machine;
 
@@ -34,6 +35,8 @@ import java.util.List;
  */
 
 public class StatisticsTools {
+
+    private static final String TAG = "StatisticsTools";
 
     /**
      * StatisticsTask
@@ -197,6 +200,28 @@ public class StatisticsTools {
             statistics102Bean.mSettingInfo = "0";
         }
         upload102InfoPrivateNew(statistics102Bean);
+    }
+
+    /**
+     * 上传统计代码
+     * @param extras 额外参数
+     * */
+    public static void upload(String... extras) {
+        if (extras == null) {
+            return;
+        }
+        Statistics101Bean bean = Statistics101Bean.builder();
+        if (extras.length > 0) {
+            bean.mOperateId = extras[0];
+        }
+        if (extras.length > 1) {
+            bean.mEntrance = extras[1];
+        }
+        if (extras.length > 2) {
+            bean.mTab = extras[2];
+        }
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(TAG, bean.toString());
     }
 
     /**

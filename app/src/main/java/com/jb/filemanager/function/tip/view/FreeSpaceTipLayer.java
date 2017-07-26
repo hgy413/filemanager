@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
-import com.jb.filemanager.home.MainActivity;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 
 /**
  * Created by nieyh on 17-7-17.
@@ -26,6 +26,7 @@ public class FreeSpaceTipLayer extends TipLayer {
             @Override
             public void onClick(View v) {
                 close();
+                StatisticsTools.upload(StatisticsConstants.LOW_CLICK_CLEAN);
                 Intent intent = new Intent(getContext(), CleanTrashActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -35,4 +36,9 @@ public class FreeSpaceTipLayer extends TipLayer {
 
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        StatisticsTools.upload(StatisticsConstants.LOW_SHOW);
+    }
 }

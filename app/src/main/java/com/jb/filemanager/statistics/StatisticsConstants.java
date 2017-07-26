@@ -199,5 +199,8 @@ public class StatisticsConstants {
     public static final String FEEDBACK_SEND_CLI = "c000_feedback_report";
     //切换反馈类型
     public static final String FEEDBACK_SWITCH_TYPE = "c000_feedback_change";
-
+    //smart charge
+    public static final String DIALOG_SMART_CHARGE_SHOW = "f000_smart_window";
+    public static final String DIALOG_SMART_CHARGE_SWITCH_CLI = "c000_smart_switch";
+    public static final String DIALOG_SMART_CHARGE_EXIT = "c000_smart_exit";
 }

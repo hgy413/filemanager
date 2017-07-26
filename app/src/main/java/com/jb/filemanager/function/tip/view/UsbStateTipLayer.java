@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.home.MainActivity;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 
 /**
  * Created by nieyh on 17-7-17.
@@ -26,6 +26,7 @@ public class UsbStateTipLayer extends TipLayer {
             @Override
             public void onClick(View v) {
                 close();
+                StatisticsTools.upload(StatisticsConstants.USB_CLICK_MANAGER);
 //                Intent intent = new Intent(getContext(), MainActivity.class);
                 //方案 1
                 //直接跳转首页 并移除首页之上的其他页面
@@ -44,5 +45,11 @@ public class UsbStateTipLayer extends TipLayer {
                 TheApplication.getAppContext().startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        StatisticsTools.upload(StatisticsConstants.USB_SHOW);
     }
 }

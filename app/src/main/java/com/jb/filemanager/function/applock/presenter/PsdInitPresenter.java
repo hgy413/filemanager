@@ -3,6 +3,8 @@ package com.jb.filemanager.function.applock.presenter;
 import android.text.TextUtils;
 
 import com.jb.filemanager.function.applock.view.PatternView;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,9 +129,21 @@ public class PsdInitPresenter implements PsdInitContract.Presenter {
     }
 
     @Override
-    public void dealBackPress(/*boolean isSystemBack*/) {
+    public void dealBackPress(boolean isSystemBack) {
         if (mView != null) {
             if (mMode != QUESTION_REST) {
+                String entrace = isSystemBack ? String.valueOf("1") : String.valueOf("2");
+                switch (mCurrentStep) {
+                    case 0:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_INIT_PSD_1_EXIT, entrace);
+                        break;
+                    case 1:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_INIT_PSD_2_EXIT, entrace);
+                        break;
+                    case 2:
+                        StatisticsTools.upload(StatisticsConstants.APPLOCK_INIT_PSD_3_EXIT, entrace);
+                        break;
+                }
                 if (mCurrentStep != 0) {
                     mCurrentStep = 0;
                     mView.showPsdViewDismissQuestion();

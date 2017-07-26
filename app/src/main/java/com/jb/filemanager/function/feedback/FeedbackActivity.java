@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.function.applock.dialog.ListDialog;
+import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.AppUtils;
 
@@ -90,6 +91,12 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
                 imageView.setRotation(0);
             }
         });
+        mQuestionListDialog.setItemClickListener(new ListDialog.OnItemClickListener() {
+            @Override
+            public void click(int index) {
+                StatisticsTools.upload(StatisticsConstants.FEEDBACK_SWITCH_TYPE);
+            }
+        });
         mWarnTipNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +104,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
                 if (mPresenter != null) {
                     mPresenter.clickTipSecondBtu();
                 }
+                StatisticsTools.upload(StatisticsConstants.FEEDBACK_NO_CLI);
             }
         });
 
@@ -109,6 +117,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
                 if (mPresenter != null) {
                     mPresenter.sendWarnTip();
                 }
+                StatisticsTools.upload(StatisticsConstants.FEEDBACK_YES_CLI);
                 showWarnTip2();
             }
         });
@@ -137,6 +146,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
             @Override
             public void onClick(View v) {
 
+                StatisticsTools.upload(StatisticsConstants.FEEDBACK_SEND_CLI);
                 String detailString = mContainer.getText().toString().trim();
                 String selectItem = select.getText().toString();
                 if (detailString.equals("")) {
@@ -228,6 +238,11 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         }
         //InputMethodManager 释放当前Activity
         AppUtils.fixInputMethodManagerLeak(this);
+        if (mQuestionListDialog != null) {
+            mQuestionListDialog.setOnDismissListener(null);
+            mQuestionListDialog.setItemClickListener(null);
+            mQuestionListDialog.dismiss();
+        }
         super.onDestroy();
     }
 
