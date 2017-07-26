@@ -47,10 +47,10 @@ public class UsbStateManager {
                 boolean isConnected = bundle.getBoolean("connected");
                 boolean isHostConnected = bundle.getBoolean("host_connected");
                 if (isConnected && !isHostConnected) {
-//                    if (isFirstTip) {
-//                        isFirstTip = false;
-//                        return;
-//                    }
+                    if (isFirstTip) {
+                        isFirstTip = false;
+                        return;
+                    }
                     //当USB连接上 并且 设备不是充当主设备 (也就是代表着usb连接电脑设备)
                     tryShowTipWindow();
                 }

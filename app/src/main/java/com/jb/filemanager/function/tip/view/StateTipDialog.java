@@ -116,8 +116,8 @@ public class StateTipDialog extends BaseActivity {
         TipLayer tipLayer = null;
         switch (tipType) {
             case TipLayer.USB_STATE_TIP_LAYER:
-//                tipLayer = new UsbStateTipLayer(this);
-//                break;
+                tipLayer = new UsbStateTipLayer(this);
+                break;
             case TipLayer.FREE_SPACE_TIP_LAYER:
                 tipLayer = new FreeSpaceTipLayer(this);
                 break;

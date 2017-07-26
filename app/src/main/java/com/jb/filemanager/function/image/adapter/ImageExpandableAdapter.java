@@ -117,8 +117,13 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         }
 
         ImageGroupModle imageGroupModle = mImageGroupModleList.get(groupPosition);
-
-        viewGroupHolder.mDate.setText(imageGroupModle.mTimeDate);
+        int size = imageGroupModle.mImageModleList.size();
+        int num = 0;
+        if (size > 0) {
+            num += imageGroupModle.mImageModleList.get(size - 1).size();
+            num += (size - 1) * 3;
+        }
+        viewGroupHolder.mDate.setText(imageGroupModle.mTimeDate + "(" + num + ")");
         if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.NONE_SELECTED) {
             viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_none_gray_width);
         } else if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.MULT_SELECTED) {

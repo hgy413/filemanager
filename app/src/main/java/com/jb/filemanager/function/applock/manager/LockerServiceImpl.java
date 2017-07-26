@@ -79,7 +79,7 @@ public class LockerServiceImpl {
      * 执行解除锁定应用
      * */
     public void actionUnLockApp() {
-        mLockerFloatLayerManager.onBackPress();
+//        mLockerFloatLayerManager.onBackPress();
     }
 
 
