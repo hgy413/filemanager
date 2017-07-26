@@ -142,7 +142,7 @@
         <activity
             android:name=".function.recent.RecentImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_TranslucentBar_without_bg"/>
+            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar"/>
 
         <!-- 隐私页 -->
         <activity
