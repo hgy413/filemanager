@@ -734,7 +734,10 @@ public class CleanTrashPresenter {
                     }
                     // 没有子项，则删除本身带的路径(二级)
                     for (String path : delBean.getPaths()) {
-                        updatePath.add(new File(path).getParentFile().getAbsolutePath());
+                        File parentFile = new File(path).getParentFile();
+                        if (parentFile != null) {
+                            updatePath.add(parentFile.getAbsolutePath());
+                        }
                         deleteCategory(path);
                     }
                 } else {
@@ -743,7 +746,10 @@ public class CleanTrashPresenter {
                         // 由于界面数据只是克隆了内存数据的列表，并没有对列表进行深度克隆。
                         // 所以三级项不能直接移除(因为是同个SubItemBean)，所以只能通过判断是否勾选来决定删除文件
                         if (subItem.isChecked()) {
-                            updatePath.add(new File(subItem.getPath()).getParentFile().getAbsolutePath());
+                            File parentFile = new File(subItem.getPath()).getParentFile();
+                            if (parentFile != null) {
+                                updatePath.add(parentFile.getAbsolutePath());
+                            }
                             deleteCategory(subItem.getPath());
                             delBean.setSize(delBean.getSize() - subItem.getSize());
                         }
