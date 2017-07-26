@@ -24,8 +24,8 @@
     <color name="common_bg">#F5F6FF</color>
     <color name="common_style_green">#FF00BBA0</color>
     <!-- home -->
-    <color name="main_tab_text_color_select">#B2000000</color>
-    <color name="main_tab_text_color_normal">#66000000</color>
+    <color name="main_tab_text_color_select">#FFFFFF</color>
+    <color name="main_tab_text_color_normal">#C7F4EF</color>
     <color name="main_tab_indicator">#42CBAE</color>
     <color name="main_category_info_storage_value_color">#00BBA0</color>
     <color name="main_category_info_photo_color">#85FFEB</color>
