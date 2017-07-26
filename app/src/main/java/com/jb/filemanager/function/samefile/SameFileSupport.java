@@ -82,7 +82,10 @@ public class SameFileSupport implements SameFileContract.Support {
     public GroupList<String,FileInfo> getAllVideoInfo() {
         return getMediaInfo(VIDEO_URI, VIDEO_PROPERTIES);
     }
-
+    public static int getVideoNumber() {
+       // TheApplication.getAppContext().getContentResolver().query(VIDEO_URI, m);
+        return 0;
+    }
     @Override
     public GroupList<String, FileInfo> getAllDownloadInfo() {
         File download = new File(mDownPath);
@@ -119,7 +122,7 @@ public class SameFileSupport implements SameFileContract.Support {
         GroupList<String, FileInfo> list;
         try (Cursor cursor = mResolver.query(uri,
                 mediaProperties,
-                MediaStore.Audio.Media.SIZE + " > 0 ",
+                MediaStore.Audio.Media.SIZE + " >= 0 ",
                 null,
                 mediaProperties[4]
         )) {
@@ -129,8 +132,10 @@ public class SameFileSupport implements SameFileContract.Support {
             String date = "";
             FileInfo info = null;
             ArrayList<FileInfo> infoList;
-
+            int i = cursor.getCount();
+            i = 0;
             while (cursor.moveToNext()) {
+                i++;
                 if (null != (info = cursorToFileInfo(cursor))) {
                     modify = info.mModified;
                     if (uri == MUSIC_URI) {

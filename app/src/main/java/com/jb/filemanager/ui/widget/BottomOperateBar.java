@@ -133,12 +133,12 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                             FileUtil.deleteSelectedFiles(selectedFiles);
 
                             ArrayList<String> paths = new ArrayList<>();
+                            // 删除文件应该给出已经删除的文件的路径，这样的话系统发现该文件不存在就会更新数据库，
+                            // 如果扫描的是其他还存在的文件，系统并不会更新那些被删除的文件的数据。
                             for (File file : selectedFiles) {
-                                if (!paths.contains(file.getAbsolutePath())) {
-                                    paths.add(file.getParentFile().getAbsolutePath());
-                                }
+                                paths.add(file.getAbsolutePath());
                             }
-                            String[] dest = new String[paths.size()];
+                            String[] dest = new String[selectedFiles.size()];
                             dest = paths.toArray(dest);
                             MediaScannerConnection.scanFile(TheApplication.getInstance(), dest, null, null); // 修改后的文件添加到系统数据库
                             mListener.afterDelete();

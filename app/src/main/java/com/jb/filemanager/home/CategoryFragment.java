@@ -74,7 +74,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
             MediaStore.Images.Media.SIZE };
 
     private static final String[] VIDEO_PROJECTION = new String[] {
-            MediaStore.Video.Media.SIZE };
+            MediaStore.Video.Media._ID };
 
     private static final String[] AUDIO_PROJECTION = new String[] {
             MediaStore.Audio.Media.SIZE};
@@ -725,7 +725,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                 return new CursorLoader(getActivity(),
                         uri,
                         VIDEO_PROJECTION,
-                        MediaStore.Video.Media.SIZE + "!= 0 AND " + MediaStore.Video.Media.DATA + " IS NOT NULL",
+                        MediaStore.Video.Media.SIZE + " > 0 AND " + MediaStore.Video.Media.DATA + " IS NOT NULL",
                         null,
                         MediaStore.Video.Media.DEFAULT_SORT_ORDER);
             }
