@@ -138,4 +138,17 @@ public class StatisticsConstants {
     public static final String CLEAN_PAGE_EXIT = "c000_clean_exit";
 
 
+    //about
+    public static final String ABOUT_CONTACT_ME_CLI = "c000_About_contact";
+    public static final String ABOUT_PRO_CLI = "c000_About_pro";
+    public static final String ABOUT_USER_CLI = "c000_About_yuser";
+    //APPlock
+    public static final String APPLOCK_SEARCH_CLI = "c000_Locker_icon";
+    public static final String APPLOCK_SETTING_CLI = "c000_Locker_set";
+    public static final String APPLOCK_RECOMMOND_FLOD_CLI = "c000_Locker_re";
+    public static final String APPLOCK_OTHER_FLOD_CLI = "c000_Locker_other";
+    public static final String APPLOCK_PRE_RE_CHECK_CLI = "c000_Locker_reapp";
+    public static final String APPLOCK_PRE_OTHER_CHECK_CLI = "c000_Locker_othapp";
+    public static final String APPLOCK_EXIT = "c000_Locker_exit";
+
 }

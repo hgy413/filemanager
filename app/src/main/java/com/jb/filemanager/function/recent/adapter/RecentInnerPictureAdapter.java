@@ -81,7 +81,7 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
             if (index < size) {
                 final BlockItemFileBean bean = mItemFiles.get(index);
                 ImageLoader.getInstance(context).displayImage(bean.getFilePath(), holder.images[i], R.drawable.common_default_app_icon);
-                holder.btns[i].setImageResource(bean.isSelected() ? R.drawable.select_all : R.drawable.select_none_image);
+                holder.btns[i].setImageResource(bean.isSelected() ? R.drawable.select_all : R.drawable.choose_none_gray);
                 if (index == 5) {
                     holder.moreMask.setVisibility(View.VISIBLE);
                     holder.moreMask.setOnClickListener(new View.OnClickListener() {

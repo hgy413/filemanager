@@ -1,7 +1,6 @@
 package com.jb.filemanager.function.image.adapter;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.image.ImageDetailFragment;
-import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
@@ -125,7 +123,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         }
         viewGroupHolder.mDate.setText(imageGroupModle.mTimeDate + "(" + num + ")");
         if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.NONE_SELECTED) {
-            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_none_gray_width);
+            viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_none);
         } else if (imageGroupModle.mSelectState == GroupSelectBox.SelectState.MULT_SELECTED) {
             viewGroupHolder.mGroupSelectBox.setImageResource(R.drawable.choose_part);
         } else {
@@ -330,7 +328,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
                     mGroupSelectBox.setImageResource(R.drawable.choose_all);
                 } else {
                     mMask.setVisibility(View.GONE);
-                    mGroupSelectBox.setImageResource(R.drawable.choose_none_green);
+                    mGroupSelectBox.setImageResource(R.drawable.choose_none_gray);
                 }
                 mPhoto.setTag(new Binder(group, child, mImageModle));
                 mGroupSelectBox.setTag(mImageModle);
