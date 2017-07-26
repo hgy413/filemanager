@@ -428,8 +428,8 @@
     <string name="set_wall_paper">Set As Wallpaper</string>
 
     <!--文档管理-->
-    <string name="doc_manager_title">Document Manager</string>
+    <string name="doc_manager_title">Document</string>
     <string name="txt_preview">TXT Preview</string>
-    <string name="app_manager">App Manager</string>
+    <string name="app_manager">App</string>
     <string name="splash_content">Let Manage File Easier</string>
 </resources>

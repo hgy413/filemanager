@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,30 +10,26 @@
     android:orientation="vertical"
     tools:context="com.jb.filemanager.function.apkmanager.AppManagerActivity">
 
-    <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+
 
         <include layout="@layout/common_action_bar_without_search_blue_back_2"/>
 
         <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
             android:id="@+id/elv_apk"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:divider="@null"
             android:groupIndicator="@null"
             android:listSelector="@android:color/transparent"
             android:scrollbars="none">
 
         </com.jb.filemanager.ui.widget.FloatingGroupExpandableListView>
-    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_bottom_delete"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
         android:drawableTop="@drawable/ic_bottom_delete"
         android:background="@drawable/app_uninstall_item_selector"
         android:text="@string/app_uninstall"
@@ -44,4 +40,4 @@
         android:paddingBottom="6dp"
         android:visibility="visible"/>
 
-</RelativeLayout>
+</LinearLayout>

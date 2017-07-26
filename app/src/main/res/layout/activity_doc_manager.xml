@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     android:background="@color/list_divider_line_color_f5f6ff"
     tools:context="com.jb.filemanager.function.docmanager.DocManagerActivity">
 
-    <LinearLayout
-        android:layout_height="match_parent"
+    <include layout="@layout/app_manager_title_with_search"/>
+
+    <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
+        android:id="@+id/elv_apk"
         android:layout_width="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:groupIndicator="@null"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none"/>
 
-        <include layout="@layout/app_manager_title_with_search"/>
-
-        <com.jb.filemanager.ui.widget.FloatingGroupExpandableListView
-            android:id="@+id/elv_apk"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:groupIndicator="@null"
-            android:listSelector="@android:color/transparent"
-            android:scrollbars="none"/>
-    </LinearLayout>
 
     <com.jb.filemanager.ui.widget.BottomOperateBar
+        android:visibility="visible"
         android:id="@+id/bob_bottom_operator"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_height="60dp"/>
-</RelativeLayout>
+</LinearLayout>

@@ -12,6 +12,7 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.scanframe.bean.appBean.AppItemInfo;
 import com.jb.filemanager.function.scanframe.clean.event.AppInstallEvent;
 import com.jb.filemanager.function.scanframe.clean.event.AppUninstallEvent;
@@ -177,7 +178,12 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (handleSelectMode()) {
+            unSelectAllItem();
+            mTvBottomDelete.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -214,6 +220,25 @@ public class AppManagerActivity extends BaseActivity implements AppManagerContra
             default:
                 break;
         }
+    }
+
+    public boolean handleSelectMode() {
+        boolean result = false;
+        List<AppItemInfo> children = mAppInfo.get(0).getChildren();
+        for (AppItemInfo childBean : children) {
+            result = result || childBean.isChecked();
+        }
+        return result;
+    }
+
+    private void unSelectAllItem() {
+        for (AppGroupBean groupBean : mAppInfo) {
+            for (AppItemInfo childBean:groupBean.getChildren()) {
+                childBean.mIsChecked = false;
+            }
+            groupBean.mSelectState = GroupSelectBox.SelectState.NONE_SELECTED;
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     //卸载应用程序

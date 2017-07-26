@@ -82,15 +82,12 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
 
     @Override
     public View onGetChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        boolean isTheLastOne = true;
+        /*boolean isTheLastOne = true;
         for (int i = groupPosition; i < getGroupCount(); i++) {
             isTheLastOne = isTheLastOne && !mGroupExpandState[i];//下面只要有一个展开的  就不是最后一个
-        }
-
-        if (isLastChild && groupPosition == getGroupCount() - 1) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child_with_bottom_space, parent, false);
-        } else if (isLastChild) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child_with_bottom_space, parent, false);
+        }*/
+        if (isLastChild) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child_with_bottom_space_10, parent, false);
         } else {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app_child, parent, false);
         }
