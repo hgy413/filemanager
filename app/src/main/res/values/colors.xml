@@ -48,7 +48,7 @@
     <!-- common -->
     <color name="common_status_bar_bg">#1C72B4</color>
     <color name="common_status_bar_gray">#E1E1E1</color>
-    <color name="common_status_bar_green">#3bbbab</color>
+    <color name="common_status_bar_green">#00BBA0</color>
     <color name="common_status_bar_red">#E06C6C</color>
     <color name="common_action_bar_bg">#4FABFF</color>
     <color name="common_action_bar_search_under_line">#BABABA</color>

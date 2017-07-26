@@ -91,7 +91,7 @@
         <activity
             android:name=".home.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar_Gray_StateBar">
+            android:theme="@style/AppTheme.NoActionBar_Green_StateBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
