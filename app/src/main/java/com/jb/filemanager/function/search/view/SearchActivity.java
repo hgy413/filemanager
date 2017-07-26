@@ -263,7 +263,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     }
 
     @Override
-    public void showSearchResult(ArrayList<FileInfo> fileInfoList) {
+    public void showSearchResult(String keyword, ArrayList<FileInfo> fileInfoList) {
         boolean hasResult = fileInfoList != null && fileInfoList.size() > 0;
 
         if (mRlSearchContainer != null) {
@@ -276,7 +276,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
         if (mTvTitle != null) {
             mTvTitle.setVisibility(View.VISIBLE);
-            mTvTitle.setText(getString(R.string.search_result_title, hasResult ? fileInfoList.size() : 0));
+            mTvTitle.setText(getString(R.string.search_result_title, keyword, hasResult ? fileInfoList.size() : 0));
         }
 
         if (mLlAnimContainer != null) {

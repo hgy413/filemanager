@@ -404,7 +404,7 @@
     <!-- 搜索页 -->
 
     <!-- 搜索结果页 -->
-    <string name="search_result_title">P(%1$d Items)</string>
+    <string name="search_result_title">%1$s(%2$d Items)</string>
     <string name="search_result_empty_tips">No items</string>
 
     <!-- 通用路径文件浏览器 -->

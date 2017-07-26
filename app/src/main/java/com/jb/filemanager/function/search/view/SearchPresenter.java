@@ -48,7 +48,7 @@ public class SearchPresenter implements SearchContract.Presenter {
             if (mView != null) {
                 if (mAnimPlayOnce) {
                     mView.stopSearchAnim();
-                    mView.showSearchResult(event.mFileInfoList);
+                    mView.showSearchResult(mKeyword, event.mFileInfoList);
 
                     statisticsShowSearchResult();
                 } else {
@@ -185,7 +185,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         mAnimPlayOnce = true;
         if (mSearchFinished && mView != null) {
             mView.stopSearchAnim();
-            mView.showSearchResult(mSearchResult);
+            mView.showSearchResult(mKeyword, mSearchResult);
 
             statisticsShowSearchResult();
         }

@@ -20,7 +20,7 @@ public class SearchContract {
         void showInputEmptyTips();
         void showSearchAnim();
         void stopSearchAnim();
-        void showSearchResult(ArrayList<FileInfo> fileInfoList);
+        void showSearchResult(String keyword, ArrayList<FileInfo> fileInfoList);
 
         void showKeyboard();
         void hideKeyboard();
