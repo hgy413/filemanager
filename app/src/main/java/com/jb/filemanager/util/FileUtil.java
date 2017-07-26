@@ -963,7 +963,7 @@ public class FileUtil {
                 String extension = fullPath.substring(lastDot + 1).toLowerCase(Locale.getDefault());
                 String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
                 if (mime == null || mime.equals("")) {
-                    mime = "*/*"; // Unknow type
+                    mime = "text/*"; // Unknow type
                 }
                 Uri uri = Uri.fromFile(file);
                 intent = new Intent(Intent.ACTION_VIEW);

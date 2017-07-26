@@ -111,10 +111,10 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FileOperateEvent fileOperateEvent){
         if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
-            //handleFileCopy(fileOperateEvent);
+            handleFileRename(fileOperateEvent);
             Toast.makeText(mView, "COPY", Toast.LENGTH_LONG);
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
-            //handleFileCut(fileOperateEvent);
+            handleFileRename(fileOperateEvent);
             Toast.makeText(mView, "CUT", Toast.LENGTH_LONG);
         }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
             handleFileRename(fileOperateEvent);
@@ -130,23 +130,6 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         String newFile = fileOperateEvent.mNewFile.getAbsolutePath();
         String s = newFile.toLowerCase();
         mSupport.updateDatabaseRename(oldFile, newFile);
-//        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile}, null,
-//                new MediaScannerConnection.OnScanCompletedListener() {
-//                    @Override
-//                    public void onScanCompleted(String path, Uri uri) {
-//                        reloadData();
-//
-//                        //mListener.afterRename();
-//                       // result[0] = true;
-//                    }
-//                }); // 修改后的文件添加到系统数据库
-//        if (s.endsWith(DOC)||s.endsWith(DOCX)||s.endsWith(PPT)||s.endsWith(PPTX)
-//                ||s.endsWith(XLS)||s.endsWith(XLSX)||s.endsWith(TXT)||s.endsWith(PDF)){
-//            //mSupport.handleFileRename(oldFile, newFile);
-//        }else {
-//            mSupport.handleFileDelete(oldFile);
-//        }
-        //refreshData(false, false);
         reloadData();
         Logger.d(TAG, "rename   " + newFile + "      " + fileOperateEvent.mNewFile.getParent());
     }
