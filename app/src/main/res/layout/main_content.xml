@@ -22,8 +22,9 @@
             android:id="@+id/iv_main_action_bar_menu"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="12.3dp"
             android:layout_marginLeft="17.3dp"
+            android:layout_marginStart="17.3dp"
+            android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:contentDescription="@null"
             android:src="@drawable/ic_home_menu"
@@ -34,7 +35,8 @@
             android:layout_width="110dp"
             android:layout_height="19dp"
             android:layout_marginLeft="12.3dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginStart="12.3dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_home_title"/>
 
         <android.support.v4.widget.Space
