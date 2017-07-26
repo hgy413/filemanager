@@ -30,7 +30,7 @@
     <string name="main_storage_title">Storage</string>
     <string name="main_category_item_number">(%1$d)</string>
     <string name="main_internal_storage">Internal storage</string>
-    <string name="main_double_click_exit_app_tips">Press back again to exit Ace Network.</string>
+    <string name="main_double_click_exit_app_tips">Press back again to exit File Manager.</string>
     <string name="main_dialog_single_detail_contain">%1$d folder(s), %2$d file(s)</string>
     <string name="main_category_item_photo">Image</string>
     <string name="main_category_item_video">Video</string>
@@ -44,7 +44,7 @@
     <string name="main_info_phone_storage">Phone storage:</string>
     <string name="main_info_sdcard_storage">SD card storage:</string>
     <string name="main_info_phone_used">Used %1$s</string>
-    <string name="main_info_phone_unused">Unused %1$s</string>
+    <string name="main_info_phone_unused">Available %1$s</string>
     <string name="main_info_photo">Image</string>
     <string name="main_info_music">Music</string>
     <string name="main_info_video">Video</string>
