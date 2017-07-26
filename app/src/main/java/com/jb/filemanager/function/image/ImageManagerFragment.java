@@ -275,7 +275,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterCopy() {
-        ImageStatistics.upload(ImageStatistics.IMG_COPY_CLI);
         gotoStoragePage();
         mCommonTitleBar.onBackPressed();
         dismissBobar();
@@ -283,7 +282,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterCut() {
-        ImageStatistics.upload(ImageStatistics.IMG_CUT_CLI);
         gotoStoragePage();
         mCommonTitleBar.onBackPressed();
         dismissBobar();
@@ -291,7 +289,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterRename() {
-        ImageStatistics.upload(ImageStatistics.IMG_RENAME_CLI);
         if (mPresenter != null) {
             mPresenter.handleRename();
         }
@@ -301,7 +298,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterDelete() {
-        ImageStatistics.upload(ImageStatistics.IMG_DELETE_CLI);
         if (mPresenter != null) {
             mPresenter.handleDeleted();
         }
@@ -311,31 +307,31 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void statisticsClickCopy() {
-        // TODO 统计
+        ImageStatistics.upload(ImageStatistics.IMG_COPY_CLI);
     }
 
     @Override
     public void statisticsClickCut() {
-        // TODO 统计
+        ImageStatistics.upload(ImageStatistics.IMG_CUT_CLI);
     }
 
     @Override
     public void statisticsClickDelete() {
-        // TODO 统计
+        ImageStatistics.upload(ImageStatistics.IMG_DELETE_CLI);
     }
 
     @Override
     public void statisticsClickMore() {
-        // TODO 统计
+        ImageStatistics.upload(ImageStatistics.IMG_MORE_CLI);
     }
 
     @Override
     public void statisticsClickRename() {
-        // TODO 统计
+        ImageStatistics.upload(ImageStatistics.IMG_RENAME_CLI);
     }
 
     @Override
     public void statisticsClickDetail() {
-        // TODO 统计
+        ImageStatistics.upload(ImageStatistics.IMG_DETAILS_CLI);
     }
 }
