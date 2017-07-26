@@ -44,6 +44,7 @@ import com.jb.filemanager.function.trash.dialog.TrashSubItemDetailDialog;
 import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.statistics.bean.Statistics101Bean;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileTypeUtil;
 import com.jb.filemanager.util.IntentUtil;
@@ -210,6 +211,7 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mProgress.stopSpinning();
             holder.mProgress.setVisibility(View.GONE);
             holder.mSelectBox.setVisibility(View.VISIBLE);
+            holder.mTitle.setTextColor(AppUtils.getColor(R.color.black_40));//加载完成后修改字体颜色  
         }
         holder.mProgress.setCallback(new ProgressWheel.ProgressCallback() {
             @Override
