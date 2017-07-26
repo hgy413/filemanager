@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -111,6 +110,9 @@ public class CommonTitleBar extends LinearLayout {
             @Override
             public void onClick(View v) {
                 SearchActivity.showSearchResult(TheApplication.getAppContext(), mOnActionListener.getCategoryType());
+                if (mOnActionListener != null) {
+                    mOnActionListener.onSearchAction();
+                }
             }
         });
         chgBarState(false);
@@ -215,5 +217,6 @@ public class CommonTitleBar extends LinearLayout {
         void onBackAction();
         void onCancelAction();
         int getCategoryType();
+        void onSearchAction();
     }
 }

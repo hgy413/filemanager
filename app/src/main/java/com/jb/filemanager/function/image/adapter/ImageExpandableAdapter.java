@@ -14,6 +14,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.function.image.ImageDetailFragment;
+import com.jb.filemanager.function.image.ImageStatistics;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
@@ -175,6 +176,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             case R.id.item_sub_image_photo:
                 Binder binder = (Binder) v.getTag();
                 startDetailPager(binder);
+                ImageStatistics.upload(ImageStatistics.IMG_ITEM_CLI);
                 break;
             case R.id.item_sub_image_gsb:
                 ImageModle tagImageModle = (ImageModle) v.getTag();
@@ -183,6 +185,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
                 if (mPresenter != null) {
                     mPresenter.handleSelected(mImageGroupModleList);
                 }
+                ImageStatistics.upload(ImageStatistics.IMG_ITEM_CHECK);
                 break;
             case R.id.group_image_result_gsb:
                 ImageGroupModle imageGroupModle = (ImageGroupModle) v.getTag();
@@ -204,6 +207,7 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
                 if (mPresenter != null) {
                     mPresenter.handleSelected(mImageGroupModleList);
                 }
+                ImageStatistics.upload(ImageStatistics.IMG_GROUP_CHECK);
                 break;
         }
     }

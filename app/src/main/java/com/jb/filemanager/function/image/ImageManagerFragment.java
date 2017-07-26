@@ -1,6 +1,5 @@
 package com.jb.filemanager.function.image;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,16 +21,13 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
-import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.presenter.ImageContract;
 import com.jb.filemanager.function.image.presenter.ImagePresenter;
 import com.jb.filemanager.function.image.presenter.ImageSupport;
-import com.jb.filemanager.home.MainActivity;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.CommonTitleBar;
-import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -119,6 +115,12 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
                 mExpandableListView = (ExpandableListView) mExpandableListStub.inflate();
                 mAdapter = new ImageExpandableAdapter(imageGroupModleList, this, mPresenter);
                 mExpandableListView.setAdapter(mAdapter);
+                mExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+                    @Override
+                    public void onGroupCollapse(int groupPosition) {
+                        ImageStatistics.upload(ImageStatistics.IMG_GROUP_FLOD);
+                    }
+                });
             }
             //默认全部展开
             for (int i = 0; i < imageGroupModleList.size(); i++) {
@@ -162,7 +164,11 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     public boolean onBackPressed() {
         dismissBobar();
         if (mCommonTitleBar != null) {
-            return !mCommonTitleBar.onBackPressed();
+            boolean b = mCommonTitleBar.onBackPressed();
+            if (!b) {
+                ImageStatistics.upload(ImageStatistics.IMG_EXIT, 1);
+            }
+            return !b;
         }
         return super.onBackPressed();
     }
@@ -250,6 +256,11 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         return Const.CategoryType.CATEGORY_TYPE_PHOTO;
     }
 
+    @Override
+    public void onSearchAction() {
+        ImageStatistics.upload(ImageStatistics.IMG_SEARCH_CLI);
+    }
+
     /**
      * 底部栏的功能接口
      */
@@ -264,6 +275,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterCopy() {
+        ImageStatistics.upload(ImageStatistics.IMG_COPY_CLI);
         gotoStoragePage();
         mCommonTitleBar.onBackPressed();
         dismissBobar();
@@ -271,6 +283,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterCut() {
+        ImageStatistics.upload(ImageStatistics.IMG_CUT_CLI);
         gotoStoragePage();
         mCommonTitleBar.onBackPressed();
         dismissBobar();
@@ -278,6 +291,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterRename() {
+        ImageStatistics.upload(ImageStatistics.IMG_RENAME_CLI);
         if (mPresenter != null) {
             mPresenter.handleRename();
         }
@@ -287,6 +301,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void afterDelete() {
+        ImageStatistics.upload(ImageStatistics.IMG_DELETE_CLI);
         if (mPresenter != null) {
             mPresenter.handleDeleted();
         }

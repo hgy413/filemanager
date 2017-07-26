@@ -18,7 +18,6 @@ import com.jb.filemanager.BaseFragment;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.image.adapter.ImageDetailsPagerAdapter;
-import com.jb.filemanager.function.image.app.BaseFragmentWithImmersiveStatusBar;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsContract;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsPresenter;
@@ -84,6 +83,7 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
                 if (mPresenter != null) {
                     mPresenter.handleSetWallPaper();
                 }
+                ImageStatistics.upload(ImageStatistics.IMG_SET_WALLPAPER);
             }
         });
 
@@ -93,6 +93,7 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
                 if (mPresenter != null) {
                     mPresenter.handleDelete();
                 }
+                ImageStatistics.upload(ImageStatistics.IMG_DETAIL_DELETE);
             }
         });
     }
@@ -136,6 +137,7 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
                     if (mPresenter != null) {
                         mPresenter.handlePagerChange(position);
                     }
+                    ImageStatistics.upload(ImageStatistics.IMG_DETAIL_SWTICH);
                 }
 
                 @Override

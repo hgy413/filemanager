@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.function.image.ImageStatistics;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.util.TimeUtil;
@@ -13,14 +14,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by bill wang on 2017/6/27.
@@ -44,6 +41,7 @@ public class ImagePresenter implements ImageContract.Presenter {
     public void handleBackClick() {
         if (mView != null) {
             mView.finish();
+            ImageStatistics.upload(ImageStatistics.IMG_EXIT, 2);
         }
     }
 

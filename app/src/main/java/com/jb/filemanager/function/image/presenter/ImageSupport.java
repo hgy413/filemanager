@@ -1,10 +1,8 @@
 package com.jb.filemanager.function.image.presenter;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.widget.Toast;
 
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.image.modle.ImageModle;
@@ -32,11 +30,10 @@ public class ImageSupport implements ImageContract.Support {
         TheApplication.postRunOnShortTaskThread(new Runnable() {
             @Override
             public void run() {
-//                int count = deleteImageInDb(imageModle);
-//                if (count > 0) {
-                // TODO: 17-7-21 由于是本人手机 就不真删除图片了 以后改回来
-//                    FileUtil.deleteFile(imageModle.mImagePath);
-//                }
+                int count = deleteImageInDb(imageModle);
+                if (count > 0) {
+                    FileUtil.deleteFile(imageModle.mImagePath);
+                }
             }
         });
     }
