@@ -91,11 +91,11 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         if (child.mFileType == DocChildBean.TYPE_DOC || child.mFileType == DocChildBean.TYPE_XLS || child.mFileType == DocChildBean.TYPE_PPT) {
             viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_doc);
         }else if (child.mFileType == DocChildBean.TYPE_PDF){
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_pdf);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.pdf_icon);
         }else if (child.mFileType == DocChildBean.TYPE_TXT){
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_txt);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.txt_icon);
         }else {
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_default);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.unknow_icon);
         }
 
         viewHolder.mTvAppName.setText(child.mDocName);

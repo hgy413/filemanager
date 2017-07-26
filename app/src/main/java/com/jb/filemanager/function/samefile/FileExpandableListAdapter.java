@@ -136,10 +136,10 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 holder.mIvIcon.setImageResource(R.drawable.doc_icon);
                 break;
             case FileManager.PDF:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_pdf);
+                holder.mIvIcon.setImageResource(R.drawable.pdf_icon);
                 break;
             case FileManager.TXT:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_txt);
+                holder.mIvIcon.setImageResource(R.drawable.txt_icon);
                 break;
             case FileManager.AUDIO:
                 holder.mIvIcon.setImageResource(R.drawable.music_icon);
@@ -157,7 +157,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 break;
             case FileManager.OTHERS:
             default:
-                holder.mIvIcon.setImageResource(R.drawable.file_type_default);
+                holder.mIvIcon.setImageResource(R.drawable.unknow_icon);
         }
         if (fileInfo.isSelected) {
             holder.mIvSelect.setImageResource(R.drawable.choose_all);
@@ -208,7 +208,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 break;
 
             case R.id.iv_music_child_item_select:
-
+                mContext.statisticsSelectItem();
                 Binder binder = (Binder) v.getTag();
                 if (binder.mFileInfo.isSelected) {
                     binder.mFileInfo.isSelected = false;

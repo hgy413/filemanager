@@ -555,10 +555,10 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     ivThumb.setImageResource(R.drawable.file_type_default);
                     break;
                 case FileManager.TXT:
-                    ivThumb.setImageResource(R.drawable.file_type_txt);
+                    ivThumb.setImageResource(R.drawable.txt_icon);
                     break;
                 case FileManager.PDF:
-                    ivThumb.setImageResource(R.drawable.file_type_pdf);
+                    ivThumb.setImageResource(R.drawable.pdf_icon);
                     break;
                 case FileManager.DOC:
                     ivThumb.setImageResource(R.drawable.file_type_doc);

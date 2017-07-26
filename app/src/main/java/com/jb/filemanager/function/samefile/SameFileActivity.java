@@ -40,8 +40,8 @@ import static com.jb.filemanager.R.id.search_title;
 public class SameFileActivity extends BaseActivity implements SameFileContract.View {
 
     public static final String PARAM_CATEGORY_TYPE = "param_category_type";
-    private int mCategoryType = -1;
-    private String mTitleShow = "";
+    private static int sCategoryType = -1;
+    private static String sTitleShow = "";
     private SameFileContract.Presenter mPresenter;
     private ImageFetcher mImageFetcher;
     private FloatingGroupExpandableListView mElvFilelist;
@@ -65,22 +65,22 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void initView(final int fileType) {
-        mCategoryType = fileType;
+        sCategoryType = fileType;
         mSearchTitle = (SearchTitleView) findViewById(search_title);
         switch (fileType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
-                mTitleShow = "Music";
+                sTitleShow = "Music";
                 break;
             case Const.CategoryType.CATEGORY_TYPE_VIDEO:
-                mTitleShow = "Video";
+                sTitleShow = "Video";
                 break;
             case Const.CategoryType.CATEGORY_TYPE_DOWNLOAD:
-                mTitleShow = "Download";
+                sTitleShow = "Download";
                 break;
             default:
-                mTitleShow = "Unknow";
+                sTitleShow = "Unknow";
         }
-        mSearchTitle.setTitleName(mTitleShow);
+        mSearchTitle.setTitleName(sTitleShow);
 
         mElvFilelist = (FloatingGroupExpandableListView) findViewById(R.id.elv_same_file_list);
         mFileExpandableListAdapter = new FileExpandableListAdapter(SameFileActivity.this,
@@ -111,6 +111,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void onIvBackClick() {
+                statisticsClickExit("2:左上角返回键");
                 finish();
             }
 
@@ -179,26 +180,22 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void afterCopy() {
-                statisticsClickCopy();
                 mPresenter.jumpToFileBrowserPage();
             }
 
             @Override
             public void afterCut() {
                 mPresenter.jumpToFileBrowserPage();
-                statisticsClickCut();
             }
 
             @Override
             public void afterRename() {
-                statisticsClickRename();
                 fileSelectShow(0);
                 mBottomOperateContainer.setVisibility(View.GONE);
             }
 
             @Override
             public void afterDelete() {
-                statisticsClickDelete();
                 mPresenter.onCreate(getIntent());
                 fileSelectShow(0);
                 mBottomOperateContainer.setVisibility(View.GONE);
@@ -206,32 +203,32 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void statisticsClickCopy() {
-                // TODO 统计
+                SameFileActivity.statisticsClickCopy();
             }
 
             @Override
             public void statisticsClickCut() {
-                // TODO 统计
+                SameFileActivity.statisticsClickCut();
             }
 
             @Override
             public void statisticsClickDelete() {
-                // TODO 统计
+                SameFileActivity.statisticsClickDelete();
             }
 
             @Override
             public void statisticsClickMore() {
-                // TODO 统计
+                SameFileActivity.statisticsClickMore();
             }
 
             @Override
             public void statisticsClickRename() {
-                // TODO 统计
+                SameFileActivity.statisticsClickRename();
             }
 
             @Override
             public void statisticsClickDetail() {
-                // TODO 统计
+                SameFileActivity.statisticsClickDetail();
             }
         });
     }
@@ -256,7 +253,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         if (mFileExpandableListAdapter.getSelectCount() > 0) {
             mPresenter.cleanSelect();
         } else if (mPresenter != null) {
-            statisticsClickExit();
+            statisticsClickExit("1:系统返回按键");
             mPresenter.onClickBackButton(true);
         }
     }
@@ -334,7 +331,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     //====================统计代码  Start =====================
     protected void statisticsClickGroup() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_GROUP_TITLE;
                 break;
@@ -348,11 +345,11 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击折叠分类---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击折叠分类---" + bean.mOperateId);
     }
     protected void statisticsSelectGroup() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_SELECT_GROUP;
                 break;
@@ -366,11 +363,29 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击分组复选框---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击分组复选框---" + bean.mOperateId);
     }
-    private void statisticsClickCopy() {
+    protected void statisticsSelectItem() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
+            case Const.CategoryType.CATEGORY_TYPE_MUSIC:
+                bean.mOperateId = StatisticsConstants.MUSIC_CLICK_SELECT_ITEN;
+                break;
+            case Const.CategoryType.CATEGORY_TYPE_VIDEO:
+                bean.mOperateId = StatisticsConstants.VIDEO_CLICK_SELECT_ITEN;
+                break;
+            case Const.CategoryType.CATEGORY_TYPE_DOWNLOAD:
+                bean.mOperateId = StatisticsConstants.DOWNLOAD_CLICK_SELECT_ITEN;
+                break;
+            default:
+
+        }
+        StatisticsTools.upload101InfoNew(bean);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击单项选择框---" + bean.mOperateId);
+    }
+    static private void statisticsClickCopy() {
+        Statistics101Bean bean = Statistics101Bean.builder();
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_COPY;
                 break;
@@ -384,12 +399,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mCategoryType + " 点击复制---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sCategoryType + " 点击复制---" + bean.mOperateId);
     }
 
-    private void statisticsClickCut() {
+    static private void statisticsClickCut() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_CUT;
                 break;
@@ -403,12 +418,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mCategoryType + " 点击剪切---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sCategoryType + " 点击剪切---" + bean.mOperateId);
     }
 
-    private void statisticsClickPast() {
+    static private void statisticsClickPast() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_PAST;
                 break;
@@ -422,12 +437,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击粘贴---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击粘贴---" + bean.mOperateId);
     }
 
-    private void statisticsClickDelete() {
+    static private void statisticsClickDelete() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_DELETE;
                 break;
@@ -441,12 +456,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击删除---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击删除---" + bean.mOperateId);
     }
 
-    private void statisticsClickRename() {
+    static private void statisticsClickRename() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_RENAME;
                 break;
@@ -460,31 +475,31 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击重命名---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击重命名---" + bean.mOperateId);
     }
 
-    private void statisticsClickDetail() {
+    static private void statisticsClickDetail() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
-                bean.mOperateId = StatisticsConstants.MUSIC_CLICK_DELETE;
+                bean.mOperateId = StatisticsConstants.MUSIC_CLICK_DETAIL;
                 break;
             case Const.CategoryType.CATEGORY_TYPE_VIDEO:
-                bean.mOperateId = StatisticsConstants.VIDEO_CLICK_DELETE;
+                bean.mOperateId = StatisticsConstants.VIDEO_CLICK_DETAIL;
                 break;
             case Const.CategoryType.CATEGORY_TYPE_DOWNLOAD:
-                bean.mOperateId = StatisticsConstants.DOWNLOAD_CLICK_DELETE;
+                bean.mOperateId = StatisticsConstants.DOWNLOAD_CLICK_DETAIL;
                 break;
             default:
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击详情---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击详情---" + bean.mOperateId);
     }
 
-    private void statisticsClickMore() {
+    static private void statisticsClickMore() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_MORE;
                 break;
@@ -498,12 +513,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击more---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击more---" + bean.mOperateId);
     }
 
     private void statisticsClickItem() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_PLAY;
                 break;
@@ -517,12 +532,12 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mCategoryType + " 点击单个条目---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sCategoryType + " 点击单个条目---" + bean.mOperateId);
     }
 
     private void statisticsClickSearch() {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_SEARCH;
                 break;
@@ -536,22 +551,22 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
         }
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 点击搜索---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 点击搜索---" + bean.mOperateId);
     }
 
     private void statisticsCalledSystemPaly() {
-        if (mCategoryType == Const.CategoryType.CATEGORY_TYPE_MUSIC) {
+        if (sCategoryType == Const.CategoryType.CATEGORY_TYPE_MUSIC) {
             Statistics101Bean bean = Statistics101Bean.builder();
             bean.mOperateId = StatisticsConstants.MUSIC_CALLED_SYSTEM_PLAY;
 
             StatisticsTools.upload101InfoNew(bean);
-            Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 音乐播放调用成功---" + bean.mOperateId);
+            Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 音乐播放调用成功---" + bean.mOperateId);
         }
     }
 
-    private void statisticsClickExit() {
+    private void statisticsClickExit(String entrance) {
         Statistics101Bean bean = Statistics101Bean.builder();
-        switch (mCategoryType) {
+        switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
                 bean.mOperateId = StatisticsConstants.MUSIC_CLICK_EXIT;
                 break;
@@ -564,8 +579,9 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             default:
 
         }
+        bean.mEntrance = entrance;
         StatisticsTools.upload101InfoNew(bean);
-        Logger.d(StatisticsConstants.LOGGER_SHOW, mTitleShow + " 退出---" + bean.mOperateId);
+        Logger.d(StatisticsConstants.LOGGER_SHOW, sTitleShow + " 退出---" + bean.mOperateId);
     }
 
     //====================统计代码  end =====================
