@@ -30,7 +30,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_action_bar_search"
+        android:src="@drawable/black_search_icon_selector"
         android:visibility="gone"/>
 
     <View
