@@ -501,17 +501,23 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                         mImageFetcher.loadImage(path, ivThumb);
                     }
                     break;
+                case FileManager.APP:
+                    ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
+                    break;
                 case FileManager.AUDIO:
                     ivThumb.setImageResource(R.drawable.music_icon);
                     break;
                 case FileManager.OTHERS:
                     ivThumb.setImageResource(R.drawable.img_file);
                     break;
-                case FileManager.APP:
-                    ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
+                case FileManager.TXT:
+                    ivThumb.setImageResource(R.drawable.file_type_txt);
+                    break;
+                case FileManager.PDF:
+                    ivThumb.setImageResource(R.drawable.file_type_pdf);
                     break;
                 case FileManager.DOC:
-                    ivThumb.setImageResource(R.drawable.img_txt);
+                    ivThumb.setImageResource(R.drawable.file_type_doc);
                     break;
                 case FileManager.ZIP:
                     ivThumb.setImageResource(R.drawable.zip_icon);

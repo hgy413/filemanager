@@ -130,10 +130,10 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 holder.mIvIcon.setImageResource(R.drawable.doc_icon);
                 break;
             case PDF:
-                holder.mIvIcon.setImageResource(R.drawable.img_pdf);
+                holder.mIvIcon.setImageResource(R.drawable.file_type_pdf);
                 break;
             case TXT:
-                holder.mIvIcon.setImageResource(R.drawable.img_txt);
+                holder.mIvIcon.setImageResource(R.drawable.file_type_txt);
                 break;
             case MUSIC:
                 holder.mIvIcon.setImageResource(R.drawable.music_icon);

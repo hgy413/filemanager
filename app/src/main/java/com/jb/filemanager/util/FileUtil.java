@@ -338,10 +338,13 @@ public class FileUtil {
                     type = FileManager.VIDEO;
                 } else if (mimeType.equals("application/vnd.android.package-archive")) {
                     type = FileManager.APP;
+                } else if (mimeType.equals("text/plain")) {
+                    type = FileManager.TXT;
+                } else if (mimeType.equals("application/pdf")) {
+                    type = FileManager.PDF;
                 } else {
                     // 剩下的mime type 格式不统一，简单使用后缀名判断
                     switch (extension) {
-                        case "txt":
                         case "doc":
                         case "docx":
                             type = FileManager.DOC;

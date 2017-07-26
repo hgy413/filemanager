@@ -37,11 +37,17 @@ public class FileManager {
     // 应用
     public static final int APP = 4;
 
-    // 文档
-    public static final int DOC = 5;
+    // 文档 txt
+    public static final int TXT = 5;
+
+    // 文档 doc, docx
+    public static final int DOC = 6;
+
+    // 文档 pdf
+    public static final int PDF = 7;
 
     // 压缩包
-    public static final int ZIP = 6;
+    public static final int ZIP = 8;
 
 
 
