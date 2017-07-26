@@ -1,13 +1,17 @@
 package com.jb.filemanager.function.zipfile;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.ProgressWheel;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.zipfile.adapter.ZipListAdapter;
@@ -20,6 +24,8 @@ import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,11 +45,17 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     private SearchTitleView mSearchTitle;
     private BottomOperateBar mOperateBar;
 
+    @Subscribe
+    public void onEventMainThread(FileOperateEvent event) {
+        mPresenter.onCreate();
+    }
+
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zip_file);
 
+        TheApplication.getGlobalEventBus().register(this);
         mProgress = (ProgressWheel) findViewById(R.id.zip_progress);
         mListView = (ExpandableListView) findViewById(R.id.zip_expand_lv);
         mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -58,7 +70,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         });
 
         mSearchTitle = (SearchTitleView) findViewById(R.id.search_title);
-        mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
+        mSearchTitle.setClickCallBack(new SearchTitleViewCallback() {
             @Override
             public void onSearchClick() {
                 SearchActivity.showSearchResult(getApplicationContext(), Const.CategoryType.CATEGORY_TYPE_ZIP);
@@ -113,13 +125,24 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
                 mPresenter.afterDelete();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.e("zip", "onResume");
         mPresenter.onCreate();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        try {
+            TheApplication.getGlobalEventBus().unregister(this);
+        } catch (Exception e) {
+        }
         mPresenter.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -168,7 +191,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     public void onBackPressed() {
         if (ExtractManager.getInstance().isProgressDialogAttached()) {
             ExtractManager.getInstance().hideProgressDialogFromWindow();
-        } else if (mSearchTitle.isSelectMode()){
+        } else if (mSearchTitle.isSelectMode()) {
             mPresenter.onTitleCancelBtnClick();
         } else {
             super.onBackPressed();

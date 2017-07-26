@@ -32,6 +32,7 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
 
     @Override
     public void onCreate() {
+        onTitleCancelBtnClick();
         mView.setWidgetsState(true);
         ScanZipFileTask task = new ScanZipFileTask();
         task.execute();
@@ -120,23 +121,16 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
     @Override
     public void afterCut() {
         onTitleCancelBtnClick();
-        onCreate();
     }
 
     @Override
     public void afterRename() {
-        mView.setSearchTitleSelectBtnState(0);
-        mView.setSearchTitleSelectCount(0);
-        mView.switchSelectMode(false);
-        onCreate();
+        onTitleCancelBtnClick();
     }
 
     @Override
     public void afterDelete() {
-        mView.setSearchTitleSelectBtnState(0);
-        mView.setSearchTitleSelectCount(0);
-        mView.switchSelectMode(false);
-        onCreate();
+        onTitleCancelBtnClick();
     }
 
     private void changeAllItemState(boolean isSelect) {

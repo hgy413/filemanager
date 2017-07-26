@@ -68,10 +68,11 @@ public final class RecentFileManager implements RecentFileScanTaskListener {
             mRecentFileScanTask.cancel(true);
         }
     }
+    //////////////////////////////////////////////////////////////////////
     // ---------------扫描全盘任务回调接口--------开始---------------------
+    ////////////////////////////////////////////////////////////////////
     @Override
     public void onPreScan() {
-//        Log.e("recent", "开始扫描");
         mIsScanning = true;
     }
 
@@ -104,6 +105,8 @@ public final class RecentFileManager implements RecentFileScanTaskListener {
         mIsScanning = false;
 
     }
+    //////////////////////////////////////////////////////////////////////
     // ---------------扫描全盘任务回调接口--------结束---------------------
+    ////////////////////////////////////////////////////////////////////
 
 }

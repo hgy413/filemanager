@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#f5f6ff"
@@ -17,6 +18,17 @@
         android:layout_below="@id/search_title"
         android:background="@drawable/main_shadow"/>
 
+    <com.jb.filemanager.commomview.ProgressWheel
+        android:id="@+id/recent_progress"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/shadow"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        app:matProg_barColor="#0084ff"
+        app:matProg_barWidth="5dp"
+        app:matProg_progressIndeterminate="true"/>
+
     <ListView
         android:id="@+id/recent_expand_lv"
         android:layout_width="match_parent"
@@ -24,12 +36,13 @@
         android:layout_below="@id/shadow"
         android:divider="@android:color/transparent"
         android:groupIndicator="@null"
+        android:visibility="gone"
         android:overScrollMode="never"
         android:scrollbars="none"/>
 
     <com.jb.filemanager.ui.widget.BottomOperateBar
         android:id="@+id/bob_bottom_operator"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="60dp"/>
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

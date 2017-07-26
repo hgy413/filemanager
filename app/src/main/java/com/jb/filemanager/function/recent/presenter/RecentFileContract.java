@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface RecentFileContract {
     interface View {
+        void switchWidgetsState(boolean isLoadingData);
         void setListViewData(List<BlockBean> data);
         void notifyListDataChanged();
         void switchSelectMode(boolean isToSelectMode);
@@ -29,5 +30,6 @@ public interface RecentFileContract {
         void afterCut();
         void afterRename();
         void afterDelete();
+        void reloadData();
     }
 }

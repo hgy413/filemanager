@@ -8,6 +8,9 @@ import android.widget.ListView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.commomview.ProgressWheel;
+import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.recent.adapter.RecentFileAdapter;
 import com.jb.filemanager.function.recent.bean.BlockBean;
@@ -18,6 +21,8 @@ import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,11 +39,18 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     private RecentFileAdapter mAdapter;
     private SearchTitleView mSearchTitle;
     private BottomOperateBar mOperateBar;
+    private ProgressWheel mProgress;
+
+    @Subscribe
+    public void onEventMainThread(FileOperateEvent event) {
+        mPresenter.reloadData();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recent_file);
+        TheApplication.getGlobalEventBus().register(this);
 
         initViews();
         mPresenter.onCreate();
@@ -69,6 +81,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
                 SearchActivity.showSearchResult(getApplicationContext(), Const.CategoryType.CATEGORY_TYPE_RECENT);
             }
         });
+        mProgress = (ProgressWheel) findViewById(R.id.recent_progress);
         mListView = (ListView) findViewById(R.id.recent_expand_lv);
         mOperateBar = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
         mOperateBar.setListener(new BottomOperateBar.Listener() {
@@ -104,6 +117,17 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
                 mPresenter.afterDelete();
             }
         });
+    }
+
+    @Override
+    public void switchWidgetsState(boolean isLoadingData) {
+        if (isLoadingData) {
+            mProgress.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+        } else {
+            mProgress.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -145,6 +169,10 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
     @Override
     protected void onDestroy() {
+        try {
+            TheApplication.getGlobalEventBus().unregister(this);
+        } catch (Exception e) {
+        }
         mPresenter.onDestroy();
         super.onDestroy();
     }

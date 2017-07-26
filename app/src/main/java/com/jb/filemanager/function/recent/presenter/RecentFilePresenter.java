@@ -1,5 +1,7 @@
 package com.jb.filemanager.function.recent.presenter;
 
+import android.util.Log;
+
 import com.jb.filemanager.function.recent.RecentFileManager;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
@@ -106,16 +108,23 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
     @Override
     public void afterCut() {
         onTitleCancelBtnClick();
-        RecentFileManager.getInstance().scanAllFile();
     }
 
     @Override
     public void afterRename() {
-        RecentFileManager.getInstance().scanAllFile();
+        onTitleCancelBtnClick();
     }
 
     @Override
     public void afterDelete() {
+        onTitleCancelBtnClick();
+        mView.switchWidgetsState(true);
+        RecentFileManager.getInstance().scanAllFile();
+    }
+
+    @Override
+    public void reloadData() {
+        mView.switchWidgetsState(true);
         RecentFileManager.getInstance().scanAllFile();
     }
 
@@ -134,6 +143,7 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
 
     @Override
     public void onDataFlushComplete(List<BlockBean> data) {
+        mView.switchWidgetsState(false);
         mView.setSearchTitleSelectBtnState(0);
         mView.setSearchTitleSelectCount(0);
         mView.switchSelectMode(false);
