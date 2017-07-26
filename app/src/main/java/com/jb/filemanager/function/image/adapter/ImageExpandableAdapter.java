@@ -133,6 +133,11 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         viewGroupHolder.mGroupSelectBox.setTag(imageGroupModle);
         viewGroupHolder.mGroupSelectBox.setOnClickListener(this);
 
+        if (groupPosition == getGroupCount() - 1 && !isExpanded) {
+            viewGroupHolder.mFooter.setVisibility(View.VISIBLE);
+        } else {
+            viewGroupHolder.mFooter.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -159,6 +164,11 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
             end++;
         }
 
+        if (groupPosition == getGroupCount() - 1 && childPosition == getChildrenCount(groupPosition) - 1) {
+            viewItemHolder.mFooter.setVisibility(View.VISIBLE);
+        } else {
+            viewItemHolder.mFooter.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -255,10 +265,12 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
         private TextView mDate;
         //check按钮
         private ImageView mGroupSelectBox;
+        View mFooter;
 
         public ViewGroupHolder(View itemView) {
             mDate = (TextView) itemView.findViewById(R.id.group_image_result_date);
             mGroupSelectBox = (ImageView) itemView.findViewById(R.id.group_image_result_gsb);
+            mFooter = itemView.findViewById(R.id.image_group_footer);
         }
     }
 
@@ -269,12 +281,14 @@ public class ImageExpandableAdapter extends BaseExpandableListAdapter implements
 
         SubViewItemHolder[] mSubViewItem = new SubViewItemHolder[3];
         Space mSpace;
+        View mFooter;
 
         public ViewItemHolder(View itemView) {
             mSubViewItem[0] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_1));
             mSubViewItem[1] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_2));
             mSubViewItem[2] = new SubViewItemHolder(itemView.findViewById(R.id.item_image_result_3));
             mSpace = (Space) itemView.findViewById(R.id.item_image_result_bottom_space);
+            mFooter = itemView.findViewById(R.id.image_child_footer);
         }
 
         void showVisiable(int pos, int group, int child, ImageModle imageModle) {
