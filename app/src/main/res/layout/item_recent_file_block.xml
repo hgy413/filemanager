@@ -35,7 +35,8 @@
                 android:ellipsize="marquee"
                 android:singleLine="true"
                 android:text="DirName"
-                android:textColor="@color/black_70"
+                android:textColor="@color/black_40"
+                android:textStyle="bold"
                 android:textSize="12dp"/>
 
             <TextView
