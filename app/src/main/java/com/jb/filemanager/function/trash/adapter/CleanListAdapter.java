@@ -181,9 +181,9 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_group_size);
             holder.mSelectBox
-                    .setImageSource(R.drawable.select_none,
-                            R.drawable.select_multi,
-                            R.drawable.select_all);
+                    .setImageSource(R.drawable.choose_none,
+                            R.drawable.choose_part,
+                            R.drawable.choose_all);
             holder.mTopShader = convertView.findViewById(R.id.v_group_divider_line);
             convertView.setTag(R.layout.item_clean_trash_group, holder);
         }
@@ -415,9 +415,9 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
             holder.mSelectBox = (GroupSelectBox) convertView
                     .findViewById(R.id.item_child_select_button);
             holder.mSelectBox
-                    .setImageSource(R.drawable.select_none,
-                            R.drawable.select_multi,
-                            R.drawable.select_all);
+                    .setImageSource(R.drawable.choose_none,
+                            R.drawable.choose_part,
+                            R.drawable.choose_all);
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_child_size);
             //holder.mAppItemForeground = convertView.findViewById(R.id.clean_main_list_item_foreground);
@@ -708,8 +708,8 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
                     .findViewById(R.id.item_child_child_name);
             holder.mCheckBox = (ItemCheckBox) convertView
                     .findViewById(R.id.item_child_child_select_button);
-            holder.mCheckBox.setImageRes(R.drawable.select_none,
-                    R.drawable.select_all);
+            holder.mCheckBox.setImageRes(R.drawable.choose_none,
+                    R.drawable.choose_all);
             holder.mSize = (TextView) convertView
                     .findViewById(R.id.item_child_child_size);
 
@@ -719,8 +719,8 @@ public class CleanListAdapter extends AbsAdapter<CleanGroupsBean> {
         // 2. 初始化View
         final List children = group.getChildren();
 //        holder.mRoot.setBackgroundResource(R.drawable.common_list_item_gray_white_selector);
-        holder.mCheckBox.setImageRes(R.drawable.select_none,
-                R.drawable.select_all);
+        holder.mCheckBox.setImageRes(R.drawable.choose_none,
+                R.drawable.choose_all);
         holder.mCheckBox.setChecked(subItem.isChecked());
         holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override

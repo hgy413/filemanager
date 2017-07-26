@@ -63,7 +63,7 @@
             android:layout_marginStart="5dp"
             android:contentDescription="@null"
             android:padding="12dp"
-            android:src="@drawable/select_all"
+            android:src="@drawable/choose_all"
             android:visibility="gone"/>
     </LinearLayout>
 

@@ -153,7 +153,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
             totalCount += groupBean.getchildrenSize();
         }
         if (chosenCount == totalCount) {
-            mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.select_all);
+            mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.choose_all);
         } else {
             mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.title_select_all);
         }

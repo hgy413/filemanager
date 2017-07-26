@@ -49,5 +49,5 @@
         android:contentDescription="@null"
         android:paddingRight="12dp"
         android:paddingLeft="22dp"
-        android:src="@drawable/select_multi"/>
+        android:src="@drawable/choose_part"/>
 </LinearLayout>

@@ -77,10 +77,10 @@ public class PasswordInputDialog extends BaseDialog implements View.OnClickListe
                 isShowPass = !isShowPass;
                 if (isShowPass) {
                     mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_DATETIME_VARIATION_NORMAL);
-                    mTvShowPass.setImageResource(R.drawable.select_all);
+                    mTvShowPass.setImageResource(R.drawable.choose_all);
                 } else {
                     mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    mTvShowPass.setImageResource(R.drawable.select_none);
+                    mTvShowPass.setImageResource(R.drawable.choose_none);
                 }
                 break;
         }
