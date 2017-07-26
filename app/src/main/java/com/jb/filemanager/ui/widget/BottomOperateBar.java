@@ -3,6 +3,7 @@ package com.jb.filemanager.ui.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaScannerConnection;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -39,6 +40,8 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
 
     private Context mContext;
     private LinearLayout mLlCut, mLlCopy, mLlDelete, mLlMore; // 四个按钮
+    private PopupWindow mPopupWindow;
+
     public BottomOperateBar(Context context) {
         this(context, null, 0);
     }
@@ -74,6 +77,26 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
         mLlCopy.setOnClickListener(this);
         mLlDelete.setOnClickListener(this);
         mLlMore.setOnClickListener(this);
+    }
+
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        if (visibility != View.VISIBLE) {
+            if (mPopupWindow != null) {
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (mPopupWindow != null) {
+            mPopupWindow.dismiss();
+            mPopupWindow = null;
+        }
+        super.finalize();
     }
 
     public void setListener(Listener listener) {
@@ -156,11 +179,14 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                 TextView rename = (TextView) contentView.findViewById(R.id.tv_main_operate_more_rename);
 
                 int width = (int)getResources().getDimension(R.dimen.popup_window_width);
-                final PopupWindow popupWindow = new PopupWindow(contentView,
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+                mPopupWindow = new PopupWindow(contentView,
                         width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-                popupWindow.setTouchable(true);
-                popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+                mPopupWindow.setTouchable(true);
+                mPopupWindow.setTouchInterceptor(new View.OnTouchListener() {
 
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -172,12 +198,12 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
 
                 // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
                 // 我觉得这里是API的一个bug
-                popupWindow.setBackgroundDrawable(APIUtil.getDrawable(mListener.getActivity(), R.color.transparent));
+                mPopupWindow.setBackgroundDrawable(APIUtil.getDrawable(mListener.getActivity(), R.color.transparent));
 
                 int marginRight = (int)getResources().getDimension(R.dimen.popup_window_margin_right);
                 int marginTarget = (int)getResources().getDimension(R.dimen.popup_window_margin_target);
                 // 设置好参数之后再show
-                popupWindow.showAsDropDown(this,
+                mPopupWindow.showAsDropDown(this,
                         this.getWidth() - width - marginRight,
                         marginTarget);
 
@@ -187,7 +213,10 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         @Override
                         public void onClick(View v) {
                             showDetailDialog();
-                            popupWindow.dismiss();
+                            if (mPopupWindow != null) {
+                                mPopupWindow.dismiss();
+                                mPopupWindow = null;
+                            }
 
                             statisticsClickDetail();
                         }
@@ -200,7 +229,10 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
                         @Override
                         public void onClick(View v) {
                             showRenameDialog();
-                            popupWindow.dismiss();
+                            if (mPopupWindow != null) {
+                                mPopupWindow.dismiss();
+                                mPopupWindow = null;
+                            }
 
                             statisticsClickRename();
                         }
