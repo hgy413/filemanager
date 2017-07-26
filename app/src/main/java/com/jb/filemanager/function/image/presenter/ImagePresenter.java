@@ -140,7 +140,7 @@ public class ImagePresenter implements ImageContract.Presenter {
                     //此处返回数据为秒钟 所以乘以1000
                     long modifiedTime = cursor.getLong(cursor
                             .getColumnIndex(MediaStore.Images.Media.DATE_ADDED)) * 1000;
-                    int id = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                    int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
                     now = Calendar.getInstance();
                     now.setTimeInMillis(modifiedTime);
                     String timeDateStr = TimeUtil.getTime(modifiedTime, simpleDateFormat);
