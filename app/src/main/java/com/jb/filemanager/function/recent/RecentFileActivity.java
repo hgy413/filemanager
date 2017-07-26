@@ -98,58 +98,54 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
             @Override
             public void afterCopy() {
-                RecentStatistics.upload(RecentStatistics.RECENT_COPY);
                 FileBrowserActivity.startBrowser(RecentFileActivity.this, "");
                 mPresenter.afterCopy();
             }
 
             @Override
             public void afterCut() {
-                RecentStatistics.upload(RecentStatistics.RECENT_CUT);
                 FileBrowserActivity.startBrowser(RecentFileActivity.this, "");
                 mPresenter.afterCut();
             }
 
             @Override
             public void afterRename() {
-                RecentStatistics.upload(RecentStatistics.RECENT_RENAME);
                 mPresenter.afterRename();
             }
 
             @Override
             public void afterDelete() {
-                RecentStatistics.upload(RecentStatistics.RECENT_DELETE);
                 mPresenter.afterDelete();
             }
 
             @Override
             public void statisticsClickCopy() {
-                // TODO 统计
+                RecentStatistics.upload(RecentStatistics.RECENT_COPY);
             }
 
             @Override
             public void statisticsClickCut() {
-                // TODO 统计
+                RecentStatistics.upload(RecentStatistics.RECENT_CUT);
             }
 
             @Override
             public void statisticsClickDelete() {
-                // TODO 统计
+                RecentStatistics.upload(RecentStatistics.RECENT_DELETE);
             }
 
             @Override
             public void statisticsClickMore() {
-                // TODO 统计
+                RecentStatistics.upload(RecentStatistics.RECENT_MORE);
             }
 
             @Override
             public void statisticsClickRename() {
-                // TODO 统计
+                RecentStatistics.upload(RecentStatistics.RECENT_RENAME);
             }
 
             @Override
             public void statisticsClickDetail() {
-                // TODO 统计
+                RecentStatistics.upload(RecentStatistics.RECENT_DETAIL);
             }
         });
     }
