@@ -62,9 +62,9 @@ public class ImageSupport implements ImageContract.Support {
             @Override
             public void run() {
                 //合成uri
-                Uri uri = Uri.withAppendedPath(isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageModle.mImageId);
-                //删除指定文件
-                TheApplication.getAppContext().getContentResolver().delete(uri, null, null);
+//                Uri uri = Uri.withAppendedPath(isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageModle.mImageId);
+//                //删除指定文件
+//                TheApplication.getAppContext().getContentResolver().delete(uri, null, null);
                 //先删除这个数据库数据 然后指定文件扫描插入
                 Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 scanIntent.setData(Uri.fromFile(new File(imageModle.mImagePath)));
