@@ -232,7 +232,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         @Override
         protected Boolean doInBackground(Boolean... params) {
             long lastTime = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(IPreferencesIds.KEY_SCAN_DOC_TIME, 0);
-            boolean shouldScan = System.currentTimeMillis() - lastTime > 5 * 60 * 1000;
+            boolean shouldScan = System.currentTimeMillis() - lastTime > 3 * 60 * 1000;
             if (params[1] && shouldScan) {//重头开始扫描
                 for (String path : StorageUtil.getAllExternalPaths(TheApplication.getAppContext())) {
                     File root = new File(path);
