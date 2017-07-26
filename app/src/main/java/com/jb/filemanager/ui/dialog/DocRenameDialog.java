@@ -1,12 +1,14 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.media.MediaScannerConnection;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -68,11 +70,13 @@ public class DocRenameDialog extends FMBaseDialog {
                                 }
                                 showErrorTips(isFolder ? act.getString(R.string.dialog_rename_folder_error_input, notContain) : act.getString(R.string.dialog_rename_file_error_input, notContain));
                             } else {
-                                File target = new File(sourceFile.getParentFile().getAbsolutePath() + File.separator + input);
+                                String dir = sourceFile.getParentFile().getAbsolutePath();
+                                File target = new File(dir + File.separator + input);
                                 if (target.exists()) {
                                     showErrorTips(getString(R.string.dialog_rename_target_exist));
                                 } else {
                                     boolean success = FileUtil.renameSelectedFile(sourceFile, target.getAbsolutePath());
+                                    MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[] {dir}, null, null); // 修改后的文件添加到系统数据库
                                     if (listener != null) {
                                         listener.onResult(DocRenameDialog.this, success);
                                     }
@@ -82,7 +86,6 @@ public class DocRenameDialog extends FMBaseDialog {
                     } else {
                         showErrorTips(getString(R.string.dialog_rename_source_not_exist));
                     }
-
                 }
             }); // 确定按钮点击事件
         }
