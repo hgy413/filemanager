@@ -2,6 +2,7 @@ package com.jb.filemanager.function.image;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,8 +23,11 @@ import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsContract;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsPresenter;
 import com.jb.filemanager.function.image.presenter.imagedetails.ImageDetailsSupport;
+import com.jb.filemanager.ui.dialog.DeleteFileDialog;
 import com.jb.filemanager.util.DrawUtils;
+import com.jb.filemanager.util.FileUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +53,8 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
     private ImageDetailsPagerAdapter mImageDitalsViewPagerAdapter;
     //顶部栏 以及 删除按钮
     private View mHead, mDelete;
+    //删除文件对话框
+    private DeleteFileDialog mDeleteFileDialog;
 
     @Nullable
     @Override
@@ -90,10 +96,24 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
         mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPresenter != null) {
-                    mPresenter.handleDelete();
+                if (mDeleteFileDialog == null) {
+                    mDeleteFileDialog = new DeleteFileDialog(getActivity(), new DeleteFileDialog.Listener() {
+                        @Override
+                        public void onConfirm(DeleteFileDialog dialog) {
+                            dialog.dismiss();
+                            if (mPresenter != null) {
+                                mPresenter.handleDelete();
+                            }
+                            ImageStatistics.upload(ImageStatistics.IMG_DETAIL_DELETE);
+                        }
+
+                        @Override
+                        public void onCancel(DeleteFileDialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
                 }
-                ImageStatistics.upload(ImageStatistics.IMG_DETAIL_DELETE);
+                mDeleteFileDialog.show();
             }
         });
     }
@@ -182,5 +202,13 @@ public class ImageDetailFragment extends BaseFragment implements ImageDetailsCon
     @Override
     public void closeView() {
         onToBack();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mDeleteFileDialog != null) {
+            mDeleteFileDialog.dismiss();
+        }
+        super.onDestroy();
     }
 }
