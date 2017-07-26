@@ -53,6 +53,8 @@
             android:id="@+id/iv_main_action_bar_more"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:paddingRight="23dp"
             android:paddingEnd="23dp"
             android:paddingLeft="0dp"
