@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.about.AboutActivity;
 import com.jb.filemanager.function.applock.activity.AppLockPreActivity;
 import com.jb.filemanager.function.applock.manager.LockerFloatLayerManager;
@@ -26,6 +27,7 @@ import com.jb.filemanager.function.tip.manager.StorageTipManager;
 import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.home.dialog.IntroduceChargeDialog;
+import com.jb.filemanager.home.event.SwitcherChgStateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.statistics.StatisticsConstants;
@@ -34,6 +36,9 @@ import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.QuickClickGuard;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by bill wang on 16/8/19.
@@ -51,10 +56,31 @@ public class MainDrawer implements View.OnClickListener {
     public static final int CLI_OPEN = 1;
     private static final int FLING_OPEN = 2;
     private int mOpenType = FLING_OPEN;
-
+    //监听外部的开关状态变化
+    private IOnEventMainThreadSubscriber<SwitcherChgStateEvent> mSwitcherChgStateEventSubscriber = new IOnEventMainThreadSubscriber<SwitcherChgStateEvent>() {
+        @Override
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(SwitcherChgStateEvent event) {
+            if (mActivity == null || mActivity.isFinishing()) {
+                return;
+            }
+            View item;
+            if (event.isFreespace()) {
+                item = mActivity.findViewById(R.id.tv_drawer_low_space);
+            } else if (event.isLogger()) {
+                item = mActivity.findViewById(R.id.tv_drawer_logger_notification);
+            } else {
+                item = mActivity.findViewById(R.id.tv_drawer_usb_plugin);
+            }
+            item.setSelected(event.isEnable());
+        }
+    };
 
     public MainDrawer(BaseActivity activity) {
         mActivity = activity;
+        if (!TheApplication.getGlobalEventBus().isRegistered(mSwitcherChgStateEventSubscriber)) {
+            TheApplication.getGlobalEventBus().register(mSwitcherChgStateEventSubscriber);
+        }
     }
 
     public void initDrawer() {
@@ -280,7 +306,7 @@ public class MainDrawer implements View.OnClickListener {
             }
             break;
             case R.id.tv_drawer_rating:
-                final RateContract.View view = ((RateContract.View)mActivity);
+                final RateContract.View view = ((RateContract.View) mActivity);
                 RateManager.getsInstance().commitRateSuccess();
                 view.showLoveDialog(new AbsRateDialog.OnPressListener() {
                     @Override

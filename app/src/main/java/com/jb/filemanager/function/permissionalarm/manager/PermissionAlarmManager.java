@@ -23,6 +23,7 @@ import com.jb.filemanager.database.params.UpdateParams;
 import com.jb.filemanager.database.provider.AppPermissionsProvider;
 import com.jb.filemanager.function.permissionalarm.utils.PermissionHelper;
 import com.jb.filemanager.function.permissionalarm.view.PermissionAlarmPopActivity;
+import com.jb.filemanager.home.event.SwitcherChgStateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.util.AppUtils;
@@ -159,6 +160,7 @@ public class PermissionAlarmManager {
         }
         sharedPreferencesManager.commitBoolean(IPreferencesIds.KEY_PERMISSION_ALARM_USER_HAS_CHANGE, true);
         sharedPreferencesManager.commitBoolean(IPreferencesIds.KEY_PERMISSION_ALARM_ENABLE, isEnable);
+        TheApplication.getGlobalEventBus().post(SwitcherChgStateEvent.buildLoggerStateChgEvent(isEnable));
         return isEnable;
     }
 

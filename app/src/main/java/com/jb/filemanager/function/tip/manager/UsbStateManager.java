@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.tip.view.StateTipDialog;
 import com.jb.filemanager.function.tip.view.TipLayer;
+import com.jb.filemanager.home.event.SwitcherChgStateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.util.Logger;
@@ -82,6 +83,7 @@ public class UsbStateManager {
     public boolean changerSwitch() {
         SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
         boolean isEnable = sharedPreferencesManager.getBoolean(IPreferencesIds.KEY_USB_CONNECTED_TIP_ENABLE, true);
+        isFirstTip = true;
         isEnable = !isEnable;
         if (isEnable) {
             Logger.w(TAG, "开启USB监听开关");
@@ -93,6 +95,7 @@ public class UsbStateManager {
             stopMonitor();
         }
         sharedPreferencesManager.commitBoolean(IPreferencesIds.KEY_USB_CONNECTED_TIP_ENABLE, isEnable);
+        TheApplication.getGlobalEventBus().post(SwitcherChgStateEvent.buildUsbStateChgEvent(isEnable));
         return isEnable;
     }
 

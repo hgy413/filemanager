@@ -6,6 +6,7 @@ import android.os.StatFs;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.tip.view.StateTipDialog;
 import com.jb.filemanager.function.tip.view.TipLayer;
+import com.jb.filemanager.home.event.SwitcherChgStateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.util.APIUtil;
@@ -84,6 +85,7 @@ public class StorageTipManager {
             stopMonitor();
         }
         sharedPreferencesManager.commitBoolean(IPreferencesIds.KEY_LOW_SPACE_WARNING_ENABLE, isEnable);
+        TheApplication.getGlobalEventBus().post(SwitcherChgStateEvent.buildFreeSpaceStateChgEvent(isEnable));
         return isEnable;
     }
 
