@@ -63,7 +63,7 @@
             android:paddingStart="0dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_bar_more"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
     </LinearLayout>
 
