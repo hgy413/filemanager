@@ -10,8 +10,8 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.function.zipfile.ZipStatistics;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
-import com.jb.filemanager.function.zipfile.util.FileUtils;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.IconUtil;
 import com.jb.filemanager.util.TimeUtil;
 
 import java.util.List;
@@ -60,24 +60,29 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag(R.layout.item_zip_pre);
         }
         final ZipPreviewFileBean item = getItem(position);
-        String extension = FileUtils.getFileExtension(item.getFileName());
         if (item.isDirectory()) {
             holder.icon.setImageResource(R.drawable.img_folder);
-        } else if ("png".equalsIgnoreCase(extension) || "jpg".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.photo_icon);
-        } else if ("mp3".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.music_icon);
-        } else if ("mp4".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.video_icon);
-        } else if ("zip".equalsIgnoreCase(extension) || "rar".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.zip_icon);
-        } else if ("doc".equalsIgnoreCase(extension) || "docx".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.doc_icon);
-        } else if ("txt".equalsIgnoreCase(extension)) {
-            holder.icon.setImageResource(R.drawable.img_file);
         } else {
-            holder.icon.setImageResource(R.drawable.unknown_icon);
+            IconUtil.displayIcon(item.getFileName(), holder.icon);
         }
+//        String extension = FileUtils.getFileExtension(item.getFileName());
+//        if (item.isDirectory()) {
+//            holder.icon.setImageResource(R.drawable.img_folder);
+//        } else if ("png".equalsIgnoreCase(extension) || "jpg".equalsIgnoreCase(extension)) {
+//            holder.icon.setImageResource(R.drawable.photo_icon);
+//        } else if ("mp3".equalsIgnoreCase(extension)) {
+//            holder.icon.setImageResource(R.drawable.music_icon);
+//        } else if ("mp4".equalsIgnoreCase(extension)) {
+//            holder.icon.setImageResource(R.drawable.video_icon);
+//        } else if ("zip".equalsIgnoreCase(extension) || "rar".equalsIgnoreCase(extension)) {
+//            holder.icon.setImageResource(R.drawable.zip_icon);
+//        } else if ("doc".equalsIgnoreCase(extension) || "docx".equalsIgnoreCase(extension)) {
+//            holder.icon.setImageResource(R.drawable.doc_icon);
+//        } else if ("txt".equalsIgnoreCase(extension)) {
+//            holder.icon.setImageResource(R.drawable.img_file);
+//        } else {
+//            holder.icon.setImageResource(R.drawable.unknown_icon);
+//        }
         holder.name.setText(item.getFileName());
         if (item.isDirectory()) {
             holder.size.setText(TimeUtil.getTime(item.getLastModifyTime()));

@@ -17,6 +17,7 @@ import com.jb.filemanager.function.recent.util.RecentFileUtil;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.dialog.ZipFileOperationDialog;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
+import com.jb.filemanager.util.IconUtil;
 
 import java.io.File;
 import java.util.List;
@@ -69,7 +70,8 @@ public class RecentInnerFileAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag(R.layout.inner_item_file);
         }
         final BlockItemFileBean item = getItem(position);
-        holder.icon.setImageResource(R.drawable.img_file);
+//        holder.icon.setImageResource(R.drawable.img_file);
+        IconUtil.displayIcon(item.getFileName(), holder.icon);
         holder.name.setText(item.getFileName());
         holder.selectBtn.setImageResource(item.isSelected() ? R.drawable.select_all : R.drawable.select_none);
         // divider问题
