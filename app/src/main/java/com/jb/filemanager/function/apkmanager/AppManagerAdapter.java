@@ -53,9 +53,9 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
             return convertView;
         }
         viewHolder.mSelectBox
-                .setImageSource(R.drawable.select_none,
-                        R.drawable.select_multi,
-                        R.drawable.select_all);
+                .setImageSource(R.drawable.choose_none,
+                        R.drawable.choose_part,
+                        R.drawable.choose_all);
 
         viewHolder.mSelectBox.setState(appGroupBean.mSelectState);
         viewHolder.mSelectBox.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +102,8 @@ class AppManagerAdapter extends AbsAdapter<AppGroupBean> {
             viewHolder.mItemCheckBox.setVisibility(View.GONE);
             return convertView;
         }
-        viewHolder.mItemCheckBox.setImageRes(R.drawable.select_none,
-                R.drawable.select_all);
+        viewHolder.mItemCheckBox.setImageRes(R.drawable.choose_none,
+                R.drawable.choose_all);
         viewHolder.mItemCheckBox.setChecked(child.mIsChecked);
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

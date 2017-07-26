@@ -51,9 +51,9 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         viewHolder.mTvGroupTitle.setText(appGroupBean.mGroupTitle);
         viewHolder.mTvGroupTitleItemCount.setText(TheApplication.getAppContext().getString(R.string.item_count, appGroupBean.getchildrenSize()));
         viewHolder.mSelectBox
-                .setImageSource(R.drawable.select_none,
-                        R.drawable.select_multi,
-                        R.drawable.select_all);
+                .setImageSource(R.drawable.choose_none,
+                        R.drawable.choose_part,
+                        R.drawable.choose_all);
 
         viewHolder.mSelectBox.setState(appGroupBean.mSelectState);
         viewHolder.mSelectBox.setOnClickListener(new View.OnClickListener() {
@@ -100,8 +100,8 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
 
         viewHolder.mTvAppName.setText(child.mDocName);
         viewHolder.mTvAppSize.setText(ConvertUtils.formatFileSize(Long.parseLong(child.mDocSize)));
-        viewHolder.mItemCheckBox.setImageRes(R.drawable.select_none,
-                R.drawable.select_all);
+        viewHolder.mItemCheckBox.setImageRes(R.drawable.choose_none,
+                R.drawable.choose_all);
         viewHolder.mItemCheckBox.setChecked(child.mIsChecked);
         viewHolder.mItemCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override

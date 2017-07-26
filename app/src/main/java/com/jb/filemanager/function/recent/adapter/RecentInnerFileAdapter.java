@@ -73,7 +73,7 @@ public class RecentInnerFileAdapter extends BaseAdapter {
 //        holder.icon.setImageResource(R.drawable.img_file);
         IconUtil.displayIcon(item.getFileName(), holder.icon);
         holder.name.setText(item.getFileName());
-        holder.selectBtn.setImageResource(item.isSelected() ? R.drawable.select_all : R.drawable.select_none);
+        holder.selectBtn.setImageResource(item.isSelected() ? R.drawable.choose_all : R.drawable.choose_none);
         // divider问题
         if (mItemFiles.size() > 3) {
             // 有More按钮

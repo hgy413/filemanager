@@ -12,6 +12,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             tools:text="asdasdasdas"
+            android:textStyle="bold"
             android:textColor="@color/black_40"
             android:textSize="12dp"/>
 
@@ -22,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             tools:text="ewrwerewrw"
+            android:textStyle="bold"
             tools:background="@color/colorAccent"
             android:textColor="@color/black_40"
             android:textSize="12dp"/>

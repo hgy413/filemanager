@@ -81,11 +81,11 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
         holder.groupTime.setText(group.getGroupTimeStr() + " (" + group.getChildCount() + ")");
         int selectedState = group.getSelectedState();
         if (selectedState == 1) {
-            holder.groupCheckBox.setImageResource(R.drawable.select_none);
+            holder.groupCheckBox.setImageResource(R.drawable.choose_none);
         } else if (selectedState == 2) {
-            holder.groupCheckBox.setImageResource(R.drawable.select_multi);
+            holder.groupCheckBox.setImageResource(R.drawable.choose_part);
         } else {
-            holder.groupCheckBox.setImageResource(R.drawable.select_all);
+            holder.groupCheckBox.setImageResource(R.drawable.choose_all);
         }
         holder.groupCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +127,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
         holder.icon.setImageResource(R.drawable.zip_icon);
         holder.name.setText(child.getFileName());
         holder.size.setText(ConvertUtils.formatFileSize(child.getFileSize()) + " " + TimeUtil.getTime(child.getLastModifiedTime()));
-        holder.itemCheckBox.setImageResource(child.isSelected() ? R.drawable.select_all : R.drawable.select_none);
+        holder.itemCheckBox.setImageResource(child.isSelected() ? R.drawable.choose_all : R.drawable.choose_none);
         holder.itemCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
