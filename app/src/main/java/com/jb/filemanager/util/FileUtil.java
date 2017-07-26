@@ -44,7 +44,7 @@ import static com.jiubang.commerce.utils.FileUtils.deleteDirectory;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileUtil {
 
-    public static final String FILE_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
+    public static final String FILE_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\]<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
     public static final String FOLDER_NAME_REG = "^[^~!@#$%^&*+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{\\}【】‘；：”“’。，、？]{1,}";
 
 
