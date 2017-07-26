@@ -42,8 +42,8 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:drawablePadding="16dp"
-        android:drawableLeft="@drawable/img_folder"
-        android:drawableStart="@drawable/img_folder"
+        android:drawableLeft="@drawable/file_type_folder"
+        android:drawableStart="@drawable/file_type_folder"
         android:textColor="#000000"
         android:textSize="14dp"/>
 

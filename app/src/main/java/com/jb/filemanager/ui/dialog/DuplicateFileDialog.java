@@ -1,12 +1,15 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.APIUtil;
+import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
 
@@ -43,9 +46,46 @@ public class DuplicateFileDialog extends FMBaseDialog {
             File file = new File(duplicateFilePath);
             if (file.exists()) {
                 if (file.isDirectory()) {
-                    filePath.setCompoundDrawablesWithIntrinsicBounds(APIUtil.getDrawable(act, R.drawable.img_folder), null, null, null);
+                    filePath.setCompoundDrawablesWithIntrinsicBounds(APIUtil.getDrawable(act, R.drawable.file_type_folder), null, null, null);
                 } else {
-                    filePath.setCompoundDrawablesWithIntrinsicBounds(APIUtil.getDrawable(act, R.drawable.img_file), null, null, null);
+                    int type = FileUtil.getFileType(file.getAbsolutePath());
+                    Drawable icon;
+                    switch (type) {
+                        case FileManager.IMAGE:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_photo);
+                            break;
+                        case FileManager.VIDEO:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_video);
+                            break;
+                        case FileManager.APP:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_app);
+                            break;
+                        case FileManager.AUDIO:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_music);
+                            break;
+                        case FileManager.OTHERS:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_default);
+                            break;
+                        case FileManager.TXT:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_txt);
+                            break;
+                        case FileManager.PDF:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_pdf);
+                            break;
+                        case FileManager.DOC:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_doc);
+                            break;
+                        case FileManager.ZIP:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_zip);
+                            break;
+                        default:
+                            icon = APIUtil.getDrawable(act, R.drawable.file_type_default);
+                            break;
+                    }
+
+                    if (icon != null) {
+                        filePath.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+                    }
                 }
             }
         }

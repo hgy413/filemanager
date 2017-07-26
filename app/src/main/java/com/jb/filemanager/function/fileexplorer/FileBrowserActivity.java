@@ -279,10 +279,10 @@ public class FileBrowserActivity extends ListActivity implements
             if (fileInfo.isFile()) {
                 FileSizeFormatter.FileSize fz = FileSizeFormatter.formatFileSize(fileInfo.mSize);
                 item.mFileTime.setText(String.format("%s %s", fz.toFullString(), fileInfo.mTime));
-                item.mIcon.setImageResource(R.drawable.img_file);
+                item.mIcon.setImageResource(R.drawable.file_type_default);
             } else {
                 item.mFileTime.setText(fileInfo.mTime);
-                item.mIcon.setImageResource(R.drawable.img_folder);
+                item.mIcon.setImageResource(R.drawable.file_type_folder);
             }
             convertView
                     .setBackgroundResource(R.drawable.common_list_item_white_selector);

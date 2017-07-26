@@ -43,10 +43,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         FileInfo fileInfo = mFileInfoList.get(position);
         if (FilePlus.isDirectoryType(fileInfo.mFileType)) {
             // 展示文件夹图标
-            holder.mIcon.setImageResource(R.drawable.img_folder);
+            holder.mIcon.setImageResource(R.drawable.file_type_folder);
         } else {
             // 展示对应文件图标
-            holder.mIcon.setImageResource(R.drawable.img_file);
+            holder.mIcon.setImageResource(R.drawable.file_type_default);
         }
         holder.mPath.setText(fileInfo.mFileAbsolutePath);
         holder.mName.setText(fileInfo.mFileName);

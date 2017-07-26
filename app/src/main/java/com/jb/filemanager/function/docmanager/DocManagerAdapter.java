@@ -95,7 +95,7 @@ public class DocManagerAdapter extends AbsAdapter<DocGroupBean> {
         }else if (child.mFileType == DocChildBean.TYPE_TXT){
             viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_txt);
         }else {
-            viewHolder.mIvAppIcon.setImageResource(R.drawable.unknown_icon);
+            viewHolder.mIvAppIcon.setImageResource(R.drawable.file_type_default);
         }
 
         viewHolder.mTvAppName.setText(child.mDocName);

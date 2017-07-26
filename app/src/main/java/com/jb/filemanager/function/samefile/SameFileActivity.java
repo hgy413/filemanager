@@ -59,7 +59,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         mItemSelected = new boolean[0];
         mPresenter = new SameFilePresenter(this, new SameFileSupport(), getSupportLoaderManager());
         int imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-        mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.music_icon);
+        mImageFetcher = ImageUtils.createImageFetcher(this, imageWidth, R.drawable.file_type_music);
         mPresenter.onCreate(getIntent());
     }
 

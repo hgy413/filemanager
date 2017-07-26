@@ -16,19 +16,19 @@ public final class IconUtil {
         int type = FileUtil.getFileType(path);
         switch (type) {
             case FileManager.IMAGE:
-                ivThumb.setImageResource(R.drawable.photo_icon);
+                ivThumb.setImageResource(R.drawable.file_type_photo);
                 break;
             case FileManager.VIDEO:
-                ivThumb.setImageResource(R.drawable.video_icon);
+                ivThumb.setImageResource(R.drawable.file_type_video);
                 break;
             case FileManager.APP:
                 ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
                 break;
             case FileManager.AUDIO:
-                ivThumb.setImageResource(R.drawable.music_icon);
+                ivThumb.setImageResource(R.drawable.file_type_music);
                 break;
             case FileManager.OTHERS:
-                ivThumb.setImageResource(R.drawable.img_file);
+                ivThumb.setImageResource(R.drawable.file_type_default);
                 break;
             case FileManager.TXT:
                 ivThumb.setImageResource(R.drawable.file_type_txt);
@@ -40,7 +40,7 @@ public final class IconUtil {
                 ivThumb.setImageResource(R.drawable.file_type_doc);
                 break;
             case FileManager.ZIP:
-                ivThumb.setImageResource(R.drawable.zip_icon);
+                ivThumb.setImageResource(R.drawable.file_type_zip);
                 break;
             default:
                 break;

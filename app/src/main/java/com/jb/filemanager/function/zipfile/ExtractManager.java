@@ -330,12 +330,12 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 if (mNotification == null) {
                     Notification.Builder builder = new Notification.Builder(mContext);
                     builder.setAutoCancel(false);
-                    builder.setSmallIcon(R.drawable.zip_icon);
-                    builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.zip_icon));
+                    builder.setSmallIcon(R.drawable.file_type_zip);
+                    builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.file_type_zip));
                     mNotification = APIUtil.build(builder);
                     mNotification.when = System.currentTimeMillis();
                     mNotification.flags = Notification.FLAG_NO_CLEAR;
-                    mNotification.icon = R.drawable.zip_icon;
+                    mNotification.icon = R.drawable.file_type_zip;
                     mNotification.contentView = mRemoteViews;
                 }
 
@@ -371,12 +371,12 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 remoteViews.setTextViewText(R.id.extract_noti_finish_dest_path, mContext.getString(R.string.extract_to, savePath));
 
                 Notification.Builder builder = new Notification.Builder(mContext);
-                builder.setSmallIcon(R.drawable.zip_icon);
+                builder.setSmallIcon(R.drawable.file_type_zip);
                 builder.setAutoCancel(true);
-                builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.zip_icon));
+                builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.file_type_zip));
                 Notification notification = APIUtil.build(builder);
                 notification.when = System.currentTimeMillis();
-                notification.icon = R.drawable.zip_icon;
+                notification.icon = R.drawable.file_type_zip;
                 notification.contentView = remoteViews;
 
                 Intent intent = new Intent(mContext, FileBrowserActivity.class);

@@ -61,7 +61,7 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
         }
         final ZipPreviewFileBean item = getItem(position);
         if (item.isDirectory()) {
-            holder.icon.setImageResource(R.drawable.img_folder);
+            holder.icon.setImageResource(R.drawable.file_type_folder);
         } else {
             IconUtil.displayIcon(item.getFileName(), holder.icon);
         }

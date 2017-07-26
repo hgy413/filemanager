@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -500,7 +499,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
             mInflater = LayoutInflater.from(context);
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
-            mImageFetcher = ImageUtils.createImageFetcher((FragmentActivity) context, mImageSize, R.drawable.photo_icon);
+            mImageFetcher = ImageUtils.createImageFetcher((FragmentActivity) context, mImageSize, R.drawable.file_type_photo);
             mRootDirs = rootDirs;
         }
 
@@ -550,10 +549,10 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     ivThumb.setImageDrawable(PackageManagerLocker.getInstance().getApplicationIconByPath(path, 120, 120));
                     break;
                 case FileManager.AUDIO:
-                    ivThumb.setImageResource(R.drawable.music_icon);
+                    ivThumb.setImageResource(R.drawable.file_type_music);
                     break;
                 case FileManager.OTHERS:
-                    ivThumb.setImageResource(R.drawable.img_file);
+                    ivThumb.setImageResource(R.drawable.file_type_default);
                     break;
                 case FileManager.TXT:
                     ivThumb.setImageResource(R.drawable.file_type_txt);
@@ -565,7 +564,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     ivThumb.setImageResource(R.drawable.file_type_doc);
                     break;
                 case FileManager.ZIP:
-                    ivThumb.setImageResource(R.drawable.zip_icon);
+                    ivThumb.setImageResource(R.drawable.file_type_zip);
                     break;
                 default:
                     break;
@@ -645,7 +644,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     boolean isInternalStorage = FileUtil.isInternalStoragePath(mInflater.getContext(), file.getAbsolutePath());
                     holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
                 } else {
-                    holder.mIvFileThumb.setImageResource(R.drawable.img_folder);
+                    holder.mIvFileThumb.setImageResource(R.drawable.file_type_folder);
                 }
             } else {
                 loadFileThumb(file.getAbsolutePath(), holder.mIvFileThumb);
@@ -729,7 +728,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                     boolean isInternalStorage = FileUtil.isInternalStoragePath(mInflater.getContext(), file.getAbsolutePath());
                     holder.mIvFileThumb.setImageResource(isInternalStorage ? R.drawable.img_phone_storage : R.drawable.img_sdcard_storage);
                 } else {
-                    holder.mIvFileThumb.setImageResource(R.drawable.img_folder);
+                    holder.mIvFileThumb.setImageResource(R.drawable.file_type_folder);
                 }
             } else {
                 loadFileThumb(file.getAbsolutePath(), holder.mIvFileThumb);
