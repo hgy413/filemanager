@@ -958,17 +958,20 @@ public class FileUtil {
         Intent intent = null;
         File file = new File(fullPath);
         if (!(!file.exists() || file.isDirectory())) {
+            String mime = null;
             int lastDot = fullPath.lastIndexOf(".");
             if (lastDot >= 0 && fullPath.length() > lastDot + 1) {
                 String extension = fullPath.substring(lastDot + 1).toLowerCase(Locale.getDefault());
-                String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
                 if (mime == null || mime.equals("")) {
-                    mime = "text/*"; // Unknow type
+                    mime = "*/*"; // Unknow type
                 }
-                Uri uri = Uri.fromFile(file);
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(uri, mime);
+            } else {
+                mime = "*/*"; // Unknow type
             }
+            Uri uri = Uri.fromFile(file);
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, mime);
         }
         return intent;
     }
