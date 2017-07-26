@@ -46,7 +46,7 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_action_bar_search"/>
+            android:src="@drawable/black_search_icon_selector"/>
 
         <FrameLayout
             android:id="@+id/view_common_title_bar_search_check_group_fl"

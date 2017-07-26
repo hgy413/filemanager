@@ -75,7 +75,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_action_bar_search"/>
+            android:src="@drawable/black_search_icon_selector"/>
 
     </LinearLayout>
 
