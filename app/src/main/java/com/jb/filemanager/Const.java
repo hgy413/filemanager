@@ -65,11 +65,6 @@ public interface Const {
     //FileManager邮箱
     String FILEMANAGER_BUS_EMAIL = "gofilemanager@gmail.com";
 
-    // File Type
-    enum FILE_TYPE {
-        APP, DOC, PDF, TXT, MUSIC, VIDEO, PICTURE, ZIP, OTHER
-    }
-
     public class CategoryType {
         public static final int CATEGORY_TYPE_ALL = 0;
         public static final int CATEGORY_TYPE_PHOTO = 1;

@@ -15,8 +15,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.jb.filemanager.Const;
+import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.scanframe.bean.common.FileType;
+import com.jb.filemanager.manager.PackageManagerLocker;
+import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.FileTypeUtil;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
@@ -101,95 +104,11 @@ public class SameFileSupport implements SameFileContract.Support {
         //Todo Grouped by file type.
         ArrayList list;
         for (FileInfo info : infoList) {
-            if (info.mFullPath.endsWith("zip") || info.mFullPath.endsWith("tar.jz")) {
-                info.mFileType = Const.FILE_TYPE.ZIP;
-                list = infoGroupList.get("Zip");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Zip",list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith("mp4") || info.mFullPath.endsWith("avi")) {
-                info.mFileType = Const.FILE_TYPE.VIDEO;
-                list = infoGroupList.get("Video");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Video", list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith("mp3") || info.mFullPath.endsWith("acc")) {
-                info.mFileType = Const.FILE_TYPE.VIDEO;
-                list = infoGroupList.get("Music");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Music", list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith("doc") || info.mFullPath.endsWith("docx")
-                    || info.mFullPath.endsWith("xls") || info.mFullPath.endsWith("xlsx")
-                    || info.mFullPath.endsWith("ppt")) {
-                info.mFileType = Const.FILE_TYPE.DOC;
-                list = infoGroupList.get("Document");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Document", list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith("txt") ) {
-                info.mFileType = Const.FILE_TYPE.DOC;
-                list = infoGroupList.get("Txt");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Txt", list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith("pdf")) {
-                info.mFileType = Const.FILE_TYPE.DOC;
-                list = infoGroupList.get("Pdf");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Pdf", list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith(".apk") || info.mFullPath.endsWith(".APK") ) {
-                info.mFileType = Const.FILE_TYPE.APP;
-                list = infoGroupList.get("Application");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Application", list);
-                }
-                list.add(info);
-                continue;
-            }
-            if (info.mFullPath.endsWith(".img") || info.mFullPath.endsWith(".png")
-                    || info.mFullPath.endsWith(".gif") || info.mFullPath.endsWith(".jpg") ) {
-                info.mFileType = Const.FILE_TYPE.PICTURE;
-                list = infoGroupList.get("Picture");
-                if (null == list) {
-                    list = new ArrayList();
-                    infoGroupList.put("Picture", list);
-                }
-                list.add(info);
-                continue;
-            }
-
-            info.mFileType = Const.FILE_TYPE.OTHER;
-            list = infoGroupList.get("Other");
+            String type = getFileTypeName(info.mFullPath);
+            list = infoGroupList.get(type);
             if (null == list) {
                 list = new ArrayList();
-                infoGroupList.put("Other", list);
+                infoGroupList.put(type,list);
             }
             list.add(info);
         }
@@ -215,9 +134,9 @@ public class SameFileSupport implements SameFileContract.Support {
                 if (null != (info = cursorToFileInfo(cursor))) {
                     modify = info.mModified;
                     if (uri == MUSIC_URI) {
-                        info.mFileType = Const.FILE_TYPE.MUSIC;
+                        info.mFileType = FileManager.AUDIO;
                     } else if (uri == VIDEO_URI) {
-                        info.mFileType = Const.FILE_TYPE.VIDEO;
+                        info.mFileType = FileManager.VIDEO;
                     }
                     boolean isSameDay = TimeUtil.isSameDayOfMillis(lastModify, modify);
                     if (!isSameDay) {
@@ -331,90 +250,39 @@ public class SameFileSupport implements SameFileContract.Support {
         mResolver.insert(targetUri, values);
     }
 
-    private Const.FILE_TYPE isType(String newFile) {
-        return Const.FILE_TYPE.VIDEO;
-    }
-
     public FileInfo getFileInfo(File file){
         FileInfo info = new FileInfo();
         info.mFullPath = file.getPath();
         info.mName = file.getName();
         info.mModified = file.lastModified();
         info.mSize = file.length();
-        // info.type = FileTypeUtil.getFileType(file); // get file type
+        info.mFileType = FileUtil.getFileType(info.mFullPath); // get file type
         return info;
     }
 
 
-//
-//    private String getFileType(@NonNull String path) {
-//        ArrayList<String> mArrayList = new ArrayList<>();
-//        if (mArrayList.contains("mp3"))
-//        if (path.endsWith("zip") || path.endsWith("tar.jz") || path.endsWith("ZIP") ||
-//                path.endsWith("rar"))
-//            return "zip";
-//        if (path.endsWith("mp4"))
-//
-//        }
-//        if (info.mFullPath.endsWith("mp4") || info.mFullPath.endsWith("avi")) {
-//            info.mFileType = Const.FILE_TYPE.VIDEO;
-//            list = infoGroupList.get("Video");
-//            if (null == list) {
-//                list = new ArrayList();
-//                infoGroupList.put("Video", list);
-//            }
-//            list.add(info);
-//            continue;
-//        }
-//        if (info.mFullPath.endsWith("mp3") || info.mFullPath.endsWith("acc")) {
-//            info.mFileType = Const.FILE_TYPE.VIDEO;
-//            list = infoGroupList.get("Music");
-//            if (null == list) {
-//                list = new ArrayList();
-//                infoGroupList.put("Music", list);
-//            }
-//            list.add(info);
-//            continue;
-//        }
-//        if (info.mFullPath.endsWith("doc") || info.mFullPath.endsWith("docx")
-//                || info.mFullPath.endsWith("xls") || info.mFullPath.endsWith("xlsx")
-//                || info.mFullPath.endsWith("ppt")) {
-//            info.mFileType = Const.FILE_TYPE.DOC;
-//            list = infoGroupList.get("Document");
-//            if (null == list) {
-//                list = new ArrayList();
-//                infoGroupList.put("Document", list);
-//            }
-//            list.add(info);
-//            continue;
-//        }
-//        if (info.mFullPath.endsWith("txt") ) {
-//            info.mFileType = Const.FILE_TYPE.DOC;
-//            list = infoGroupList.get("Txt");
-//            if (null == list) {
-//                list = new ArrayList();
-//                infoGroupList.put("Txt", list);
-//            }
-//            list.add(info);
-//            continue;
-//        }
-//        if (info.mFullPath.endsWith("pdf")) {
-//            info.mFileType = Const.FILE_TYPE.DOC;
-//            list = infoGroupList.get("Pdf");
-//            if (null == list) {
-//                list = new ArrayList();
-//                infoGroupList.put("Pdf", list);
-//            }
-//            list.add(info);
-//            continue;
-//        }
-//        info.mFileType = Const.FILE_TYPE.OTHER;
-//        list = infoGroupList.get("Other");
-//        if (null == list) {
-//            list = new ArrayList();
-//            infoGroupList.put("Other", list);
-//        }
-//    }
-//
 
+    private String getFileTypeName(@NonNull String path) {
+        switch (FileUtil.getFileType(path)) {
+            case FileManager.IMAGE:
+                return "Picture";
+            case FileManager.VIDEO:
+                return "Video";
+            case FileManager.APP:
+                return "Application";
+            case FileManager.AUDIO:
+                return "Music";
+            case FileManager.TXT:
+                return "Txt";
+            case FileManager.PDF:
+                return "Pdf";
+            case FileManager.DOC:
+                return "Doc";
+            case FileManager.ZIP:
+                return "Zip";
+            case FileManager.OTHERS:
+            default:
+                return "Other";
+        }
+    }
 }

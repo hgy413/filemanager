@@ -18,7 +18,7 @@ public class FileInfo {
 //            MediaStore.Audio.Media.ARTIST
 //    };
 
-    public Const.FILE_TYPE mFileType;
+    public int mFileType;
     public String mId;
     public String mName;
     public long mSize;

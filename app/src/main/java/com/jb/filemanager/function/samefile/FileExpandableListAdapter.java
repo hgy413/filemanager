@@ -15,7 +15,12 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.manager.PackageManagerLocker;
+import com.jb.filemanager.manager.file.FileManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
+import com.jb.filemanager.statistics.StatisticsTools;
+import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.util.ConvertUtils;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
 import com.jb.filemanager.util.imageloader.IconLoader;
 import com.jb.filemanager.util.images.ImageFetcher;
@@ -32,10 +37,11 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
     GroupList<String, FileInfo> mGroupList;
     private ItemChooseChangeListener mChooseChangeListener;
     private ImageFetcher mImageFetcher;
-    private Context mContext;
+    private SameFileActivity mContext;
+
     public FileExpandableListAdapter(Context context, @NonNull ItemChooseChangeListener chooseChangeListener) {
         mChooseChangeListener = chooseChangeListener;
-        mContext = context;
+        mContext = (SameFileActivity)context;
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         int mImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, dm);
         mImageFetcher = ImageUtils.createImageFetcher((SameFileActivity)context, mImageSize, R.drawable.photo_icon);
@@ -118,38 +124,38 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
             holder.mViewGroupDevideSpace.setVisibility(View.GONE);
         }
         FileInfo fileInfo = mGroupList.valueAt(groupPosition).get(childPosition);
-        Const.FILE_TYPE fileType = mGroupList.valueAt(groupPosition).get(childPosition).mFileType;
+        int fileType = mGroupList.valueAt(groupPosition).get(childPosition).mFileType;
         // Set Icon
         switch (fileType) {
-            case APP:
+            case FileManager.APP:
                 holder.mIvIcon.setImageResource(R.drawable.app_icon);
                 holder.mIvIcon.setImageDrawable(PackageManagerLocker.getInstance()
                         .getApplicationIconByPath(fileInfo.mFullPath, 120, 120));
                 break;
-            case DOC:
+            case FileManager.DOC:
                 holder.mIvIcon.setImageResource(R.drawable.doc_icon);
                 break;
-            case PDF:
+            case FileManager.PDF:
                 holder.mIvIcon.setImageResource(R.drawable.file_type_pdf);
                 break;
-            case TXT:
+            case FileManager.TXT:
                 holder.mIvIcon.setImageResource(R.drawable.file_type_txt);
                 break;
-            case MUSIC:
+            case FileManager.AUDIO:
                 holder.mIvIcon.setImageResource(R.drawable.music_icon);
                 break;
-            case VIDEO:
+            case FileManager.VIDEO:
                 mImageFetcher.setLoadingImage(R.drawable.video_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
-            case PICTURE:
+            case FileManager.IMAGE:
                 mImageFetcher.setLoadingImage(R.drawable.photo_icon);
                 mImageFetcher.loadImage(fileInfo.mFullPath, holder.mIvIcon);
                 break;
-            case ZIP:
+            case FileManager.ZIP:
                 holder.mIvIcon.setImageResource(R.drawable.zip_icon);
                 break;
-            case OTHER:
+            case FileManager.OTHERS:
             default:
                 holder.mIvIcon.setImageResource(R.drawable.unknown_icon);
         }
@@ -160,7 +166,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
         }
         holder.mTvName.setText(fileInfo.mName);
         String showInfo = "";
-        if (fileInfo.mFileType == Const.FILE_TYPE.MUSIC || fileInfo.mFileType == Const.FILE_TYPE.VIDEO) {
+        if (fileInfo.mFileType == FileManager.AUDIO || fileInfo.mFileType == FileManager.VIDEO) {
             showInfo += fileInfo.mArtist + " " + ConvertUtils.getReadableSize(fileInfo.mSize) + "  " +
                     TimeUtil.getMSTime(fileInfo.mDuration);
         } else {
@@ -188,6 +194,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_file_group_item_select:
+                mContext.statisticsSelectGroup();
                 ImageView ivSelect = (ImageView)v;
                 int group = (int)ivSelect.getTag();
                 boolean selectResoult = true;
@@ -201,6 +208,7 @@ public class FileExpandableListAdapter extends BaseExpandableListAdapter impleme
                 break;
 
             case R.id.iv_music_child_item_select:
+
                 Binder binder = (Binder) v.getTag();
                 if (binder.mFileInfo.isSelected) {
                     binder.mFileInfo.isSelected = false;
