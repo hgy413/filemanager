@@ -34,10 +34,10 @@
     <string name="main_dialog_single_detail_contain">%1$d folder(s), %2$d file(s)</string>
     <string name="main_category_item_photo">Photo</string>
     <string name="main_category_item_video">Video</string>
-    <string name="main_category_item_apps">Apps</string>
-    <string name="main_category_item_music">Musics</string>
-    <string name="main_category_item_doc">Docs</string>
-    <string name="main_category_item_zip">Zips</string>
+    <string name="main_category_item_apps">App</string>
+    <string name="main_category_item_music">Music</string>
+    <string name="main_category_item_doc">Doc</string>
+    <string name="main_category_item_zip">Zip</string>
     <string name="main_category_item_download">Download</string>
     <string name="main_category_item_recent">Recent</string>
     <string name="main_category_item_ad">AD</string>
@@ -48,8 +48,8 @@
     <string name="main_info_photo">Photo</string>
     <string name="main_info_music">Music</string>
     <string name="main_info_video">Video</string>
-    <string name="main_info_docs">Docs</string>
-    <string name="main_info_apps">Apps</string>
+    <string name="main_info_docs">Doc</string>
+    <string name="main_info_apps">App</string>
     <string name="main_info_other">Other</string>
     <string name="main_info_switch_phone">Phone</string>
     <string name="main_info_switch_sdcard">SD</string>
