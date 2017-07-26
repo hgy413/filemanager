@@ -2,7 +2,6 @@ package com.jb.filemanager.function.zipfile;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -68,6 +67,12 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
                 return true;
             }
         });
+        mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                ZipStatistics.upload(ZipStatistics.ZIP_SORT);
+            }
+        });
 
         mSearchTitle = (SearchTitleView) findViewById(R.id.search_title);
         mSearchTitle.setClickCallBack(new SearchTitleViewCallback() {
@@ -131,7 +136,6 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     protected void onResume() {
         super.onResume();
 
-        Log.e("zip", "onResume");
         mPresenter.onCreate();
     }
 

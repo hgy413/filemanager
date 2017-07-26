@@ -11,6 +11,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.zipfile.ExtractManager;
 import com.jb.filemanager.function.zipfile.ZipFilePreviewActivity;
+import com.jb.filemanager.function.zipfile.ZipStatistics;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.util.ZipUtils;
 import com.jb.filemanager.ui.dialog.BaseDialog;
@@ -67,12 +68,15 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_view:
                 onPreviewBtnClick();
+                ZipStatistics.upload(ZipStatistics.ZIP_LOOK);
                 break;
             case R.id.btn_extract:
                 onExtractFileClick();
+                ZipStatistics.upload(ZipStatistics.ZIP_EXTRACT);
                 break;
             case R.id.btn_cancel:
                 dismiss();
+                ZipStatistics.upload(ZipStatistics.ZIP_CANCEL);
                 break;
         }
     }

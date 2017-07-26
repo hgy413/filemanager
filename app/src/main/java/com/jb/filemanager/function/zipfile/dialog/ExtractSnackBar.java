@@ -14,6 +14,7 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
+import com.jb.filemanager.function.zipfile.ZipStatistics;
 
 import java.io.File;
 
@@ -50,6 +51,7 @@ public class ExtractSnackBar extends BaseActivity {
                     parent = file.getPath();
                 }
                 FileBrowserActivity.startBrowser(TheApplication.getAppContext(), parent);
+                ZipStatistics.upload(ZipStatistics.ZIP_SEE);
             }
         });
 

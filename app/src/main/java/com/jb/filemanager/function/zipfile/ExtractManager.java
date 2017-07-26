@@ -249,6 +249,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
                 break;
             case R.id.view_extract_background_handle:
                 hideProgressDialogFromWindow();
+                ZipStatistics.upload(ZipStatistics.ZIP_SMALL);
                 break;
         }
     }
@@ -274,6 +275,7 @@ public final class ExtractManager implements ExtractingFilesListener, View.OnCli
     public void onViewAttachedToWindow(View v) {
 //        Log.e("dialog", "onViewAttachedToWindow");
         mIsProgressDialogAttached = true;
+        ZipStatistics.upload(ZipStatistics.ZIP_GO);
     }
 
     // 若点击物理返回键可隐藏弹窗, 默认不取消任务, 后台继续运行

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.zipfile.ZipStatistics;
 import com.jb.filemanager.function.zipfile.bean.ZipFileGroupBean;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
 import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
@@ -94,6 +95,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
                 if (mListener != null) {
                     mListener.onSwitchClick();
                 }
+                ZipStatistics.upload(ZipStatistics.ZIP_SORT_SELECT);
             }
         });
         if (groupPosition == getGroupCount() - 1 && !isExpanded) {
@@ -134,6 +136,7 @@ public class ZipListAdapter extends BaseExpandableListAdapter {
                 if (mListener != null) {
                     mListener.onSwitchClick();
                 }
+                ZipStatistics.upload(ZipStatistics.ZIP_SINGLE);
             }
         });
         if (childPosition == getChildrenCount(groupPosition) - 1 && groupPosition == getGroupCount() - 1) {

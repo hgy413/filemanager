@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
+import com.jb.filemanager.function.zipfile.ZipStatistics;
 import com.jb.filemanager.function.zipfile.bean.ZipPreviewFileBean;
 import com.jb.filemanager.function.zipfile.listener.ZipListAdapterClickListener;
 import com.jb.filemanager.function.zipfile.util.FileUtils;
@@ -93,6 +94,7 @@ public class ZipInnerFilesAdapter extends BaseAdapter {
                 if (mListener != null) {
                     mListener.onSwitchClick();
                 }
+                ZipStatistics.upload(ZipStatistics.ZIP_SELECT);
             }
         });
         return convertView;

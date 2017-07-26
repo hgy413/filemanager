@@ -175,6 +175,7 @@ public class ZipFilePreviewActivity extends BaseActivity implements
         switch (v.getId()) {
             case R.id.zip_pre_btn_extract:
                 mPresenter.onExtractFiles();
+                ZipStatistics.upload(ZipStatistics.ZIP_INEXTRACT);
                 break;
         }
     }
