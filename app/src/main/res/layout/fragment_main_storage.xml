@@ -37,9 +37,9 @@
             <ImageView
                 android:id="@+id/iv_main_storage_style_switcher"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/main_storage_style_switch_selector" />
 
