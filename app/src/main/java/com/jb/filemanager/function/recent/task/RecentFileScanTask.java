@@ -47,7 +47,9 @@ public class RecentFileScanTask extends AsyncTask<Void, Integer, List<BlockBean>
             if (isCancelled()) return null;
             File root = new File(path);
             if (root.isDirectory()) {
-                for (File dir : root.listFiles()) {
+                File[] files = root.listFiles();
+                if (files == null) return null;
+                for (File dir : files) {
                     if (isCancelled()) return null;
                     scanPath(dir, 0);
                 }

@@ -91,7 +91,7 @@ public class RecentFileAdapter extends BaseAdapter {
         } else {
             holder.footer.setVisibility(View.GONE);
         }
-        
+
         holder.titleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,8 +124,13 @@ public class RecentFileAdapter extends BaseAdapter {
         int totalHeight = 0;
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
+            try {
+                listItem.measure(0, 0);
+                totalHeight += listItem.getMeasuredHeight();
+            } catch (Exception e) {
+                totalHeight += DrawUtils.dip2px(50);
+                e.printStackTrace();
+            }
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();

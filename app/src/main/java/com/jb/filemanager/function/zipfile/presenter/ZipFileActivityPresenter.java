@@ -175,7 +175,9 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
         private void scanPath(File dir, int depth) {
             if (depth > DEPTH_THRESHOLD) return;
             if (!dir.exists() || !dir.isDirectory()) return;
-            for (File file : dir.listFiles()) {
+            File[] files = dir.listFiles();
+            if (files == null) return;
+            for (File file : files) {
                 if (file.isDirectory()) {
                     scanPath(file, depth + 1);
                 } else {
