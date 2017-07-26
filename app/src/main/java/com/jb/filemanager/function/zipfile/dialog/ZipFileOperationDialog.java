@@ -129,6 +129,7 @@ public class ZipFileOperationDialog extends BaseDialog implements View.OnClickLi
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     dismissProgressDialog();
                     ExtractErrorDialog extractErrorDialog = new ExtractErrorDialog(mActivity, mFile.getFileName());
+                    extractErrorDialog.setSubTextVisibility(false);
                     extractErrorDialog.show();
 //                    Toast.makeText(mContext, "File Error. error_code=" + errorCode, Toast.LENGTH_SHORT).show();
                 }
