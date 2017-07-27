@@ -11,6 +11,7 @@ import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.buyuser.event.BuyUserChannelEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
+import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jiubang.commerce.buychannel.BuyChannelApi;
 import com.jiubang.commerce.buychannel.BuySdkInitParams;
@@ -38,13 +39,13 @@ public class BuyUserManager {
 
         //45协议相关参数
         //45协议的功能点id，每个产品都不一样,查询链接：http://wiki.3g.net.cn/pages/viewpage.action?pageId=18781210
-        int p45FunId = 760;
+        int p45FunId = StatisticsConstants.PROTOCOL_45_FUN_ID;
         //产品key,长度24的字符串，在广告portal产品管理中生成,查询链接：http://gouser.3g.net.cn/userManage/login_iframe.jsp?systemid=68&hd=0(如果没有权限，请找黄炯查询)
-        String productKey = "7EPR2BWJNI2K7ZV1V04CT4MB";
+        String productKey = "SVFEZS8JSZQE67YGM3NC2W9T";
         //接入密钥，长度32的字符串，在广告portal产品管理中生成，查询链接：http://gouser.3g.net.cn/userManage/login_iframe.jsp?systemid=68&hd=0(如果没有权限，请找黄炯查询)
-        String accessKey = "Q0I73XWNKHH9L2GI8TVDOCWP2VNUXQVY";
+        String accessKey = "1Y5PCR66ELXHKF7DKW9MV4XCRF4SY4O5";
         // userTypeProtocolCId "用户来源判断接口协议"里的产品cid 定义详见 http://wiki.3g.net.cn/pages/viewpage.action?pageId=14255114
-        String userTypeProtocolCId = "89";
+        String userTypeProtocolCId = "109";
 
         // BuySdkInitParams buySdkInitParams = new BuySdkInitParams(CHANNEL, false, p45FunId);
         //2.初始化买量SDK需要的相关参数

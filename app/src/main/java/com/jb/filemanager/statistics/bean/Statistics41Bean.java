@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.gau.go.gostaticsdk.StatisticsManager;
 import com.jb.filemanager.BuildConfig;
+import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.util.AppUtils;
 import com.jb.ga0.commerce.util.http.GoHttpHeadUtil;
@@ -29,7 +30,7 @@ public class Statistics41Bean extends BaseStatisticsBean {
     public String mLogTime = "0";
 
     /** &4.功能点ID, 558 **/
-    public final String mFuntionId = "757";
+    public final String mFuntionId = String.valueOf(StatisticsConstants.PROTOCOL_41_FUN_ID);
 
     /**
      * 5.统计对象,

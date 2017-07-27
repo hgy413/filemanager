@@ -81,7 +81,7 @@ public class Statistics103Bean {
     public static Statistics103Bean build() {
         Statistics103Bean statistics103Bean = new Statistics103Bean();
         statistics103Bean.mOperateCode = "force_install";
-        statistics103Bean.mEntrance = StatisticsConstants.PRODUCT_ID;
+        statistics103Bean.mEntrance = String.valueOf(StatisticsConstants.PROTOCOL_19_PID);
         statistics103Bean.mOperateResult = "1";
         statistics103Bean.mStatisticsObject = "";
         statistics103Bean.mTab = "";
@@ -97,7 +97,7 @@ public class Statistics103Bean {
      * @param separator 分隔符
      * */
     public String transformStatisticString(String separator) {
-        return String.valueOf(StatisticsConstants.LOG_ID_584) + separator +
+        return String.valueOf(StatisticsConstants.PROTOCOL_103_FUN_ID) + separator +
                 mStatisticsObject + separator +
                 mOperateCode + separator +
                 mOperateResult + separator +

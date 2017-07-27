@@ -7,18 +7,18 @@ package com.jb.filemanager.statistics;
 
 public interface StatisticsConstants {
 
-    //101
-    int LOG_ID_758 = 862;
-    //102
-    int LOG_ID_759 = 759;
-    //103 功能id
-    int LOG_ID_584 = 584;
-
-
-    /**
-     * File Manager 的产品ID
-     */
-    String PRODUCT_ID = "194";
+    // 19协议功能id
+    int PROTOCOL_19_PID = 194;
+    // 45协议功能id
+    int PROTOCOL_41_FUN_ID = 864;
+    // 45协议功能id
+    int PROTOCOL_45_FUN_ID = 863;
+    // 101协议功能id
+    int PROTOCOL_101_FUN_ID = 862;
+    // 102协议功能id
+    int PROTOCOL_102_FUN_ID = 861;
+    // 103协议功能id
+    int PROTOCOL_103_FUN_ID = 584;
 
 
     // 侧边栏呼出

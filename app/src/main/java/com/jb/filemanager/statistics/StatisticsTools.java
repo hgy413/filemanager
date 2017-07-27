@@ -137,7 +137,7 @@ public class StatisticsTools {
         if (statisticsBaseBean.mOperateId.equals("")) {
             return;
         }
-        String sb = String.valueOf(StatisticsConstants.LOG_ID_758) + PROTOCOL_DIVIDER +
+        String sb = String.valueOf(StatisticsConstants.PROTOCOL_101_FUN_ID) + PROTOCOL_DIVIDER +
                 statisticsBaseBean.mStatisticsObject + PROTOCOL_DIVIDER +
                 statisticsBaseBean.mOperateId + PROTOCOL_DIVIDER +
                 "1" + PROTOCOL_DIVIDER +
@@ -146,7 +146,7 @@ public class StatisticsTools {
                 statisticsBaseBean.mLocation + PROTOCOL_DIVIDER +
                 statisticsBaseBean.mRelativeObject + PROTOCOL_DIVIDER +
                 statisticsBaseBean.mRemark;
-        uploadStaticData(PROTOCOL_101, StatisticsConstants.LOG_ID_758, sb, ignoreAgreePrivacy);
+        uploadStaticData(PROTOCOL_101, StatisticsConstants.PROTOCOL_101_FUN_ID, sb, ignoreAgreePrivacy);
     }
 
     /**
@@ -169,12 +169,12 @@ public class StatisticsTools {
             return;
         }
         StringBuffer sb = new StringBuffer();
-        sb.append(StatisticsConstants.LOG_ID_759).append(PROTOCOL_DIVIDER);
+        sb.append(StatisticsConstants.PROTOCOL_102_FUN_ID).append(PROTOCOL_DIVIDER);
         sb.append(statisticsBaseBean.mSettingInfo).append(PROTOCOL_DIVIDER);
         sb.append(statisticsBaseBean.mType).append(PROTOCOL_DIVIDER);
         sb.append("").append(PROTOCOL_DIVIDER);
         sb.append("");
-        uploadStaticData(PROTOCOL_102, StatisticsConstants.LOG_ID_759, sb.toString(), false);
+        uploadStaticData(PROTOCOL_102, StatisticsConstants.PROTOCOL_102_FUN_ID, sb.toString(), false);
     }
 
     /**
@@ -183,7 +183,7 @@ public class StatisticsTools {
     public static void upload103InfoPrivate() {
         Statistics103Bean statistics103Bean = Statistics103Bean.build();
         uploadStaticData(PROTOCOL_103,
-                StatisticsConstants.LOG_ID_584,
+                StatisticsConstants.PROTOCOL_103_FUN_ID,
                 statistics103Bean.transformStatisticString(PROTOCOL_DIVIDER),
                 false);
     }
@@ -435,7 +435,7 @@ public class StatisticsTools {
         boolean agreePrivacy = PrivacyHelper.isAgreePrivacy();
         String launcherPackageName = agreePrivacy ? Machine.getLauncherPackageName(TheApplication.getInstance()) : "";
 
-        final String productID = StatisticsConstants.PRODUCT_ID;
+        final String productID = String.valueOf(StatisticsConstants.PROTOCOL_19_PID);
         final String channel = AppUtils.getChannel(TheApplication.getInstance());
         final boolean isPay = false;
         final boolean needRootInfo = true;
