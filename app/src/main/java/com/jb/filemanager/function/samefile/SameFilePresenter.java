@@ -111,10 +111,12 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FileOperateEvent fileOperateEvent){
         if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
+            mView.statisticsClickPast();
             handleFileRename(fileOperateEvent);
             Toast.makeText(mView, "COPY", Toast.LENGTH_LONG);
             mView.finish();
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
+            mView.statisticsClickPast();
             handleFileRename(fileOperateEvent);
             Toast.makeText(mView, "CUT", Toast.LENGTH_LONG);
             mView.finish();

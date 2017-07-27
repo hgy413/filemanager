@@ -422,7 +422,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         Logger.d(StatisticsConstants.LOGGER_SHOW, sCategoryType + " 点击剪切---" + bean.mOperateId);
     }
 
-    static private void statisticsClickPast() {
+    static protected void statisticsClickPast() {
         Statistics101Bean bean = Statistics101Bean.builder();
         switch (sCategoryType) {
             case Const.CategoryType.CATEGORY_TYPE_MUSIC:
