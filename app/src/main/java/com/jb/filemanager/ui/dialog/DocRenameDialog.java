@@ -76,7 +76,8 @@ public class DocRenameDialog extends FMBaseDialog {
                                     showErrorTips(getString(R.string.dialog_rename_target_exist));
                                 } else {
                                     boolean success = FileUtil.renameSelectedFile(sourceFile, target.getAbsolutePath());
-                                    MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[] {dir}, null, null); // 修改后的文件添加到系统数据库
+
+                                    MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[] {sourceFile.getAbsolutePath(), target.getAbsolutePath()}, null, null); // 修改后的文件添加到系统数据库
                                     if (listener != null) {
                                         listener.onResult(DocRenameDialog.this, success);
                                     }
