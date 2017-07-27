@@ -76,7 +76,8 @@ public class DocRenameDialog extends FMBaseDialog {
                                     showErrorTips(getString(R.string.dialog_rename_target_exist));
                                 } else {
                                     boolean success = FileUtil.renameSelectedFile(sourceFile, target.getAbsolutePath());
-
+                                    // 重命名除了要将新文件添加到数据库外，还要传入旧文件路径，这样系统会将该文件在系统数据库中的信息删除
+                                    // 否则数据库中会有残留。
                                     MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[] {sourceFile.getAbsolutePath(), target.getAbsolutePath()}, null, null); // 修改后的文件添加到系统数据库
                                     if (listener != null) {
                                         listener.onResult(DocRenameDialog.this, success);
