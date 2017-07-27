@@ -113,11 +113,23 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
             handleFileRename(fileOperateEvent);
             Toast.makeText(mView, "COPY", Toast.LENGTH_LONG);
+            mView.finish();
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
             handleFileRename(fileOperateEvent);
             Toast.makeText(mView, "CUT", Toast.LENGTH_LONG);
+            mView.finish();
         }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
-            handleFileRename(fileOperateEvent);
+            //handleFileRename(fileOperateEvent);
+            if (fileOperateEvent != null && fileOperateEvent.mNewFile != null
+                    && fileOperateEvent.mNewFile.getName() != null) {
+                FileInfo info = getSelectInfo().get(0);
+                if (info != null) {
+                    info.mName = fileOperateEvent.mNewFile.getName();
+                    info.isSelected = false;
+                }
+                mView.showFileList(mFileGroupList);
+                mView.fileSelectShow(0);
+            }
             Toast.makeText(mView, "RENAME", Toast.LENGTH_LONG);
         }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
         }else {
@@ -128,7 +140,6 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     private void handleFileRename(FileOperateEvent fileOperateEvent) {
         String oldFile = fileOperateEvent.mOldFile.getAbsolutePath();
         String newFile = fileOperateEvent.mNewFile.getAbsolutePath();
-        String s = newFile.toLowerCase();
         mSupport.updateDatabaseRename(oldFile, newFile);
         reloadData();
         Logger.d(TAG, "rename   " + newFile + "      " + fileOperateEvent.mNewFile.getParent());
@@ -181,15 +192,23 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     @Override
     public ArrayList<File> getSelectFile() {
         ArrayList<File> selectedFile = new ArrayList<>();
+        for (FileInfo info : getSelectInfo()) {
+            selectedFile.add(new File(info.mFullPath));
+        }
+        return  selectedFile;
+    }
+
+    @Override
+    public ArrayList<FileInfo> getSelectInfo() {
+        ArrayList<FileInfo> selectedInfo = new ArrayList<>();
         for (int i = 0; i < mFileGroupList.size(); i++) {
             for (FileInfo info : mFileGroupList.valueAt(i)) {
                 if (info.isSelected) {
-                    selectedFile.add(new File(info.mFullPath));
+                    selectedInfo.add(info);
                 }
             }
         }
-        return  selectedFile;
-
+        return selectedInfo;
     }
 
     protected ArrayList<String> selectedPositon2PathList(boolean[] position) {

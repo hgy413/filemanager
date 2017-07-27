@@ -111,7 +111,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
             @Override
             public void onIvBackClick() {
-                statisticsClickExit("2:左上角返回键");
+                statisticsClickExit("2");
                 finish();
             }
 
@@ -253,7 +253,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         if (mFileExpandableListAdapter.getSelectCount() > 0) {
             mPresenter.cleanSelect();
         } else if (mPresenter != null) {
-            statisticsClickExit("1:系统返回按键");
+            statisticsClickExit("1");
             mPresenter.onClickBackButton(true);
         }
     }

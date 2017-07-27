@@ -36,6 +36,8 @@ public interface SameFileContract {
 
         ArrayList<File> getSelectFile();
 
+        ArrayList<FileInfo> getSelectInfo();
+
         void jumpToFileBrowserPage();
 
         void reloadData();
