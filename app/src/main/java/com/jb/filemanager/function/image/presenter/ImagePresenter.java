@@ -11,6 +11,7 @@ import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.image.ImageStatistics;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
+import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
 
 import org.greenrobot.eventbus.Subscribe;
