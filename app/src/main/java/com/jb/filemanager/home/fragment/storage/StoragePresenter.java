@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.jb.filemanager.R;
 import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.home.event.CurrentPathChangeEvent;
+import com.jb.filemanager.home.event.DrawerStatusChangeEvent;
 import com.jb.filemanager.home.event.SortByChangeEvent;
 import com.jb.filemanager.manager.file.FileLoader;
 import com.jb.filemanager.manager.file.FileManager;
@@ -46,6 +47,7 @@ class StoragePresenter implements StorageContract.Presenter,
     private String mCurrentPath;
 
     private int mStatus = MAIN_STATUS_NORMAL;
+    private boolean mDrawerIsOpen;
 
     private StorageContract.View mView;
     private StorageContract.Support mSupport;
@@ -56,6 +58,15 @@ class StoragePresenter implements StorageContract.Presenter,
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SortByChangeEvent event) {
             restartLoad();
+        }
+    };
+
+    private IOnEventMainThreadSubscriber<DrawerStatusChangeEvent> mDrawerStatusChangeEvent = new IOnEventMainThreadSubscriber<DrawerStatusChangeEvent>() {
+
+        @Override
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(DrawerStatusChangeEvent event) {
+            mDrawerIsOpen = event.getDrawerIsOpen();
         }
     };
 
@@ -77,6 +88,8 @@ class StoragePresenter implements StorageContract.Presenter,
         initStoragePath(path);
 
         EventBus.getDefault().register(mSortChangeEvent);
+        EventBus.getDefault().register(mDrawerStatusChangeEvent);
+
     }
 
     @Override
@@ -111,6 +124,9 @@ class StoragePresenter implements StorageContract.Presenter,
         if (EventBus.getDefault().isRegistered(mSortChangeEvent)) {
             EventBus.getDefault().unregister(mSortChangeEvent);
         }
+        if (EventBus.getDefault().isRegistered(mDrawerStatusChangeEvent)) {
+            EventBus.getDefault().unregister(mDrawerStatusChangeEvent);
+        }
 
         if (mSupport != null) {
             LoaderManager loaderManager = mSupport.getLoaderManager();
@@ -132,29 +148,30 @@ class StoragePresenter implements StorageContract.Presenter,
     public boolean onClickSystemBack() {
         boolean result = false;
         if (mView != null && mSupport != null) {
-            if (mStatus == MAIN_STATUS_SELECT) {
-                result = true;
-                mStatus = MAIN_STATUS_NORMAL;
-                resetSelectFile();
-            } else {
-                if (mPathStack.size() > 1) {
-                    mPathStack.pop();
-                    restartLoad();
-                    return true;
-                } else if (mPathStack.size() == 1) {
-                    if (mStorageList.size() == 1) {
-                        return false;
-                    } else {
+            if (!mDrawerIsOpen) {
+                if (mStatus == MAIN_STATUS_SELECT) {
+                    result = true;
+                    mStatus = MAIN_STATUS_NORMAL;
+                    resetSelectFile();
+                } else {
+                    if (mPathStack.size() > 1) {
                         mPathStack.pop();
-                        mCurrentPath = null;
-                        mView.updateCurrentPath(mStorageList, null);
-                        EventBus.getDefault().post(new CurrentPathChangeEvent(mCurrentPath));
+                        restartLoad();
                         return true;
+                    } else if (mPathStack.size() == 1) {
+                        if (mStorageList.size() == 1) {
+                            return false;
+                        } else {
+                            mPathStack.pop();
+                            mCurrentPath = null;
+                            mView.updateCurrentPath(mStorageList, null);
+                            EventBus.getDefault().post(new CurrentPathChangeEvent(mCurrentPath));
+                            return true;
+                        }
                     }
                 }
             }
         }
-
         return result;
     }
 

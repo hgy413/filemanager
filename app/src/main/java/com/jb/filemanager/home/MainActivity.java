@@ -119,8 +119,12 @@ public class MainActivity extends PrivacyGuardActivity implements MainContract.V
 
     @Override
     public void onBackPressed() {
-        if (mPresenter != null) {
-            mPresenter.onClickBackButton(true);
+        if (mDrawer.isDrawerOpened()) {
+            mDrawer.closeDrawerWithDelay(0);
+        } else {
+            if (mPresenter != null) {
+                mPresenter.onClickBackButton(true);
+            }
         }
     }
 

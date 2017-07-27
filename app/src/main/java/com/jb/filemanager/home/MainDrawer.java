@@ -27,6 +27,7 @@ import com.jb.filemanager.function.tip.manager.StorageTipManager;
 import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
 import com.jb.filemanager.home.dialog.IntroduceChargeDialog;
+import com.jb.filemanager.home.event.DrawerStatusChangeEvent;
 import com.jb.filemanager.home.event.SwitcherChgStateEvent;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
@@ -37,6 +38,7 @@ import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.QuickClickGuard;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -148,8 +150,10 @@ public class MainDrawer implements View.OnClickListener {
         }
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
+            EventBus.getDefault().post(new DrawerStatusChangeEvent(false));
         } else {
             mDrawerLayout.openDrawer(GravityCompat.START);
+            EventBus.getDefault().post(new DrawerStatusChangeEvent(true));
         }
     }
 
@@ -220,11 +224,12 @@ public class MainDrawer implements View.OnClickListener {
             @Override
             public void run() {
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                EventBus.getDefault().post(new DrawerStatusChangeEvent(true));
             }
         }, delayMills);
     }
 
-    private void closeDrawerWithDelay(int delayMills) {
+    void closeDrawerWithDelay(int delayMills) {
         if (mDrawerLayout == null) {
             mDrawerLayout = (DrawerLayout) mActivity.findViewById(R.id.left_drawer);
         }
@@ -232,6 +237,7 @@ public class MainDrawer implements View.OnClickListener {
             @Override
             public void run() {
                 mDrawerLayout.closeDrawers();
+                EventBus.getDefault().post(new DrawerStatusChangeEvent(false));
             }
         }, delayMills);
     }
