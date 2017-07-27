@@ -104,10 +104,10 @@ public class RateManager {
         Logger.w(TAG, "isInstallTimeOver8Hours >> true");
         int guideTimes;
         //评分引导次数 大于两次
-        if ((guideTimes = getRateGuideTimes()) > 2) {
+        if ((guideTimes = getRateGuideTimes()) > 1) {
             return false;
         }
-        Logger.w(TAG, "getRateGuideTimes >> " + guideTimes + " < 2");
+        Logger.w(TAG, "getRateGuideTimes >> " + guideTimes + " < 1");
         //上一次评分时间距离现在少于两天
         if (!isLastRateOver2Days()) {
             return false;

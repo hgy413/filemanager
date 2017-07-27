@@ -27,6 +27,7 @@ import com.jb.filemanager.function.image.presenter.ImagePresenter;
 import com.jb.filemanager.function.image.presenter.ImageSupport;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.CommonLoadingView;
 import com.jb.filemanager.ui.widget.CommonTitleBar;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -54,6 +55,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     private BottomOperateBar mBobBottomOperator;
     private ViewStub mEmptyViewStub;
     private ViewStub mExpandableListStub;
+    private CommonLoadingView mCommonLoadingView;
     private boolean isLoaded = false;
     //图片删除事件监听器
     private IOnEventMainThreadSubscriber<ImageFileDeleteEvent> mImageFileDeleteEventSubscriber = new IOnEventMainThreadSubscriber<ImageFileDeleteEvent>() {
@@ -83,6 +85,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         mCommonTitleBar.setBarDefaultTitle(R.string.image_title);
         mCommonTitleBar.setOnActionListener(this);
         mExpandableListStub = (ViewStub) view.findViewById(R.id.fragment_image_el);
+        mCommonLoadingView = (CommonLoadingView) view.findViewById(R.id.fragment_image_loading);
         mEmptyViewStub = (ViewStub) view.findViewById(R.id.fragment_image_empty_vs);
         mBobBottomOperator = (BottomOperateBar) view.findViewById(R.id.fragment_image_bob);
         mBobBottomOperator.setListener(this);
@@ -205,6 +208,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        mCommonLoadingView.startLoading();
         return new CursorLoader(getActivity(),
                 uri,
                 null,
@@ -219,6 +223,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mPresenter != null) {
             mPresenter.handleDataFinish(cursor);
         }
+        mCommonLoadingView.stopLoading();
     }
 
     @Override
