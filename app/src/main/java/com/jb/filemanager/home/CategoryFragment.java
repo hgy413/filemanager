@@ -657,8 +657,8 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     mTvCleanTrash.setText(getString(R.string.home_trash_notice, format + data[1]));
                 }
             });
-            long duration = (long) (size * 80);
-            mValueAnimator.setDuration(duration > 5000 ? 5000 : duration);//动画时间短于2秒
+            long duration = (long) (size * 60);
+            mValueAnimator.setDuration(duration > 3000 ? 3000 : duration);//动画时间短于2秒
             mValueAnimator.start();
         }
     }
