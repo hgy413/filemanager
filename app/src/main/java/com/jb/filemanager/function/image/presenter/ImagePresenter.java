@@ -4,11 +4,16 @@ package com.jb.filemanager.function.image.presenter;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.eventbus.FileOperateEvent;
+import com.jb.filemanager.eventbus.IOnEventMainThreadSubscriber;
 import com.jb.filemanager.function.image.ImageStatistics;
 import com.jb.filemanager.function.image.modle.ImageGroupModle;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.util.TimeUtil;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -36,6 +41,25 @@ public class ImagePresenter implements ImageContract.Presenter {
         mView = view;
         mSupport = support;
     }
+
+    /**
+     * 文件操作监听
+     * */
+    private IOnEventMainThreadSubscriber<FileOperateEvent> mOperateEventSubscriber = new IOnEventMainThreadSubscriber<FileOperateEvent>() {
+        @Override
+        @Subscribe
+        public void onEventMainThread(FileOperateEvent event) {
+            if (event.mOperateType == FileOperateEvent.OperateType.CUT) {
+                if (mSupport != null) {
+                    mSupport.cutFile(event.mOldFile, event.mNewFile);
+                }
+            } else if (event.mOperateType == FileOperateEvent.OperateType.COPY) {
+                if (mSupport != null) {
+                    mSupport.copyFile(event.mOldFile, event.mNewFile);
+                }
+            }
+        }
+    };
 
     @Override
     public void handleBackClick() {
@@ -344,6 +368,29 @@ public class ImagePresenter implements ImageContract.Presenter {
             if (imageGroupModle.mImageModleList.size() == 0 ) {
                 i1.remove();
             }
+        }
+    }
+
+    @Override
+    public void handleCopy() {
+        mSupport.saveImageModle(mSelectedImageList);
+        if (!TheApplication.getGlobalEventBus().isRegistered(mOperateEventSubscriber)) {
+            TheApplication.getGlobalEventBus().register(mOperateEventSubscriber);
+        }
+    }
+
+    @Override
+    public void handleCut() {
+        mSupport.saveImageModle(mSelectedImageList);
+        if (!TheApplication.getGlobalEventBus().isRegistered(mOperateEventSubscriber)) {
+            TheApplication.getGlobalEventBus().register(mOperateEventSubscriber);
+        }
+    }
+
+    @Override
+    public void release() {
+        if (TheApplication.getGlobalEventBus().isRegistered(mOperateEventSubscriber)) {
+            TheApplication.getGlobalEventBus().unregister(mOperateEventSubscriber);
         }
     }
 }

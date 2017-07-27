@@ -178,6 +178,9 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mAdapter != null) {
             mAdapter.release();
         }
+        if (mPresenter != null) {
+            mPresenter.release();
+        }
         mPresenter = null;
         if (TheApplication.getGlobalEventBus().isRegistered(mImageFileDeleteEventSubscriber)) {
             TheApplication.getGlobalEventBus().unregister(mImageFileDeleteEventSubscriber);
@@ -276,6 +279,9 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     @Override
     public void afterCopy() {
         gotoStoragePage();
+        if (mPresenter != null) {
+            mPresenter.handleCopy();
+        }
         mCommonTitleBar.onBackPressed();
         dismissBobar();
     }
@@ -283,6 +289,9 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     @Override
     public void afterCut() {
         gotoStoragePage();
+        if (mPresenter != null) {
+            mPresenter.handleCut();
+        }
         mCommonTitleBar.onBackPressed();
         dismissBobar();
     }

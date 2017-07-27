@@ -31,15 +31,21 @@ public class ImageContract {
         void handleCheck(boolean isCheck);
         void handleSelected(List<ImageGroupModle> imageGroupModleList);
         void handleDataFinish(Cursor cursor);
+        void handleCopy();
+        void handleCut();
         void handleDeleted();
         void handleRename();
         void handleDeletedBg(ImageModle imageModle);
         ArrayList<File> getCurrentSelectedFiles();
+        void release();
     }
 
     public interface Support {
         void deleteImage(ImageModle imageModle);
         int deleteImageInDb(ImageModle imageModle);
         void renameImage(ImageModle imageModle);
+        void saveImageModle(List<ImageModle> imageModle);
+        void copyFile(File oldFile, File newFile);
+        void cutFile(File oldFile, File newFile);
     }
 }
