@@ -43,9 +43,9 @@ public class ImageContract {
     public interface Support {
         void deleteImage(ImageModle imageModle);
         int deleteImageInDb(ImageModle imageModle);
-        void renameImage(ImageModle imageModle);
         void saveImageModle(List<ImageModle> imageModle);
         void copyFile(File oldFile, File newFile);
         void cutFile(File oldFile, File newFile);
+        void renameFile(File oldFile, File newFile);
     }
 }

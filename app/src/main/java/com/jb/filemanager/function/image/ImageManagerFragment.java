@@ -28,7 +28,6 @@ import com.jb.filemanager.function.image.presenter.ImageSupport;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 import com.jb.filemanager.ui.widget.CommonTitleBar;
-import com.jb.filemanager.util.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

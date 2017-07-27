@@ -58,14 +58,6 @@ public class ImageSupport implements ImageContract.Support {
     }
 
     @Override
-    public void renameImage(final ImageModle imageModle) {
-        if (imageModle == null) {
-            return;
-        }
-        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{imageModle.mImagePath}, null, null);
-    }
-
-    @Override
     public void saveImageModle(List<ImageModle> imageModleList) {
         if (imageModleList == null || imageModleList.size() == 0) {
             return;
@@ -114,5 +106,10 @@ public class ImageSupport implements ImageContract.Support {
         }
         //扫描新文件数据
         MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile.getAbsolutePath()}, null, null);
+    }
+
+    @Override
+    public void renameFile(File oldFile, File newFile) {
+        cutFile(oldFile, newFile);
     }
 }
