@@ -328,8 +328,7 @@ public class UpdateManager {
 	}
 
 	public static boolean needDialogShow() {
-		return true;
-//		return /*LauncherModel.getInstance().getSharedPreferencesManager().isLoadDone() &&*/ needDialogShowByUpdateWay() && needDialogShowByVersion() && needDialogShowByButton();
+		return /*LauncherModel.getInstance().getSharedPreferencesManager().isLoadDone() &&*/ needDialogShowByUpdateWay() && needDialogShowByVersion() && needDialogShowByButton();
 	}
 
 	private static boolean needDialogShowByVersion() {
