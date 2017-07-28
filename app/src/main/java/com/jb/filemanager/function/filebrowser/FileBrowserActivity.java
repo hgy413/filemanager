@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.home.fragment.storage.StorageFragment;
+import com.jb.filemanager.manager.file.FileManager;
 
 /**
  * Created by bill wang on 2017/7/19.
@@ -22,6 +23,18 @@ import com.jb.filemanager.home.fragment.storage.StorageFragment;
 public class FileBrowserActivity extends BaseActivity {
 
     private static final String PARAM_PATH = "param_path";
+
+    /**
+     * 展示搜索
+     * */
+    public static void startBrowser(Context context, String targetPath) {
+        Intent intent = new Intent(context, FileBrowserActivity.class);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.putExtra(PARAM_PATH, targetPath);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,15 +73,10 @@ public class FileBrowserActivity extends BaseActivity {
         transaction.commit();
     }
 
-    /**
-     * 展示搜索
-     * */
-    public static void startBrowser(Context context, String targetPath) {
-        Intent intent = new Intent(context, FileBrowserActivity.class);
-        if (!(context instanceof Activity)) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        intent.putExtra(PARAM_PATH, targetPath);
-        context.startActivity(intent);
+    @Override
+    public void onBackPressed() {
+        FileManager.getInstance().clearCutFiles();
+        FileManager.getInstance().clearCopyFiles();
+        super.onBackPressed();
     }
 }
