@@ -1,4 +1,4 @@
-package com.jb.filemanager.manager;
+package com.jb.filemanager.globaldata;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -22,6 +22,7 @@ import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.samefile.FileInfo;
 import com.jb.filemanager.function.samefile.GroupList;
 import com.jb.filemanager.function.zipfile.bean.ZipFileItemBean;
+import com.jb.filemanager.globaldata.bean.BaseDataBean;
 import com.jb.filemanager.util.StorageUtil;
 
 import java.io.File;
@@ -70,7 +71,7 @@ import java.util.Set;
  * </p>
  */
 
-public class GlobalFileManager {
+public final class GlobalFileManager implements GlobalScanDBTask.GlobalScanDBListener {
 
     private static GlobalFileManager sInstance;
     private Context mContext;
@@ -82,15 +83,15 @@ public class GlobalFileManager {
     // 图片文件
     private List<ImageModle> mImageList = new ArrayList<>();
     // 视频文件
-    private GroupList<String,FileInfo> mVideoList = new GroupList<String,FileInfo>();
+    private GroupList<String, FileInfo> mVideoList = new GroupList<String, FileInfo>();
     // 音频文件
-    private GroupList<String,FileInfo> mAudioList = new GroupList<String,FileInfo>();
+    private GroupList<String, FileInfo> mAudioList = new GroupList<String, FileInfo>();
 
     // 最近文件
     private List<BlockBean> mRecentList = new ArrayList<>();
-    // 下载文件
-    private GroupList<String,FileInfo> mDownloadList = new GroupList<String,FileInfo>();
-    // 下载文件
+    // 下载文件 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+    private GroupList<String, FileInfo> mDownloadList = new GroupList<String, FileInfo>();
+    // 文档文件
     private List<DocGroupBean> mDocumentList = new ArrayList<>();
 
     private GlobalFileManager() {
@@ -111,32 +112,83 @@ public class GlobalFileManager {
 //        initAllData();
     }
 
-    // MediaStore.Audio Video Images Files
-    // http://blog.csdn.net/ifmylove2011/article/details/51425921
-    private void initAllData() {
+    public void loadData() {
+        GlobalScanDBTask globalScanDBTask = new GlobalScanDBTask(this);
+        globalScanDBTask.execute();
+    }
+
+    public void initAllData() {
         long start = System.currentTimeMillis();
         Log.e("time", "start=" + start);
         ContentResolver resolver = mContext.getContentResolver();
-        Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        Uri audioUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Uri filesUri = MediaStore.Files.getContentUri("external");
-
+//        Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//        Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+//        Uri audioUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+//        Uri filesUri = MediaStore.Files.getContentUri("external");
+//        String data = MediaStore.Files.FileColumns.DATA;
+//        String mimeType = MediaStore.Files.FileColumns.MIME_TYPE;
+//        String parent = MediaStore.Files.FileColumns.PARENT;
+//        String title = MediaStore.Files.FileColumns.TITLE;
+//        String count = MediaStore.Files.FileColumns._COUNT;
+//        String id = MediaStore.Files.FileColumns._ID;
+//        String dateAdded = MediaStore.Files.FileColumns.DATE_ADDED;
+//        String dateModified = MediaStore.Files.FileColumns.DATE_MODIFIED;
+        String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
         Cursor cursor = resolver.query(
                 MediaStore.Files.getContentUri("external"),
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 null,
-                MediaStore.Files.FileColumns.MIME_TYPE + "=? or "
-                        + MediaStore.Files.FileColumns.MIME_TYPE + "=?",
-                new String[]{MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip"),
-                        MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")},
+//                MediaStore.Files.FileColumns.MIME_TYPE + "=? or "
+//                        + MediaStore.Files.FileColumns.MIME_TYPE + "=?",
+                null,
+//                new String[]{MimeTypeMap.getSingleton().getMimeTypeFromExtension("png"),
+//                        MimeTypeMap.getSingleton().getMimeTypeFromExtension("jpg")},
+                null,
                 null);
-//        if (cursor != null) {
-//            while (cursor.moveToNext()) {
-//                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-//                Log.e("image", "data=" + data);
-//            }
+        Cursor cur = resolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        int cc = 0;
+//        while (cur.moveToNext()) {
+//            cc ++;
+//            cur.getString(cur.getColumnIndex(MediaStore.Images.ImageColumns.))
 //        }
-        Log.e("time", "time=" + (System.currentTimeMillis() - start));
+        if (cursor != null) {
+           /* String[] names = cursor.getColumnNames();
+            StringBuilder sb = new StringBuilder();
+            for (String name : names) {
+                sb.append(name);
+                sb.append("--");
+            }
+            Log.e("global", sb.toString());*/
+            int c = 0;
+            while (cursor.moveToNext()) {
+                c++;
+                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                int parent = cursor.getInt(cursor.getColumnIndex(MediaStore.Files.FileColumns.PARENT));
+                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID));
+//                int count = cursor.getInt(cursor.getColumnIndex(MediaStore.Files.FileColumns._COUNT));
+                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE));
+                String display = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME));
+                long addTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED));
+                long lastModify = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED));
+                String format = cursor.getString(cursor.getColumnIndex("format"));
+                int mediaType = cursor.getInt(cursor.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
+//                Log.e("global", "id=" + id + ";title=" + title
+//                        + ";display=" + display + ";parent=" + parent + ";path=" + data);
+//                File file = new File(data);
+//                if (file.isDirectory()) {
+//                    Log.e("global", data);
+//                }
+                Log.e("global", "id=" + id + ";mediaTYpe=" + mediaType + ";parent=" + parent + ";path=" + data);
+            }
+
+            Log.e("time", c + ";;time=" + (System.currentTimeMillis() - start));
+        }
     }
 
     /**
@@ -163,6 +215,7 @@ public class GlobalFileManager {
                 }
             });
         } else {
+            // 低版本使用广播
             registerMediaScannerReceiver();
             final Intent intent;
             if (f.isDirectory()) {
@@ -219,4 +272,31 @@ public class GlobalFileManager {
             mContext.unregisterReceiver(mReceiver);
         }
     }
+
+    //////////////////////////////////////////////////////////
+    ////////////////扫描系统数据库接口开始//////////////////////
+    /////////////////////////////////////////////////////////
+    @Override
+    public void onPreExecute() {
+        Log.e("global", "开始系统数据库数据扫描");
+    }
+
+    @Override
+    public void onProgressUpdate() {
+
+    }
+
+    @Override
+    public void onPostExecute(List<BaseDataBean> data) {
+        Log.e("global", "完成系统数据库数据扫描" + data.size());
+//        for (BaseDataBean bean : data) {
+//            Log.e("global", bean.toString());
+//        }
+    }
+
+    @Override
+    public void onCancelled() {
+        Log.e("global", "取消系统数据库数据扫描");
+    }
+    ////////////////扫描系统数据库接口结束//////////////////////
 }

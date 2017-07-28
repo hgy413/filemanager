@@ -1,6 +1,7 @@
 package com.jb.filemanager.manager.file.task;
 
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.jb.filemanager.TheApplication;

@@ -35,7 +35,7 @@ import com.jb.filemanager.function.search.SearchManager;
 import com.jb.filemanager.function.tip.manager.StorageTipManager;
 import com.jb.filemanager.function.tip.manager.UsbStateManager;
 import com.jb.filemanager.function.zipfile.ExtractManager;
-import com.jb.filemanager.manager.GlobalFileManager;
+import com.jb.filemanager.globaldata.GlobalFileManager;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.receiver.ScreenStateReceiver;
@@ -243,7 +243,7 @@ public class TheApplication extends Application {
         appLaunchFinished();
 
         // 将主进程的主线程设置成严苛模式 包括线程耗时以及内存泄露部分
-        initStrictMode();
+        //initStrictMode();
         TheApplication.getGlobalEventBus().post(new GlobalDataLoadingDoneEvent());
     }
 

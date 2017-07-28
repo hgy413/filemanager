@@ -130,7 +130,7 @@ public class ZipFileActivityPresenter implements ZipActivityContract.Presenter {
 
     @Override
     public void afterDelete() {
-        onTitleCancelBtnClick();
+        onCreate();
     }
 
     private void changeAllItemState(boolean isSelect) {

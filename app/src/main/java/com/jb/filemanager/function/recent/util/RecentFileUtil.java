@@ -56,6 +56,11 @@ public final class RecentFileUtil {
         return VALUE_EARLY_TIME;
     }
 
+    public static int calculateWithinMinute(File file) {
+        long deltaTime = System.currentTimeMillis() - file.lastModified();
+        return calculateWithinMinute(deltaTime);
+    }
+
     /**
      * 最近文件类型 : 文件或者图片
      *
@@ -180,7 +185,7 @@ public final class RecentFileUtil {
      * 调用系统应用打开文件
      *
      * @param context c
-     * @param file f
+     * @param file    f
      */
     public static void openFile(Context context, File file) {
         Intent intent = new Intent();
@@ -197,5 +202,17 @@ public final class RecentFileUtil {
         } catch (Exception e) {
 //            Toast.makeText(context, "找不到打开此文件的应用！", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * 最后修改时间间隔在0到一个月之内
+     *
+     * @param file 文件
+     * @return true or false
+     */
+    public static boolean isRecentFile(File file) {
+        if (file == null || file.isDirectory()) return false;
+        long deltaTime = System.currentTimeMillis() - file.lastModified();
+        return deltaTime >= 0 && deltaTime <= RecentFileUtil.MAX_MODIFY_SCAN_TIME;
     }
 }

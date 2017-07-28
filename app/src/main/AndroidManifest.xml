@@ -407,6 +407,7 @@
         <activity
             android:name="com.jiubang.commerce.ad.h5.H5AdActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".globaldata.TestActivity"/>
         <!-- 广告SDK本身服务 -->
         <service
             android:name="com.jiubang.commerce.service.AdService"

@@ -19,7 +19,6 @@ import com.jb.filemanager.util.QuickClickGuard;
  */
 
 public class BaseFragment extends android.support.v4.app.Fragment {
-    protected Activity mActivity;
 
     protected QuickClickGuard mQuickClickGuard;
     //这个主要是为防止快速点击不同的控件

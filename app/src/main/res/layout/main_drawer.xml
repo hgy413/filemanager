@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="SpUsage,ContentDescription"
     android:id="@+id/left_drawer"
@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <ImageView
@@ -22,9 +22,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="0dp"
+            android:layout_weight="44"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
+            android:paddingTop="16dp"
             android:gravity="center_vertical"
             android:textColor="#999999"
             android:textSize="@dimen/h5_12"
@@ -34,30 +36,34 @@
         <TextView
             android:id="@+id/tv_drawer_app_locker"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="46"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_app_locker"
             android:drawableStart="@drawable/ic_drawer_app_locker"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_app_locker"/>
 
         <TextView
             android:id="@+id/tv_drawer_smart_charge"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="46"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_smart_charge"
             android:drawableStart="@drawable/ic_drawer_smart_charge"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:visibility="gone"
             android:text="@string/drawer_smart_charge"/>
@@ -69,9 +75,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="0dp"
+            android:layout_weight="44"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
+            android:paddingTop="16dp"
             android:gravity="center_vertical"
             android:textColor="#999999"
             android:textSize="@dimen/h5_12"
@@ -81,9 +89,11 @@
         <TextView
             android:id="@+id/tv_drawer_usb_plugin"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_usb"
             android:drawableStart="@drawable/ic_drawer_usb"
@@ -91,16 +101,18 @@
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_usb_plugin_message"/>
 
         <TextView
             android:id="@+id/tv_drawer_low_space"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_low_space"
             android:drawableStart="@drawable/ic_drawer_low_space"
@@ -108,7 +120,7 @@
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_low_space_warning"/>
 
@@ -116,9 +128,11 @@
         <TextView
             android:id="@+id/tv_drawer_logger_notification"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_logger"
             android:drawableStart="@drawable/ic_drawer_logger"
@@ -126,7 +140,7 @@
             android:drawableEnd="@drawable/drawer_setting_switcher_selector"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_logger_notification"/>
 
@@ -137,9 +151,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="0dp"
+            android:layout_weight="43"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
+            android:paddingTop="16dp"
             android:gravity="center_vertical"
             android:textColor="#999999"
             android:textSize="@dimen/h5_12"
@@ -149,30 +165,34 @@
         <TextView
             android:id="@+id/tv_drawer_rating"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_rating"
             android:drawableStart="@drawable/ic_drawer_rating"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_rating"/>
 
         <TextView
             android:id="@+id/tv_drawer_update"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_update"
             android:drawableStart="@drawable/ic_drawer_update"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:visibility="gone"
             android:text="@string/drawer_update"/>
@@ -180,33 +200,37 @@
         <TextView
             android:id="@+id/tv_drawer_help"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_help"
             android:drawableStart="@drawable/ic_drawer_help"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_help"/>
 
         <TextView
             android:id="@+id/tv_drawer_about"
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:paddingBottom="12dp"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_drawer_about"
             android:drawableStart="@drawable/ic_drawer_about"
             android:drawablePadding="15dp"
             android:textColor="#4c4c4c"
-            android:textSize="@dimen/h5_12"
+            android:textSize="@dimen/h4_14"
             android:textStyle="bold"
             android:text="@string/drawer_about"/>
 
     </LinearLayout>
 
-</ScrollView>
+</FrameLayout>

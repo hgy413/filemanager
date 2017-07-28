@@ -19,6 +19,12 @@
         android:layout_marginTop="@dimen/common_title_bar_exclude_shadow_height"
         android:layout="@layout/layout_no_files"/>
 
+    <com.jb.filemanager.ui.widget.CommonLoadingView
+        android:id="@+id/fragment_image_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/common_title_bar_exclude_shadow_height"/>
+
     <com.jb.filemanager.ui.widget.CommonTitleBar
         android:id="@+id/fragment_image_title_bar"
         android:layout_width="match_parent"

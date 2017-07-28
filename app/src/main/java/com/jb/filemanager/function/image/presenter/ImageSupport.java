@@ -1,6 +1,6 @@
 package com.jb.filemanager.function.image.presenter;
 
-import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
@@ -11,6 +11,9 @@ import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by nieyh on 2017/6/27.
@@ -19,6 +22,8 @@ import java.io.File;
 public class ImageSupport implements ImageContract.Support {
     //是否是内部存储
     private boolean isInternalStorage = false;
+    //临时存储的图片列表
+    private List<ImageModle> mTempImageModleList;
 
     public ImageSupport(boolean isInternalStorage) {
         this.isInternalStorage = isInternalStorage;
@@ -49,27 +54,62 @@ public class ImageSupport implements ImageContract.Support {
         Uri uri = Uri.withAppendedPath(isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "" + imageModle.mImageId);
         //删除指定文件
-       return TheApplication.getAppContext().getContentResolver().delete(uri, null, null);
+        return TheApplication.getAppContext().getContentResolver().delete(uri, null, null);
     }
 
     @Override
-    public void renameImage(final ImageModle imageModle) {
-        if (imageModle == null) {
+    public void saveImageModle(List<ImageModle> imageModleList) {
+        if (imageModleList == null || imageModleList.size() == 0) {
             return;
         }
+        mTempImageModleList = new ArrayList<>(imageModleList.size());
+        mTempImageModleList.addAll(imageModleList);
+    }
 
-        TheApplication.postRunOnShortTaskThread(new Runnable() {
-            @Override
-            public void run() {
-                //合成uri
-//                Uri uri = Uri.withAppendedPath(isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageModle.mImageId);
-//                //删除指定文件
-//                TheApplication.getAppContext().getContentResolver().delete(uri, null, null);
-                //先删除这个数据库数据 然后指定文件扫描插入
-                Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                scanIntent.setData(Uri.fromFile(new File(imageModle.mImagePath)));
-                TheApplication.getAppContext().sendBroadcast(scanIntent);
+    @Override
+    public void copyFile(File oldFile, File newFile) {
+        if (oldFile == null || newFile == null) {
+            return;
+        }
+        if (oldFile.isDirectory() || newFile.isDirectory()) {
+            return;
+        }
+        if (!newFile.exists()) {
+            return;
+        }
+        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile.getAbsolutePath()}, null, null);
+    }
+
+    @Override
+    public void cutFile(File oldFile, File newFile) {
+        if (oldFile == null || newFile == null) {
+            return;
+        }
+        if (oldFile.isDirectory() || newFile.isDirectory()) {
+            return;
+        }
+        if (!newFile.exists()) {
+            return;
+        }
+        if (mTempImageModleList == null) {
+            return;
+        }
+        Iterator<ImageModle> iterator = mTempImageModleList.iterator();
+        //删除数据库中老数据
+        while (iterator.hasNext()) {
+            ImageModle imageModle = iterator.next();
+            if (imageModle.mImagePath.equals(oldFile.getAbsolutePath())) {
+                deleteImageInDb(imageModle);
+                iterator.remove();
+                break;
             }
-        });
+        }
+        //扫描新文件数据
+        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile.getAbsolutePath()}, null, null);
+    }
+
+    @Override
+    public void renameFile(File oldFile, File newFile) {
+        cutFile(oldFile, newFile);
     }
 }

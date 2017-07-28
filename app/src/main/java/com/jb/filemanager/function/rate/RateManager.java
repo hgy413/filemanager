@@ -23,6 +23,8 @@ import java.lang.annotation.RetentionPolicy;
 
 public class RateManager {
 
+    private final String TAG = "RateManager";
+
     private static RateManager sInstance;
 
     private RateManager() {}
@@ -78,32 +80,39 @@ public class RateManager {
 
     // 是否满足引导条件
     public boolean isReachTriggerCondition() {
+        Logger.w(TAG, "isReachTriggerCondition");
         //评分成功则不再触发
         if (isRateSuccess()) {
             return false;
         }
+        Logger.w(TAG, "isRateSuccess >> false");
         //没安装GP
         if (!isGpAppExist()) {
             return false;
         }
+        Logger.w(TAG, "isGpAppExist >> true");
         //没有网络
         if (!isNetworkConnection()) {
             return false;
         }
+        Logger.w(TAG, "isNetworkConnection >> true");
 
         //安装时间小于八小时
         if (!isInstallTimeOver8Hours()) {
             return false;
         }
+        Logger.w(TAG, "isInstallTimeOver8Hours >> true");
         int guideTimes;
         //评分引导次数 大于两次
-        if ((guideTimes = getRateGuideTimes()) > 2) {
+        if ((guideTimes = getRateGuideTimes()) > 1) {
             return false;
         }
+        Logger.w(TAG, "getRateGuideTimes >> " + guideTimes + " < 1");
         //上一次评分时间距离现在少于两天
         if (!isLastRateOver2Days()) {
             return false;
         }
+        Logger.w(TAG, "isLastRateOver2Days >> true ");
 
         RateTriggeringFactorProvider rateTriggeringFactorProvider
                 = new RateTriggeringFactorProvider(TheApplication.getAppContext());
@@ -114,6 +123,7 @@ public class RateManager {
                 FILE_OPERATE,
                 SEARCH_RESULT_CLICK) || rateTriggeringFactorProvider.isTriggerCounterOverSomeTimes(2, APPLOCK_ENTER);
 
+        Logger.w(TAG, "isReachTriggerCondition >> " + isReachTriggerCondition);
         if (isReachTriggerCondition) {
             //增加一次引导次数
             commitRateGuideTimes(++ guideTimes);
@@ -181,8 +191,8 @@ public class RateManager {
     }
 
     //上一次评分的时间
-    private int getLastRateDate() {
-        return SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getInt(IPreferencesIds.KEY_LAST_TIME, 0);
+    private long getLastRateDate() {
+        return SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(IPreferencesIds.KEY_LAST_TIME, 0);
     }
 
     //更新上一次评分的时间

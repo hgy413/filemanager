@@ -94,7 +94,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
         mQuestionListDialog.setItemClickListener(new ListDialog.OnItemClickListener() {
             @Override
             public void click(int index) {
-                StatisticsTools.upload(StatisticsConstants.FEEDBACK_SWITCH_TYPE);
+                StatisticsTools.upload(StatisticsConstants.FEEDBACK_SWITCH_TYPE, "", String.valueOf(index + 1));
             }
         });
         mWarnTipNo.setOnClickListener(new View.OnClickListener() {
@@ -146,13 +146,14 @@ public class FeedbackActivity extends BaseActivity implements FeedbackContract.V
             @Override
             public void onClick(View v) {
 
-                StatisticsTools.upload(StatisticsConstants.FEEDBACK_SEND_CLI);
                 String detailString = mContainer.getText().toString().trim();
                 String selectItem = select.getText().toString();
                 if (detailString.equals("")) {
+                    StatisticsTools.upload(StatisticsConstants.FEEDBACK_SEND_CLI, "", String.valueOf(1));
                     Toast.makeText(FeedbackActivity.this, getString(R.string.feedback_no_contain), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                StatisticsTools.upload(StatisticsConstants.FEEDBACK_SEND_CLI, "", String.valueOf(2));
                 sendFeedBack(detailString, selectItem);
                 finish();
             }

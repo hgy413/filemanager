@@ -73,16 +73,21 @@ public class RateTriggeringFactorProvider extends BaseDataProvider {
                 db.beginTransaction();
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(RateTriggeringFactorTable.LAST_TRIGGER_TIME, date);
-                contentValues.put(RateTriggeringFactorTable.FACTOR_TYPE, type);
-                if (db.insert(RateTriggeringFactorTable.TABLE_NAME, null, contentValues) == 0) {
-                    //插入失败 则执行更新
-                    mDBHelper.exec("UPDATE " + RateTriggeringFactorTable.TABLE_NAME + " SET "
-                            + RateTriggeringFactorTable.TRIGGER_COUNTER + " = " + RateTriggeringFactorTable.TRIGGER_COUNTER + "+1 ,"
-                            + RateTriggeringFactorTable.LAST_TRIGGER_TIME + " = " + date
-                            + " WHERE " + RateTriggeringFactorTable.FACTOR_TYPE + " = " + type);
+                contentValues.put(RateTriggeringFactorTable.TRIGGER_COUNTER, RateTriggeringFactorTable.TRIGGER_COUNTER + " + 1");
+                if (db.update(RateTriggeringFactorTable.TABLE_NAME,
+                        contentValues,
+                        RateTriggeringFactorTable.FACTOR_TYPE + " =? ",
+                        new String[]{String.valueOf(type)}) == 0) {
+                    Logger.w(TAG, "update failure");
+                    //当更新失败时 则直接插入数据
+                    contentValues.remove(RateTriggeringFactorTable.TRIGGER_COUNTER);
+                    contentValues.put(RateTriggeringFactorTable.FACTOR_TYPE, type);
+                    db.insert(RateTriggeringFactorTable.TABLE_NAME, null, contentValues);
+                } else {
+                    Logger.w(TAG, "update success");
                 }
                 db.setTransactionSuccessful();
-            } catch (DatabaseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 db.endTransaction();

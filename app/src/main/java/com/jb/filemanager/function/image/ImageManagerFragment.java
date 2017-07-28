@@ -27,6 +27,7 @@ import com.jb.filemanager.function.image.presenter.ImagePresenter;
 import com.jb.filemanager.function.image.presenter.ImageSupport;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.CommonLoadingView;
 import com.jb.filemanager.ui.widget.CommonTitleBar;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -40,7 +41,7 @@ import java.util.List;
  * Created by nieyh on 17-7-3.
  */
 
-public class ImageManagerFragment extends BaseFragment implements ImageContract.View, CommonTitleBar.OnActionListener, BottomOperateBar.Listener {
+public class ImageManagerFragment extends BaseFragment implements ImageContract.View, CommonTitleBar.OnActionListener, BottomOperateBar.Listener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private ImageContract.Presenter mPresenter;
     //是否是内部存储
@@ -54,6 +55,8 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     private BottomOperateBar mBobBottomOperator;
     private ViewStub mEmptyViewStub;
     private ViewStub mExpandableListStub;
+    private CommonLoadingView mCommonLoadingView;
+    private boolean isLoaded = false;
     //图片删除事件监听器
     private IOnEventMainThreadSubscriber<ImageFileDeleteEvent> mImageFileDeleteEventSubscriber = new IOnEventMainThreadSubscriber<ImageFileDeleteEvent>() {
         @Override
@@ -82,11 +85,11 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         mCommonTitleBar.setBarDefaultTitle(R.string.image_title);
         mCommonTitleBar.setOnActionListener(this);
         mExpandableListStub = (ViewStub) view.findViewById(R.id.fragment_image_el);
+        mCommonLoadingView = (CommonLoadingView) view.findViewById(R.id.fragment_image_loading);
         mEmptyViewStub = (ViewStub) view.findViewById(R.id.fragment_image_empty_vs);
         mBobBottomOperator = (BottomOperateBar) view.findViewById(R.id.fragment_image_bob);
         mBobBottomOperator.setListener(this);
         mPresenter = new ImagePresenter(this, new ImageSupport(isInternalStorage));
-        loadData();
     }
 
     /**
@@ -178,6 +181,9 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mAdapter != null) {
             mAdapter.release();
         }
+        if (mPresenter != null) {
+            mPresenter.release();
+        }
         mPresenter = null;
         if (TheApplication.getGlobalEventBus().isRegistered(mImageFileDeleteEventSubscriber)) {
             TheApplication.getGlobalEventBus().unregister(mImageFileDeleteEventSubscriber);
@@ -199,32 +205,52 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         }
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri = isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        mCommonLoadingView.startLoading();
+        return new CursorLoader(getActivity(),
+                uri,
+                null,
+                MediaStore.Images.Media.MIME_TYPE + "=? or "
+                        + MediaStore.Images.Media.MIME_TYPE + "=?",
+                new String[]{"image/jpeg", "image/png"},
+                MediaStore.Images.Media.DATE_ADDED + " desc");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (mPresenter != null) {
+            mPresenter.handleDataFinish(cursor);
+        }
+        mCommonLoadingView.stopLoading();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isLoaded) {
+            loadData();
+            isLoaded = true;
+        } else {
+            updateLoadData();
+        }
+    }
+
     private void loadData() {
-        getLoaderManager().initLoader(FileManager.LOADER_IMAGE, null, new LoaderManager.LoaderCallbacks<Cursor>() {
-            @Override
-            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                Uri uri = isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                return new CursorLoader(getActivity(),
-                        uri,
-                        null,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or "
-                                + MediaStore.Images.Media.MIME_TYPE + "=?",
-                        new String[]{"image/jpeg", "image/png"},
-                        MediaStore.Images.Media.DATE_ADDED + " desc");
-            }
+        getLoaderManager().initLoader(FileManager.LOADER_IMAGE, null,this);
+    }
 
-            @Override
-            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-                if (mPresenter != null) {
-                    mPresenter.handleDataFinish(cursor);
-                }
-            }
-
-            @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
-
-            }
-        });
+    /**
+     * 重置数据
+     * */
+    private void updateLoadData() {
+        getLoaderManager().restartLoader(FileManager.LOADER_IMAGE, null, this);
     }
 
     @Override
@@ -276,6 +302,9 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     @Override
     public void afterCopy() {
         gotoStoragePage();
+        if (mPresenter != null) {
+            mPresenter.handleCopy();
+        }
         mCommonTitleBar.onBackPressed();
         dismissBobar();
     }
@@ -283,6 +312,9 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     @Override
     public void afterCut() {
         gotoStoragePage();
+        if (mPresenter != null) {
+            mPresenter.handleCut();
+        }
         mCommonTitleBar.onBackPressed();
         dismissBobar();
     }
