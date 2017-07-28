@@ -51,8 +51,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     private DocManagerContract.View mView;
     private DocManagerContract.Support mSupport;
     private DocScanListener mDocScanListener;
-    private boolean mIsFirstIn = true;
     private ScanDocFileTask mScanDocFileTask;
+    private volatile boolean mIsFirstIn = true;
 
     public DocManagerPresenter(DocManagerContract.View view, DocManagerContract.Support support) {
         mView = view;
@@ -123,35 +123,6 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void getDocInfo(boolean keepUserCheck, boolean shouldScanAgain) {
-        if (mIsFirstIn) {//第一次进入先从数据库读取数据 然后再扫描
-            ArrayList<DocChildBean> mDocList = mSupport.getDocFileInfo();
-            ArrayList<DocChildBean> mTxtList = mSupport.getTextFileInfo();
-            ArrayList<DocChildBean> mPdfList = mSupport.getPdfFileInfo();
-
-            sortResult(mDocList);
-            sortResult(mTxtList);
-            sortResult(mPdfList);
-
-            DocGroupBean txtGroupBean = new DocGroupBean(mTxtList, TheApplication.getAppContext().getString(R.string.file_type_txt), GroupSelectBox.SelectState.NONE_SELECTED, false);
-            DocGroupBean docGroupBean = new DocGroupBean(mDocList, TheApplication.getAppContext().getString(R.string.file_type_doc), GroupSelectBox.SelectState.NONE_SELECTED, false);
-            DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, TheApplication.getAppContext().getString(R.string.file_type_pdf), GroupSelectBox.SelectState.NONE_SELECTED, false);
-
-            ArrayList<DocGroupBean> groups = new ArrayList<>();
-            if (mTxtList.size() > 0) {
-                groups.add(txtGroupBean);
-            }
-            if (mDocList.size() > 0) {
-                groups.add(docGroupBean);
-            }
-            if (mPdfList.size() > 0) {
-                groups.add(pdfGroupBean);
-            }
-
-            if (mDocScanListener != null && groups.size() > 0) {
-                mDocScanListener.onScanFinish(groups, false);
-            }
-            mIsFirstIn = false;
-        }
         mScanDocFileTask = new ScanDocFileTask();
         mScanDocFileTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, keepUserCheck, shouldScanAgain);
     }
@@ -243,6 +214,37 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
         @Override
         protected Boolean doInBackground(Boolean... params) {
+            if (mIsFirstIn) {//第一次进入先从数据库读取数据 然后再扫描
+                ArrayList<DocChildBean> mDocList = mSupport.getDocFileInfo();
+                ArrayList<DocChildBean> mTxtList = mSupport.getTextFileInfo();
+                ArrayList<DocChildBean> mPdfList = mSupport.getPdfFileInfo();
+
+                sortResult(mDocList);
+                sortResult(mTxtList);
+                sortResult(mPdfList);
+
+                DocGroupBean txtGroupBean = new DocGroupBean(mTxtList, TheApplication.getAppContext().getString(R.string.file_type_txt), GroupSelectBox.SelectState.NONE_SELECTED, false);
+                DocGroupBean docGroupBean = new DocGroupBean(mDocList, TheApplication.getAppContext().getString(R.string.file_type_doc), GroupSelectBox.SelectState.NONE_SELECTED, false);
+                DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, TheApplication.getAppContext().getString(R.string.file_type_pdf), GroupSelectBox.SelectState.NONE_SELECTED, false);
+
+                ArrayList<DocGroupBean> groups = new ArrayList<>();
+                if (mTxtList.size() > 0) {
+                    groups.add(txtGroupBean);
+                }
+                if (mDocList.size() > 0) {
+                    groups.add(docGroupBean);
+                }
+                if (mPdfList.size() > 0) {
+                    groups.add(pdfGroupBean);
+                }
+
+                if (mDocScanListener != null && groups.size() > 0) {
+                    mDocScanListener.onScanFinish(groups, false);
+                }
+
+                mIsFirstIn = false;
+            }
+
             long lastTime = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(IPreferencesIds.KEY_SCAN_DOC_TIME, 0);
             boolean shouldScan = System.currentTimeMillis() - lastTime > 3 * 60 * 1000;
             if (params[1] && shouldScan) {//重头开始扫描
@@ -273,7 +275,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 /*for (int i = 0; i < mPdfList.size(); i++) {
                     Logger.d(TAG, "pdf insert");
                 }*/
-            } else {//取数据库
+            } else if (!mIsFirstIn) {//取数据库
                 Logger.d(TAG, "扫描数据库");
                 if (mSupport == null) {
                     return null;
