@@ -267,6 +267,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         if (requestCode == FileBrowserActivity.REQUEST_CODE_PASTE) {
             if (data.getBooleanExtra(FileBrowserActivity.RETURN_PARAM_IS_PASTE, false)) {
                 onCreate(mView.getIntent());
+                mView.fileSelectShow(0);
             }
         }
     }
