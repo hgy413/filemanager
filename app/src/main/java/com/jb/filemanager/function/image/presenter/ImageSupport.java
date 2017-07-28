@@ -9,6 +9,7 @@ import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.image.modle.ImageModle;
 import com.jb.filemanager.util.FileUtil;
+import com.jb.filemanager.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.ui.dialog.ConfirmCommonDialog;
 
+
 /**
  * 
  * @author wangying
@@ -41,7 +42,7 @@ public class VersionUpdateListener implements ConfirmCommonDialog.OnConfirmDetai
 
 		Uri uri = Uri.parse(mSharedPreferencesManager
 				.getString(UpdateManager.UPDATE_GP_URL,
-						"market://details?id=com.jb.filemanager"));
+						"market://details?id=com.jb.netsecurity"));
 		Intent marketIntent = new Intent(Intent.ACTION_VIEW, uri);
 		marketIntent.setPackage("com.android.vending");
 		marketIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

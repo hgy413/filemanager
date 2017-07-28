@@ -3,8 +3,11 @@ package com.jb.filemanager.function.update;
 import android.content.Context;
 import android.support.v4.BuildConfig;
 
+
+import com.jb.filemanager.Const;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileManagerUtil;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.device.Machine;
@@ -30,7 +33,7 @@ public class UpdateManager {
 
 	public static final String SERVICE_URL = "http://version.api.goforandroid.com/api/v1/product/versions?"; // 版本更新请求的地址
 
-	public static final int NWORKMASTER_ID = 1216; // 产品ID
+	public static final int FILEMANAER_ID = 1454; // 产品ID
 
 	public static final int UPDATE_WAY_FORCE = 1; 		// 强制升级
 	public static final int UPDATE_WAY_NORMAL = 2; 		// 正常提示升级
@@ -174,7 +177,7 @@ public class UpdateManager {
 
 	private String createUrlString() {
 		Locale locale = Locale.getDefault();
-		return SERVICE_URL + "product_id=" + NWORKMASTER_ID + "&version_number=" + FileManagerUtil.getVersionCode(mContext) + "&country=" + locale.getCountry() + "&lang=" + locale.getLanguage();
+		return SERVICE_URL + "product_id=" + FILEMANAER_ID + "&version_number=" + FileManagerUtil.getVersionCode(mContext) + "&country=" + locale.getCountry() + "&lang=" + locale.getLanguage();
 	}
 
 	/**
@@ -315,14 +318,13 @@ public class UpdateManager {
 	}
 
 	public static boolean isNeedToCheckVersion() {
-		/*boolean result = false;
+		boolean result = false;
 		long lastLaunchTime = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(UpdateManager.LAST_CHECK_TIME, 0);
 		if (AppUtils.isAppExist(TheApplication.getAppContext(), Const.GP_PACKAGE)
 				&& (System.currentTimeMillis() - lastLaunchTime) >= UpdateManager.ONE_DAY) {
 			result = true;
 		}
-		return result;*/
-		return false;
+		return result;
 	}
 
 	public static boolean needDialogShow() {

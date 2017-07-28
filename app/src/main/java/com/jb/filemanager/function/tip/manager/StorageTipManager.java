@@ -3,6 +3,7 @@ package com.jb.filemanager.function.tip.manager;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.jb.filemanager.BuildConfig;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.function.tip.view.StateTipDialog;
 import com.jb.filemanager.function.tip.view.TipLayer;
@@ -23,7 +24,7 @@ public class StorageTipManager {
 
     private static StorageTipManager sInstance;
     //每十分钟检测一次
-    private final long INTERVAL_TIME = 10 * 60 * 1000;
+    private final long INTERVAL_TIME = BuildConfig.DEBUG ? 30 * 1000 : 10 * 60 * 1000;
     //比率阈值
     private final float RATE_THRESHOLD = 0.1f;
 

@@ -6,12 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.view.View;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
-import com.jb.filemanager.ui.dialog.CommonVerifyDialog;
+import com.jb.filemanager.ui.dialog.ConfirmCommonDialog;
 import com.jb.filemanager.ui.dialog.UpdateConfirmDialog;
 
 import java.lang.ref.WeakReference;
@@ -35,8 +34,8 @@ public class AppUpdatePresenter {
     }
 
     private void init() {
-        if (UpdateManager.isNeedToCheckVersion()) {
-//            new UpdateManager().checkVersion();
+         if (UpdateManager.isNeedToCheckVersion()) {
+            new UpdateManager().checkVersion();
         }
     }
 
@@ -51,12 +50,9 @@ public class AppUpdatePresenter {
                     mHandler.removeCallbacks(mDialogShow);
                 }
             }
-            Activity activity = mActivityRef.get();
-            if (activity != null) {
-                mUpdateConfirmDialog = new UpdateConfirmDialog(activity);
-                mDialogShow = new DialogShow(mUpdateConfirmDialog, activity);
-                mHandler.postDelayed(mDialogShow, 1000);
-            }
+            mUpdateConfirmDialog = new UpdateConfirmDialog(mActivityRef.get(), false);
+            mDialogShow = new DialogShow(mUpdateConfirmDialog, mActivityRef.get());
+            mHandler.postDelayed(mDialogShow, 1000);
         }
     }
 
@@ -76,48 +72,28 @@ public class AppUpdatePresenter {
         public DialogShow(UpdateConfirmDialog dialog, Context context) {
             mDialog = dialog;
             mContext = context;
-            mPm = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
+            mPm = SharedPreferencesManager.getInstance(context);
         }
 
         @Override
         public void run() {
            // mDialog.setHeight((int) mContext.getResources().getDimension(
                     //R.dimen.dialog_update_height));
-            mDialog.setDialogTitle(TheApplication.getAppContext().getString(R.string.update_notice), 0xff444444);
-            String cancelTxt = null;
+            mDialog.setTitleText(R.string.update_notice);
             if (!mPm.getBoolean(UpdateManager.UPDATE_VERSION_LATER, false)) {
-                cancelTxt = TheApplication.getAppContext().getString(R.string.update_later);
+                mDialog.setCancelText(R.string.update_later);
             } else {
-                cancelTxt = TheApplication.getAppContext().getString(R.string.update_cancel);
+                mDialog.setCancelText(R.string.update_cancel);
             }
             if (mPm.getInt(UpdateManager.UPDATE_WAY, UpdateManager.UPDATE_WAY_NORMAL) == UpdateManager.UPDATE_WAY_FORCE) {
-                cancelTxt = null;
+                mDialog.setCancelGone();
             }
-            String sureTxt = TheApplication.getAppContext().getString(R.string.update_update);
-            if (cancelTxt == null) {
-                mDialog.setContentText(sureTxt);
-            } else {
-                mDialog.setContentText(cancelTxt, sureTxt);
-            }
-            mDialog.setUpdateTipText(mPm.getString(UpdateManager.UPDATE_VERSION_DETAIL,
+            mDialog.setOkText(R.string.update_update);
+            mDialog.setContentText(mPm.getString(UpdateManager.UPDATE_VERSION_DETAIL,
                     ""));
-            mDialog.setOnCommonDialogListener(new CommonVerifyDialog.OnCommonDialogListener() {
+            mDialog.setOnConfirmDetailListener(new ConfirmCommonDialog.OnConfirmDetailListener() {
                 @Override
-                public void onCancel(View view) {
-                    SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
-                    if (sharedPreferencesManager.getBoolean(UpdateManager.UPDATE_VERSION_LATER,
-                            false)) {
-                        sharedPreferencesManager.commitBoolean(UpdateManager.UPDATE_VERSION_CANCEL, true);
-                    } else {
-                        sharedPreferencesManager.commitBoolean(UpdateManager.UPDATE_VERSION_LATER, true);
-                        sharedPreferencesManager.commitLong(UpdateManager.UPDATE_VERSION_LATER_TIME, System.currentTimeMillis());
-                    }
-
-                    mShowing = false;
-                }
-
-                @Override
-                public void onSure(View view) {
+                public void onConfirm() {
                     SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
                     if (sharedPreferencesManager.getInt(UpdateManager.UPDATE_WAY,
                             UpdateManager.UPDATE_WAY_NORMAL) != 1) {
@@ -136,9 +112,7 @@ public class AppUpdatePresenter {
                     marketIntent.setPackage("com.android.vending");
                     marketIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
-                        if (mContext != null) {
-                            mContext.startActivity(marketIntent);
-                        }
+                        mContext.startActivity(marketIntent);
                     } catch (ActivityNotFoundException e) {
                         if (mActivityRef != null && mActivityRef.get() != null) {
                             mActivityRef.get().finish();
@@ -146,7 +120,42 @@ public class AppUpdatePresenter {
                     }
 
                     // TODO @王兆琦 统计
-                    // StatisticsTools.uploadOperateIdNew(StatisticsConstants.UPDATE_DIALOG_CLICK);
+                   // StatisticsTools.uploadOperateIdNew(StatisticsConstants.UPDATE_DIALOG_CLICK);
+
+                    mShowing = false;
+                }
+
+                @Override
+                public void onCancel() {
+                    SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
+                    if (sharedPreferencesManager.getBoolean(UpdateManager.UPDATE_VERSION_LATER,
+                            false)) {
+                        sharedPreferencesManager.commitBoolean(UpdateManager.UPDATE_VERSION_CANCEL, true);
+                    } else {
+                        sharedPreferencesManager.commitBoolean(UpdateManager.UPDATE_VERSION_LATER, true);
+                        sharedPreferencesManager.commitLong(UpdateManager.UPDATE_VERSION_LATER_TIME, System.currentTimeMillis());
+                    }
+
+                    mShowing = false;
+                }
+
+                @Override
+                public void onBackPress() {
+                    SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(TheApplication.getAppContext());
+                    if (sharedPreferencesManager.getInt(UpdateManager.UPDATE_WAY,
+                            UpdateManager.UPDATE_WAY_NORMAL) != 1) {
+                        if (sharedPreferencesManager.getBoolean(
+                                UpdateManager.UPDATE_VERSION_LATER, false)) {
+                            sharedPreferencesManager.commitBoolean(UpdateManager.UPDATE_VERSION_CANCEL, true);
+                        } else {
+                            sharedPreferencesManager.commitBoolean(UpdateManager.UPDATE_VERSION_LATER, true);
+                            sharedPreferencesManager.commitLong(UpdateManager.UPDATE_VERSION_LATER_TIME, System.currentTimeMillis());
+                        }
+                    } else {
+                        if (mActivityRef != null && mActivityRef.get() != null) {
+                            mActivityRef.get().finish();
+                        }
+                    }
 
                     mShowing = false;
                 }

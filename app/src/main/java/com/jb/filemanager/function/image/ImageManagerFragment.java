@@ -206,6 +206,12 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
     }
 
     @Override
+    public void clearSelected() {
+        mCommonTitleBar.onBackPressed();
+        dismissBobar();
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = isInternalStorage ? MediaStore.Images.Media.INTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         mCommonLoadingView.startLoading();
@@ -305,8 +311,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mPresenter != null) {
             mPresenter.handleCopy();
         }
-        mCommonTitleBar.onBackPressed();
-        dismissBobar();
     }
 
     @Override
@@ -315,8 +319,6 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mPresenter != null) {
             mPresenter.handleCut();
         }
-        mCommonTitleBar.onBackPressed();
-        dismissBobar();
     }
 
     @Override
@@ -324,8 +326,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mPresenter != null) {
             mPresenter.handleRename();
         }
-        mCommonTitleBar.onBackPressed();
-        dismissBobar();
+        clearSelected();
     }
 
     @Override
@@ -333,8 +334,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
         if (mPresenter != null) {
             mPresenter.handleDeleted();
         }
-        mCommonTitleBar.onBackPressed();
-        dismissBobar();
+        clearSelected();
     }
 
     @Override

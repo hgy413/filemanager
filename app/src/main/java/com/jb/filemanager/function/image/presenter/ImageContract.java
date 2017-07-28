@@ -20,6 +20,7 @@ public class ImageContract {
         void showSelected(int selectSize, int allSize);
         void dismissBobar();
         void showBobar();
+        void clearSelected();
         void notifyViewChg();
         void finish();
         void gotoStoragePage();

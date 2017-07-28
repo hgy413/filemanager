@@ -62,6 +62,12 @@ public class ImagePresenter implements ImageContract.Presenter {
                     mSupport.renameFile(event.mOldFile, event.mNewFile);
                 }
             }
+            TheApplication.postRunOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mView.clearSelected();
+                }
+            });
         }
     };
 
@@ -173,7 +179,13 @@ public class ImagePresenter implements ImageContract.Presenter {
                     now.setTimeInMillis(modifiedTime);
                     String timeDateStr = TimeUtil.getTime(modifiedTime, simpleDateFormat);
                     ImageModle imageModle = new ImageModle(path, id, false, modifiedTime);
-
+                    //保存之前选择过的
+                    for (int i = 0; i < mSelectedImageList.size(); i++) {
+                        ImageModle tmpModle = mSelectedImageList.get(i);
+                        if (tmpModle.mImagePath.equals(imageModle.mImagePath)) {
+                            imageModle.isChecked = true;
+                        }
+                    }
                     if (mImageGroupModleMap.containsKey(timeDateStr)) {
                         //存在时 直接添加 
                         ImageGroupModle imageGroupModle = mImageGroupModleMap.get(timeDateStr);
@@ -208,6 +220,9 @@ public class ImagePresenter implements ImageContract.Presenter {
             }
             if (mView != null) {
                 mView.bindData(mImageGroupModleList);
+            }
+            if (mSelectedImageList.size() > 0) {
+                handleSelected(mImageGroupModleList);
             }
         }
     }
