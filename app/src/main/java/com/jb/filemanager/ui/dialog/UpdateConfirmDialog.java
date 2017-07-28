@@ -1,9 +1,11 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
@@ -17,7 +19,7 @@ import com.jb.filemanager.TheApplication;
 public class UpdateConfirmDialog extends BaseDialog {
 
 	private TextView mContentTextView;
-	private TextView mNoBtu;
+	private ImageView mNoBtu;
 	private TextView mYesBtu;
 	private TextView mTitle;
 	private ConfirmCommonDialog.OnConfirmDetailListener mOnConfirmDetailListener;
@@ -25,6 +27,8 @@ public class UpdateConfirmDialog extends BaseDialog {
 	public UpdateConfirmDialog(Activity act, boolean cancelOutside) {
 		super(act, cancelOutside);
 		initView();
+		int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getContext().getResources().getDisplayMetrics());
+		setSize(getContext().getResources().getDisplayMetrics().widthPixels - 2 * margin, WindowManager.LayoutParams.WRAP_CONTENT);
 	}
 
 	void initView() {
@@ -32,7 +36,7 @@ public class UpdateConfirmDialog extends BaseDialog {
 		View contentView = layoutInflater.inflate(R.layout.dialog_update_layout, null);
 		mTitle = (TextView) contentView.findViewById(R.id.dialog_update_layout_title);
 		mContentTextView = (TextView) contentView.findViewById(R.id.dialog_update_layout_update_content);
-		mNoBtu = (TextView) contentView.findViewById(R.id.dialog_update_layout_no_btn);
+		mNoBtu = (ImageView) contentView.findViewById(R.id.dialog_update_layout_no_btn);
 		mYesBtu = (TextView) contentView.findViewById(R.id.dialog_update_layout_yes_btn);
 		setContentView(contentView);
 		setOnListener();
@@ -58,10 +62,6 @@ public class UpdateConfirmDialog extends BaseDialog {
 
 	public void setContentText(String str) {
 		mContentTextView.setText(str);
-	}
-
-	public void setCancelText(int cancelText) {
-		mNoBtu.setText(cancelText);
 	}
 
 	public void setOkText(int okText) {

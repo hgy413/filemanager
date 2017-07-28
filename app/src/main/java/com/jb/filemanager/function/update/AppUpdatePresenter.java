@@ -80,17 +80,16 @@ public class AppUpdatePresenter {
            // mDialog.setHeight((int) mContext.getResources().getDimension(
                     //R.dimen.dialog_update_height));
             mDialog.setTitleText(R.string.update_notice);
-            if (!mPm.getBoolean(UpdateManager.UPDATE_VERSION_LATER, false)) {
-                mDialog.setCancelText(R.string.update_later);
-            } else {
-                mDialog.setCancelText(R.string.update_cancel);
-            }
+//            if (!mPm.getBoolean(UpdateManager.UPDATE_VERSION_LATER, false)) {
+//                mDialog.setCancelText(R.string.update_later);
+//            } else {
+//                mDialog.setCancelText(R.string.update_cancel);
+//            }
             if (mPm.getInt(UpdateManager.UPDATE_WAY, UpdateManager.UPDATE_WAY_NORMAL) == UpdateManager.UPDATE_WAY_FORCE) {
                 mDialog.setCancelGone();
             }
             mDialog.setOkText(R.string.update_update);
-            mDialog.setContentText(mPm.getString(UpdateManager.UPDATE_VERSION_DETAIL,
-                    ""));
+            mDialog.setContentText(mPm.getString(UpdateManager.UPDATE_VERSION_DETAIL, ""));
             mDialog.setOnConfirmDetailListener(new ConfirmCommonDialog.OnConfirmDetailListener() {
                 @Override
                 public void onConfirm() {

@@ -1,83 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="304dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_centerInParent="true"
-    android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="30dp"
+        android:background="@drawable/shape_update_bg">
 
         <TextView
             android:id="@+id/dialog_update_layout_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="27dp"
+            android:layout_centerHorizontal="true"
             android:text="@string/update_notice"
-            android:textColor="@color/black_70"
-            android:textSize="@dimen/h2_18"
+            android:textColor="#FF465150"
+            android:textSize="@dimen/h3_16"
             android:textStyle="bold"/>
 
-    </LinearLayout>
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="34dp"
-        android:layout_marginTop="15dp">
-
-        <TextView
-            android:id="@+id/dialog_update_layout_update_content"
+        <ScrollView
+            android:id="@+id/dialog_update_layout_update_content_sv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="22dp"
-            android:gravity="left"
-            android:lineSpacingExtra="8dp"
-            android:padding="6dp"
-            android:textColor="@color/black_70"
-            android:textSize="@dimen/h2_18"/>
+            android:layout_height="104dp"
+            android:layout_below="@id/dialog_update_layout_title"
+            android:layout_marginTop="12dp">
 
-    </ScrollView>
+            <TextView
+                android:id="@+id/dialog_update_layout_update_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingLeft="33dp"
+                android:paddingRight="33dp"
+                android:textColor="#666666"
+                android:lineSpacingExtra = "4dp"
+                tools:text="1. 你好你好你好你好你好你好你好你好你好\n2. 你好你好你好你好你好你好你好你好你\n3. 好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好\n4.你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好"
+                android:textSize="@dimen/h5_12"/>
 
+        </ScrollView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#d2d3d3"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:orientation="horizontal">
-
-        <TextView
+        <ImageView
             android:id="@+id/dialog_update_layout_no_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/update_cancel"
-            android:textColor="#abb3bd"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_update_cancle"/>
 
         <TextView
             android:id="@+id/dialog_update_layout_yes_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="30dp"
             android:gravity="center"
-            android:textColor="@color/black_70"
+            android:textColor="@color/white"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="19dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:layout_below="@id/dialog_update_layout_update_content_sv"
             android:text="@string/update_update"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-</LinearLayout>
+            android:background="@drawable/selector_update_btu"
+            android:textSize="@dimen/h5_12"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="57dp"
+        android:layout_height="49dp"
+        android:background="@drawable/ic_update_icon"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
