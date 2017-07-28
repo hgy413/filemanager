@@ -9,7 +9,6 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.recent.adapter.RecentFileAdapter;
@@ -21,6 +20,7 @@ import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.CommonLoadingView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -40,7 +40,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     private RecentFileAdapter mAdapter;
     private SearchTitleView mSearchTitle;
     private BottomOperateBar mOperateBar;
-    private ProgressWheel mProgress;
+    private CommonLoadingView mProgress;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FileOperateEvent event) {
@@ -83,7 +83,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
                 RecentStatistics.upload(RecentStatistics.RECENT_SEARCH);
             }
         });
-        mProgress = (ProgressWheel) findViewById(R.id.recent_progress);
+        mProgress = (CommonLoadingView) findViewById(R.id.loading);
         mListView = (ListView) findViewById(R.id.recent_expand_lv);
         mOperateBar = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
         mOperateBar.setListener(new BottomOperateBar.Listener() {
@@ -156,9 +156,11 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
         if (isLoadingData) {
             mProgress.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.GONE);
+            mProgress.startLoading();
         } else {
             mProgress.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
+            mProgress.stopLoading();
         }
     }
 

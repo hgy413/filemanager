@@ -10,7 +10,6 @@ import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
-import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
@@ -24,6 +23,7 @@ import com.jb.filemanager.function.zipfile.presenter.ZipFileActivityPresenter;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.CommonLoadingView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -39,7 +39,7 @@ import java.util.List;
 public class ZipFileActivity extends BaseActivity implements ZipActivityContract.View {
 
     private ZipFileActivityPresenter mPresenter = new ZipFileActivityPresenter(this);
-    private ProgressWheel mProgress;
+    private CommonLoadingView mProgress;
     private ExpandableListView mListView;
     private ZipListAdapter mAdapter;
     private ZipFileOperationDialog mOperationDialog;
@@ -58,7 +58,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
         setContentView(R.layout.activity_zip_file);
 
         TheApplication.getGlobalEventBus().register(this);
-        mProgress = (ProgressWheel) findViewById(R.id.zip_progress);
+        mProgress = (CommonLoadingView) findViewById(R.id.loading);
         mListView = (ExpandableListView) findViewById(R.id.zip_expand_lv);
         mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -175,6 +175,11 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     public void setWidgetsState(boolean isLoading) {
         mProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         mListView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+        if (isLoading) {
+            mProgress.startLoading();
+        } else {
+            mProgress.stopLoading();
+        }
     }
 
     @Override

@@ -18,16 +18,11 @@
         android:layout_below="@id/search_title"
         android:background="@drawable/main_shadow"/>
 
-    <com.jb.filemanager.commomview.ProgressWheel
-        android:id="@+id/recent_progress"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/shadow"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        app:matProg_barColor="#0084ff"
-        app:matProg_barWidth="5dp"
-        app:matProg_progressIndeterminate="true"/>
+    <com.jb.filemanager.ui.widget.CommonLoadingView
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/common_title_bar_exclude_shadow_height"/>
 
     <ListView
         android:id="@+id/recent_expand_lv"

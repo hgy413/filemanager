@@ -1,7 +1,5 @@
 package com.jb.filemanager.function.recent.presenter;
 
-import android.util.Log;
-
 import com.jb.filemanager.function.recent.RecentFileManager;
 import com.jb.filemanager.function.recent.bean.BlockBean;
 import com.jb.filemanager.function.recent.bean.BlockItemFileBean;
@@ -27,6 +25,7 @@ public class RecentFilePresenter implements RecentFileContract.Presenter, Recent
 
     @Override
     public void onCreate() {
+        mView.switchWidgetsState(true);
         mBlockList = RecentFileManager.getInstance().getRecentFiles();
         mView.setListViewData(mBlockList);
         RecentFileManager.getInstance().setFlushDataCallbackListener(this);
