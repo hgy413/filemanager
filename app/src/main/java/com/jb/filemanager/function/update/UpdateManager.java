@@ -328,7 +328,6 @@ public class UpdateManager {
 	}
 
 	public static boolean needDialogShow() {
-		// TODO: 17-7-28 解开
 		return true;
 //		return /*LauncherModel.getInstance().getSharedPreferencesManager().isLoadDone() &&*/ needDialogShowByUpdateWay() && needDialogShowByVersion() && needDialogShowByButton();
 	}
