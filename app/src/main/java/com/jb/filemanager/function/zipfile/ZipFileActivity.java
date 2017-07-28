@@ -26,6 +26,7 @@ import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
     private SearchTitleView mSearchTitle;
     private BottomOperateBar mOperateBar;
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FileOperateEvent event) {
         Log.e("event", "ZipActivity FileOperateEvent");
         mPresenter.onCreate();

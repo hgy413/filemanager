@@ -23,6 +23,7 @@ import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
     private BottomOperateBar mOperateBar;
     private ProgressWheel mProgress;
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FileOperateEvent event) {
         mPresenter.reloadData();
     }
