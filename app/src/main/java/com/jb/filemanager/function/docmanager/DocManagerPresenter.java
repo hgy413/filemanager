@@ -52,6 +52,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
     private DocManagerContract.Support mSupport;
     private DocScanListener mDocScanListener;
     private boolean mIsFirstIn = true;
+    private ScanDocFileTask mScanDocFileTask;
 
     public DocManagerPresenter(DocManagerContract.View view, DocManagerContract.Support support) {
         mView = view;
@@ -78,6 +79,9 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void onDestroy() {
+        if (mScanDocFileTask != null && !mScanDocFileTask.isCancelled()) {
+            mScanDocFileTask.cancel(true);
+        }
         EventBus globalEventBus = TheApplication.getGlobalEventBus();
         if (globalEventBus.isRegistered(this)) {
             globalEventBus.unregister(this);
@@ -148,8 +152,8 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             }
             mIsFirstIn = false;
         }
-        ScanDocFileTask scanDocFileTask = new ScanDocFileTask();
-        scanDocFileTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, keepUserCheck, shouldScanAgain);
+        mScanDocFileTask = new ScanDocFileTask();
+        mScanDocFileTask.executeOnExecutor(ZAsyncTask.THREAD_POOL_EXECUTOR, keepUserCheck, shouldScanAgain);
     }
 
     @Override
@@ -265,6 +269,9 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 }
             } else {//取数据库
                 Logger.d(TAG, "扫描数据库");
+                if (mSupport == null) {
+                    return null;
+                }
                 mDocList = mSupport.getDocFileInfo();
                 mTxtList = mSupport.getTextFileInfo();
                 mPdfList = mSupport.getPdfFileInfo();

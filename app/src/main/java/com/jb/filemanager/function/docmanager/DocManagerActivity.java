@@ -13,7 +13,6 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
-import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
@@ -21,6 +20,7 @@ import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
 import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.CommonLoadingView;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
@@ -43,7 +43,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private ImageView mIvCommonActionBarBack;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private FloatingGroupExpandableListView mElvApk;
-    private ProgressWheel mPwDocProgress;
+    private CommonLoadingView mClvDocProgress;
     private BottomOperateBar mBobBottomOperator;
 
     private DocManagerAdapter mAdapter;
@@ -74,9 +74,9 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_search);
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
         mBobBottomOperator = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
-        mPwDocProgress = (ProgressWheel) findViewById(R.id.pw_doc_progress);
+        mClvDocProgress = (CommonLoadingView) findViewById(R.id.clv_doc_progress);
 
-        mPwDocProgress.setVisibility(View.VISIBLE);
+        mClvDocProgress.startLoading();
         mTvCommonActionBarWithSearchTitle.setText(R.string.doc_manager_title);
     }
 
@@ -97,7 +97,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                         if (arrayList == null) {
                             return;
                         }
-                        mPwDocProgress.setVisibility(View.GONE);
+                        mClvDocProgress.stopLoading();
                         mElvApk.setVisibility(View.VISIBLE);
                         mAppInfo = arrayList;
                         if (mAdapter == null) {
