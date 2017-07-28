@@ -198,7 +198,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             @Override
             public void afterCopy() {
                 mPresenter.jumpToFileBrowserPage();
-                mPresenter.reloadData();
             }
 
             @Override

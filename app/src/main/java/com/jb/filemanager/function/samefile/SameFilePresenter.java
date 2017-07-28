@@ -20,6 +20,7 @@ import com.jb.filemanager.eventbus.FileOperateEvent;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.home.MainActivity;
+import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.util.Logger;
 import com.jb.filemanager.util.TimeUtil;
 
@@ -263,6 +264,10 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //int requestCode = data.get?
+        if (requestCode == FileBrowserActivity.REQUEST_CODE_PASTE) {
+            if (data.getBooleanExtra(FileBrowserActivity.RETURN_PARAM_IS_PASTE, false)) {
+                onCreate(mView.getIntent());
+            }
+        }
     }
 }
