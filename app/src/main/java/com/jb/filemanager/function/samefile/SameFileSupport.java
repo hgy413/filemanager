@@ -230,12 +230,7 @@ public class SameFileSupport implements SameFileContract.Support {
         if (!file.exists() || file.isDirectory()){
             return;
         }
-        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{newFile}, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                    }
-                }); // 修改后的文件添加到系统数据库
+        MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{oldFile, newFile}, null, null); // 修改后的文件添加到系统数据库
 //        MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
 //        if (FileTypeUtil.getFileTypeFromPostfix(newFile) == FileType.VIDEO) {
 //            targetUri = VIDEO_URI;
