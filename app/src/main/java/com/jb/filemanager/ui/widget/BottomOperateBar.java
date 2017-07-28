@@ -22,6 +22,7 @@ import com.jb.filemanager.ui.dialog.DocRenameDialog;
 import com.jb.filemanager.ui.dialog.MultiFileDetailDialog;
 import com.jb.filemanager.ui.dialog.SingleFileDetailDialog;
 import com.jb.filemanager.util.APIUtil;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -257,13 +258,18 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
             ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
             if (selectedFiles != null && mListener.getActivity() != null) {
                 if (selectedFiles.size() == 1) {
-                    SingleFileDetailDialog singleFileDetailDialog = new SingleFileDetailDialog(mListener.getActivity(), selectedFiles.get(0), new SingleFileDetailDialog.Listener() {
-                        @Override
-                        public void onConfirm(SingleFileDetailDialog dialog) {
-                            dialog.dismiss();
-                        }
-                    });
-                    singleFileDetailDialog.show();
+                    File file = selectedFiles.get(0);
+                    if (file != null && file.exists()) {
+                        SingleFileDetailDialog singleFileDetailDialog = new SingleFileDetailDialog(mListener.getActivity(), selectedFiles.get(0), new SingleFileDetailDialog.Listener() {
+                            @Override
+                            public void onConfirm(SingleFileDetailDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
+                        singleFileDetailDialog.show();
+                    } else {
+                        AppUtils.showToast(mContext, mContext.getString(R.string.common_file_not_exist));
+                    }
                 } else {
                     MultiFileDetailDialog multiFileDetailDialog = new MultiFileDetailDialog(mListener.getActivity(), selectedFiles, new MultiFileDetailDialog.Listener() {
                         @Override
@@ -281,22 +287,26 @@ public class BottomOperateBar extends LinearLayout implements View.OnClickListen
         if (mListener != null && mListener.getActivity() != null) {
             ArrayList<File> selectedFiles = mListener.getCurrentSelectedFiles();
             if (selectedFiles != null && selectedFiles.size() == 1 && selectedFiles.get(0).exists()) {
-                final File file = selectedFiles.get(0);
-                DocRenameDialog docRenameDialog = new DocRenameDialog(mListener.getActivity(), file, new DocRenameDialog.Listener() {
-                    @Override
-                    public void onResult(DocRenameDialog dialog, boolean success) {
-                        if (mListener != null) {
-                            mListener.afterRename();
+                File file = selectedFiles.get(0);
+                if (file.exists()) {
+                    DocRenameDialog docRenameDialog = new DocRenameDialog(mListener.getActivity(), file, new DocRenameDialog.Listener() {
+                        @Override
+                        public void onResult(DocRenameDialog dialog, boolean success) {
+                            if (mListener != null) {
+                                mListener.afterRename();
+                            }
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
-                    }
 
-                    @Override
-                    public void onCancel(DocRenameDialog dialog) {
-                        dialog.dismiss();
-                    }
-                });
-                docRenameDialog.show();
+                        @Override
+                        public void onCancel(DocRenameDialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                    docRenameDialog.show();
+                } else {
+                    AppUtils.showToast(mContext, mContext.getString(R.string.common_file_not_exist));
+                }
             }
         }
     }
