@@ -290,7 +290,9 @@ public final class GlobalFileManager implements GlobalScanDBTask.GlobalScanDBLis
     public void onPostExecute(List<BaseDataBean> data) {
         Log.e("global", "完成系统数据库数据扫描" + data.size());
 //        for (BaseDataBean bean : data) {
-//            Log.e("global", bean.toString());
+//            if (bean.isFlag(BaseDataBean.FLAG_IMAGE)) {
+//                Log.e("global", bean.toString());
+//            }
 //        }
     }
 

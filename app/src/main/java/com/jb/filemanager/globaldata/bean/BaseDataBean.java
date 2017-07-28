@@ -69,6 +69,7 @@ public class BaseDataBean {
         this.parentIndex = parentIndex;
         this.isDirectory = file.isDirectory();
         this.size = file.length();
+        this.lastModify = file.lastModified();
     }
 
     /**

@@ -63,7 +63,7 @@
         android:drawableTop="@drawable/extract"
         android:gravity="center"
         android:paddingBottom="6dp"
-        android:paddingTop="6dp"
+        android:paddingTop="12dp"
         android:text="Extract"
         android:textColor="@android:color/white"
         android:textSize="10dp"

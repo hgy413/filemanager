@@ -1064,6 +1064,19 @@ public final class FileUtils {
     }
 
     /**
+     * @see #getFileExtension(File)
+     * @param file file
+     * @return s
+     */
+    public static String getFileExtensionLite(final File file) {
+        String filePath = file.getName();
+        int lastPoi = filePath.lastIndexOf('.');
+        int lastSep = filePath.lastIndexOf(File.separator);
+        if (lastPoi == -1 || lastSep >= lastPoi) return "";
+        return filePath.substring(lastPoi + 1);
+    }
+
+    /**
      * 获取全路径中的文件拓展名
      *
      * @param filePath 文件路径

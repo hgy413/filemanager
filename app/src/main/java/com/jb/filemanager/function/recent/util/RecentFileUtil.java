@@ -215,4 +215,16 @@ public final class RecentFileUtil {
         long deltaTime = System.currentTimeMillis() - file.lastModified();
         return deltaTime >= 0 && deltaTime <= RecentFileUtil.MAX_MODIFY_SCAN_TIME;
     }
+
+    /**
+     * @see #isRecentFile(File)
+     * @param file
+     * @return
+     */
+    public static boolean isRecentFileLite(File file) {
+        long deltaTime = System.currentTimeMillis() - file.lastModified();
+        return deltaTime >= 0 && deltaTime <= RecentFileUtil.MAX_MODIFY_SCAN_TIME;
+    }
+
+
 }

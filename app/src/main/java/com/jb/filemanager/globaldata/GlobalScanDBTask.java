@@ -21,7 +21,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by xiaoyu on 2017/7/27 16:52.
@@ -64,7 +63,6 @@ public class GlobalScanDBTask extends AsyncTask<Void, Void, List<BaseDataBean>> 
      * title_label--recording_mode--type3dvideo--video_view_mode--video_codec_info--
      * audio_codec_info--title_search_key--title_pinyin--composer_pinyin--genre_name_pinyin--
      * _display_name_pinyin--bucket_display_name_pinyin--name_pinyin--
-     *
      */
     @Override
     protected List<BaseDataBean> doInBackground(Void... params) {
@@ -94,18 +92,20 @@ public class GlobalScanDBTask extends AsyncTask<Void, Void, List<BaseDataBean>> 
             }
         }
         // 获取数据
-        String[] projection = null;
-        String selection = null;
-        String[] selectionArgs = null;
-        String sortOrder = null;
+//        String[] projection = null;
+//        String selection = null;
+//        String[] selectionArgs = null;
+//        String sortOrder = null;
         Cursor cursor = null;
+        File file;
         try {
-            cursor = resolver.query(uri, projection, selection, selectionArgs, sortOrder);
+//            cursor = resolver.query(uri, projection, selection, selectionArgs, sortOrder);
+            cursor = resolver.query(uri, null, null, null, null);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     if (isCancelled()) return result;
                     String path = cursor.getString(cursor.getColumnIndex(FileColumns.DATA));
-                    File file = new File(path);
+                    file = new File(path);
                     if (isNeedHandle(file)) {
                         long id = cursor.getLong(cursor.getColumnIndex(FileColumns._ID));
                         int parentIndex = cursor.getInt(cursor.getColumnIndex(FileColumns.PARENT));
@@ -114,54 +114,47 @@ public class GlobalScanDBTask extends AsyncTask<Void, Void, List<BaseDataBean>> 
                         if (parentIndex == downloadDirId && downloadDirId != -1) {
                             bean.flag = bean.flag | BaseDataBean.FLAG_DOWNLOAD;
                         }
-                        if (RecentFileUtil.isRecentFile(file)) {
+                        if (RecentFileUtil.isRecentFileLite(file)) {
                             bean.flag = bean.flag | BaseDataBean.FLAG_RECENT;
                         }
-                        int lastDot = bean.fileName.lastIndexOf(".");
-                        if (lastDot < 0) {
+                        String extension = FileUtils.getFileExtensionLite(file);
+                        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                        if (TextUtils.isEmpty(extension) || TextUtils.isEmpty(mimeType)) {
                             bean.flag = bean.flag | BaseDataBean.FLAG_OTHER;
+                        } else if (mimeType.matches("image/.+")) {
+                            bean.flag = bean.flag | BaseDataBean.FLAG_IMAGE;
+                        } else if (mimeType.matches("audio/.+")) {
+                            bean.flag = bean.flag | BaseDataBean.FLAG_AUDIO;
+                        } else if (mimeType.matches("video/.+")) {
+                            bean.flag = bean.flag | BaseDataBean.FLAG_VIDEO;
+                        } else if (mimeType.equals("application/vnd.android.package-archive")) {
+                            bean.flag = bean.flag | BaseDataBean.FLAG_APK;
+                        } else if (mimeType.equals("text/plain")) {
+                            bean.flag = bean.flag | BaseDataBean.FLAG_TXT;
+                            bean.flag = bean.flag | BaseDataBean.FLAG_DOCUMENT;
+                        } else if (mimeType.equals("application/pdf")) {
+                            bean.flag = bean.flag | BaseDataBean.FLAG_DOCUMENT;
+                            bean.flag = bean.flag | BaseDataBean.FLAG_PDF;
                         } else {
-                            String extension = bean.fileName.substring(lastDot + 1).toLowerCase(Locale.getDefault());
-                            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-                            if (TextUtils.isEmpty(extension) || TextUtils.isEmpty(mimeType)) {
-                                bean.flag = bean.flag | BaseDataBean.FLAG_OTHER;
-                            } else {
-                                if (mimeType.matches("image/.+")) {
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_IMAGE;
-                                } else if (mimeType.matches("audio/.+")) {
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_AUDIO;
-                                } else if (mimeType.matches("video/.+")) {
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_VIDEO;
-                                } else if (mimeType.equals("application/vnd.android.package-archive")) {
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_APK;
-                                } else if (mimeType.equals("text/plain")) {
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_TXT;
+                            // 剩下的mime type 格式不统一，简单使用后缀名判断
+                            switch (extension) {
+                                case "doc":
+                                case "docx":
+                                case "ppt":
+                                case "pptx":
+                                case "xls":
+                                case "xlsx":
                                     bean.flag = bean.flag | BaseDataBean.FLAG_DOCUMENT;
-                                } else if (mimeType.equals("application/pdf")) {
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_DOCUMENT;
-                                    bean.flag = bean.flag | BaseDataBean.FLAG_PDF;
-                                } else {
-                                    // 剩下的mime type 格式不统一，简单使用后缀名判断
-                                    switch (extension) {
-                                        case "doc":
-                                        case "docx":
-                                        case "ppt":
-                                        case "pptx":
-                                        case "xls":
-                                        case "xlsx":
-                                            bean.flag = bean.flag | BaseDataBean.FLAG_DOCUMENT;
-                                            bean.flag = bean.flag | BaseDataBean.FLAG_DOC;
-                                            break;
-                                        case "rar":
-                                        case "zip":
-                                        case "7z":
-                                            bean.flag = bean.flag | BaseDataBean.FLAG_ZIP;
-                                            break;
-                                        default:
-                                            bean.flag = bean.flag | BaseDataBean.FLAG_OTHER;
-                                            break;
-                                    }
-                                }
+                                    bean.flag = bean.flag | BaseDataBean.FLAG_DOC;
+                                    break;
+                                case "rar":
+                                case "zip":
+                                case "7z":
+                                    bean.flag = bean.flag | BaseDataBean.FLAG_ZIP;
+                                    break;
+                                default:
+                                    bean.flag = bean.flag | BaseDataBean.FLAG_OTHER;
+                                    break;
                             }
                         }
                         result.add(bean);
@@ -211,9 +204,10 @@ public class GlobalScanDBTask extends AsyncTask<Void, Void, List<BaseDataBean>> 
      * @return true or false
      */
     private boolean isNeedHandle(File file) {
-        if (file == null || !file.exists() || file.isDirectory()) return false;
-        String extension = FileUtils.getFileExtension(file);
-        return !TextUtils.isEmpty(extension) || RecentFileUtil.isRecentFile(file);
+        if (file == null || !file.exists() || file.isDirectory() || file.isHidden())
+            return false;
+        String extension = FileUtils.getFileExtensionLite(file);
+        return !TextUtils.isEmpty(extension) || RecentFileUtil.isRecentFileLite(file);
     }
 
     public interface GlobalScanDBListener {
