@@ -13,6 +13,7 @@ import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
 import com.jb.filemanager.commomview.GroupSelectBox;
+import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
@@ -42,7 +43,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private ImageView mIvCommonActionBarBack;
     private ImageView mIvCommonActionBarWithSearchSearch;
     private FloatingGroupExpandableListView mElvApk;
-
+    private ProgressWheel mPwDocProgress;
     private BottomOperateBar mBobBottomOperator;
 
     private DocManagerAdapter mAdapter;
@@ -73,7 +74,9 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mIvCommonActionBarWithSearchSearch = (ImageView) findViewById(R.id.iv_common_action_bar_search);
         mElvApk = (FloatingGroupExpandableListView) findViewById(R.id.elv_apk);
         mBobBottomOperator = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
+        mPwDocProgress = (ProgressWheel) findViewById(R.id.pw_doc_progress);
 
+        mPwDocProgress.setVisibility(View.VISIBLE);
         mTvCommonActionBarWithSearchTitle.setText(R.string.doc_manager_title);
     }
 
@@ -94,6 +97,8 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                         if (arrayList == null) {
                             return;
                         }
+                        mPwDocProgress.setVisibility(View.GONE);
+                        mElvApk.setVisibility(View.VISIBLE);
                         mAppInfo = arrayList;
                         if (mAdapter == null) {
                             mAdapter = new DocManagerAdapter(mAppInfo);
@@ -164,17 +169,13 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     private void handleBottomDeleteShow(int chosenCount) {
         if (chosenCount == 0) {
             mBobBottomOperator.setVisibility(View.GONE);
-//            mRlCommonOperateBarContainer.setVisibility(View.GONE);
         } else {
-//            mRlCommonOperateBarContainer.setVisibility(View.VISIBLE);
             mBobBottomOperator.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void initClick() {
-//        mRlCommonOperateBarContainer.setOnClickListener(this);
-//        mBobBottomOperator.setOnClickListener(this);
         mBobBottomOperator.setListener(new BottomOperateBar.Listener() {
             @Override
             public ArrayList<File> getCurrentSelectedFiles() {

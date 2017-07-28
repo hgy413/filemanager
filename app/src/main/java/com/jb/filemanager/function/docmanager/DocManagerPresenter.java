@@ -126,14 +126,14 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             DocGroupBean pdfGroupBean = new DocGroupBean(mPdfList, TheApplication.getAppContext().getString(R.string.file_type_pdf), GroupSelectBox.SelectState.NONE_SELECTED, false);
 
             ArrayList<DocGroupBean> groups = new ArrayList<>();
-            if (mDocList.size() > 0) {
+            if (mTxtList.size() > 0) {
                 groups.add(txtGroupBean);
+            }
+            if (mDocList.size() > 0) {
+                groups.add(docGroupBean);
             }
             if (mPdfList.size() > 0) {
                 groups.add(pdfGroupBean);
-            }
-            if (mTxtList.size() > 0) {
-                groups.add(docGroupBean);
             }
 
             if (mDocScanListener != null && groups.size() > 0) {
@@ -213,6 +213,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     public class ScanDocFileTask extends ZAsyncTask<Boolean, Integer, Boolean> {
 
+        DocFileProvider docFileProvider = DocFileProvider.getInstance();
         private static final int DEPTH_THRESHOLD = 3;
         private ArrayList<DocChildBean> mDocList = new ArrayList<>();
         private ArrayList<DocChildBean> mTxtList = new ArrayList<>();
@@ -234,13 +235,29 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             long lastTime = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(IPreferencesIds.KEY_SCAN_DOC_TIME, 0);
             boolean shouldScan = System.currentTimeMillis() - lastTime > 3 * 60 * 1000;
             if (params[1] && shouldScan) {//重头开始扫描
+                Logger.d(TAG, "扫描文件");
                 for (String path : StorageUtil.getAllExternalPaths(TheApplication.getAppContext())) {
                     File root = new File(path);
                     scanPath(root, 0);
                 }
                 //记录扫描时间
                 SharedPreferencesManager.getInstance(TheApplication.getAppContext()).commitLong(IPreferencesIds.KEY_SCAN_DOC_TIME, System.currentTimeMillis());
+                Logger.d(TAG, "扫描文件完成");
+                //插入数据
+                docFileProvider.deleteAllData();
+                for (int i = 0; i < mDocList.size(); i++) {
+                    docFileProvider.insertManyDocItem(mDocList.get(i));
+                }
+
+                for (int i = 0; i < mTxtList.size(); i++) {
+                    docFileProvider.insertManyDocItem(mTxtList.get(i));
+                }
+
+                for (int i = 0; i < mPdfList.size(); i++) {
+                    docFileProvider.insertManyDocItem(mPdfList.get(i));
+                }
             } else {//取数据库
+                Logger.d(TAG, "扫描数据库");
                 mDocList = mSupport.getDocFileInfo();
                 mTxtList = mSupport.getTextFileInfo();
                 mPdfList = mSupport.getPdfFileInfo();
@@ -256,17 +273,17 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
             ArrayList<DocGroupBean> groups = new ArrayList<>();
             mFileCount = 0;
-            if (mDocList.size() > 0) {
+            if (mTxtList.size() > 0) {
                 groups.add(txtGroupBean);
                 mFileCount += txtGroupBean.getchildrenSize();
+            }
+            if (mDocList.size() > 0) {
+                mFileCount += docGroupBean.getchildrenSize();
+                groups.add(docGroupBean);
             }
             if (mPdfList.size() > 0) {
                 groups.add(pdfGroupBean);
                 mFileCount += pdfGroupBean.getchildrenSize();
-            }
-            if (mTxtList.size() > 0) {
-                groups.add(docGroupBean);
-                mFileCount += docGroupBean.getchildrenSize();
             }
 
             if (mDocScanListener != null) {
@@ -281,7 +298,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         private void scanPath(File dir, int depth) {
             if (depth > DEPTH_THRESHOLD) return;
             if (!dir.exists() || !dir.isDirectory()) return;
-            DocFileProvider docFileProvider = DocFileProvider.getInstance();
+
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     scanPath(file, depth + 1);
@@ -298,7 +315,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        docFileProvider.insertDocItem(childBean);
+//                        docFileProvider.insertDocItem(childBean);
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(XLS) || extension.equalsIgnoreCase(XLSX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -308,7 +325,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        docFileProvider.insertDocItem(childBean);
+//                        docFileProvider.insertDocItem(childBean);
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PPT) || extension.equalsIgnoreCase(PPTX)) {
                         DocChildBean childBean = new DocChildBean();
@@ -318,7 +335,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        docFileProvider.insertDocItem(childBean);
+//                        docFileProvider.insertDocItem(childBean);
                         mDocList.add(childBean);
                     } else if (extension.equalsIgnoreCase(TXT)) {
                         DocChildBean childBean = new DocChildBean();
@@ -328,7 +345,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        docFileProvider.insertDocItem(childBean);
+//                        docFileProvider.insertDocItem(childBean);
                         mTxtList.add(childBean);
                     } else if (extension.equalsIgnoreCase(PDF)) {
                         DocChildBean childBean = new DocChildBean();
@@ -338,7 +355,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                         childBean.mDocPath = file.getAbsolutePath();
                         childBean.mAddDate = file.lastModified();
                         childBean.mModifyDate = file.lastModified();
-                        docFileProvider.insertDocItem(childBean);
+//                        docFileProvider.insertDocItem(childBean);
                         mPdfList.add(childBean);
                     }
                 }

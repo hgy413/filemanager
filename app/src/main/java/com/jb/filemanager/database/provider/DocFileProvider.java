@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.database.DatabaseException;
 import com.jb.filemanager.database.DatabaseHelper;
 import com.jb.filemanager.database.table.DocFileTable;
 import com.jb.filemanager.function.docmanager.DocChildBean;
@@ -214,6 +215,7 @@ public class DocFileProvider extends BaseDataProvider {
             updateDocFile(queryItem, childBean);
         }
     }
+
     public void insertDocList(ArrayList<DocChildBean> itemList) {
         if (itemList == null || itemList.size() == 0) {
             return;
@@ -297,5 +299,60 @@ public class DocFileProvider extends BaseDataProvider {
                 DocFileTable.DOC_PATH + " like ?",
                 new String[]{oldFile});
         Logger.d(TAG, "delete number" + delete + "   " + oldFile);
+    }
+
+    public void insertManyDocItem(DocChildBean childBean) {
+        if (childBean == null) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
+        contentValues.put(DocFileTable.DOC_PATH, childBean.mDocPath);
+        contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
+        int dot = childBean.mDocName.lastIndexOf(".");
+        String type = childBean.mDocName.substring(dot + 1);
+        contentValues.put(DocFileTable.DOC_TYPE, type.toLowerCase());
+        contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
+        contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
+        sContentResolver.insert(mUri, contentValues);
+
+        Logger.d(TAG, childBean.mDocPath + "   " + childBean.mDocSize + "   " + childBean.mDocName + "   " +
+                childBean.mAddDate + "   " + type + " 没了");
+    }
+
+    //插入多条数据使用
+    public void insertManyItem(ArrayList<DocChildBean> childBeanList) {
+        if (childBeanList == null) {
+            return;
+        }
+
+        ArrayList<ContentValues> contentValuesList = new ArrayList<>();
+        for (DocChildBean childBean : childBeanList) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DocFileTable.DOC_NAME, childBean.mDocName);
+            contentValues.put(DocFileTable.DOC_PATH, childBean.mDocPath);
+            contentValues.put(DocFileTable.DOC_SIZE, childBean.mDocSize);
+            int dot = childBean.mDocName.lastIndexOf(".");
+            String type = childBean.mDocName.substring(dot + 1);
+            contentValues.put(DocFileTable.DOC_TYPE, type.toLowerCase());
+            contentValues.put(DocFileTable.DOC_MODIFY_DATE, childBean.mModifyDate);
+            contentValues.put(DocFileTable.DOC_ADDED_DATE, childBean.mAddDate);
+
+            contentValuesList.add(contentValues);
+        }
+
+        ContentValues[] a = new ContentValues[childBeanList.size()];
+        sContentResolver.bulkInsert(mUri, contentValuesList.toArray(a));
+
+        Logger.d(TAG, a.length + "");
+    }
+
+    //删除表内数据
+    public void deleteAllData() {
+        try {
+            mDBHelper.exec("DELETE FROM " + DocFileTable.TABLE_NAME);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
     }
 }

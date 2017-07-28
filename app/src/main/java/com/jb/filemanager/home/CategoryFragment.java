@@ -674,7 +674,7 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(DocFileScanFinishEvent event) {
-        mTvDocCount.setText(event.mDocFileCount);
+        mTvDocCount.setText(String.valueOf(event.mDocFileCount));
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> getImageLoaderCallback() {
