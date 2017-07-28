@@ -256,17 +256,23 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 Logger.d(TAG, "扫描文件完成");
                 //插入数据
                 docFileProvider.deleteAllData();
-                for (int i = 0; i < mDocList.size(); i++) {
-                    docFileProvider.insertManyItem(mDocList);
-                }
+                docFileProvider.insertManyItem(mDocList);
+                Logger.d(TAG, "doc insert");
+                /*for (int i = 0; i < mDocList.size(); i++) {
+                    Logger.d(TAG, "doc insert");
+                }*/
 
-                for (int i = 0; i < mTxtList.size(); i++) {
-                    docFileProvider.insertManyItem(mTxtList);
-                }
+                Logger.d(TAG, "txt insert");
+                docFileProvider.insertManyItem(mTxtList);
+                /*for (int i = 0; i < mTxtList.size(); i++) {
+                    Logger.d(TAG, "txt insert");
+                }*/
 
-                for (int i = 0; i < mPdfList.size(); i++) {
-                    docFileProvider.insertManyItem(mPdfList);
-                }
+                docFileProvider.insertManyItem(mPdfList);
+                Logger.d(TAG, "pdf insert");
+                /*for (int i = 0; i < mPdfList.size(); i++) {
+                    Logger.d(TAG, "pdf insert");
+                }*/
             } else {//取数据库
                 Logger.d(TAG, "扫描数据库");
                 if (mSupport == null) {

@@ -94,6 +94,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                     @Override
                     public void run() {
 //                        Toast.makeText(DocManagerActivity.this, "加载完成了", Toast.LENGTH_SHORT).show();
+                        Logger.d(TAG, "scan finish");
                         if (arrayList == null) {
                             return;
                         }

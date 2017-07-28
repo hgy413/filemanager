@@ -322,7 +322,7 @@ public class DocFileProvider extends BaseDataProvider {
 
     //插入多条数据使用
     public void insertManyItem(ArrayList<DocChildBean> childBeanList) {
-        if (childBeanList == null) {
+        if (childBeanList == null || childBeanList.size() == 0) {
             return;
         }
 
