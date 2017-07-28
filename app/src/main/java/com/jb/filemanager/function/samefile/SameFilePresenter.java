@@ -113,13 +113,11 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
             mView.statisticsClickPast();
             handleFileRename(fileOperateEvent);
-            Toast.makeText(mView, "COPY", Toast.LENGTH_LONG);
-            mView.finish();
+            reloadData();
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
             mView.statisticsClickPast();
             handleFileRename(fileOperateEvent);
-            Toast.makeText(mView, "CUT", Toast.LENGTH_LONG);
-            mView.finish();
+            cleanSelect();
         }else if (FileOperateEvent.OperateType.RENAME.equals(fileOperateEvent.mOperateType)){
             //handleFileRename(fileOperateEvent);
             if (fileOperateEvent != null && fileOperateEvent.mNewFile != null
@@ -132,7 +130,6 @@ public class SameFilePresenter implements SameFileContract.Presenter,
                 mView.showFileList(mFileGroupList);
                 mView.fileSelectShow(0);
             }
-            Toast.makeText(mView, "RENAME", Toast.LENGTH_LONG);
         }else if (FileOperateEvent.OperateType.DELETE.equals(fileOperateEvent.mOperateType)){
         }else {
            // handleError();
@@ -143,19 +140,19 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         String oldFile = fileOperateEvent.mOldFile.getAbsolutePath();
         String newFile = fileOperateEvent.mNewFile.getAbsolutePath();
         mSupport.updateDatabaseRename(oldFile, newFile);
-        reloadData();
-        Logger.d(TAG, "rename   " + newFile + "      " + fileOperateEvent.mNewFile.getParent());
+        //reloadData();
     }
 
 
     @Override
     public void onClickBackButton(boolean finishActivity) {
         if (mView != null) {
-            if (finishActivity) {
-                ((AppCompatActivity)mView).finish();
-            } else {
-                ((AppCompatActivity)mView).finish();
-            }
+            mView.finish();
+//            if (finishActivity) {
+//                ((AppCompatActivity)mView).finish();
+//            } else {
+//                ((AppCompatActivity)mView).finish();
+//            }
         }
     }
 

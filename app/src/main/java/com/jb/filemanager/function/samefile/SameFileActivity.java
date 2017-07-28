@@ -96,6 +96,8 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         initClicklistener();
     }
 
+
+
     private void initClicklistener() {
         mSearchTitle.setClickCallBack(new SearchTitleViewCallback(){
             @Override
@@ -112,7 +114,8 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             @Override
             public void onIvBackClick() {
                 statisticsClickExit("2");
-                finish();
+                //SameFileActivity.this.onDestroy();
+                mPresenter.onClickBackButton(true);
             }
 
             @Override
@@ -274,12 +277,11 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     protected void onDestroy() {
-        if (mPresenter != null) {
-            mPresenter.onDestroy();
-        }
-
         if (mImageFetcher != null) {
             mImageFetcher.closeCache();
+        }
+        if (mPresenter != null) {
+            mPresenter.onDestroy();
         }
         super.onDestroy();
     }
