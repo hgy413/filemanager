@@ -67,7 +67,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
 
     private StorageContract.Presenter mPresenter;
 
-
+    private Listener mListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -280,6 +280,10 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                         if (mPresenter != null) {
                             mPresenter.onClickOperateCancelButton();
                         }
+
+                        if (mListener != null) {
+                            mListener.onClickCancel();
+                        }
                     }
                 });
             }
@@ -294,6 +298,10 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
                         RateManager.getsInstance().collectTriggeringFactor(RateManager.FILE_OPERATE);
                         if (mPresenter != null) {
                             mPresenter.onClickOperatePasteButton();
+                        }
+
+                        if (mListener != null) {
+                            mListener.onClickPaste();
                         }
                     }
                 });
@@ -325,6 +333,7 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
         if (mPresenter != null) {
             mPresenter.onDestroy();
         }
+        mListener = null;
         super.onDestroy();
     }
 
@@ -440,6 +449,14 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
 
     // implements StorageContract.View end
 
+
+    // public start
+
+    public void setListener(StorageFragment.Listener listener) {
+        mListener = listener;
+    }
+
+    // public end
 
     // private start
 
@@ -768,5 +785,10 @@ public class StorageFragment extends BaseFragment implements View.OnKeyListener,
         ImageView mIvFileThumb;
         TextView mTvFileName;
         ImageView mIvChecked;
+    }
+
+    public interface Listener {
+        void onClickPaste();
+        void onClickCancel();
     }
 }

@@ -220,7 +220,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void jumpToFileBrowserPage(){
-        FileBrowserActivity.startBrowser(mView, null);
+        FileBrowserActivity.startBrowserForPaste(mView, null);
     }
 
     @Override

@@ -113,13 +113,13 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
 
             @Override
             public void afterCopy() {
-                FileBrowserActivity.startBrowser(ZipFileActivity.this, "");
+                FileBrowserActivity.startBrowserForPaste(ZipFileActivity.this, "");
                 mPresenter.afterCopy();
             }
 
             @Override
             public void afterCut() {
-                FileBrowserActivity.startBrowser(ZipFileActivity.this, "");
+                FileBrowserActivity.startBrowserForPaste(ZipFileActivity.this, "");
                 mPresenter.afterCut();
             }
 

@@ -149,7 +149,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         File clickedFile = new File(clickedFilePath);
         if (clickedFile.exists()) {
             if (clickedFile.isDirectory()) {
-                FileBrowserActivity.startBrowser(activity, clickedFilePath);
+                FileBrowserActivity.startBrowserForPaste(activity, clickedFilePath);
             } else {
                 FileUtil.openFile(activity, clickedFile);
             }

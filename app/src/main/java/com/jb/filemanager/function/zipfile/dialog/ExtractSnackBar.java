@@ -50,7 +50,7 @@ public class ExtractSnackBar extends BaseActivity {
                 } else {
                     parent = file.getPath();
                 }
-                FileBrowserActivity.startBrowser(TheApplication.getAppContext(), parent);
+                FileBrowserActivity.startBrowserForView(TheApplication.getAppContext(), parent);
                 ZipStatistics.upload(ZipStatistics.ZIP_SEE);
             }
         });

@@ -99,13 +99,13 @@ public class RecentFileActivity extends BaseActivity implements RecentFileContra
 
             @Override
             public void afterCopy() {
-                FileBrowserActivity.startBrowser(RecentFileActivity.this, "");
+                FileBrowserActivity.startBrowserForPaste(RecentFileActivity.this, "");
                 mPresenter.afterCopy();
             }
 
             @Override
             public void afterCut() {
-                FileBrowserActivity.startBrowser(RecentFileActivity.this, "");
+                FileBrowserActivity.startBrowserForPaste(RecentFileActivity.this, "");
                 mPresenter.afterCut();
             }
 

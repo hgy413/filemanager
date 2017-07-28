@@ -160,7 +160,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void gotoStoragePage() {
-        FileBrowserActivity.startBrowser(getActivity(), null);
+        FileBrowserActivity.startBrowserForPaste(getActivity(), null);
     }
 
     @Override

@@ -95,13 +95,13 @@ public class RecentFileAdapter extends BaseAdapter {
         holder.titleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileBrowserActivity.startBrowser(TheApplication.getAppContext(), item.getBlockDirPath());
+                FileBrowserActivity.startBrowserForView(TheApplication.getAppContext(), item.getBlockDirPath());
             }
         });
         holder.tvMoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileBrowserActivity.startBrowser(TheApplication.getAppContext(), item.getBlockDirPath());
+                FileBrowserActivity.startBrowserForView(TheApplication.getAppContext(), item.getBlockDirPath());
             }
         });
         return convertView;

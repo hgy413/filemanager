@@ -88,7 +88,7 @@ public class RecentInnerPictureAdapter extends BaseAdapter {
                     holder.moreMask.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            FileBrowserActivity.startBrowser(context, mBlockBean.getBlockDirPath());
+                            FileBrowserActivity.startBrowserForView(context, mBlockBean.getBlockDirPath());
                         }
                     });
                 }

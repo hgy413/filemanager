@@ -204,13 +204,13 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
 
             @Override
             public void afterCopy() {
-                FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
+                FileBrowserActivity.startBrowserForPaste(DocManagerActivity.this, "");
                 handleDataCopy();
             }
 
             @Override
             public void afterCut() {
-                FileBrowserActivity.startBrowser(DocManagerActivity.this, "");
+                FileBrowserActivity.startBrowserForPaste(DocManagerActivity.this, "");
                 handleDataCut();
             }
 
