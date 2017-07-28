@@ -257,15 +257,15 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 //插入数据
                 docFileProvider.deleteAllData();
                 for (int i = 0; i < mDocList.size(); i++) {
-                    docFileProvider.insertManyDocItem(mDocList.get(i));
+                    docFileProvider.insertManyItem(mDocList);
                 }
 
                 for (int i = 0; i < mTxtList.size(); i++) {
-                    docFileProvider.insertManyDocItem(mTxtList.get(i));
+                    docFileProvider.insertManyItem(mTxtList);
                 }
 
                 for (int i = 0; i < mPdfList.size(); i++) {
-                    docFileProvider.insertManyDocItem(mPdfList.get(i));
+                    docFileProvider.insertManyItem(mPdfList);
                 }
             } else {//取数据库
                 Logger.d(TAG, "扫描数据库");
