@@ -45,6 +45,8 @@ public interface SameFileContract {
         void selectAllFile();
 
         void cleanSelect();
+
+        void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
     interface Support {
