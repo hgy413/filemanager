@@ -27,6 +27,7 @@ import com.jb.filemanager.statistics.bean.Statistics101Bean;
 import com.jb.filemanager.ui.view.SearchTitleView;
 import com.jb.filemanager.ui.view.SearchTitleViewCallback;
 import com.jb.filemanager.ui.widget.BottomOperateBar;
+import com.jb.filemanager.ui.widget.CommonLoadingView;
 import com.jb.filemanager.ui.widget.FloatingGroupExpandableListView;
 import com.jb.filemanager.ui.widget.WrapperExpandableListAdapter;
 import com.jb.filemanager.util.FileUtil;
@@ -59,7 +60,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private SearchTitleView mSearchTitle;
     private BottomOperateBar mBottomOperateContainer;
     private LinearLayout mLlNoFileView;
-    private ProgressWheel mProgressWheel;
+    private CommonLoadingView mLoadingView;
     private boolean[] mItemSelected;
 
     @Override
@@ -103,7 +104,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         mElvFilelist.setAdapter(new WrapperExpandableListAdapter(mFileExpandableListAdapter));
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mLlNoFileView = (LinearLayout) findViewById(R.id.ll_no_file);
-        mProgressWheel = (ProgressWheel) findViewById(R.id.recent_progress);
+        mLoadingView = (CommonLoadingView) findViewById(R.id.mlv_image_loading);
         initClicklistener();
     }
 
@@ -318,7 +319,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void showFileList(GroupList<String, FileInfo> mMusicMaps) {
-        mProgressWheel.setVisibility(View.GONE);
+        mLoadingView.setVisibility(View.GONE);
         mLlNoFileView.setVisibility(View.GONE);
         mFileGroupList = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
@@ -334,7 +335,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void onNoFileFindShow() {
-        mProgressWheel.setVisibility(View.GONE);
+        mLoadingView.setVisibility(View.GONE);
         mLlNoFileView.setVisibility(View.VISIBLE);
     }
 

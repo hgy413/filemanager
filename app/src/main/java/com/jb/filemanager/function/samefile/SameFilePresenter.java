@@ -221,22 +221,6 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     }
 
     @Override
-    public void reloadData() {
-        Intent intent = mView.getIntent();
-        int categoryType = intent.getIntExtra(SameFileActivity.PARAM_CATEGORY_TYPE,
-                Const.CategoryType.CATEGORY_TYPE_PHOTO);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
-        //TODO 由于当前数据库刷新不及时，采用使用这种临时的方法，应当在解决数据刷新问题时候，及时删除该判断
-        if (categoryType == Const.CategoryType.CATEGORY_TYPE_MUSIC || categoryType == Const.CategoryType.CATEGORY_TYPE_VIDEO) {
-            String time = TimeUtil.getYandMandD(new Date(System.currentTimeMillis()));
-            mFileGroupList.put(time, getSelectInfo());
-            cleanSelect();
-        } else {
-            mView.fileSelectShow(0);
-            onCreate(mView.getIntent());
-        }
-    }
-
-    @Override
     public void selectAllFile() {
         if (mFileGroupList != null) {
             for (int i = 0; i < mFileGroupList.size(); i++) {

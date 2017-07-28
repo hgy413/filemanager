@@ -40,8 +40,6 @@ public interface SameFileContract {
 
         void jumpToFileBrowserPage();
 
-        void reloadData();
-
         void selectAllFile();
 
         void cleanSelect();
