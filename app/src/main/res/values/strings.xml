@@ -18,7 +18,6 @@
     <string name="common_search">Search</string>
     <string name="common_ellipsis">…</string>
 
-
     <string name="gp_not_connect">Unable to open connection</string>
 
     <string name="about_copyright">Copyright:2013–2016 Go File Manager.</string>
@@ -353,6 +352,7 @@
     <string name="dialog_rename_folder_empty_input">The folder name could not be empty</string>
     <string name="dialog_rename_source_not_exist">The file/folder not exist</string>
     <string name="dialog_rename_target_exist">The name has been used</string>
+    <string name="dialog_rename_file_not_exist">File not exist</string>
 
 
 

@@ -1,11 +1,13 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.ConvertUtils;
 import com.jb.filemanager.util.FileUtil;
 import com.jb.filemanager.util.TimeUtil;
@@ -19,8 +21,11 @@ import java.io.File;
 
 public class SingleFileDetailDialog extends FMBaseDialog {
 
-    public SingleFileDetailDialog(final Activity act, final File file, final Listener listener) {
+    private File mSourceFile;
+
+    public SingleFileDetailDialog(final Activity act, File file, final Listener listener) {
         super(act, true);
+        mSourceFile = file;
         if (file != null && file.exists()) {
             View dialogView = View.inflate(act, R.layout.dialog_single_file_detail, null);
 
@@ -58,7 +63,7 @@ public class SingleFileDetailDialog extends FMBaseDialog {
                 TheApplication.postRunOnShortTaskThread(new Runnable() {
                     @Override
                     public void run() {
-                        final String readableSize = ConvertUtils.getReadableSize(FileUtil.getSize(file));
+                        final String readableSize = ConvertUtils.getReadableSize(FileUtil.getSize(mSourceFile));
                         TheApplication.postRunOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -85,7 +90,7 @@ public class SingleFileDetailDialog extends FMBaseDialog {
                     TheApplication.postRunOnShortTaskThread(new Runnable() {
                         @Override
                         public void run() {
-                            final int[] counts = FileUtil.countFolderAndFile(file);
+                            final int[] counts = FileUtil.countFolderAndFile(mSourceFile);
                             TheApplication.postRunOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -113,6 +118,16 @@ public class SingleFileDetailDialog extends FMBaseDialog {
             }
 
             setContentView(dialogView);
+        }
+    }
+
+    @Override
+    public void show() {
+        if (mSourceFile != null && mSourceFile.exists()) {
+            super.show();
+        } else {
+            Context context = TheApplication.getInstance();
+            AppUtils.showToast(context, context.getString(R.string.dialog_rename_file_not_exist));
         }
     }
 

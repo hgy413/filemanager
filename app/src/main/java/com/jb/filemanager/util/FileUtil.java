@@ -374,17 +374,19 @@ public class FileUtil {
     }
 
     public static long getSize(File file) {
-        long size;
-        if (file.isDirectory()) {
-            size = 0;
-            File[] files = file.listFiles();
-            if (files != null) {
-                for (File child : files) {
-                    size += getSize(child);
+        long size = 0L;
+        if (file != null && file.exists()) {
+            if (file.isDirectory()) {
+                size = 0;
+                File[] files = file.listFiles();
+                if (files != null) {
+                    for (File child : files) {
+                        size += getSize(child);
+                    }
                 }
+            } else {
+                size = file.length();
             }
-        } else {
-            size = file.length();
         }
         return size;
     }

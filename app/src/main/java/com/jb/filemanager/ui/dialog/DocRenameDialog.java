@@ -1,6 +1,7 @@
 package com.jb.filemanager.ui.dialog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.util.AppUtils;
 import com.jb.filemanager.util.FileUtil;
 
 import java.io.File;
@@ -26,8 +28,11 @@ public class DocRenameDialog extends FMBaseDialog {
     private TextView mTvErrorTips;
     private EditText mEtInput;
 
-    public DocRenameDialog(final Activity act, final File sourceFile, final Listener listener) {
+    private File mSourceFile;
+
+    public DocRenameDialog(final Activity act, File sourceFile, final Listener listener) {
         super(act, true);
+        mSourceFile = sourceFile;
 
         View dialogView = View.inflate(act, R.layout.dialog_file_rename, null);
         mTvTitle = (TextView) dialogView.findViewById(R.id.tv_rename_title);
@@ -48,8 +53,8 @@ public class DocRenameDialog extends FMBaseDialog {
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (sourceFile != null && sourceFile.exists()) {
-                        boolean isFolder = sourceFile.isDirectory();
+                    if (mSourceFile != null && mSourceFile.exists()) {
+                        boolean isFolder = mSourceFile.isDirectory();
                         if (mEtInput != null) {
                             String input = mEtInput.getText().toString();
                             if (TextUtils.isEmpty(input)) {
@@ -70,15 +75,15 @@ public class DocRenameDialog extends FMBaseDialog {
                                 }
                                 showErrorTips(isFolder ? act.getString(R.string.dialog_rename_folder_error_input, notContain) : act.getString(R.string.dialog_rename_file_error_input, notContain));
                             } else {
-                                String dir = sourceFile.getParentFile().getAbsolutePath();
+                                String dir = mSourceFile.getParentFile().getAbsolutePath();
                                 File target = new File(dir + File.separator + input);
                                 if (target.exists()) {
                                     showErrorTips(getString(R.string.dialog_rename_target_exist));
                                 } else {
-                                    boolean success = FileUtil.renameSelectedFile(sourceFile, target.getAbsolutePath());
+                                    boolean success = FileUtil.renameSelectedFile(mSourceFile, target.getAbsolutePath());
                                     // 重命名除了要将新文件添加到数据库外，还要传入旧文件路径，这样系统会将该文件在系统数据库中的信息删除
                                     // 否则数据库中会有残留。
-                                    MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[] {sourceFile.getAbsolutePath(), target.getAbsolutePath()}, null, null); // 修改后的文件添加到系统数据库
+                                    MediaScannerConnection.scanFile(TheApplication.getInstance(), new String[] {mSourceFile.getAbsolutePath(), target.getAbsolutePath()}, null, null); // 修改后的文件添加到系统数据库
                                     if (listener != null) {
                                         listener.onResult(DocRenameDialog.this, success);
                                     }
@@ -115,6 +120,16 @@ public class DocRenameDialog extends FMBaseDialog {
                 mTvErrorTips.setVisibility(View.VISIBLE);
                 mTvErrorTips.setText(errorDesc);
             }
+        }
+    }
+
+    @Override
+    public void show() {
+        if (mSourceFile != null && mSourceFile.exists()) {
+            super.show();
+        } else {
+            Context context = TheApplication.getInstance();
+            AppUtils.showToast(context, context.getString(R.string.dialog_rename_file_not_exist));
         }
     }
 

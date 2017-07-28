@@ -153,6 +153,10 @@ class StoragePresenter implements StorageContract.Presenter,
                     result = true;
                     mStatus = MAIN_STATUS_NORMAL;
                     resetSelectFile();
+                } else if (mStatus == MAIN_STATUS_PASTE) {
+                    result = true;
+                    mStatus = MAIN_STATUS_NORMAL;
+                    mView.updateBottomBar();
                 } else {
                     if (mPathStack.size() > 1) {
                         mPathStack.pop();
