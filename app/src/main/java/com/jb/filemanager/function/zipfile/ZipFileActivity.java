@@ -2,6 +2,7 @@ package com.jb.filemanager.function.zipfile;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -46,6 +47,7 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
 
     @Subscribe
     public void onEventMainThread(FileOperateEvent event) {
+        Log.e("event", "ZipActivity FileOperateEvent");
         mPresenter.onCreate();
     }
 
@@ -154,11 +156,6 @@ public class ZipFileActivity extends BaseActivity implements ZipActivityContract
             public void statisticsClickDetail() {
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         mPresenter.onCreate();
     }

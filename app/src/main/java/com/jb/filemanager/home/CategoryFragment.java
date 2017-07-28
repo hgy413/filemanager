@@ -45,7 +45,7 @@ import com.jb.filemanager.function.scanframe.clean.event.CleanScanDoneEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanScanFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanStateEvent;
 import com.jb.filemanager.function.trash.CleanTrashActivity;
-import com.jb.filemanager.function.zipfile.ZipFileActivity;
+import com.jb.filemanager.globaldata.TestActivity;
 import com.jb.filemanager.manager.file.FileManager;
 import com.jb.filemanager.statistics.StatisticsConstants;
 import com.jb.filemanager.statistics.StatisticsTools;
@@ -320,7 +320,8 @@ public class CategoryFragment extends Fragment implements View.OnKeyListener {
                     //add by nieyh 收集评分引导的触发因素信息
                     RateManager.getsInstance().collectTriggeringFactor(RateManager.STORAGE_SUB_PAGE);
                     // zip
-                    startActivity(new Intent(getContext(), ZipFileActivity.class));
+//                    startActivity(new Intent(getContext(), ZipFileActivity.class));
+                    startActivity(new Intent(getContext(), TestActivity.class));
 
                     Statistics101Bean bean = Statistics101Bean.builder();
                     bean.mOperateId = StatisticsConstants.HOME_CLICK_CATEGORY_ZIP;
