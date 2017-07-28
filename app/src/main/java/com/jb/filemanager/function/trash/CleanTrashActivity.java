@@ -137,6 +137,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         mIvTopGradient = (ImageView) findViewById(R.id.iv_top_gradient);
         mIvTopGreen = (ImageView) findViewById(R.id.iv_top_green);
 
+        mCleanTrashExpandableListView.setEnabled(false);
     }
 
     private void initClick() {
@@ -392,6 +393,7 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
                     finish();
 //                    Toast.makeText(CleanTrashActivity.this, "Had nothing to show and no where to go", Toast.LENGTH_SHORT).show();
                 } else {
+                    mCleanTrashExpandableListView.setEnabled(true);
                     showScanResult();
                 }
                 CleanProgressDoneEvent.cleanAllDone();
