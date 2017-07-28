@@ -198,6 +198,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             @Override
             public void afterCopy() {
                 mPresenter.jumpToFileBrowserPage();
+                mPresenter.reloadData();
             }
 
             @Override
@@ -248,6 +249,14 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                 SameFileActivity.statisticsClickDetail();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (mPresenter != null) {
+            mPresenter.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -306,14 +315,6 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             mPresenter.onDestroy();
         }
         super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (mPresenter != null) {
-            // mPresenter.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override

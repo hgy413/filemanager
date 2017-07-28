@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.jb.filemanager.function.docmanager.DocManagerSupport.DOC;
 import static com.jb.filemanager.function.docmanager.DocManagerSupport.DOCX;
@@ -113,7 +114,7 @@ public class SameFilePresenter implements SameFileContract.Presenter,
         if (FileOperateEvent.OperateType.COPY.equals(fileOperateEvent.mOperateType)){
             mView.statisticsClickPast();
             handleFileRename(fileOperateEvent);
-            reloadData();
+
         }else if (FileOperateEvent.OperateType.CUT.equals(fileOperateEvent.mOperateType)){
             mView.statisticsClickPast();
             handleFileRename(fileOperateEvent);
@@ -148,11 +149,6 @@ public class SameFilePresenter implements SameFileContract.Presenter,
     public void onClickBackButton(boolean finishActivity) {
         if (mView != null) {
             mView.finish();
-//            if (finishActivity) {
-//                ((AppCompatActivity)mView).finish();
-//            } else {
-//                ((AppCompatActivity)mView).finish();
-//            }
         }
     }
 
@@ -225,8 +221,18 @@ public class SameFilePresenter implements SameFileContract.Presenter,
 
     @Override
     public void reloadData() {
-        mView.fileSelectShow(0);
-        onCreate(mView.getIntent());
+        Intent intent = mView.getIntent();
+        int categoryType = intent.getIntExtra(SameFileActivity.PARAM_CATEGORY_TYPE,
+                Const.CategoryType.CATEGORY_TYPE_PHOTO);// 默认给出一个错误值，以免混乱，避免获取不到时加载错误的选项造成疑惑
+        //TODO 由于当前数据库刷新不及时，采用使用这种临时的方法，应当在解决数据刷新问题时候，及时删除该判断
+        if (categoryType == Const.CategoryType.CATEGORY_TYPE_MUSIC || categoryType == Const.CategoryType.CATEGORY_TYPE_VIDEO) {
+            String time = TimeUtil.getYandMandD(new Date(System.currentTimeMillis()));
+            mFileGroupList.put(time, getSelectInfo());
+            cleanSelect();
+        } else {
+            mView.fileSelectShow(0);
+            onCreate(mView.getIntent());
+        }
     }
 
     @Override
@@ -253,5 +259,10 @@ public class SameFilePresenter implements SameFileContract.Presenter,
             mView.showFileList(mFileGroupList);
             mView.fileSelectShow(0);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //int requestCode = data.get?
     }
 }
