@@ -27,10 +27,12 @@ import java.util.TimerTask;
 public class TrashGroupAdapter extends RecyclerView.Adapter<TrashGroupAdapter.GroupHolder> {
 
     private List<CleanGroupsBean> mDataGroup;
+    private List<Long> mDataGroupSize;
     private OnItemRemoveListener mOnItemRemoveListener;
 
-    public TrashGroupAdapter(List<CleanGroupsBean> dataGroup) {
+    public TrashGroupAdapter(List<CleanGroupsBean> dataGroup, List<Long> groupSize) {
         mDataGroup = dataGroup;
+        mDataGroupSize = groupSize;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class TrashGroupAdapter extends RecyclerView.Adapter<TrashGroupAdapter.Gr
         holder.mItemGroupIvSelect.setVisibility(View.VISIBLE);
         holder.mItemGroupIvSelect.setState(cleanGroupsBean.getState());
         holder.mItemGroupName.setText(cleanGroupsBean.getTitle());
-        String result = ConvertUtils.formatFileSize(cleanGroupsBean.getSize());
+        String result = ConvertUtils.formatFileSize(mDataGroupSize.get(position));
         holder.mItemGroupSize.setText(result);
         holder.mVGroupDividerLine.setVisibility(View.INVISIBLE);
         holder.mItemGroupPb.setVisibility(View.GONE);

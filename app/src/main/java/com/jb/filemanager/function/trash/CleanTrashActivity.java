@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.R;
 import com.jb.filemanager.TheApplication;
+import com.jb.filemanager.function.scanframe.bean.CleanGroupsBean;
 import com.jb.filemanager.function.scanframe.clean.CleanManager;
 import com.jb.filemanager.function.scanframe.clean.event.CleanCheckedFileSizeEvent;
 import com.jb.filemanager.function.scanframe.clean.event.CleanNoneCheckedEvent;
@@ -47,6 +48,9 @@ import com.jb.filemanager.util.imageloader.IconLoader;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xiaoyu on 2016/11/9 13:46.<br>
@@ -241,7 +245,12 @@ public class CleanTrashActivity extends BaseActivity implements Contract.ICleanM
         SlideInRightAnimator animator = new SlideInRightAnimator();
         mRvTrashGroupList.setLayoutManager(new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRvTrashGroupList.setItemAnimator(animator);
-        TrashGroupAdapter adapter = new TrashGroupAdapter(mPresenter.getDataGroup());
+        List<CleanGroupsBean> dataGroup = mPresenter.getDataGroup();
+        ArrayList<Long> sizeText = new ArrayList<>();
+        for (CleanGroupsBean groupBean : dataGroup) {
+            sizeText.add(groupBean.getSize());
+        }
+        TrashGroupAdapter adapter = new TrashGroupAdapter(dataGroup,sizeText);//防止因为清理的太快 导致getSize为0
         animator.setRemoveDuration(TOP_TRANSLATION_DURATION / adapter.getItemCount());
         mRvTrashGroupList.setAdapter(adapter);
         mRvTrashGroupList.setVisibility(View.VISIBLE);
