@@ -24,7 +24,7 @@ public class StorageTipManager {
 
     private static StorageTipManager sInstance;
     //每十分钟检测一次
-    private final long INTERVAL_TIME = BuildConfig.DEBUG ? 30 * 1000 : 10 * 60 * 1000;
+    private final long INTERVAL_TIME = BuildConfig.DEBUG ? 60 * 1000 : 10 * 60 * 1000;
     //比率阈值
     private final float RATE_THRESHOLD = 0.1f;
 
@@ -55,7 +55,13 @@ public class StorageTipManager {
      * 尝试展示提示对话框
      */
     private void tryShowTipWindow() {
-        StateTipDialog.show(TheApplication.getAppContext(), TipLayer.FREE_SPACE_TIP_LAYER);
+        Logger.w("nieyh", "tryShowTipWindow");
+        TheApplication.postRunOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                StateTipDialog.show(TheApplication.getAppContext(), TipLayer.FREE_SPACE_TIP_LAYER);
+            }
+        }, 500);
     }
 
     /**

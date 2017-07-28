@@ -63,7 +63,12 @@ public class UsbStateManager {
      * 尝试展示提示对话框
      */
     private void tryShowTipWindow() {
-        StateTipDialog.show(TheApplication.getAppContext(), TipLayer.USB_STATE_TIP_LAYER);
+        TheApplication.postRunOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                StateTipDialog.show(TheApplication.getAppContext(), TipLayer.USB_STATE_TIP_LAYER);
+            }
+        }, 500);
     }
 
     /**
