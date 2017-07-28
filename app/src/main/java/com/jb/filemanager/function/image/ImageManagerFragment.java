@@ -1,5 +1,6 @@
 package com.jb.filemanager.function.image;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jb.filemanager.function.filebrowser.FileBrowserActivity.REQUEST_CODE_PASTE;
 
 /**
  * Created by nieyh on 17-7-3.
@@ -160,7 +163,7 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
 
     @Override
     public void gotoStoragePage() {
-        FileBrowserActivity.startBrowserForPaste(getActivity(), null);
+        startActivityForResult(FileBrowserActivity.getBrowserForPasteIntent(getActivity(), null), REQUEST_CODE_PASTE);
     }
 
     @Override
@@ -174,6 +177,21 @@ public class ImageManagerFragment extends BaseFragment implements ImageContract.
             return !b;
         }
         return super.onBackPressed();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PASTE && data != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                boolean isPaste = bundle.getBoolean(FileBrowserActivity.RETURN_PARAM_IS_PASTE);
+                //还有问题 当粘贴失败时 无法准确判断
+//                if (isPaste) {
+//                    clearSelected();
+//                }
+            }
+        }
     }
 
     @Override

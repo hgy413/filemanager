@@ -57,6 +57,16 @@ public class FileBrowserActivity extends BaseActivity {
         activity.startActivityForResult(intent, REQUEST_CODE_PASTE);
     }
 
+    /**
+     * 展示浏览器--粘贴
+     * */
+    public static Intent getBrowserForPasteIntent(Activity activity, String targetPath) {
+        Intent intent = new Intent(activity, FileBrowserActivity.class);
+        intent.putExtra(PARAM_PATH, targetPath);
+        intent.putExtra(PARAM_REQUEST, REQUEST_CODE_PASTE);
+        return intent;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
