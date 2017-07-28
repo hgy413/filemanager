@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
     >
     <com.jb.filemanager.ui.view.SearchTitleView
         android:id="@+id/search_title"
@@ -74,6 +75,14 @@
                 android:textColor="@color/light_gray1"
                 android:text="@string/no_file_hint"/>
         </LinearLayout>
+        <com.jb.filemanager.commomview.ProgressWheel
+            android:id="@+id/recent_progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            app:matProg_barColor="#0084ff"
+            app:matProg_barWidth="5dp"
+            app:matProg_progressIndeterminate="true"/>
     </FrameLayout>
 
 

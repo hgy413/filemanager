@@ -10,7 +10,14 @@ import android.widget.LinearLayout;
 import com.jb.filemanager.BaseActivity;
 import com.jb.filemanager.Const;
 import com.jb.filemanager.R;
+import com.jb.filemanager.commomview.ProgressWheel;
 import com.jb.filemanager.function.docmanager.DocManagerActivity;
+import com.jb.filemanager.function.image.ImageActivity;
+import com.jb.filemanager.function.image.ImageDetailFragment;
+import com.jb.filemanager.function.image.adapter.ImageExpandableAdapter;
+import com.jb.filemanager.function.image.modle.ImageGroupModle;
+import com.jb.filemanager.function.image.modle.ImageModle;
+import com.jb.filemanager.function.recent.RecentImageActivity;
 import com.jb.filemanager.function.search.view.SearchActivity;
 import com.jb.filemanager.function.txtpreview.TxtPreviewActivity;
 import com.jb.filemanager.manager.file.FileManager;
@@ -28,13 +35,15 @@ import com.jb.filemanager.util.images.ImageFetcher;
 import com.jb.filemanager.util.images.ImageUtils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.jb.filemanager.R.id.cancel;
+import static com.jb.filemanager.R.id.list;
 import static com.jb.filemanager.R.id.search_title;
 
 /**
  * Created by bool on 17-6-30.
- * 显示音乐列表
+ * 分类显示列表
  */
 
 public class SameFileActivity extends BaseActivity implements SameFileContract.View {
@@ -50,6 +59,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
     private SearchTitleView mSearchTitle;
     private BottomOperateBar mBottomOperateContainer;
     private LinearLayout mLlNoFileView;
+    private ProgressWheel mProgressWheel;
     private boolean[] mItemSelected;
 
     @Override
@@ -93,6 +103,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
         mElvFilelist.setAdapter(new WrapperExpandableListAdapter(mFileExpandableListAdapter));
         mBottomOperateContainer = (BottomOperateBar) findViewById(R.id.bottom_operate_bar_container);
         mLlNoFileView = (LinearLayout) findViewById(R.id.ll_no_file);
+        mProgressWheel = (ProgressWheel) findViewById(R.id.recent_progress);
         initClicklistener();
     }
 
@@ -141,19 +152,22 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
                         if (fileSize <= 1024 * 1024) {//只提供1M以下的小文件的预览
                             fileOpenIntent = new Intent(SameFileActivity.this, TxtPreviewActivity.class);
                             fileOpenIntent.putExtra(TxtPreviewActivity.TARGET_DOC_PATH, fileInfo.mFullPath);
+                        } else {
+                            fileOpenIntent = FileUtil.getOpenFileIntent(fileInfo.mFullPath);
                         }
+                        startActivity(fileOpenIntent);
                         break;
                     case FileManager.IMAGE:
-
+                        ArrayList<FileInfo> arrayList =  mFileGroupList.get("Picture");
+                        ArrayList<ImageModle> imagelist = getAllImagesModule(arrayList);
+                        if (imagelist.size() > 0) {
+                            RecentImageActivity.startView(SameFileActivity.this, imagelist, arrayList.indexOf(fileInfo));
+                        }
                         break;
                     case FileManager.ZIP:
-                        break;
-                }
-                if (fileOpenIntent == null) {
-                    fileOpenIntent = FileUtil.getOpenFileIntent(fileInfo.mFullPath);
-                }
-                if (fileOpenIntent != null) {
-                    startActivity(fileOpenIntent);
+                    default:
+                        fileOpenIntent = FileUtil.getOpenFileIntent(fileInfo.mFullPath);
+                        startActivity(fileOpenIntent);
                 }
                 return false;
             }
@@ -243,7 +257,15 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
             mImageFetcher.setExitTasksEarly(false);
         }
     }
-
+    ArrayList<ImageModle> getAllImagesModule(ArrayList<FileInfo> arrayList) {
+        ArrayList<ImageModle> moduleList = new ArrayList();
+        ImageModle image;
+        for (FileInfo info : arrayList ) {
+            image = new ImageModle(info.mFullPath, 0, info.isSelected, 0);
+            moduleList.add(image);
+        }
+        return moduleList;
+    }
     @Override
     protected void onPressedHomeKey() {
         if (mPresenter != null) {
@@ -296,6 +318,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void showFileList(GroupList<String, FileInfo> mMusicMaps) {
+        mProgressWheel.setVisibility(View.GONE);
         mLlNoFileView.setVisibility(View.GONE);
         mFileGroupList = mMusicMaps;
         mItemSelected = new boolean[mMusicMaps.itemSize()];
@@ -311,6 +334,7 @@ public class SameFileActivity extends BaseActivity implements SameFileContract.V
 
     @Override
     public void onNoFileFindShow() {
+        mProgressWheel.setVisibility(View.GONE);
         mLlNoFileView.setVisibility(View.VISIBLE);
     }
 

@@ -231,29 +231,6 @@ public class SameFileSupport implements SameFileContract.Support {
             return;
         }
         MediaScannerConnection.scanFile(TheApplication.getAppContext(), new String[]{oldFile, newFile}, null, null); // 修改后的文件添加到系统数据库
-//        MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
-//        if (FileTypeUtil.getFileTypeFromPostfix(newFile) == FileType.VIDEO) {
-//            targetUri = VIDEO_URI;
-//        } else if (FileTypeUtil.getFileTypeFromPostfix(newFile) == FileType.MUSIC) {
-//            targetUri = MUSIC_URI;
-//        } else {
-//            return;
-//        }
-//        mediaMetadata.setDataSource(newFile);
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Video.Media.DISPLAY_NAME, file.getName());
-//        values.put(MediaStore.Video.Media.SIZE, file.length());
-//        values.put(MediaStore.Video.Media.DATA, file.getAbsolutePath());
-//        values.put(MediaStore.Video.Media.DATE_MODIFIED, file.lastModified());
-//        values.put(MediaStore.Video.Media.MIME_TYPE,
-//                mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE));
-//        values.put(MediaStore.Video.Media.DURATION,
-//                mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-//        values.put(MediaStore.Video.Media.ARTIST,
-//                mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
-//
-//        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER,0);
-//        mResolver.insert(targetUri, values);
     }
 
     public FileInfo getFileInfo(File file){
