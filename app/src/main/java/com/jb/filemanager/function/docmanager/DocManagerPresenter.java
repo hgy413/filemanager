@@ -9,6 +9,7 @@ import com.jb.filemanager.commomview.GroupSelectBox;
 import com.jb.filemanager.database.provider.DocFileProvider;
 import com.jb.filemanager.eventbus.DocFileScanFinishEvent;
 import com.jb.filemanager.eventbus.FileOperateEvent;
+import com.jb.filemanager.function.filebrowser.FileBrowserActivity;
 import com.jb.filemanager.manager.spm.IPreferencesIds;
 import com.jb.filemanager.manager.spm.SharedPreferencesManager;
 import com.jb.filemanager.os.ZAsyncTask;
@@ -87,7 +88,13 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if (requestCode != FileBrowserActivity.REQUEST_CODE_PASTE) {
+            return;
+        }
+        boolean isPaste = data.getBooleanExtra(FileBrowserActivity.RETURN_PARAM_IS_PASTE, false);
+        if (!isPaste) {
+            mView.showBottom();
+        }
     }
 
     @Override

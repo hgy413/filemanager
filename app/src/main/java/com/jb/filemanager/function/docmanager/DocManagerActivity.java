@@ -337,6 +337,11 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
     }
 
     @Override
+    public void showBottom() {
+        mBobBottomOperator.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
