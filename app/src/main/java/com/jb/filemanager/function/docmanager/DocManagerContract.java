@@ -26,6 +26,7 @@ public class DocManagerContract {
         void updateDeleteProgress(int done,int total);
         void refreshTile();
         void showBottom();
+        void setLoadState(boolean isLoad);
     }
 
     interface Presenter {

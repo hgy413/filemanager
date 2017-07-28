@@ -76,7 +76,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mBobBottomOperator = (BottomOperateBar) findViewById(R.id.bob_bottom_operator);
         mClvDocProgress = (CommonLoadingView) findViewById(R.id.clv_doc_progress);
 
-        mClvDocProgress.startLoading();
+        setLoadState(true);
         mTvCommonActionBarWithSearchTitle.setText(R.string.doc_manager_title);
     }
 
@@ -98,8 +98,7 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
                         if (arrayList == null) {
                             return;
                         }
-                        mClvDocProgress.stopLoading();
-                        mElvApk.setVisibility(View.VISIBLE);
+                        setLoadState(false);
                         mAppInfo = arrayList;
                         if (mAdapter == null) {
                             mAdapter = new DocManagerAdapter(mAppInfo);
@@ -335,6 +334,17 @@ public class DocManagerActivity extends BaseActivity implements DocManagerContra
         mIvCommonActionBarBack.setImageResource(R.drawable.action_bar_back_drawable_selector_blue);
         mIvCommonActionBarWithSearchSearch.setImageResource(R.drawable.black_search_icon_selector);
         mIsSelectMode = false;
+    }
+
+    @Override
+    public void setLoadState(boolean isLoad) {
+        if (isLoad){
+            mClvDocProgress.startLoading();
+            mElvApk.setVisibility(View.INVISIBLE);
+        }else {
+            mClvDocProgress.stopLoading();
+            mElvApk.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

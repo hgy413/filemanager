@@ -157,12 +157,14 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         File newFile = fileOperateEvent.mNewFile;
         mSupport.handleFileCopy(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
         refreshData(false, false);
+        mView.setLoadState(true);
         Logger.d(TAG, "copy   " + newFile.getAbsolutePath() + "      " + newFile.getParent());
     }
 
     private void handleFileCut(FileOperateEvent fileOperateEvent) {
         mSupport.handleFileCut(fileOperateEvent.mOldFile.getAbsolutePath(), fileOperateEvent.mNewFile.getAbsolutePath());
         refreshData(false, false);
+        mView.setLoadState(true);
         Logger.d(TAG, "cut   " + fileOperateEvent.mNewFile.getAbsolutePath() + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
@@ -182,6 +184,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             mSupport.handleFileDelete(oldFile);
         }
         refreshData(false, false);
+        mView.setLoadState(true);
         Logger.d(TAG, "rename   " + newFile + "      " + fileOperateEvent.mNewFile.getParent());
     }
 
@@ -215,6 +218,7 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
         @Override
         protected Boolean doInBackground(Boolean... params) {
             if (mIsFirstIn) {//第一次进入先从数据库读取数据 然后再扫描
+                Logger.d(TAG, "第一次扫描数据库");
                 ArrayList<DocChildBean> mDocList = mSupport.getDocFileInfo();
                 ArrayList<DocChildBean> mTxtList = mSupport.getTextFileInfo();
                 ArrayList<DocChildBean> mPdfList = mSupport.getPdfFileInfo();
@@ -248,6 +252,9 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
             long lastTime = SharedPreferencesManager.getInstance(TheApplication.getAppContext()).getLong(IPreferencesIds.KEY_SCAN_DOC_TIME, 0);
             boolean shouldScan = System.currentTimeMillis() - lastTime > 3 * 60 * 1000;
             if (params[1] && shouldScan) {//重头开始扫描
+                mDocList.clear();
+                mTxtList.clear();
+                mPdfList.clear();
                 Logger.d(TAG, "扫描文件");
                 for (String path : StorageUtil.getAllExternalPaths(TheApplication.getAppContext())) {
                     File root = new File(path);
@@ -275,11 +282,14 @@ public class DocManagerPresenter implements DocManagerContract.Presenter{
                 /*for (int i = 0; i < mPdfList.size(); i++) {
                     Logger.d(TAG, "pdf insert");
                 }*/
-            } else if (!mIsFirstIn) {//取数据库
-                Logger.d(TAG, "扫描数据库");
+            } else if (!mIsFirstIn) {//第一次进入的时候前面已经取过了数据库 就不再取了
+                Logger.d(TAG, "非第一次扫描数据库");
                 if (mSupport == null) {
                     return null;
                 }
+                mDocList.clear();
+                mTxtList.clear();
+                mPdfList.clear();
                 mDocList = mSupport.getDocFileInfo();
                 mTxtList = mSupport.getTextFileInfo();
                 mPdfList = mSupport.getPdfFileInfo();
