@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/window_relative" android:layout_width="@dimen/ad_gp_install_btn_width"
+    android:layout_height="@dimen/ad_gp_install_btn_height">
+    <ImageView android:id="@+id/float_window_image_big" android:layout_width="wrap_content" android:layout_height="wrap_content" 
+        android:src="@drawable/ad_gp_big_image" />
+    <ImageView android:id="@+id/float_window_view" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:src="@drawable/ad_gp_small_image" android:layout_alignBottom="@id/float_window_image_big" android:paddingBottom="2dp"
+        android:paddingRight="5dp" android:layout_alignRight="@id/float_window_image_big" />
+</RelativeLayout>
+<!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/layout/ad_google_guide_download_layout.xml -->

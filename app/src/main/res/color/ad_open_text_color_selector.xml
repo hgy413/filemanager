@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:color="@color/ad_color_81b715" />
+    <item android:state_focused="true" android:color="@color/ad_color_81b715" />
+    <item android:state_pressed="true" android:color="@color/ad_color_81b715" />
+    <item android:color="@color/ad_color_8acb29"></item>
+</selector><!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/color/ad_open_text_color_selector.xml -->

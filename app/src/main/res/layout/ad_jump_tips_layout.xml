@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#80000000" android:gravity="center">
+    <!-- 内容区域 -->
+    <LinearLayout android:layout_width="254dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/ad_bg" 
+        android:paddingTop="14dp" android:paddingLeft="16dp" android:paddingBottom="24dp" android:paddingRight="16dp" android:gravity="center">
+		<!-- Title区域 -->
+    	<LinearLayout android:id="@+id/manager_update_titlebar" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="left|center_vertical" android:orientation="horizontal">
+        	<!-- GooglePlay图标 -->
+        	<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ad_google_play_icon" />
+        </LinearLayout>
+        <!-- 提示信息 -->
+    	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="13dp" android:textColor="#525252" android:textSize="16sp" android:text="@string/ad_jump_tips"/>
+    </LinearLayout>
+</LinearLayout><!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/layout/ad_jump_tips_layout.xml -->

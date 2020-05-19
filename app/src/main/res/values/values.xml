@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/values/color.xml -->
+    <eat-comment/>
+    <color name="ad_color_555555">#555555</color>
+    <color name="ad_color_81b715">#81B715</color>
+    <color name="ad_color_8acb29">#8ACB29</color>
+    <color name="ad_color_aaaaaa">#AAAAAA</color>
+    <!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="ad_gp_install_btn_height">60dp</dimen>
+    <dimen name="ad_gp_install_btn_margin_left_edge">225dp</dimen>
+    <dimen name="ad_gp_install_btn_margin_top_include_btn_height">282dp</dimen>
+    <dimen name="ad_gp_install_btn_width">200dp</dimen>
+    <!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/values/values.xml -->
+    <eat-comment/>
+    <dimen name="ad_icon_item_height">115dp</dimen>
+    <dimen name="ad_icon_item_padding">8dp</dimen>
+    <dimen name="ad_icon_item_width">82dp</dimen>
+    <!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="ad_activation_guide_dialog_cancel">Cancel</string>
+    <string name="ad_activation_guide_dialog_installed">  installed successfully.</string>
+    <string name="ad_activation_guide_dialog_open">Open</string>
+    <string name="ad_activation_guide_dialog_top">""</string>
+    <string name="ad_click_tip">Opening link, please wait.</string>
+    <string name="ad_jump_tips">Struggling to open...</string>
+    <string name="ad_notification_message_open_app">This new app was installed. Click here to try it!</string>
+    <string name="desksetting_net_error"> Network unavailable</string>
+    <string name="no_googlemarket_tip">Make sure you have Google Market before download, please</string>
+</resources>

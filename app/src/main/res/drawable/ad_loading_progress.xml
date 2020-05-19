@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-rotate xmlns:android="http://schemas.android.com/apk/res/android" android:drawable="@drawable/ad_refresh"
+    android:pivotX="50%" android:pivotY="50%"/><!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/drawable/ad_loading_progress.xml -->

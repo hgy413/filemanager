@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="wrap_content" >
+    <RelativeLayout android:id="@+id/small_window_layout" android:layout_width="19dp" android:layout_height="wrap_content" android:background="@drawable/ad_google_back_bg">
+		<ImageView android:layout_width="17dp" android:layout_height="40dp" android:background="@drawable/ad_google_back_icon"
+    		android:layout_alignParentRight="true" android:layout_marginTop="44.3dp" />
+    </RelativeLayout>
+</FrameLayout><!-- From: file:/data/jenkins/jobs/AdSdk-AS/workspace/adsdk-AS-jekins/adsdk-demo-src/CommerceAdSDK/commerceAdSDK/src/main/res/layout/ad_exit_google_float_window_small_layout.xml -->
